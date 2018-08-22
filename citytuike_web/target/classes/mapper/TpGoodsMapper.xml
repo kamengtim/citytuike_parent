@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.citytuike.mapper.TpGoodsMapper">
+	<resultMap id="TpGoods" type="com.citytuike.model.TpGoods" >
+		<result column="goods_id" property="goods_id" />
+	</resultMap>
+	<resultMap id="TpGoodsImges" type="com.citytuike.model.TpGoodsImages" >
+		<result column="img_id" property="img_id" />
+		<result column="goods_id" property="goods_id" />
+		<result column="image_url" property="image_url" />
+	</resultMap>
+	
+	<!-- 分页SQL语句 -->  
+    <select id="selectByPage" resultMap="TpGoods">  
+        select *  from tp_goods limit #{startPos},#{pageSize}
+    </select>  
+    
+    <!-- 取得记录的总数 -->  
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tp_goods  
+    </select> 
+	<!--token查询 -->
+	<select id="findById" resultType="TpGoods">
+		select * from tp_goods as t where t.goods_id=#{id}
+	</select>
+	<select id="findByGoodsId" resultMap="TpGoodsImges">
+		select * from tp_goods_images as t where t.goods_id=#{goodsId}
+	</select>
+	<insert id="insertGoodsCollect" parameterType="com.citytuike.model.TpGoodsCollect" useGeneratedKeys="true" keyProperty="collect_id">
+		INSERT INTO tp_goods_collect (
+			user_id,
+			goods_id,
+			add_time
+		) VALUES (
+			#{user_id},
+			#{goods_id},
+			#{add_time}
+		);
+	</insert>
+	<update id="updateByStatus" parameterType="com.citytuike.model.TpSmsLog" >
+		UPDATE tp_sms_log
+		SET 
+				status=1
+		WHERE mobile = #{mobile}
+	</update>
+	
+	
+</mapper>

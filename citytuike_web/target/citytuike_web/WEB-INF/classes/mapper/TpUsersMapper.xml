@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.citytuike.mapper.TpUsersMapper">
+	<resultMap id="TpRegion" type="com.citytuike.model.TpRegion" >
+		<result column="id" property="id" />
+	</resultMap>
+	<resultMap id="TpUserAddress" type="com.citytuike.model.TpUserAddress" >
+		<result column="address_id" property="address_id" />
+	</resultMap>
+	<resultMap id="TpUsers" type="com.citytuike.model.TpUsers" >
+		<result column="user_id" property="user_id" />
+		<result column="email" property="email" />
+		<result column="password" property="password" />
+		<result column="paypwd" property="paypwd" />
+		<result column="sex" property="sex" />
+		<result column="birthday" property="birthday" />
+		<result column="user_money" property="user_money" />
+		<result column="frozen_money" property="frozen_money" />
+		<result column="distribut_money" property="distribut_money" />
+		<result column="underling_number" property="underling_number" />
+		<result column="pay_points" property="pay_points" />
+		<result column="address_id" property="address_id" />
+		<result column="reg_time" property="reg_time" />
+		<result column="last_login" property="last_login" />
+		<result column="last_ip" property="last_ip" />
+		<result column="qq" property="qq" />
+		<result column="mobile" property="mobile" />
+		<result column="mobile_validated" property="mobile_validated" />
+		<result column="oauth" property="oauth" />
+		<result column="openid" property="openid" />
+		<result column="unionid" property="unionid" />
+		<result column="head_pic" property="head_pic" />
+		<result column="province" property="province" />
+		<result column="city" property="city" />
+		<result column="district" property="district" />
+		<result column="email_validated" property="email_validated" />
+		<result column="nickname" property="nickname" />
+		<result column="level" property="level" />
+		<result column="discount" property="discount" />
+		<result column="total_amount" property="total_amount" />
+		<result column="is_lock" property="is_lock" />
+		<result column="is_distribut" property="is_distribut" />
+		<result column="first_leader" property="first_leader" />
+		<result column="second_leader" property="second_leader" />
+		<result column="token" property="token" />
+		<result column="message_mask" property="message_mask" />
+		<result column="push_id" property="pushId" />
+		<result column="distribut_level" property="distribut_level" />
+		<result column="is_vip" property="is_vip" />
+		<result column="invite_code" property="invite_code" />
+		<result column="relation" property="relation" />
+		<result column="parent_id" property="parent_id" />
+		<result column="wechat" property="wechat" />
+		<result column="wechat_qrcode" property="wechat_qrcode" />
+		<result column="set_pass" property="set_pass" />
+		<result column="im_id" property="im_id" />
+		<result column="im_pwd" property="im_pwd" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+			t.user_id,
+			t.email,
+			t.password,
+			t.paypwd,
+			t.sex,
+			t.birthday,
+			t.user_money,
+			t.frozen_money,
+            t.distribut_money,
+			t.underling_number,
+			t.pay_points,
+			t.address_id,
+			t.reg_time,
+			t.last_login,
+			t.last_ip,
+			t.qq,
+			t.mobile,
+			t.mobile_validated,
+			t.oauth,
+			t.openid,
+			t.unionid,
+			t.head_pic,
+			t.province,
+			t.city,
+			t.district,
+			t.email_validated,
+			t.nickname,
+			t.level,
+			t.discount,
+			t.total_amount,
+			t.is_lock,
+			t.is_distribut,
+			t.first_leader,
+			t.second_leader,
+			t.second_leader,
+			t.token,
+			t.message_mask,
+			t.push_id,
+			t.distribut_level,
+			t.is_vip,
+			t.invite_code,
+			t.relation,
+			t.sale_number,
+			t.parent_id,
+			t.wechat,
+			t.wechat_qrcode,
+			t.set_pass,
+			t.im_id,
+			t.im_pwd
+	</sql>
+	
+	<!--登陆查询 -->
+	<select id="findOneByLogo" resultType="TpUsers">
+		select <include refid="Base_Column_List" /> 
+		from tp_users as t where t.mobile=#{username} and t.password=#{password}
+	</select>
+	<select id="findAddressByUserId" resultMap="TpUserAddress">
+		select * from tp_user_address as t where t.address_id=#{id}
+	</select>
+	<select id="findIsDefaultAll" resultMap="TpUserAddress">
+		select * from tp_user_address as t where t.user_id=#{user_id} and t.is_default=1
+	</select>
+	<select id="findUserAddresById" resultType="TpUserAddress">
+		select * from tp_user_address as t where t.user_id=#{user_id}
+	</select>
+	
+	<select id="findAllByLevel" resultMap="TpRegion">
+		select * from tp_region as t where t.level=#{id}
+	</select>
+	
+	<!--token查询 -->
+	<select id="findOneByToken" resultType="TpUsers">
+		select <include refid="Base_Column_List" /> 
+		from tp_users as t where t.token=#{token}
+	</select>
+	<insert id="save" parameterType="com.citytuike.model.TpUsers" useGeneratedKeys="true" keyProperty="user_id" >
+		INSERT INTO tp_users (
+			email,
+			password,
+			paypwd,
+			sex,
+			birthday,
+			user_money,
+			frozen_money,
+            distribut_money,
+			underling_number,
+			pay_points,
+			address_id,
+			reg_time,
+			last_login,
+			last_ip,
+			qq,
+			mobile,
+			mobile_validated,
+			oauth,
+			openid,
+			unionid,
+			head_pic,
+			province,
+			city,
+			district,
+			email_validated,
+			nickname,
+			level,
+			discount,
+			total_amount,
+			is_lock,
+			is_distribut,
+			first_leader,
+			second_leader,
+			second_leader,
+			token,
+			message_mask,
+			push_id,
+			distribut_level,
+			is_vip,
+			invite_code,
+			relation,
+			sale_number,
+			parent_id,
+			wechat,
+			wechat_qrcode,
+			set_pass,
+			im_id,
+			im_pwd
+		) VALUES (
+			#{email},
+			#{password},
+			#{paypwd},
+			#{sex},
+			#{birthday},
+			#{user_money},
+			#{frozen_money},
+            #{distribut_money},
+			#{underling_number},
+			#{pay_points},
+			#{address_id},
+			#{reg_time},
+			#{last_login},
+			#{last_ip},
+			#{qq},
+			#{mobile},
+			#{mobile_validated},
+			#{oauth},
+			#{openid},
+			#{unionid},
+			#{head_pic},
+			#{province},
+			#{city},
+			#{district},
+			#{email_validated},
+			#{nickname},
+			#{level},
+			#{discount},
+			#{total_amount},
+			#{is_lock},
+			#{is_distribut},
+			#{first_leader},
+			#{second_leader},
+			#{second_leader},
+			#{token},
+			#{message_mask},
+			#{push_id},
+			#{distribut_level},
+			#{is_vip},
+			#{invite_code},
+			#{relation},
+			#{sale_number},
+			#{parent_id},
+			#{wechat},
+			#{wechat_qrcode},
+			#{set_pass},
+			#{im_id},
+			#{im_pwd}
+		);
+		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+			/*SELECT @@IDENTITY AS id*/
+		</selectKey>-->
+	</insert>
+	<insert id="insertUserAddress" parameterType="com.citytuike.model.TpUserAddress" useGeneratedKeys="true" keyProperty="address_id" >
+		INSERT INTO tp_users (
+			user_id,
+			consignee,
+			email,
+			country,
+			province,
+			city,
+			district,
+            twon,
+			address,
+			zipcode,
+			mobile,
+			is_default
+		) VALUES (
+			#{user_id},
+			#{consignee},
+			#{email},
+			#{country},
+			#{province},
+			#{city},
+			#{district},
+            #{twon},
+			#{address},
+			#{zipcode},
+			#{mobile},
+			#{is_default}
+		);
+	</insert>
+	<update id="updateBytokenIn" parameterType="com.citytuike.model.TpUsers" >
+		UPDATE tp_users
+		SET 
+			<if test="token != null">
+				token=#{token}
+			</if>
+		WHERE user_id = #{user_id}
+	</update>
+	<update id="updateBytokenOut" parameterType="com.citytuike.model.TpUsers" >
+		UPDATE tp_users
+		SET 
+			<if test="token != null">
+				token=#{token}
+			</if>
+		WHERE user_id = #{user_id}
+	</update>
+	<update id="updateAddressToDefault" parameterType="com.citytuike.model.TpUserAddress" >
+		UPDATE tp_users_address
+		SET 
+				is_default=#{i}
+		WHERE address_id = #{id}
+	</update>
+	<update id="updateUserAddress" parameterType="com.citytuike.model.TpUserAddress" >
+		UPDATE tp_user_address
+		SET 
+			<if test="consignee != null">
+				consignee=#{consignee}
+			</if>
+			<if test="email != null">
+				and email=#{email}
+			</if>
+			<if test="country != null">
+				and country=#{country}
+			</if>
+			<if test="province != null">
+				and province=#{province}
+			</if>
+			<if test="city != null">
+				and city=#{city}
+			</if>
+			<if test="district != null">
+				and district=#{district}
+			</if>
+			<if test="twon != null">
+				and twon=#{twon}
+			</if>
+			<if test="address != null">
+				and address=#{address}
+			</if>
+			<if test="zipcode != null">
+				and zipcode=#{zipcode}
+			</if>
+			<if test="mobile != null">
+				and mobile=#{mobile}
+			</if>
+			<if test="is_default != null">
+				and is_default=#{is_default}
+			</if>
+		WHERE address_id = #{address_id}
+	</update>
+	
+	
+</mapper>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.citytuike.mapper.TpOrderMapper">
+	<resultMap id="TpOrder" type="com.citytuike.model.TpOrder" >
+		<result column="order_id" property="order_id" />
+	</resultMap>
+	<resultMap id="TpOrderGoods" type="com.citytuike.model.TpOrderGoods" >
+		<result column="rec_id" property="rec_id" />
+	</resultMap>
+	<!-- 分页SQL语句 -->  
+    <select id="findAllGoodsByOrderId" resultMap="TpOrderGoods">  
+        select *  from tp_order_goods where order_id=#{order_id}
+    </select>  
+    <select id="findOrderById" resultType="com.citytuike.model.TpOrder">  
+        select *  from tp_order where order_id=#{id}
+    </select>
+    <select id="selectByPage" resultMap="TpOrder">
+    	select *  from tp_order
+    	
+    	<if test="type != null">
+    		where
+    		<if test='type == "ALL"'>
+			    1=1
+			</if>
+    		<if test='type == "WAITSEND"'>
+			    shipping_status=1 and order_status in(0, 1)
+			</if>
+		    <if test='type != null and type == "WAITPAY"'>
+			    pay_status=1 and order_status in(0, 1)
+			</if>
+		    <if test='type != null and type == "WAITRECEIVE"'>
+			    shipping_status=1 and order_status=0
+			</if>
+		    <if test='type != null and type == "WAITCCOMMENT"'>
+			    order_status=2
+			</if>
+		    <if test='type != null and type == "CANCEL"'>
+			    order_status=3
+			</if>
+		    <if test='type != null and type == "FINISH"'>
+			    order_status=4
+			</if>
+		    <if test='type != null and type == "CANCELLED"'>
+			    order_status=5
+			</if>
+    	</if>
+	    
+        limit #{startPos},#{pageSize}
+    </select>  
+    <!-- 取得记录的总数 -->  
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tp_order  
+    </select> 
+	<insert id="intsertOrder" parameterType="com.citytuike.model.TpOrder" useGeneratedKeys="true" keyProperty="order_id">
+		INSERT INTO tp_goods_collect (
+			order_sn,
+			user_id,
+			order_status,
+			shipping_status,
+			pay_status,
+			consignee,
+			province,
+			city,
+			district,
+			twon,
+			address,
+			zipcode,
+			mobile,
+			email,
+			shipping_code,
+			shipping_name,
+			pay_code,
+			pay_name,
+			invoice_title,
+			taxpayer,
+			goods_price,
+			shipping_price,
+			user_money,
+			coupon_price,
+			integral,
+			integral_money,
+			order_amount,
+			total_amount,
+			add_time,
+			confirm_time,
+			pay_time,
+			transaction_id,
+			prom_id,
+			prom_type,
+			order_prom_id,
+			order_prom_amount,
+			discount,
+			user_note,
+			admin_note,
+			parent_sn,
+			is_distribut,
+			paid_money,
+			deleted,
+			settle_status,
+			all_income,
+			invoice_email,
+			invoice_contact,
+			invoice_fee,
+			is_return
+		) VALUES (
+			#{order_sn},
+			#{user_id},
+			#{order_status},
+			#{shipping_status},
+			#{pay_status},
+			#{consignee},
+			#{province},
+			#{city},
+			#{district},
+			#{twon},
+			#{address},
+			#{zipcode},
+			#{mobile},
+			#{email},
+			#{shipping_code},
+			#{shipping_name},
+			#{pay_code},
+			#{pay_name},
+			#{invoice_title},
+			#{taxpayer},
+			#{goods_price},
+			#{shipping_price},
+			#{user_money},
+			#{coupon_price},
+			#{integral},
+			#{integral_money},
+			#{order_amount},
+			#{total_amount},
+			#{add_time},
+			#{confirm_time},
+			#{pay_time},
+			#{transaction_id},
+			#{prom_id},
+			#{prom_type},
+			#{order_prom_id},
+			#{order_prom_amount},
+			#{discount},
+			#{user_note},
+			#{admin_note},
+			#{parent_sn},
+			#{is_distribut},
+			#{paid_money},
+			#{deleted},
+			#{settle_status},
+			#{all_income},
+			#{invoice_email},
+			#{invoice_contact},
+			#{invoice_fee},
+			#{is_return}
+		);
+	</insert>
+	<insert id="insertOrderGoods" parameterType="com.citytuike.model.TpOrderGoods" useGeneratedKeys="true" keyProperty="rec_id">
+		INSERT INTO tp_goods_collect (
+			order_id,
+			goods_id,
+			goods_name,
+			goods_sn,
+			goods_num,
+			final_price,
+			goods_price,
+			cost_price,
+			member_goods_price,
+			give_integral,
+			spec_key,
+			spec_key_name,
+			bar_code,
+			is_comment,
+			prom_type,
+			prom_id,
+			is_send,
+			delivery_id,
+			sku,
+			original_img,
+			goods_type,
+			type
+		) VALUES (
+			#{order_id},
+			#{goods_id},
+			#{goods_name},
+			#{goods_sn},
+			#{goods_num},
+			#{final_price},
+			#{goods_price},
+			#{cost_price},
+			#{member_goods_price},
+			#{give_integral},
+			#{spec_key},
+			#{spec_key_name},
+			#{bar_code},
+			#{is_comment},
+			#{prom_type},
+			#{prom_id},
+			#{is_send},
+			#{delivery_id},
+			#{sku},
+			#{original_img},
+			#{goods_type},
+			#{type}
+		);
+	</insert>
+	<insert id="insertOrderAction" parameterType="com.citytuike.model.TpOrderAction" useGeneratedKeys="true" keyProperty="action_id">
+		INSERT INTO tp_goods_collect (
+			order_id,
+			goods_id,
+			goods_name,
+			goods_sn,
+			goods_num,
+			final_price,
+			goods_price,
+			cost_price,
+			member_goods_price,
+			give_integral,
+			spec_key,
+			spec_key_name,
+			bar_code,
+			is_comment,
+			prom_type,
+			prom_id,
+			is_send,
+			delivery_id,
+			sku,
+			original_img,
+			goods_type,
+			type
+		) VALUES (
+			#{order_id},
+			#{goods_id},
+			#{goods_name},
+			#{goods_sn},
+			#{goods_num},
+			#{final_price},
+			#{goods_price},
+			#{cost_price},
+			#{member_goods_price},
+			#{give_integral},
+			#{spec_key},
+			#{spec_key_name},
+			#{bar_code},
+			#{is_comment},
+			#{prom_type},
+			#{prom_id},
+			#{is_send},
+			#{delivery_id},
+			#{sku},
+			#{original_img},
+			#{goods_type},
+			#{type}
+		);
+	</insert>
+	<insert id="insertInvoic" parameterType="com.citytuike.model.TpInvoice" useGeneratedKeys="true" keyProperty="invoice_id">
+		INSERT INTO tp_goods_collect (
+			order_id,
+			user_id,
+			invoice_type,
+			invoice_money,
+			invoice_title,
+			invoice_desc,
+			invoice_rate,
+			taxpayer,
+			status,
+			atime,
+			ctime
+		) VALUES (
+			#{order_id},
+			#{user_id},
+			#{invoice_type},
+			#{invoice_money},
+			#{invoice_title},
+			#{invoice_desc},
+			#{invoice_rate},
+			#{taxpayer},
+			#{status},
+			#{atime},
+			#{ctime}
+		);
+	</insert>
+	<update id="updataRecordRefundOrder" parameterType="com.citytuike.model.TpOrder" >
+		UPDATE tp_order SET order_status=3 WHERE order_id = #{order_id}
+	</update>
+	<update id="updataOrderConfirm" parameterType="com.citytuike.model.TpOrder" >
+		UPDATE tp_order SET shipping_status=1 WHERE order_id = #{order_id}
+	</update>
+	<update id="updateOrderAddress" parameterType="com.citytuike.model.TpOrder" >
+		UPDATE tp_order SET province=#{province}, city=#{city}, 
+		district=#{district}, address=#{address} WHERE order_id = #{order_id}
+	</update>
+	
+	
+</mapper>
