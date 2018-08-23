@@ -6,23 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="341904fd-e717-4327-9846-64fb23443566" name="Default Changelist" comment="时时彩">
+    <list default="true" id="341904fd-e717-4327-9846-64fb23443566" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/constant/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/constant/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/Util.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpUsersMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpUsersMapper.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpUsers.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpUsers.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpUsersService.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpUsersService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpUsersServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpUsersServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/Util.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/Util.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/UserController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpUsersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpUsersMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/lib/citytuike_core-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/lib/citytuike_core-1.0-SNAPSHOT.jar" afterDir="false" />
@@ -89,7 +79,7 @@
         <counts>
           <entry key="java" value="1060" />
           <entry key="jsp" value="2" />
-          <entry key="txt" value="3" />
+          <entry key="txt" value="16" />
           <entry key="xml" value="181" />
         </counts>
       </usages-collector>
@@ -97,7 +87,7 @@
         <counts>
           <entry key="JAVA" value="1060" />
           <entry key="JSP" value="2" />
-          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="PLAIN_TEXT" value="16" />
           <entry key="SQL" value="1" />
           <entry key="XML" value="180" />
         </counts>
@@ -108,120 +98,7 @@
     <favorites_list name="citytuike_parent" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/interceptor/CitytuikeInterceptor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="30" column="5" lean-forward="true" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/WeixinToolsController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="146" column="9" lean-forward="true" selection-start-line="146" selection-start-column="9" selection-end-line="146" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="562">
-              <caret line="41" column="11" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="712">
-              <caret line="131" column="38" selection-start-line="131" selection-start-column="38" selection-end-line="131" selection-end-column="38" />
-              <folding>
-                <element signature="e#4231#4232#0" expanded="true" />
-                <element signature="e#4284#4285#0" expanded="true" />
-                <element signature="e#4334#4335#0" expanded="true" />
-                <element signature="e#4385#4386#0" expanded="true" />
-                <element signature="e#4437#4438#0" expanded="true" />
-                <element signature="e#4490#4491#0" expanded="true" />
-                <element signature="e#4540#4541#0" expanded="true" />
-                <element signature="e#4558#4559#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="562">
-              <caret line="39" column="27" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="447">
-              <caret line="119" column="51" lean-forward="true" selection-start-line="119" selection-start-column="51" selection-end-line="119" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/constant/Constant.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="8" column="56" selection-start-line="8" selection-start-column="56" selection-end-line="8" selection-end-column="56" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/WeixinAPI.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="436" column="17" lean-forward="true" selection-start-line="436" selection-start-column="17" selection-end-line="436" selection-end-column="17" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1196#1216#0" expanded="true" />
-                <element signature="e#1289#1309#0" expanded="true" />
-                <element signature="e#1381#1401#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="35" column="22" lean-forward="true" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="89" column="25" selection-start-line="89" selection-start-column="19" selection-end-line="89" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -497,7 +374,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535018643393" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535018711980" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -633,7 +510,7 @@
       <workItem from="1534908469776" duration="8752000" />
       <workItem from="1534919900062" duration="5688000" />
       <workItem from="1534927429973" duration="5783000" />
-      <workItem from="1534990118867" duration="18369000" />
+      <workItem from="1534990118867" duration="18649000" />
     </task>
     <task id="LOCAL-00001" summary="时时彩">
       <created>1534933809644</created>
@@ -649,11 +526,18 @@
       <option name="project" value="LOCAL" />
       <updated>1534933996897</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="微信登录">
+      <created>1535018697413</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1535018697413</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38592000" />
+    <option name="totallyTimeSpent" value="38872000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -666,7 +550,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Image Layers" order="0" />
       <window_info id="UI Designer" order="1" />
@@ -674,7 +557,7 @@
       <window_info id="Capture Tool" order="3" />
       <window_info id="Web" order="4" side_tool="true" />
       <window_info id="Designer" order="5" />
-      <window_info content_ui="combo" id="Project" order="6" sideWeight="0.4994641" visible="true" weight="0.1748401" />
+      <window_info active="true" content_ui="combo" id="Project" order="6" sideWeight="0.4994641" visible="true" weight="0.21588486" />
       <window_info id="Structure" order="7" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Spring" order="0" />
       <window_info anchor="bottom" id="Terminal" order="1" weight="0.32939914" />
@@ -687,7 +570,7 @@
       <window_info anchor="bottom" id="Message" order="8" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.3290461" />
       <window_info anchor="bottom" id="Run" order="10" sideWeight="0.49946696" weight="0.20922747" />
-      <window_info active="true" anchor="bottom" id="Debug" order="11" sideWeight="0.49840087" visible="true" weight="0.1607717" />
+      <window_info anchor="bottom" id="Debug" order="11" sideWeight="0.49840087" visible="true" weight="0.1607717" />
       <window_info anchor="bottom" id="Cvs" order="12" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="13" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="14" weight="0.32939914" />
@@ -711,7 +594,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="时时彩" />
-    <option name="LAST_COMMIT_MESSAGE" value="时时彩" />
+    <MESSAGE value="微信登录" />
+    <option name="LAST_COMMIT_MESSAGE" value="微信登录" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -1063,8 +947,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/interceptor/CitytuikeInterceptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="30" column="5" lean-forward="true" selection-start-line="30" selection-start-column="5" selection-end-line="30" selection-end-column="5" />
+        <state relative-caret-position="250">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
