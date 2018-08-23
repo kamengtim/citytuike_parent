@@ -33,6 +33,9 @@ public interface TpUsersMapper {
 
 	List<TpUserAddress> findIsDefaultAll(Integer user_id);
 
+    TpUsers findOneByInvite(@Param("invite") String invite);
 
+	TpUsers findOneByMobile(@Param("username")String username);
 
+	TpUsers findOneByOpenId(@Param("openid")String openid);
 }

@@ -35,6 +35,9 @@ public interface TpUsersService {
 
 	List<TpUserAddress> findIsDefaultAll(Integer user_id);
 
+    TpUsers findOneByInvite(String invite);
 
+	TpUsers findOneByMobile(String username);
 
+	TpUsers findOneByOpenId(String openid);
 }

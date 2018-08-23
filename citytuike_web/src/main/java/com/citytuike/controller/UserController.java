@@ -1,6 +1,7 @@
 package com.citytuike.controller;
 
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,9 +90,28 @@ public class UserController {
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "注册失败!");
+		TpUsers tpUsers1 = tpUsersService.findOneByMobile(username);
+		if (null != tpUsers1){
+			jsonObj.put("status", "5");
+			jsonObj.put("msg", "手机已注册!");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = new TpUsers();
 		tpUsers.setNickname(nickname);
+		tpUsers.setEmail("");
 		tpUsers.setMobile(username);
+		tpUsers.setSex(0);
+		tpUsers.setBirthday(0);
+		tpUsers.setUser_money(0.00);
+		tpUsers.setPay_points(0);
+		tpUsers.setAddress_id(0);
+		tpUsers.setReg_time((int)new Date().getTime());
+		tpUsers.setLast_login((int)new Date().getTime());
+		tpUsers.setLast_ip("");
+		tpUsers.setMobile_validated(1);
+		tpUsers.setEmail_validated(0);
+		tpUsers.setMessage_mask(0);
+		tpUsers.setPush_id("");
 		if (!password.equals(password2)) {
 			jsonObj.put("status", "2");
 			jsonObj.put("msg", "两次密码不一致!");
@@ -100,7 +120,7 @@ public class UserController {
 		String pwd = MD5Utils.md5("TPSHOP" + password);
 		tpUsers.setPassword(pwd);
 		TpSmsLog tpSmsLog = tpSmsLogService.findOneByMobileAndCode(username, mobile_code);
-		if (null == tpSmsLog) {
+		/*if (null == tpSmsLog) {
 			jsonObj.put("status", "3");
 			jsonObj.put("msg", "验证码错误!");
 			return jsonObj.toString();
@@ -110,16 +130,24 @@ public class UserController {
 				jsonObj.put("msg", "验证码已使用!");
 				return jsonObj.toString();
 			}
-		}
-		
+		}*/
+		tpUsers.setInvite_code(Util.getBigString(8));
 		if (invite != null && !invite.equals("")) {
 			//邀约码不为空
-			
+			TpUsers tpUsers2 = tpUsersService.findOneByInvite(invite);
+			if (null != tpUsers2){
+				tpUsers.setParent_id(tpUsers2.getUser_id());
+				if (null != tpUsers2.getRelation() && !"".equals(tpUsers2.getRelation())){
+					tpUsers.setRelation(tpUsers2.getRelation() + "," + tpUsers2.getUser_id());
+				}else{
+					tpUsers.setRelation(tpUsers2.getUser_id() + "");
+				}
+			}
 		}
 		//注册用户
 		int result = tpUsersService.save(tpUsers);
 		//更新验证码
-		result = tpSmsLogService.updateByStatus(tpSmsLog);
+//		result = tpSmsLogService.updateByStatus(tpSmsLog);
 		if (result > 0) {
 			jsonObj.put("status", "1");
 			jsonObj.put("msg", "注册成功!");

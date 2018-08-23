@@ -120,4 +120,16 @@ public class TpUsersServiceImpl implements TpUsersService{
 		return tpUsersMapper.findIsDefaultAll(user_id);
 	}
 
+	public TpUsers findOneByInvite(String invite) {
+		return tpUsersMapper.findOneByInvite(invite);
+	}
+
+	public TpUsers findOneByMobile(String username) {
+		return tpUsersMapper.findOneByMobile(username);
+	}
+
+	public TpUsers findOneByOpenId(String openid) {
+		return tpUsersMapper.findOneByOpenId(openid);
+	}
+
 }

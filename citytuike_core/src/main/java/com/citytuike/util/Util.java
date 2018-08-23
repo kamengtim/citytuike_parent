@@ -2,10 +2,11 @@ package com.citytuike.util;
 
 import java.util.Random;
 
-public class Util {
+public class Util<main> {
 	
 	 public static final String ALLCHAR = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";  
-	
+	 public static final String BIGCHAR = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 	/** 
      * 返回一个定长的随机字符串(只包含大小写字母、数字) 
      *  
@@ -21,6 +22,14 @@ public class Util {
         }  
         return sb.toString();  
     }  
+    public static String getBigString(int length) {
+        StringBuffer sb = new StringBuffer();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            sb.append(BIGCHAR.charAt(random.nextInt(BIGCHAR.length())));
+        }
+        return sb.toString();
+    }
     public static String getJson(String obj){
         obj = obj.replace("\\", "");
         char[] array = obj.toCharArray();
@@ -33,5 +42,4 @@ public class Util {
         }
         return new String(charArray);
     }
-
 }

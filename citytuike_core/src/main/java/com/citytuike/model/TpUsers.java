@@ -173,7 +173,7 @@ public class TpUsers  implements Serializable{
 	 */
 	private String invite_code;
 	/**
-	 * 
+	 * 上级全部id
 	 */
 	private String relation;
 	/**
@@ -183,7 +183,7 @@ public class TpUsers  implements Serializable{
 	/**
 	 * 
 	 */
-	private String parent_id;
+	private Integer parent_id;
 	/**
 	 * 微信号
 	 */
@@ -462,10 +462,10 @@ public class TpUsers  implements Serializable{
 	public void setSale_number(String sale_number) {
 		this.sale_number = sale_number;
 	}
-	public String getParent_id() {
+	public Integer getParent_id() {
 		return parent_id;
 	}
-	public void setParent_id(String parent_id) {
+	public void setParent_id(Integer parent_id) {
 		this.parent_id = parent_id;
 	}
 	public String getWechat() {

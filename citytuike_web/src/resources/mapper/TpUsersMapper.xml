@@ -115,6 +115,18 @@
 		select <include refid="Base_Column_List" /> 
 		from tp_users as t where t.mobile=#{username} and t.password=#{password}
 	</select>
+	<select id="findOneByOpenId" resultType="TpUsers">
+		select <include refid="Base_Column_List" />
+		from tp_users as t where t.openid=#{openid}
+	</select>
+	<select id="findOneByMobile" resultType="TpUsers">
+		select <include refid="Base_Column_List" />
+		from tp_users as t where t.mobile=#{username}
+	</select>
+	<select id="findOneByInvite" resultType="TpUsers">
+		select <include refid="Base_Column_List" />
+		from tp_users as t where t.invite_code=#{invite}
+	</select>
 	<select id="findAddressByUserId" resultMap="TpUserAddress">
 		select * from tp_user_address as t where t.address_id=#{id}
 	</select>
@@ -169,7 +181,7 @@
 			is_distribut,
 			first_leader,
 			second_leader,
-			second_leader,
+			third_leader,
 			token,
 			message_mask,
 			push_id,
@@ -218,7 +230,7 @@
 			#{is_distribut},
 			#{first_leader},
 			#{second_leader},
-			#{second_leader},
+			#{third_leader},
 			#{token},
 			#{message_mask},
 			#{push_id},
