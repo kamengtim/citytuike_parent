@@ -44,61 +44,76 @@ public class TpOrderAction implements Serializable{
 	 * 状态描述
 	 */
 	private String status_desc;
+
 	public Integer getAction_id() {
 		return action_id;
 	}
+
 	public void setAction_id(Integer action_id) {
 		this.action_id = action_id;
 	}
+
 	public Integer getOrder_id() {
 		return order_id;
 	}
+
 	public void setOrder_id(Integer order_id) {
 		this.order_id = order_id;
 	}
+
 	public Integer getAction_user() {
 		return action_user;
 	}
+
 	public void setAction_user(Integer action_user) {
 		this.action_user = action_user;
 	}
+
 	public int getOrder_status() {
 		return order_status;
 	}
+
 	public void setOrder_status(int order_status) {
 		this.order_status = order_status;
 	}
+
 	public int getShipping_status() {
 		return shipping_status;
 	}
+
 	public void setShipping_status(int shipping_status) {
 		this.shipping_status = shipping_status;
 	}
+
 	public int getPay_status() {
 		return pay_status;
 	}
+
 	public void setPay_status(int pay_status) {
 		this.pay_status = pay_status;
 	}
+
 	public String getAction_note() {
 		return action_note;
 	}
+
 	public void setAction_note(String action_note) {
 		this.action_note = action_note;
 	}
+
 	public int getLog_time() {
 		return log_time;
 	}
+
 	public void setLog_time(int log_time) {
 		this.log_time = log_time;
 	}
+
 	public String getStatus_desc() {
 		return status_desc;
 	}
+
 	public void setStatus_desc(String status_desc) {
 		this.status_desc = status_desc;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 }

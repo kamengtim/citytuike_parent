@@ -44,61 +44,76 @@ public class TpSmsLog implements Serializable{
 	 * 发送短信异常内容
 	 */
 	private int error_msg;
+
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public int getMobile() {
 		return mobile;
 	}
+
 	public void setMobile(int mobile) {
 		this.mobile = mobile;
 	}
+
 	public int getSession_id() {
 		return session_id;
 	}
+
 	public void setSession_id(int session_id) {
 		this.session_id = session_id;
 	}
+
 	public int getAdd_time() {
 		return add_time;
 	}
+
 	public void setAdd_time(int add_time) {
 		this.add_time = add_time;
 	}
+
 	public int getCode() {
 		return code;
 	}
+
 	public void setCode(int code) {
 		this.code = code;
 	}
+
 	public int getStatus() {
 		return status;
 	}
+
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
 	public int getMsg() {
 		return msg;
 	}
+
 	public void setMsg(int msg) {
 		this.msg = msg;
 	}
+
 	public int getScene() {
 		return scene;
 	}
+
 	public void setScene(int scene) {
 		this.scene = scene;
 	}
+
 	public int getError_msg() {
 		return error_msg;
 	}
+
 	public void setError_msg(int error_msg) {
 		this.error_msg = error_msg;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 }

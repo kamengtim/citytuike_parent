@@ -24,31 +24,36 @@ public class TpGoodsCollect implements Serializable{
 	 * 添加时间
 	 */
 	private int add_time;
+
 	public int getCollect_id() {
 		return collect_id;
 	}
+
 	public void setCollect_id(int collect_id) {
 		this.collect_id = collect_id;
 	}
+
 	public Integer getUser_id() {
 		return user_id;
 	}
+
 	public void setUser_id(Integer user_id) {
 		this.user_id = user_id;
 	}
+
 	public Integer getGoods_id() {
 		return goods_id;
 	}
+
 	public void setGoods_id(Integer goods_id) {
 		this.goods_id = goods_id;
 	}
+
 	public int getAdd_time() {
 		return add_time;
 	}
+
 	public void setAdd_time(int add_time) {
 		this.add_time = add_time;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 }

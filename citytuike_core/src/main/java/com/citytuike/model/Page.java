@@ -66,5 +66,5 @@ public class Page implements Serializable {
     public int getStartPos() {
         return (pageNow - 1) * pageSize;
     }
-    
+
 }
