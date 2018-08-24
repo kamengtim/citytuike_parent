@@ -5,6 +5,7 @@ import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.TpRegion;
 import com.citytuike.model.TpUserAddress;
+import com.citytuike.model.TpUserUpLog;
 import com.citytuike.model.TpUsers;
 
 public interface TpUsersService {
@@ -40,4 +41,6 @@ public interface TpUsersService {
 	TpUsers findOneByMobile(String username);
 
 	TpUsers findOneByOpenId(String openid);
+
+    int insertUserUpLog(TpUserUpLog tpUserUpLog);
 }

@@ -2,6 +2,7 @@ package com.citytuike.mapper;
 
 import com.citytuike.model.TpRegion;
 import com.citytuike.model.TpUserAddress;
+import com.citytuike.model.TpUserUpLog;
 import com.citytuike.model.TpUsers;
 import org.apache.ibatis.annotations.Param;
 
@@ -38,4 +39,6 @@ public interface TpUsersMapper {
 	TpUsers findOneByMobile(@Param("username")String username);
 
 	TpUsers findOneByOpenId(@Param("openid")String openid);
+
+    int insertUserUpLog(TpUserUpLog tpUserUpLog);
 }

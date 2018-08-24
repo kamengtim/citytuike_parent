@@ -3,6 +3,7 @@ package com.citytuike.service;
 
 import java.util.List;
 
+import com.citytuike.model.TpUserUpLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,6 +131,10 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	public TpUsers findOneByOpenId(String openid) {
 		return tpUsersMapper.findOneByOpenId(openid);
+	}
+
+	public int insertUserUpLog(TpUserUpLog tpUserUpLog) {
+		return tpUsersMapper.insertUserUpLog(tpUserUpLog);
 	}
 
 }

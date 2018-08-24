@@ -31,5 +31,7 @@ public interface TpOrderMapper {
 
 	int updateOrderAddress(TpOrder tpOrder);
 
+    TpOrder findOrderByOrderSn(@Param(value = "out_trade_no")String out_trade_no);
 
+	int updateOrderByAlipay(TpOrder tpOrder);
 }

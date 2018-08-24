@@ -2,6 +2,7 @@ package com.citytuike.service;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -179,6 +180,48 @@ public class TpOrderServiceImpl implements TpOrderService{
 		return tpOrderMapper.updateOrderAddress(tpOrder);
 	}
 
-	
+	public TpOrder findOrderByOrderSn(String out_trade_no) {
+		return tpOrderMapper.findOrderByOrderSn(out_trade_no);
+	}
+
+	public List<TpOrderGoods> findAllGoodsByOrderId(Integer order_id) {
+		return tpOrderMapper.findAllGoodsByOrderId(order_id);
+	}
+
+	public TpOrderAction getOrderAction(TpOrder tpOrder, int type) {
+		TpOrderAction tpOrderAction = new TpOrderAction();
+
+		tpOrderAction.setOrder_id(tpOrder.getOrder_id());
+		tpOrderAction.setLog_time((int)new Date().getTime());
+		tpOrderAction.setAction_user(0);
+		tpOrderAction.setOrder_status(tpOrder.getOrder_status());
+		tpOrderAction.setPay_status(tpOrder.getPay_status());
+		tpOrderAction.setShipping_status(tpOrder.getShipping_status());
+		if (type == 0){
+			tpOrderAction.setOrder_status(3);
+			tpOrderAction.setPay_status(tpOrder.getPay_status());
+			tpOrderAction.setShipping_status(tpOrder.getShipping_status());
+			tpOrderAction.setAction_note("您取消了订单，请等待系统确认");
+			tpOrderAction.setStatus_desc("用户取消已付款订单");
+		}else if (type == 1){
+			tpOrderAction.setOrder_status(tpOrder.getOrder_status());
+			tpOrderAction.setPay_status(1);
+			tpOrderAction.setShipping_status(tpOrder.getShipping_status());
+			tpOrderAction.setAction_note("您订单已支付成功，请等待系统确认");
+			tpOrderAction.setStatus_desc("订单支付成功");
+		}else if (type == 2){
+			tpOrderAction.setOrder_status(tpOrder.getOrder_status());
+			tpOrderAction.setPay_status(tpOrder.getPay_status());
+			tpOrderAction.setShipping_status(1);
+			tpOrderAction.setAction_note("您订单已发货，请等待系统确认");
+			tpOrderAction.setStatus_desc("订单发货");
+		}
+		return tpOrderAction;
+	}
+
+	public int updateOrderByAlipay(TpOrder tpOrder) {
+		return tpOrderMapper.updateOrderByAlipay(tpOrder);
+	}
+
 
 }

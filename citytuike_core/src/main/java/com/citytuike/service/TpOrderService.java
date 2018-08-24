@@ -8,6 +8,8 @@ import com.citytuike.model.TpOrder;
 import com.citytuike.model.TpOrderAction;
 import com.citytuike.model.TpOrderGoods;
 
+import java.util.List;
+
 public interface TpOrderService {
 
 	TpFreightConfig findByTemId(Integer template_id);
@@ -32,6 +34,11 @@ public interface TpOrderService {
 
 	int updateOrderAddress(TpOrder tpOrder);
 
-	
+    TpOrder findOrderByOrderSn(String out_trade_no);
 
+	List<TpOrderGoods> findAllGoodsByOrderId(Integer order_id);
+
+	TpOrderAction getOrderAction(TpOrder tpOrder, int i);
+
+	int updateOrderByAlipay(TpOrder tpOrder);
 }

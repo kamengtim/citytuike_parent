@@ -155,12 +155,7 @@ public class OrderController {
 		if (null != tpOrder) {
 			int result = tpOrderService.updataRecordRefundOrder(tpOrder);
 			if (result > 0) {
-				TpOrderAction tpOrderAction = new TpOrderAction();
-				tpOrderAction.setOrder_id(tpOrder.getOrder_id());
-				tpOrderAction.setOrder_status(tpOrder.getOrder_status());
-				tpOrderAction.setAction_note("您取消了订单，请等待系统确认");
-				tpOrderAction.setLog_time((int)new Date().getTime());
-				tpOrderAction.setStatus_desc("用户取消已付款订单");
+				TpOrderAction tpOrderAction = tpOrderService.getOrderAction(tpOrder, 0);
 				int goodsResult1 =tpOrderService.insertOrderAction(tpOrderAction);
 				if (goodsResult1 > 0) {
 					jsonObj.put("status", "1");
@@ -195,12 +190,7 @@ public class OrderController {
 		if (null != tpOrder) {
 			int result = tpOrderService.updataOrderConfirm(tpOrder);
 			if (result > 0) {
-				TpOrderAction tpOrderAction = new TpOrderAction();
-				tpOrderAction.setOrder_id(tpOrder.getOrder_id());
-				tpOrderAction.setOrder_status(tpOrder.getOrder_status());
-				tpOrderAction.setAction_note("您订单已发货，请等待系统确认");
-				tpOrderAction.setLog_time((int)new Date().getTime());
-				tpOrderAction.setStatus_desc("订单发货");
+				TpOrderAction tpOrderAction = tpOrderService.getOrderAction(tpOrder, 2);
 				int goodsResult1 =tpOrderService.insertOrderAction(tpOrderAction);
 				if (goodsResult1 > 0) {
 					jsonObj.put("status", "1");

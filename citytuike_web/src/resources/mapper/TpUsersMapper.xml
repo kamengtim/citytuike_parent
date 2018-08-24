@@ -280,6 +280,17 @@
 			#{is_default}
 		);
 	</insert>
+	<insert id="insertUserUpLog" parameterType="com.citytuike.model.TpUserUpLog" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO tp_users (
+			user_id,
+			level,
+			add_time
+		) VALUES (
+			#{user_id},
+			#{level},
+			#{add_time}
+		);
+	</insert>
 	<update id="updateBytokenIn" parameterType="com.citytuike.model.TpUsers" >
 		UPDATE tp_users
 		SET 
