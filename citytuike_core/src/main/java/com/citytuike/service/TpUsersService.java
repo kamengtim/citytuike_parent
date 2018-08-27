@@ -43,4 +43,10 @@ public interface TpUsersService {
 	TpUsers findOneByOpenId(String openid);
 
     int insertUserUpLog(TpUserUpLog tpUserUpLog);
+
+    int updateUserLevel(Integer user_id, Integer level);
+
+	TpUsers findOneByUserId(Integer user_id);
+
+	List<TpUsers> findAllByUserParentId(Integer parent_id);
 }

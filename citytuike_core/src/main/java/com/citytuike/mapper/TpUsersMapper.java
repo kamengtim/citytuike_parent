@@ -41,4 +41,10 @@ public interface TpUsersMapper {
 	TpUsers findOneByOpenId(@Param("openid")String openid);
 
     int insertUserUpLog(TpUserUpLog tpUserUpLog);
+
+    int updateUserLevel(@Param("user_id")Integer user_id, @Param("level")Integer level);
+
+	TpUsers findOneByUserId(@Param("user_id")Integer user_id);
+
+	List<TpUsers> findAllByUserParentId(@Param("parent_id")Integer parent_id);
 }

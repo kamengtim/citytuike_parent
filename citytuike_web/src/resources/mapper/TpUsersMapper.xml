@@ -119,6 +119,10 @@
 		select <include refid="Base_Column_List" />
 		from tp_users as t where t.openid=#{openid}
 	</select>
+	<select id="findOneByUserId" resultType="TpUsers">
+		select <include refid="Base_Column_List" />
+		from tp_users as t where t.user_id=#{user_id}
+	</select>
 	<select id="findOneByMobile" resultType="TpUsers">
 		select <include refid="Base_Column_List" />
 		from tp_users as t where t.mobile=#{username}
@@ -126,6 +130,9 @@
 	<select id="findOneByInvite" resultType="TpUsers">
 		select <include refid="Base_Column_List" />
 		from tp_users as t where t.invite_code=#{invite}
+	</select>
+	<select id="findAllByUserParentId" resultMap="TpUsers">
+		select * from tp_user as t where t.parent_id=#{parent_id} and t.level > 0
 	</select>
 	<select id="findAddressByUserId" resultMap="TpUserAddress">
 		select * from tp_user_address as t where t.address_id=#{id}
@@ -312,6 +319,12 @@
 		SET 
 				is_default=#{i}
 		WHERE address_id = #{id}
+	</update>
+	<update id="updateUserLevel" parameterType="com.citytuike.model.TpUsers" >
+		UPDATE tp_users
+		SET
+				level=#{level}
+		WHERE user_id=#{user_id}
 	</update>
 	<update id="updateUserAddress" parameterType="com.citytuike.model.TpUserAddress" >
 		UPDATE tp_user_address

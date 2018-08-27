@@ -71,26 +71,77 @@ public class PayController {
             //请在这里加上商户的业务逻辑程序代码
             TpOrder tpOrder = tpOrderService.findOrderByOrderSn(out_trade_no);
             if (null != tpOrder){
-                //更新订单状态
-                TpOrder tpOrder1 = new TpOrder();
-                tpOrder1.setOrder_id(tpOrder.getOrder_id());
-                tpOrder1.setPay_code("alipayMobile");
-                tpOrder1.setPay_name("手机网站支付宝");
-                tpOrder1.setPay_time((int)new Date().getTime());
-                tpOrder1.setTransaction_id(trade_no);
-                tpOrder1.setPay_status(1);
-                int orderResult =tpOrderService.updateOrderByAlipay(tpOrder);
-                if(orderResult > 0){
-                    //订单变化记录
-                    TpOrderAction tpOrderAction = tpOrderService.getOrderAction(tpOrder, 1);
-                    int actionResult1 =tpOrderService.insertOrderAction(tpOrderAction);
-                    if (actionResult1 > 0){
-                        //升级和返佣金
-                        List<TpOrderGoods> tpOrderGoodsList = tpOrderService.findAllGoodsByOrderId(tpOrder.getOrder_id());
-                        for (TpOrderGoods tpOrderGoods: tpOrderGoodsList) {
-                            if (144 == tpOrderGoods.getGoods_id()){
+                TpUsers tpUsers = tpUsersService.findOneByUserId(tpOrder.getUser_id());
+                if (null != tpUsers){
+                    //更新订单状态
+                    TpOrder tpOrder1 = new TpOrder();
+                    tpOrder1.setOrder_id(tpOrder.getOrder_id());
+                    tpOrder1.setPay_code("alipayMobile");
+                    tpOrder1.setPay_name("手机网站支付宝");
+                    tpOrder1.setPay_time((int)new Date().getTime());
+                    tpOrder1.setTransaction_id(trade_no);
+                    tpOrder1.setPay_status(1);
+                    int orderResult =tpOrderService.updateOrderByAlipay(tpOrder);
+                    if(orderResult > 0){
+                        //订单变化记录
+                        TpOrderAction tpOrderAction = tpOrderService.getOrderAction(tpOrder, 1);
+                        int actionResult1 =tpOrderService.insertOrderAction(tpOrderAction);
+                        if (actionResult1 > 0){
+                            int goodsnum = 0;
+                            //升级和返佣金
+                            List<TpOrderGoods> tpOrderGoodsList = tpOrderService.findAllGoodsByOrderId(tpOrder.getOrder_id());
+                            List<Integer> goodsIds = new ArrayList<Integer>();
+                            for (TpOrderGoods tpOrderGoods: tpOrderGoodsList) {
+                                if (tpOrderGoods.getGoods_id() == 144){
+                                    //统计机器数量,用作判断上面三级是否升级
+                                    goodsnum += tpOrderGoods.getGoods_num();
+                                }
+                                if (!goodsIds.contains(tpOrderGoods.getGoods_id())){
+                                    goodsIds.add(tpOrderGoods.getGoods_id());
+                                }
+                            }
+                            Integer level = 0;
+                            //存在机器时
+                            if (goodsnum > 0){
                                 //当前用户升级
-                                //上面三级是否升级
+                                if (tpUsers.getLevel() == 0){
+                                    level = 20;
+                                    int userResult = tpUsersService.updateUserLevel(tpOrder.getUser_id(), level);
+                                    if (userResult > 0){
+                                        //升级记录
+                                        TpUserUpLog  tpUserUpLog = new TpUserUpLog();
+                                        tpUserUpLog.setUser_id(tpOrder.getUser_id());
+                                        tpUserUpLog.setLevel(20);
+                                        tpUserUpLog.setAdd_time((int)new Date().getTime());
+                                        int uplogResult = tpUsersService.insertUserUpLog(tpUserUpLog);
+                                        if (uplogResult <= 0){
+                                            return "fail";
+                                        }
+                                    }
+                                }
+                                //上级是否升级
+                                if(null != tpUsers.getParent_id() && "".equals(tpUsers.getParent_id())){
+                                    List<TpUsers> listUsers =  tpUsersService.findAllByUserParentId(tpUsers.getParent_id());
+                                    int goodsNum = 0;
+                                    for (TpUsers tpuser: listUsers ) {
+                                        List<TpOrder> orderList = tpOrderService.findAllOrderByUserId(tpuser.getUser_id());
+                                        for (TpOrder tporder: orderList) {
+                                               List<TpOrderGoods> ordergoodsList  =  tpOrderService.findAllGoodsByOrderId(tporder.getOrder_id());
+                                            for (TpOrderGoods tpOrderGoods: ordergoodsList) {
+                                                if (144 == tpOrderGoods.getOrder_id()){
+                                                    goodsNum += tpOrderGoods.getGoods_num();
+                                                }
+                                            }
+                                        }
+                                    }
+//                                   if ()
+
+
+
+
+
+                                }
+
                                 //升级记录
                                 TpUserUpLog  tpUserUpLog = new TpUserUpLog();
                                 tpUserUpLog.setUser_id(tpOrder.getUser_id());
@@ -100,10 +151,11 @@ public class PayController {
                                 //返佣金
                                 //金额变化记录
                             }
+                            return "success";
                         }
-                        return "success";
                     }
                 }
+
             }
             //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
 

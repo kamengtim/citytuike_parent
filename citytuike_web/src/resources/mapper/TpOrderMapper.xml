@@ -12,7 +12,10 @@
     <select id="findAllGoodsByOrderId" resultMap="TpOrderGoods">  
         select *  from tp_order_goods where order_id=#{order_id}
     </select>  
-    <select id="findOrderById" resultType="com.citytuike.model.TpOrder">  
+    <select id="findAllOrderByUserId" resultMap="TpOrderGoods">
+        select *  from tp_order where user_id=#{user_id} and pay_status=1
+    </select>
+    <select id="findOrderById" resultType="com.citytuike.model.TpOrder">
         select *  from tp_order where order_id=#{id}
     </select>
     <select id="findOrderByOrderSn" resultType="com.citytuike.model.TpOrder">

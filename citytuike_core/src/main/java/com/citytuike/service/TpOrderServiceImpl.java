@@ -223,5 +223,9 @@ public class TpOrderServiceImpl implements TpOrderService{
 		return tpOrderMapper.updateOrderByAlipay(tpOrder);
 	}
 
+	public List<TpOrder> findAllOrderByUserId(Integer user_id) {
+		return tpOrderMapper.findAllOrderByUserId(user_id);
+	}
+
 
 }

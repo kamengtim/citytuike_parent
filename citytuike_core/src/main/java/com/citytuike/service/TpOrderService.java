@@ -41,4 +41,6 @@ public interface TpOrderService {
 	TpOrderAction getOrderAction(TpOrder tpOrder, int i);
 
 	int updateOrderByAlipay(TpOrder tpOrder);
+
+    List<TpOrder> findAllOrderByUserId(Integer user_id);
 }

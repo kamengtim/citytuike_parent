@@ -34,4 +34,6 @@ public interface TpOrderMapper {
     TpOrder findOrderByOrderSn(@Param(value = "out_trade_no")String out_trade_no);
 
 	int updateOrderByAlipay(TpOrder tpOrder);
+
+    List<TpOrder> findAllOrderByUserId(@Param(value = "user_id")Integer user_id);
 }

@@ -137,4 +137,16 @@ public class TpUsersServiceImpl implements TpUsersService{
 		return tpUsersMapper.insertUserUpLog(tpUserUpLog);
 	}
 
+	public int updateUserLevel(Integer user_id, Integer level) {
+		return tpUsersMapper.updateUserLevel(user_id, level);
+	}
+
+	public TpUsers findOneByUserId(Integer user_id) {
+		return tpUsersMapper.findOneByUserId(user_id);
+	}
+
+	public List<TpUsers> findAllByUserParentId(Integer parent_id) {
+		return tpUsersMapper.findAllByUserParentId(parent_id);
+	}
+
 }
