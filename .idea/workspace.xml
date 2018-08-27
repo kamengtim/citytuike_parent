@@ -6,62 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="341904fd-e717-4327-9846-64fb23443566" name="Default Changelist" comment="微信登录">
+    <list default="true" id="341904fd-e717-4327-9846-64fb23443566" name="Default Changelist" comment="是是是">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpOrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpOrderMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/constant/Constant.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/exception/AccessTokenException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/exception/PermissionException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/exception/WeixinApiException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpGoodsMapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpOrderMapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpSmsLogMapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpUsersMapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/LimitPageList.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/Page.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpFreightConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpGoods.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpGoodsCollect.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpGoodsImages.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpInvoice.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpOrder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpOrderAction.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpOrderGoods.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpRegion.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpReturn.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpSmsLog.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpUserAddress.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/model/TpUsers.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpGoodsService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpGoodsServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpOrderService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpOrderServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpSmsLogService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpSmsLogServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpUsersService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpUsersServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/BaseMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/MD5Utils.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/SHA1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/TextsMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/Util.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/WeixinAPI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/WeixinAPI$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/WeixinAPI$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/WeixinAPI$4.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/WeixinAPI$5.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/WeixinAPI$6.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/WeixinAPI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/XMLReturn.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/XmlUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/PayController.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/PayController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpOrderMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -124,7 +70,7 @@
         <counts>
           <entry key="java" value="2877" />
           <entry key="jsp" value="2" />
-          <entry key="txt" value="16" />
+          <entry key="txt" value="19" />
           <entry key="xml" value="285" />
         </counts>
       </usages-collector>
@@ -132,7 +78,7 @@
         <counts>
           <entry key="JAVA" value="2877" />
           <entry key="JSP" value="2" />
-          <entry key="PLAIN_TEXT" value="16" />
+          <entry key="PLAIN_TEXT" value="19" />
           <entry key="SQL" value="8" />
           <entry key="XML" value="277" />
         </counts>
@@ -147,8 +93,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/PayController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="430">
-              <caret line="127" column="23" lean-forward="true" selection-start-line="127" selection-start-column="23" selection-end-line="127" selection-end-column="23" />
+            <state relative-caret-position="317">
+              <caret line="134" column="41" lean-forward="true" selection-start-line="134" selection-start-column="41" selection-end-line="134" selection-end-column="41" />
               <folding>
                 <element signature="e#4504#4513#0" expanded="true" />
               </folding>
@@ -366,7 +312,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535355623270" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535356180078" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -506,7 +452,7 @@
       <workItem from="1534927429973" duration="5783000" />
       <workItem from="1534990118867" duration="21582000" />
       <workItem from="1535072616218" duration="17095000" />
-      <workItem from="1535331077152" duration="18416000" />
+      <workItem from="1535331077152" duration="19039000" />
     </task>
     <task id="LOCAL-00001" summary="时时彩">
       <created>1534933809644</created>
@@ -529,11 +475,18 @@
       <option name="project" value="LOCAL" />
       <updated>1535018697413</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="是是是">
+      <created>1535355783670</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1535355783671</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77316000" />
+    <option name="totallyTimeSpent" value="77939000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -546,7 +499,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Image Layers" order="0" />
       <window_info id="UI Designer" order="1" />
@@ -554,11 +506,11 @@
       <window_info id="Capture Tool" order="3" />
       <window_info id="Web" order="4" side_tool="true" />
       <window_info id="Designer" order="5" />
-      <window_info active="true" content_ui="combo" id="Project" order="6" sideWeight="0.4994641" visible="true" weight="0.22014925" />
+      <window_info content_ui="combo" id="Project" order="6" sideWeight="0.4994641" visible="true" weight="0.22014925" />
       <window_info id="Structure" order="7" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Spring" order="0" />
-      <window_info anchor="bottom" id="Terminal" order="1" weight="0.32939914" />
-      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50159913" side_tool="true" weight="0.48660237" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="1" sideWeight="0.49946696" visible="true" weight="0.3290461" />
+      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50053304" side_tool="true" visible="true" weight="0.3290461" />
       <window_info anchor="bottom" id="Java Enterprise" order="3" weight="0.32939914" />
       <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.4989339" weight="0.5391211" />
       <window_info anchor="bottom" id="Database Changes" order="5" show_stripe_button="false" />
@@ -592,7 +544,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="时时彩" />
     <MESSAGE value="微信登录" />
-    <option name="LAST_COMMIT_MESSAGE" value="微信登录" />
+    <MESSAGE value="是是是" />
+    <option name="LAST_COMMIT_MESSAGE" value="是是是" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
@@ -1837,8 +1790,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/PayController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="127" column="23" lean-forward="true" selection-start-line="127" selection-start-column="23" selection-end-line="127" selection-end-column="23" />
+        <state relative-caret-position="317">
+          <caret line="134" column="41" lean-forward="true" selection-start-line="134" selection-start-column="41" selection-end-line="134" selection-end-column="41" />
           <folding>
             <element signature="e#4504#4513#0" expanded="true" />
           </folding>
