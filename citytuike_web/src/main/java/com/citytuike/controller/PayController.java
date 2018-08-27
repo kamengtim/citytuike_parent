@@ -3,7 +3,6 @@ package com.citytuike.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.citytuike.constant.AlipayConfig;
 import com.citytuike.constant.Constant;
 import com.citytuike.exception.WeixinApiException;
 import com.citytuike.model.*;
@@ -64,9 +63,9 @@ public class PayController {
         //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表(以上仅供参考)//
         //计算得出通知验证结果
         //boolean AlipaySignature.rsaCheckV1(Map<String, String> params, String publicKey, String charset, String sign_type)
-        boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET, "RSA2");
+      //  boolean verify_result = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.CHARSET, "RSA2");
 
-        if(verify_result){//验证成功
+      //  if(verify_result){//验证成功
             //////////////////////////////////////////////////////////////////////////////////////////
             //请在这里加上商户的业务逻辑程序代码
             TpOrder tpOrder = tpOrderService.findOrderByOrderSn(out_trade_no);
@@ -128,9 +127,9 @@ public class PayController {
 
 //            out.clear();
             return "fail";
-        }else{//验证失败
+       /* }else{//验证失败
             return "fail";
-        }
+        }*/
     }
 
 

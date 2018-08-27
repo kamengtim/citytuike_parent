@@ -351,6 +351,21 @@
 			</if>
 		WHERE address_id = #{address_id}
 	</update>
-	
+	<select id="selectCountMoney" resultType="bigdecimal">
+		select user_money from tp_users where user_id=#{user_id}
+	</select>
+	<select id="selectRegTime" resultType="int">
+		select reg_time FROM  tp_users WHERE user_id = #{user_id}
+	</select>
+	<select id="selectParentId" resultMap="TpUsers">
+		select * FROM  tp_users WHERE user_id = #{user_id}
+	</select>
+	<select id="selectCountDevice" resultType="int">
+		select count(user_id) FROM  tp_users WHERE user_id = #{user_id}
+	</select>
+	<!-- 分页SQL语句 -->
+	<select id="selectByPage" resultType="TpUsers">
+		select *  from tp_users where parent_id = #{user_id} limit #{startPos},#{pageSize}
+	</select>
 	
 </mapper>

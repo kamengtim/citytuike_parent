@@ -1,21 +1,20 @@
 package com.citytuike.service;
 
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.citytuike.model.TpUserUpLog;
+import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.mapper.TpUsersMapper;
-import com.citytuike.model.TpRegion;
-import com.citytuike.model.TpUserAddress;
-import com.citytuike.model.TpUsers;
 
 @Service
 public class TpUsersServiceImpl implements TpUsersService{
-	
+
 	@Autowired
 	private TpUsersMapper tpUsersMapper;
 
@@ -135,6 +134,38 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	public int insertUserUpLog(TpUserUpLog tpUserUpLog) {
 		return tpUsersMapper.insertUserUpLog(tpUserUpLog);
+	}
+
+	public BigDecimal selectCountMoney(Integer user_id) {
+		return tpUsersMapper.selectCountMoney(user_id);
+	}
+
+	public int selectRegTime(Integer user_id) {
+		return tpUsersMapper.selectRegTime(user_id);
+	}
+
+	public List<TpUsers> getParentId(Integer user_id) {
+
+		return tpUsersMapper.selectParentId(user_id);
+	}
+
+	public LimitPageList getLimitPageList(Integer user_id, String page) {
+		LimitPageList limitPageList = new LimitPageList();
+		int totalCount = tpUsersMapper.selectCountDevice(user_id);
+		List<TpUsers> stuList = new ArrayList<TpUsers>();
+		Page PageSize = null;
+		if(page != null){
+			PageSize=new Page(totalCount,Integer.valueOf(page));
+			PageSize.setPageSize(10);
+			stuList = tpUsersMapper.selectByPage(PageSize.getStartPos(),PageSize.getPageSize(),user_id);
+		}else{
+			PageSize = new Page(totalCount,1);
+			PageSize.setPageSize(10);
+			stuList = tpUsersMapper.selectByPage(PageSize.getStartPos(),PageSize.getPageSize(),user_id);
+		}
+		limitPageList.setPage(PageSize);
+		limitPageList.setList(stuList);
+		return limitPageList;
 	}
 
 }

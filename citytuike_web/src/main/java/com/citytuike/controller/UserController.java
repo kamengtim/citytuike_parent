@@ -4,6 +4,7 @@ package com.citytuike.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.citytuike.service.ITpAccountLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,8 @@ public class UserController {
 	private TpUsersService tpUsersService;
 	@Autowired
 	private TpSmsLogService tpSmsLogService;
+	@Autowired
+	private ITpAccountLogService tpAccountLogService;
 	/**
 	 * @param model
 	 * @param username
@@ -409,4 +412,26 @@ public class UserController {
 		
 		return jsonObj.toString();
 	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 账户管理
+	 */
+	@RequestMapping(value="/account",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public  @ResponseBody String account(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "失败!");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		//tpAccountLogService.UserMoney(tpUsers.get);
+		return null;
+	}
+
 }

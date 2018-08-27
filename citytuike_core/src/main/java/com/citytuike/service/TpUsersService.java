@@ -1,12 +1,10 @@
 package com.citytuike.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.model.TpRegion;
-import com.citytuike.model.TpUserAddress;
-import com.citytuike.model.TpUserUpLog;
-import com.citytuike.model.TpUsers;
+import com.citytuike.model.*;
 
 public interface TpUsersService {
 
@@ -43,4 +41,11 @@ public interface TpUsersService {
 	TpUsers findOneByOpenId(String openid);
 
     int insertUserUpLog(TpUserUpLog tpUserUpLog);
+
+	BigDecimal selectCountMoney(Integer user_id);
+
+	int selectRegTime(Integer user_id);
+
+	LimitPageList getLimitPageList(Integer user_id, String page);
+
 }
