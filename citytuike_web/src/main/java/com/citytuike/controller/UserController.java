@@ -4,6 +4,7 @@ package com.citytuike.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.citytuike.model.*;
 import com.citytuike.service.ITpAccountLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.model.TpRegion;
-import com.citytuike.model.TpSmsLog;
-import com.citytuike.model.TpUserAddress;
-import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpSmsLogService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.MD5Utils;
@@ -430,8 +427,16 @@ public class UserController {
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-		//tpAccountLogService.UserMoney(tpUsers.get);
+		TpAccountLog tpAccountLog = tpAccountLogService.UserMoney(tpUsers.getUser_id());
 		return null;
 	}
+	/*@RequestMapping(value = "send_validate_code",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String SendValidateCode(@RequestParam(required = false)String type,
+												 @RequestParam(required = false)String scene,
+												 @RequestParam(required = true)String mobile,
+												 @RequestParam(required = false) String send,
+												 @RequestParam(required = false)String verify_code,
+												 @RequestParam(required = false)String unique_id){
 
+	}*/
 }

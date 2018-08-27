@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpDeviceMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpDevice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="device_sn" property="device_sn" jdbcType="VARCHAR" />
+    <result column="ad_position_id" property="ad_position_id" jdbcType="INTEGER" />
+    <result column="qrscene" property="qrscene" jdbcType="VARCHAR" />
+    <result column="iot_id" property="iot_id" jdbcType="VARCHAR" />
+    <result column="product_key" property="product_key" jdbcType="VARCHAR" />
+    <result column="device_name" property="device_name" jdbcType="VARCHAR" />
+    <result column="device_secret" property="device_secret" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="paper_number" property="paper_number" jdbcType="INTEGER" />
+    <result column="paper_send" property="paper_send" jdbcType="INTEGER" />
+    <result column="paper_inventory" property="paper_inventory" jdbcType="INTEGER" />
+    <result column="income" property="income" jdbcType="DECIMAL" />
+    <result column="one_income" property="one_income" jdbcType="DECIMAL" />
+    <result column="capacity" property="capacity" jdbcType="INTEGER" />
+    <result column="active_time" property="active_time" jdbcType="INTEGER" />
+    <result column="no_send" property="no_send" jdbcType="BIT" />
+    <result column="open_status" property="open_status" jdbcType="BIT" />
+    <result column="online" property="online" jdbcType="BIT" />
+    <result column="landmark_picture" property="landmark_picture" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="INTEGER" />
+    <result column="city" property="city" jdbcType="INTEGER" />
+    <result column="district" property="district" jdbcType="INTEGER" />
+    <result column="is_active" property="is_active" jdbcType="TINYINT" />
+    <result column="order_id" property="order_id" jdbcType="INTEGER" />
+    <result column="goods_id" property="goods_id" jdbcType="INTEGER" />
+    <result column="distribution_time" property="distribution_time" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+    <result column="active_code" property="active_code" jdbcType="VARCHAR" />
+    <result column="shipping_sn" property="shipping_sn" jdbcType="VARCHAR" />
+    <result column="shipping_name" property="shipping_name" jdbcType="VARCHAR" />
+    <result column="today_num" property="today_num" jdbcType="INTEGER" />
+    <result column="today_time" property="today_time" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_device
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpDevice" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_device (device_sn, ad_position_id, qrscene, 
+      iot_id, product_key, device_name, 
+      device_secret, add_time, user_id, 
+      paper_number, paper_send, paper_inventory, 
+      income, one_income, capacity, 
+      active_time, no_send, open_status, 
+      online, landmark_picture, province, 
+      city, district, is_active, 
+      order_id, goods_id, distribution_time, 
+      address, longitude, latitude, 
+      active_code, shipping_sn, shipping_name, 
+      today_num, today_time)
+    values (#{device_sn,jdbcType=VARCHAR}, #{ad_position_id,jdbcType=INTEGER}, #{qrscene,jdbcType=VARCHAR}, 
+      #{iot_id,jdbcType=VARCHAR}, #{product_key,jdbcType=VARCHAR}, #{device_name,jdbcType=VARCHAR}, 
+      #{device_secret,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, 
+      #{paper_number,jdbcType=INTEGER}, #{paper_send,jdbcType=INTEGER}, #{paper_inventory,jdbcType=INTEGER}, 
+      #{income,jdbcType=DECIMAL}, #{one_income,jdbcType=DECIMAL}, #{capacity,jdbcType=INTEGER}, 
+      #{active_time,jdbcType=INTEGER}, #{no_send,jdbcType=BIT}, #{open_status,jdbcType=BIT}, 
+      #{online,jdbcType=BIT}, #{landmark_picture,jdbcType=VARCHAR}, #{province,jdbcType=INTEGER}, 
+      #{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER}, #{is_active,jdbcType=TINYINT}, 
+      #{order_id,jdbcType=INTEGER}, #{goods_id,jdbcType=INTEGER}, #{distribution_time,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, 
+      #{active_code,jdbcType=VARCHAR}, #{shipping_sn,jdbcType=VARCHAR}, #{shipping_name,jdbcType=VARCHAR}, 
+      #{today_num,jdbcType=INTEGER}, #{today_time,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpDevice" >
+    update tp_device
+    set device_sn = #{device_sn,jdbcType=VARCHAR},
+      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
+      qrscene = #{qrscene,jdbcType=VARCHAR},
+      iot_id = #{iot_id,jdbcType=VARCHAR},
+      product_key = #{product_key,jdbcType=VARCHAR},
+      device_name = #{device_name,jdbcType=VARCHAR},
+      device_secret = #{device_secret,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      user_id = #{user_id,jdbcType=INTEGER},
+      paper_number = #{paper_number,jdbcType=INTEGER},
+      paper_send = #{paper_send,jdbcType=INTEGER},
+      paper_inventory = #{paper_inventory,jdbcType=INTEGER},
+      income = #{income,jdbcType=DECIMAL},
+      one_income = #{one_income,jdbcType=DECIMAL},
+      capacity = #{capacity,jdbcType=INTEGER},
+      active_time = #{active_time,jdbcType=INTEGER},
+      no_send = #{no_send,jdbcType=BIT},
+      open_status = #{open_status,jdbcType=BIT},
+      online = #{online,jdbcType=BIT},
+      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      is_active = #{is_active,jdbcType=TINYINT},
+      order_id = #{order_id,jdbcType=INTEGER},
+      goods_id = #{goods_id,jdbcType=INTEGER},
+      distribution_time = #{distribution_time,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      active_code = #{active_code,jdbcType=VARCHAR},
+      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
+      shipping_name = #{shipping_name,jdbcType=VARCHAR},
+      today_num = #{today_num,jdbcType=INTEGER},
+      today_time = #{today_time,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, device_sn, ad_position_id, qrscene, iot_id, product_key, device_name, 
+    device_secret, add_time, user_id, paper_number, paper_send, paper_inventory, income, 
+    one_income, capacity, active_time, no_send, open_status, online, landmark_picture, 
+    province, city, district, is_active, order_id, goods_id, distribution_time, address, 
+    longitude, latitude, active_code, shipping_sn, shipping_name, today_num, today_time
+    from tp_device
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, device_sn, ad_position_id, qrscene, iot_id, product_key, device_name, 
+    device_secret, add_time, user_id, paper_number, paper_send, paper_inventory, income, 
+    one_income, capacity, active_time, no_send, open_status, online, landmark_picture, 
+    province, city, district, is_active, order_id, goods_id, distribution_time, address, 
+    longitude, latitude, active_code, shipping_sn, shipping_name, today_num, today_time
+    from tp_device
+  </select>
+  <select id="selectCountDevice" resultType="int" >
+     select COUNT(id)from tp_device WHERE user_id = #{user_id}
+  </select>
+  <!-- 分页SQL语句 -->
+  <select id="selectByPage" resultType="com.citytuike.model.TpDevice">
+    select *  from tp_device where user_id = #{user_id} limit #{startPos},#{pageSize}
+  </select>
+  <select id="selectIncome" resultType="com.citytuike.model.TpDevice" >
+    select * from tp_device WHERE user_id = #{user_id}
+  </select>
+  <select id="selectParent" resultMap="BaseResultMap" >
+    select * from tp_device WHERE user_id = #{user_id}
+  </select>
+</mapper>
