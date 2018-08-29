@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpUserBankMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpUserBank" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="real_name" property="real_name" jdbcType="VARCHAR" />
+    <result column="id_card" property="id_card" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="bank_card" property="bank_card" jdbcType="VARCHAR" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="is_delete" property="is_delete" jdbcType="TINYINT" />
+    <result column="bank_name" property="bank_name" jdbcType="VARCHAR" />
+    <result column="branch" property="branch" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bank_id" jdbcType="INTEGER" />
+    <result column="branch_area" property="branch_area" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_user_bank
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpUserBank" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_user_bank (real_name, id_card, mobile, 
+      bank_card, user_id, add_time, 
+      is_delete, bank_name, branch, 
+      bank_id, branch_area)
+    values (#{real_name,jdbcType=VARCHAR}, #{id_card,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{bank_card,jdbcType=VARCHAR}, #{user_id,jdbcType=INTEGER}, #{add_time,jdbcType=INTEGER}, 
+      #{is_delete,jdbcType=TINYINT}, #{bank_name,jdbcType=VARCHAR}, #{branch,jdbcType=VARCHAR}, 
+      #{bank_id,jdbcType=INTEGER}, #{branch_area,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpUserBank" >
+    update tp_user_bank
+    set real_name = #{real_name,jdbcType=VARCHAR},
+      id_card = #{id_card,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      bank_card = #{bank_card,jdbcType=VARCHAR},
+      user_id = #{user_id,jdbcType=INTEGER},
+      add_time = #{add_time,jdbcType=INTEGER},
+      is_delete = #{is_delete,jdbcType=TINYINT},
+      bank_name = #{bank_name,jdbcType=VARCHAR},
+      branch = #{branch,jdbcType=VARCHAR},
+      bank_id = #{bank_id,jdbcType=INTEGER},
+      branch_area = #{branch_area,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, real_name, id_card, mobile, bank_card, user_id, add_time, is_delete, bank_name, 
+    branch, bank_id, branch_area
+    from tp_user_bank
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, real_name, id_card, mobile, bank_card, user_id, add_time, is_delete, bank_name, 
+    branch, bank_id, branch_area
+    from tp_user_bank
+  </select>
+  <select id="selectBankByUserId" resultMap="BaseResultMap">
+    select * from tp_user_bank where user_id = #{user_id}
+  </select>
+</mapper>

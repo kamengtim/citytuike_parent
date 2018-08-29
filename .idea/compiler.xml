@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="citytuike_core" target="1.5" />
+      <module name="citytuike_core" target="1.7" />
       <module name="citytuike_parent" target="1.5" />
       <module name="citytuike_web" target="1.7" />
     </bytecodeTargetLevel>

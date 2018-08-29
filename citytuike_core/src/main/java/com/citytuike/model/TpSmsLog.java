@@ -15,11 +15,11 @@ public class TpSmsLog implements Serializable{
 	/**
 	 * 手机号
 	 */
-	private int mobile;
+	private String mobile;
 	/**
 	 * 缓存id
 	 */
-	private int session_id;
+	private String session_id;
 	/**
 	 * 发送时间
 	 */
@@ -27,7 +27,7 @@ public class TpSmsLog implements Serializable{
 	/**
 	 * 验证码
 	 */
-	private int code;
+	private String code;
 	/**
 	 * 使用状态0未使用1已使用
 	 */
@@ -35,7 +35,7 @@ public class TpSmsLog implements Serializable{
 	/**
 	 * 内容
 	 */
-	private int msg;
+	private String msg;
 	/**
 	 * 发送场景,1:用户注册,2:找回密码,3:客户下单,4:客户支付,5:商家发货,6:身份验证
 	 */
@@ -43,7 +43,7 @@ public class TpSmsLog implements Serializable{
 	/**
 	 * 发送短信异常内容
 	 */
-	private int error_msg;
+	private String error_msg;
 
 	public int getId() {
 		return id;
@@ -53,19 +53,19 @@ public class TpSmsLog implements Serializable{
 		this.id = id;
 	}
 
-	public int getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
-	public void setMobile(int mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
-	public int getSession_id() {
+	public String getSession_id() {
 		return session_id;
 	}
 
-	public void setSession_id(int session_id) {
+	public void setSession_id(String session_id) {
 		this.session_id = session_id;
 	}
 
@@ -77,11 +77,11 @@ public class TpSmsLog implements Serializable{
 		this.add_time = add_time;
 	}
 
-	public int getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(int code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 
@@ -93,11 +93,11 @@ public class TpSmsLog implements Serializable{
 		this.status = status;
 	}
 
-	public int getMsg() {
+	public String getMsg() {
 		return msg;
 	}
 
-	public void setMsg(int msg) {
+	public void setMsg(String msg) {
 		this.msg = msg;
 	}
 
@@ -109,11 +109,11 @@ public class TpSmsLog implements Serializable{
 		this.scene = scene;
 	}
 
-	public int getError_msg() {
+	public String getError_msg() {
 		return error_msg;
 	}
 
-	public void setError_msg(int error_msg) {
+	public void setError_msg(String error_msg) {
 		this.error_msg = error_msg;
 	}
 }

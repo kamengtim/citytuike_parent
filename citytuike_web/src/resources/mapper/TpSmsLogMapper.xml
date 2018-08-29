@@ -65,5 +65,12 @@
 		WHERE mobile = #{mobile}
 	</update>
 	
-	
+	<insert id="saveMsg" keyProperty="id" useGeneratedKeys="true">
+		insert into tp_sms_log (mobile, session_id, add_time,
+      code, status, msg,
+      scene, error_msg)
+    values (#{mobile,jdbcType=VARCHAR}, #{session_id,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER},
+      #{code,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{msg,jdbcType=VARCHAR},
+      #{scene,jdbcType=INTEGER}, #{error_msg,jdbcType=LONGVARCHAR})
+	</insert>
 </mapper>

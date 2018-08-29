@@ -29,7 +29,6 @@ public class CitytuikeInterceptor implements HandlerInterceptor {
         }
         return true;
     }
-
     // after the handler is executed
     public void postHandle(HttpServletRequest request,
                            HttpServletResponse response, Object handler,
