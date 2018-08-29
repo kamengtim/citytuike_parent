@@ -6,6 +6,7 @@ import com.citytuike.model.TpUserUpLog;
 import com.citytuike.model.TpUsers;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TpUsersMapper {
@@ -47,4 +48,16 @@ public interface TpUsersMapper {
 	TpUsers findOneByUserId(@Param("user_id")Integer user_id);
 
 	List<TpUsers> findAllByUserParentId(@Param("parent_id")Integer parent_id);
+
+	BigDecimal selectCountMoney(Integer user_id);
+
+	int selectRegTime(Integer user_id);
+
+	List<TpUsers> selectParentId(Integer user_id);
+
+	int selectCountDevice(Integer user_id);
+
+	List<TpUsers> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("user_id") Integer user_id);
+
+    int updateUserFrozenMoney(@Param("user_id")Integer user_id, @Param("frozenMoney")double frozenMoney);
 }

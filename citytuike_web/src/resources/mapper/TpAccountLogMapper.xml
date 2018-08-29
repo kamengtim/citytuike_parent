@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpAccountLogMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpAccountLog" >
+    <id column="log_id" property="log_id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="user_money" property="user_money" jdbcType="DECIMAL" />
+    <result column="frozen_money" property="frozen_money" jdbcType="DECIMAL" />
+    <result column="pay_points" property="pay_points" jdbcType="INTEGER" />
+    <result column="change_time" property="change_time" jdbcType="INTEGER" />
+    <result column="desc" property="desc" jdbcType="VARCHAR" />
+    <result column="order_sn" property="order_sn" jdbcType="VARCHAR" />
+    <result column="order_id" property="order_id" jdbcType="INTEGER" />
+    <result column="change_type" property="change_type" jdbcType="INTEGER" />
+    <result column="second_type" property="second_type" jdbcType="INTEGER" />
+    <result column="third_type" property="third_type" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="is_delete" property="is_delete" jdbcType="BIT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_account_log
+    where log_id = #{log_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpAccountLog" >
+    insert into tp_account_log (log_id, user_id, user_money, 
+      frozen_money, pay_points, change_time, 
+      desc, order_sn, order_id, 
+      change_type, second_type, third_type, 
+      status, is_delete)
+    values (#{log_id,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, #{user_money,jdbcType=DECIMAL}, 
+      #{frozen_money,jdbcType=DECIMAL}, #{pay_points,jdbcType=INTEGER}, #{change_time,jdbcType=INTEGER}, 
+      #{desc,jdbcType=VARCHAR}, #{order_sn,jdbcType=VARCHAR}, #{order_id,jdbcType=INTEGER}, 
+      #{change_type,jdbcType=INTEGER}, #{second_type,jdbcType=INTEGER}, #{third_type,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{is_delete,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpAccountLog" >
+    update tp_account_log
+    set user_id = #{user_id,jdbcType=INTEGER},
+      user_money = #{user_money,jdbcType=DECIMAL},
+      frozen_money = #{frozen_money,jdbcType=DECIMAL},
+      pay_points = #{pay_points,jdbcType=INTEGER},
+      change_time = #{change_time,jdbcType=INTEGER},
+      desc = #{desc,jdbcType=VARCHAR},
+      order_sn = #{order_sn,jdbcType=VARCHAR},
+      order_id = #{order_id,jdbcType=INTEGER},
+      change_type = #{change_type,jdbcType=INTEGER},
+      second_type = #{second_type,jdbcType=INTEGER},
+      third_type = #{third_type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      is_delete = #{is_delete,jdbcType=BIT}
+    where log_id = #{log_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select log_id, user_id, user_money, frozen_money, pay_points, change_time, desc, 
+    order_sn, order_id, change_type, second_type, third_type, status, is_delete
+    from tp_account_log
+    where log_id = #{log_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select log_id, user_id, user_money, frozen_money, pay_points, change_time, desc, 
+    order_sn, order_id, change_type, second_type, third_type, status, is_delete
+    from tp_account_log
+  </select>
+</mapper>

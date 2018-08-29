@@ -119,6 +119,10 @@
 		select <include refid="Base_Column_List" />
 		from tp_users as t where t.openid=#{openid}
 	</select>
+	<select id="findOneByUserId" resultType="TpUsers">
+		select <include refid="Base_Column_List" />
+		from tp_users as t where t.user_id=#{user_id}
+	</select>
 	<select id="findOneByMobile" resultType="TpUsers">
 		select <include refid="Base_Column_List" />
 		from tp_users as t where t.mobile=#{username}
@@ -126,6 +130,9 @@
 	<select id="findOneByInvite" resultType="TpUsers">
 		select <include refid="Base_Column_List" />
 		from tp_users as t where t.invite_code=#{invite}
+	</select>
+	<select id="findAllByUserParentId" resultMap="TpUsers">
+		select * from tp_user as t where t.parent_id=#{parent_id} and t.level > 0
 	</select>
 	<select id="findAddressByUserId" resultMap="TpUserAddress">
 		select * from tp_user_address as t where t.address_id=#{id}
@@ -280,6 +287,17 @@
 			#{is_default}
 		);
 	</insert>
+	<insert id="insertUserUpLog" parameterType="com.citytuike.model.TpUserUpLog" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO tp_users (
+			user_id,
+			level,
+			add_time
+		) VALUES (
+			#{user_id},
+			#{level},
+			#{add_time}
+		);
+	</insert>
 	<update id="updateBytokenIn" parameterType="com.citytuike.model.TpUsers" >
 		UPDATE tp_users
 		SET 
@@ -301,6 +319,18 @@
 		SET 
 				is_default=#{i}
 		WHERE address_id = #{id}
+	</update>
+	<update id="updateUserLevel" parameterType="com.citytuike.model.TpUsers" >
+		UPDATE tp_users
+		SET
+				level=#{level}
+		WHERE user_id=#{user_id}
+	</update>
+	<update id="updateUserFrozenMoney" parameterType="com.citytuike.model.TpUsers" >
+		UPDATE tp_users
+		SET
+				frozen_money=#{frozen_money}
+		WHERE user_id=#{user_id}
 	</update>
 	<update id="updateUserAddress" parameterType="com.citytuike.model.TpUserAddress" >
 		UPDATE tp_user_address
@@ -340,6 +370,21 @@
 			</if>
 		WHERE address_id = #{address_id}
 	</update>
-	
+	<select id="selectCountMoney" resultType="bigdecimal">
+		select user_money from tp_users where user_id=#{user_id}
+	</select>
+	<select id="selectRegTime" resultType="int">
+		select reg_time FROM  tp_users WHERE user_id = #{user_id}
+	</select>
+	<select id="selectParentId" resultMap="TpUsers">
+		select * FROM  tp_users WHERE user_id = #{user_id}
+	</select>
+	<select id="selectCountDevice" resultType="int">
+		select count(user_id) FROM  tp_users WHERE user_id = #{user_id}
+	</select>
+	<!-- 分页SQL语句 -->
+	<select id="selectByPage" resultType="TpUsers">
+		select *  from tp_users where parent_id = #{user_id} limit #{startPos},#{pageSize}
+	</select>
 	
 </mapper>

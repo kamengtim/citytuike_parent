@@ -4,6 +4,7 @@ package com.citytuike.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.citytuike.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -104,7 +105,7 @@ public class GoodsController {
 			TpGoodsCollect tpGoodsCollect = new TpGoodsCollect();
 			tpGoodsCollect.setGoods_id(tpGoods.getGoods_id());
 			tpGoodsCollect.setUser_id(tpUsers.getUser_id());
-			tpGoodsCollect.setAdd_time((int)new Date().getTime());
+			tpGoodsCollect.setAdd_time(Integer.parseInt(Util.CreateDate()));
 			int status = tpGoodsService.insertGoodsCollect(tpGoodsCollect);
 			if (status > 0) {
 				jsonObj.put("status", "1");

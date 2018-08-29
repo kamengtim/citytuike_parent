@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpMessage" >
+    <id column="message_id" property="message_id" jdbcType="INTEGER" />
+    <result column="admin_id" property="admin_id" jdbcType="SMALLINT" />
+    <result column="type" property="type" jdbcType="BIT" />
+    <result column="category" property="category" jdbcType="INTEGER" />
+    <result column="send_time" property="send_time" jdbcType="INTEGER" />
+    <result column="message" property="message" jdbcType="LONGVARCHAR" />
+    <result column="data" property="data" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_message
+    where message_id = #{message_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpMessage" >
+    insert into tp_message (message_id, admin_id, type, 
+      category, send_time, message, 
+      data)
+    values (#{message_id,jdbcType=INTEGER}, #{admin_id,jdbcType=SMALLINT}, #{type,jdbcType=BIT}, 
+      #{category,jdbcType=INTEGER}, #{send_time,jdbcType=INTEGER}, #{message,jdbcType=LONGVARCHAR}, 
+      #{data,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpMessage" >
+    update tp_message
+    set admin_id = #{admin_id,jdbcType=SMALLINT},
+      type = #{type,jdbcType=BIT},
+      category = #{category,jdbcType=INTEGER},
+      send_time = #{send_time,jdbcType=INTEGER},
+      message = #{message,jdbcType=LONGVARCHAR},
+      data = #{data,jdbcType=LONGVARCHAR}
+    where message_id = #{message_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select message_id, admin_id, type, category, send_time, message, data
+    from tp_message
+    where message_id = #{message_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select message_id, admin_id, type, category, send_time, message, data
+    from tp_message
+  </select>
+  <select id="selectMessageByMessageId" resultMap="BaseResultMap" >
+    select message_id, admin_id, type, category, send_time, message, data
+    from tp_message where message_id = #{message_id}
+  </select>
+  <select id="selectCount" resultType="int" >
+    select count(message_id)
+    from tp_message where message_id = #{message_id}
+  </select>
+  <!-- 分页SQL语句 -->
+  <select id="selectByPage" resultMap="BaseResultMap">
+    select *  from tp_message where message_id = #{message_id} limit #{startPos},#{pageSize}
+  </select>
+    <select id="NewSelectMessageByMessageId" resultMap="BaseResultMap" >
+        select message_id, admin_id, type, category, send_time, message, data
+        from tp_message where message_id = #{message_id} and category = #{category}
+    </select>
+</mapper>

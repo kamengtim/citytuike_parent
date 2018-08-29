@@ -4,6 +4,8 @@ package com.citytuike.controller;
 import java.util.Date;
 import java.util.List;
 
+import com.citytuike.model.*;
+import com.citytuike.service.ITpAccountLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.model.TpRegion;
-import com.citytuike.model.TpSmsLog;
-import com.citytuike.model.TpUserAddress;
-import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpSmsLogService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.MD5Utils;
@@ -30,6 +28,8 @@ public class UserController {
 	private TpUsersService tpUsersService;
 	@Autowired
 	private TpSmsLogService tpSmsLogService;
+	@Autowired
+	private ITpAccountLogService tpAccountLogService;
 	/**
 	 * @param model
 	 * @param username
@@ -409,4 +409,34 @@ public class UserController {
 		
 		return jsonObj.toString();
 	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 账户管理
+	 */
+	@RequestMapping(value="/account",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public  @ResponseBody String account(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "失败!");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpAccountLog tpAccountLog = tpAccountLogService.UserMoney(tpUsers.getUser_id());
+		return null;
+	}
+	/*@RequestMapping(value = "send_validate_code",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String SendValidateCode(@RequestParam(required = false)String type,
+												 @RequestParam(required = false)String scene,
+												 @RequestParam(required = true)String mobile,
+												 @RequestParam(required = false) String send,
+												 @RequestParam(required = false)String verify_code,
+												 @RequestParam(required = false)String unique_id){
+
+	}*/
 }

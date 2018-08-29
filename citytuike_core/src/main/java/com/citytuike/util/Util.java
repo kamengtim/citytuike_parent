@@ -1,5 +1,8 @@
 package com.citytuike.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class Util<main> {
@@ -41,5 +44,32 @@ public class Util<main> {
 
         }
         return new String(charArray);
+    }
+    /**
+     * 时间戳
+     * @return
+     */
+    public static String CreateDate(){
+        String dataStr=null;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+        dataStr = sdf.format(new Date());
+        return dataStr;
+    }
+    /**
+     * 失效时间 当前时间+10min
+     * @return
+     */
+    public static String expriredDate(String dataStr){
+        String aDataStr=null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+            Date date = sdf.parse(dataStr);
+            date.setTime(date.getTime()+10*60*1000);
+            aDataStr=sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return aDataStr;
     }
 }

@@ -2,14 +2,14 @@ package com.citytuike.model;
 
 import java.io.Serializable;
 
-public class TpAccountLog<integer> implements Serializable{
+public class TpAccountLog implements Serializable{
 
 	/**
 	 * 支付记录
 	 */
 	private static final long serialVersionUID = 15898777487924007L;
 	/**
-	 * 表id
+	 * 用户id
 	 */
 	private Integer log_id;
 	/**
@@ -45,19 +45,28 @@ public class TpAccountLog<integer> implements Serializable{
 	 */
 	private Integer order_id;
 	/**
-	 * 类型
+	 * 1 收益
+	 * 2 提现
 	 */
 	private Integer change_type;
 	/**
-	 *
+	 * 0 销售收益
+	 * 20信用卡佣金冻结收益
+	 * 30 机器赔偿金
+	 * 40 纸巾收益
 	 */
 	private Integer second_type;
 	/**
-	 *
+	 * 100 购买纸巾冻结收益 级差
+	 * 200 购买纸巾冻结收益 隔代感恩
+	 * 300 购买纸巾冻结收益 同根奖励
+	 * 400 信用卡申请成功收益 佣金分成
 	 */
 	private Integer third_type;
 	/**
-	 *
+	 * 0 正常收益
+	 * 1 未解冻金额
+	 * 2 已解冻金额
 	 */
 	private Integer status;
 	/**

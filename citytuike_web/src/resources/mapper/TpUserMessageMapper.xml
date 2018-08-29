@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpUserMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpUserMessage" >
+    <id column="rec_id" property="rec_id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="message_id" property="message_id" jdbcType="INTEGER" />
+    <result column="category" property="category" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="BIT" />
+      <association property="messages" columnPrefix="tp_" javaType="com.citytuike.model.TpMessage">
+          <id column="message_id" property="message_id"/>
+          <result column="admin_id" property="admin_id"/>
+          <result column="message" property="message"/>
+          <result column="type" property="type"/>
+          <result column="category" property="category"/>
+          <result column="data" property="data"/>
+          <result column="data" property="send_time"/>
+      </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_user_message
+    where rec_id = #{rec_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpUserMessage" >
+    insert into tp_user_message (rec_id, user_id, message_id, 
+      category, status)
+    values (#{rec_id,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, #{message_id,jdbcType=INTEGER}, 
+      #{category,jdbcType=INTEGER}, #{status,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpUserMessage" >
+    update tp_user_message
+    set user_id = #{user_id,jdbcType=INTEGER},
+      message_id = #{message_id,jdbcType=INTEGER},
+      category = #{category,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT}
+    where rec_id = #{rec_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select rec_id, user_id, message_id, category, status
+    from tp_user_message
+    where rec_id = #{rec_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select rec_id, user_id, message_id, category, status
+    from tp_user_message
+  </select>
+  <select id="selectMessageByUser" resultMap="BaseResultMap" >
+    select rec_id, user_id, message_id, category, status
+    from tp_user_message where user_id =#{user_id}
+  </select>
+    <select id="NewSelectMessageByUser" resultMap="BaseResultMap" >
+        select rec_id, user_id, message_id, category, status
+        from tp_user_message where user_id =#{user_id} and category=#{cate}
+    </select>
+    <select id="selectMessageByUserDetail" resultMap="BaseResultMap" >
+        select rec_id, user_id, message_id, category, status
+        from tp_user_message where user_id =#{user_id} and rec_id = #{rec_id}
+    </select>
+</mapper>

@@ -126,7 +126,7 @@ public class CartController {
 			tpOrder.setTotal_amount(orderTotal);
 			tpOrder.setGoods_price(goodsTotal);
 			tpOrder.setShipping_price(invoiceTotal + freightTotal);
-			tpOrder.setAdd_time((int)new Date().getTime());
+			tpOrder.setAdd_time(Integer.parseInt(Util.CreateDate()));
 			tpOrder.setUser_note(user_note);
 			int result = tpOrderService.intsertOrder(tpOrder);
 			if (result > 0) {
@@ -167,8 +167,8 @@ public class CartController {
 					invoice.setInvoice_type(Integer.parseInt(type));
 					invoice.setInvoice_money(Constant.INVOICE_FREIGHT);
 					invoice.setTaxpayer(taxpayer);
-					invoice.setAtime((int)new Date().getTime());
-					invoice.setCtime((int)new Date().getTime());
+					invoice.setAtime(Integer.parseInt(Util.CreateDate()));
+					invoice.setCtime(Integer.parseInt(Util.CreateDate()));
 					int goodsResult2 = tpOrderService.insertInvoic(invoice);
 					if (goodsResult2 <= 0) {
 						jsonObj.put("status", "0");
