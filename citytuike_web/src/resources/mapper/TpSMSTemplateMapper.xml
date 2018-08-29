@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpSmsTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpSmsTemplate" >
+    <id column="tpl_id" property="tpl_id" jdbcType="INTEGER" />
+    <result column="sms_sign" property="sms_sign" jdbcType="VARCHAR" />
+    <result column="sms_tpl_code" property="sms_tpl_code" jdbcType="VARCHAR" />
+    <result column="tpl_content" property="tpl_content" jdbcType="VARCHAR" />
+    <result column="send_scene" property="send_scene" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_sms_template
+    where tpl_id = #{tpl_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpSmsTemplate" >
+    insert into tp_sms_template (tpl_id, sms_sign, sms_tpl_code, 
+      tpl_content, send_scene, add_time
+      )
+    values (#{tpl_id,jdbcType=INTEGER}, #{sms_sign,jdbcType=VARCHAR}, #{sms_tpl_code,jdbcType=VARCHAR}, 
+      #{tpl_content,jdbcType=VARCHAR}, #{send_scene,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpSmsTemplate" >
+    update tp_sms_template
+    set sms_sign = #{sms_sign,jdbcType=VARCHAR},
+      sms_tpl_code = #{sms_tpl_code,jdbcType=VARCHAR},
+      tpl_content = #{tpl_content,jdbcType=VARCHAR},
+      send_scene = #{send_scene,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER}
+    where tpl_id = #{tpl_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select tpl_id, sms_sign, sms_tpl_code, tpl_content, send_scene, add_time
+    from tp_sms_template
+    where tpl_id = #{tpl_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select tpl_id, sms_sign, sms_tpl_code, tpl_content, send_scene, add_time
+    from tp_sms_template
+  </select>
+  <select id="selectScene" resultType="string">
+    select tpl_content from tp_sms_template where send_scene = #{scene}
+  </select>
+</mapper>

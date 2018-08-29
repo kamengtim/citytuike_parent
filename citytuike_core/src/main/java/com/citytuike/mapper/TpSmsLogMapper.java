@@ -11,5 +11,5 @@ public interface TpSmsLogMapper {
 	int updateByStatus(TpSmsLog tpSmsLog);
 
 
-
+    void saveMsg(TpSmsLog tpSmsLog);
 }

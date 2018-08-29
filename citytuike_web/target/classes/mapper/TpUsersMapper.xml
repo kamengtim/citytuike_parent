@@ -45,7 +45,7 @@
 		<result column="second_leader" property="second_leader" />
 		<result column="token" property="token" />
 		<result column="message_mask" property="message_mask" />
-		<result column="push_id" property="pushId" />
+		<result column="push_id" property="push_id" />
 		<result column="distribut_level" property="distribut_level" />
 		<result column="is_vip" property="is_vip" />
 		<result column="invite_code" property="invite_code" />
@@ -377,7 +377,7 @@
 		select reg_time FROM  tp_users WHERE user_id = #{user_id}
 	</select>
 	<select id="selectParentId" resultMap="TpUsers">
-		select * FROM  tp_users WHERE user_id = #{user_id}
+		select * FROM  tp_users WHERE parent_id = #{user_id}
 	</select>
 	<select id="selectCountDevice" resultType="int">
 		select count(user_id) FROM  tp_users WHERE user_id = #{user_id}
@@ -386,5 +386,4 @@
 	<select id="selectByPage" resultType="TpUsers">
 		select *  from tp_users where parent_id = #{user_id} limit #{startPos},#{pageSize}
 	</select>
-	
 </mapper>

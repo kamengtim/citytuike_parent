@@ -23,13 +23,13 @@
 
         <!-- 必须要有的，使用这个配置链接数据库 @TODO:是否可以扩展 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.1.135/paper" userId="citytuike" password="123456">
+                        connectionURL="jdbc:mysql://112.74.76.128/paper" userId="paper" password="paper!123">
             <!-- 这里面可以设置property属性，每一个property属性都设置到配置的Driver上 -->
         </jdbcConnection>
 
         <!-- java模型创建器，是必须要的元素 负责：1，key类（见context的defaultModelType）；2，java类；3，查询类
             targetPackage：生成的类要放的包，真实的包受enableSubPackages属性控制； targetProject：目标项目，指定一个存在的目录下，生成的内容会放到指定目录中，如果目录不存在，MBG不会自动建目录 -->
-        <javaModelGenerator targetPackage="com.citytuike.modle" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.citytuike.model" targetProject="src/main/java">
             <!-- for MyBatis3/MyBatis3Simple 自动为每一个生成的类创建一个构造方法，构造方法包含了所有的field；而不是使用setter； -->
             <property name="constructorBased" value="false"/>
             <!-- for MyBatis3 / MyBatis3Simple 是否创建一个不可变的类，如果为true， 那么MBG会创建一个没有setter方法的类，取而代之的是类似constructorBased的类 -->
@@ -40,7 +40,7 @@
         <!-- 生成SQL map的XML文件生成器， 注意，在Mybatis3之后，我们可以使用mapper.xml文件+Mapper接口（或者不用mapper接口），
             或者只使用Mapper接口+Annotation，所以，如果 javaClientGenerator配置中配置了需要生成XML的话，这个元素就必须配置
             targetPackage/targetProject:同javaModelGenerator -->
-        <sqlMapGenerator targetPackage="com.citytuike.mapper"
+        <sqlMapGenerator targetPackage="resources/mapper/"
                          targetProject="src/main/java">
             <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
             <property name="enableSubPackages" value="true"/>
@@ -61,7 +61,7 @@
                 value=""/> -->
         </javaClientGenerator>
 
-        <table tableName="tp_account_log" domainObjectName="TpAccountLog">
+        <table tableName="tp_sms_template" domainObjectName="TpSMSTemplate">
             <property name="useActualColumnNames" value="true" />
             <!-- 参考 javaModelGenerator 的 constructorBased属性 -->
             <property name="constructorBased" value="false"/>

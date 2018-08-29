@@ -1,11 +1,14 @@
 package com.citytuike.controller;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.citytuike.exception.SendMessageException;
 import com.citytuike.model.*;
-import com.citytuike.service.ITpAccountLogService;
+import com.citytuike.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.service.TpSmsLogService;
-import com.citytuike.service.TpUsersService;
 import com.citytuike.util.MD5Utils;
 import com.citytuike.util.Util;
 
@@ -30,6 +31,14 @@ public class UserController {
 	private TpSmsLogService tpSmsLogService;
 	@Autowired
 	private ITpAccountLogService tpAccountLogService;
+	@Autowired
+	private TpBankService tpBankService;
+	@Autowired
+	private TpUserBankService tpUserBankService;
+	@Autowired
+	private TpWithdrawalsService tpWithdrawalsService;
+	@Autowired
+	private SendMessageService sendMessageService;
 	/**
 	 * @param model
 	 * @param username
@@ -427,16 +436,130 @@ public class UserController {
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-		TpAccountLog tpAccountLog = tpAccountLogService.UserMoney(tpUsers.getUser_id());
-		return null;
+		JSONObject jsonObject = tpAccountLogService.UserMoney(tpUsers.getUser_id());
+		return jsonObject.toString();
 	}
-	/*@RequestMapping(value = "send_validate_code",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 收益明细列表
+	 */
+	@RequestMapping(value="/account_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	public @ResponseBody String AccountList(@RequestParam(required = true)String token,
+											@RequestParam(required = true)String type,
+											@RequestParam(required = false)String page){
+		JSONObject data = new JSONObject();
+		JSONObject jsonObj = new JSONObject();
+		JSONArray  jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		LimitPageList  limitPageList  = tpAccountLogService.getDetail(tpUsers.getUser_id(),type,page);
+		List<TpAccountLog> list = (List<TpAccountLog>)limitPageList.getList();
+		for (TpAccountLog tpAccountLog : list) {
+			JSONObject jsonObject = tpAccountLogService.getJsonToAccount(tpAccountLog);
+			jsonArray.add(jsonObject);
+		}
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
+		double count_money = tpAccountLogService.SumMoney(tpUsers.getUser_id());
+		data.put("count_money",sdf.format(new Date())+":"+count_money);
+		data.put("current_page", limitPageList.getPage().getPageNow());
+		data.put("total", limitPageList.getPage().getTotalCount());
+		data.put("per_page", limitPageList.getPage().getPageSize());
+		data.put("last_page",limitPageList.getPage().getTotalPageCount());
+		data.put("data",jsonArray);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		jsonObj.put("result",data);
+
+		return jsonObj.toString();
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 银行卡列表
+	 */
+	@RequestMapping(value = "bank_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String BankList(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		List<TpUserBank>tpUserBanks = tpUserBankService.getBankByUserId(tpUsers.getUser_id());
+		for (TpUserBank tpUserBank : tpUserBanks) {
+			JSONObject jsonObject1 = tpUserBankService.getJsonBankAndUser(tpUserBank);
+			TpBank tpBank = tpBankService.getListBank(tpUserBank.getBank_id());
+			JSONObject jsonObject = tpBankService.getJsonBank(tpBank);
+			jsonObj.put("result",jsonObject1);
+			jsonObject1.put("bank",jsonObject);
+		}
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 提现申请列表
+	 */
+	@RequestMapping(value = "withdrawals_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String WithdrawalsList(@RequestParam(required = true)String token,
+												@RequestParam(required = false)String page){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		LimitPageList tpWithdrawals = tpWithdrawalsService.getWithdrawalsList(tpUsers.getUser_id(),page);
+		List<TpWithdrawals> withdrawals = (List<TpWithdrawals>)tpWithdrawals.getList();
+		for (TpWithdrawals withdrawal : withdrawals) {
+			JSONObject jsonObject = tpWithdrawalsService.JsonWithdrawals(withdrawal);
+			jsonArray.add(jsonObject);
+		}
+		data.put("data",jsonArray);
+		data.put("current_page", tpWithdrawals.getPage().getPageNow());
+		data.put("total", tpWithdrawals.getPage().getTotalCount());
+		data.put("per_page", tpWithdrawals.getPage().getPageSize());
+		data.put("last_page",tpWithdrawals.getPage().getTotalPageCount());
+		jsonObj.put("result",data);
+		return jsonObj.toString();
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 短信发送
+	 */
+	@RequestMapping(value = "send_validate_code",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
 	public @ResponseBody String SendValidateCode(@RequestParam(required = false)String type,
-												 @RequestParam(required = false)String scene,
+												 @RequestParam(required = false,defaultValue = "6")String scene,
 												 @RequestParam(required = true)String mobile,
 												 @RequestParam(required = false) String send,
 												 @RequestParam(required = false)String verify_code,
 												 @RequestParam(required = false)String unique_id){
-
-	}*/
+		try{
+		sendMessageService.sendVerifyCode(type,scene,mobile,send,verify_code,unique_id);
+		return "发送成功";
+		}catch (Exception e){
+		throw new SendMessageException("发送超时");
+		}
+	}
 }

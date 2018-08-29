@@ -23,7 +23,14 @@ public class MessageController {
     @Autowired
     private TpUserMessageService tpUserMessageService;
     @RequestMapping(value = "index",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String Index(@RequestParam(required = true) String token){
+    /**
+     * @param model
+     * @param id
+     * @param p
+     * @return
+     * 消息首页
+     */
+    public @ResponseBody String Index(@RequestParam(required = true) String token) {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "失败!");
@@ -34,11 +41,18 @@ public class MessageController {
             return jsonObj.toString();
         }
         JSONObject data = tpUserMessageService.selectMessage(tpUsers.getUser_id());
-        jsonObj.put("return",data);
-        jsonObj.put("status","1");
-        jsonObj.put("msg","请求成功");
+        jsonObj.put("return", data);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "请求成功");
         return jsonObj.toString();
     }
+    /**
+     * @param model
+     * @param id
+     * @param p
+     * @return
+     * 消息列表
+     */
     @RequestMapping(value = "getList",method = RequestMethod.GET,produces =  "text/html;charset=UTF-8")
     public @ResponseBody String getList(@RequestParam(required = true) String token,
                                         @RequestParam(required = true) String cate,
@@ -65,6 +79,13 @@ public class MessageController {
         jsonObj.put("msg","请求成功");
         return jsonObj.toString();
     }
+    /**
+     * @param model
+     * @param id
+     * @param p
+     * @return
+     * 消息详情
+     */
     @RequestMapping(value = "detail",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public @ResponseBody String Detail(@RequestParam(required = true)String token,
                                        @RequestParam(required = true)String rec_id){
