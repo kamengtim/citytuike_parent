@@ -562,4 +562,63 @@ public class UserController {
 		throw new SendMessageException("发送超时");
 		}
 	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 更新用户信息
+	 */
+	@RequestMapping(value = "userinfo",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String UserInfo(@RequestParam(required = true)String token, TpUsers users,@RequestParam(required = false)String mobile_code){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		if(users.getMobile() == null){
+			users.setToken(token);
+			users.setUser_id(tpUsers.getUser_id());
+			tpUsersService.updateUser(users);
+		}else{
+			if(mobile_code != null){
+				users.setToken(token);
+				users.setUser_id(tpUsers.getUser_id());
+				tpUsersService.updateUser(users);
+			}else{
+				return "验证码不能为空";
+			}
+		}
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "修改成功!");
+		jsonObj.put("result",jsonArray);
+		return "修改成功";
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 发卡行列表
+	 */
+	@RequestMapping(value = "bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String Bank(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		JSONArray bankList = tpBankService.getBankList(tpUsers.getUser_id());
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		jsonObj.put("result",bankList);
+		return jsonObj.toString();
+	}
+
 }

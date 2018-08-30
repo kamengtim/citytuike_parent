@@ -3,11 +3,18 @@ package com.citytuike.model;
 import java.io.Serializable;
 
 public class TpUsers  implements Serializable{
-	
+
 	/**
 	 * 用户表
 	 */
 	private static final long serialVersionUID = -2865265431959685551L;
+
+
+	/*
+	 * 纸张数量
+
+	 * */
+	private Integer paper_number;
 	/**
 	 * 表id
 	 */
@@ -181,7 +188,7 @@ public class TpUsers  implements Serializable{
 	 */
 	private String sale_number;
 	/**
-	 * 
+	 *
 	 */
 	private Integer parent_id;
 	/**
@@ -189,7 +196,7 @@ public class TpUsers  implements Serializable{
 	 */
 	private String wechat;
 	/**
-	 * 
+	 *
 	 */
 	private String wechat_qrcode;
 	/**
@@ -197,13 +204,25 @@ public class TpUsers  implements Serializable{
 	 */
 	private String set_pass;
 	/**
-	 * 
+	 *
 	 */
 	private String im_id;
 	/**
-	 * 
+	 *
 	 */
 	private String im_pwd;
+	/*
+	 *
+	 * */
+	private Integer paper_number_allowance;
+
+	public Integer getPaper_number_allowance() {
+		return paper_number_allowance;
+	}
+
+	public void setPaper_number_allowance(Integer paper_number_allowance) {
+		this.paper_number_allowance = paper_number_allowance;
+	}
 
 	public Integer getUser_id() {
 		return user_id;
@@ -595,5 +614,12 @@ public class TpUsers  implements Serializable{
 
 	public void setIm_pwd(String im_pwd) {
 		this.im_pwd = im_pwd;
+	}
+	public Integer getPaper_number() {
+		return paper_number;
+	}
+
+	public void setPaper_number(Integer paper_number) {
+		this.paper_number = paper_number;
 	}
 }

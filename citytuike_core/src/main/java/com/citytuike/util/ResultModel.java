@@ -26,4 +26,5 @@ public class ResultModel {
 		this.result = result;
 	}
 
+
 }

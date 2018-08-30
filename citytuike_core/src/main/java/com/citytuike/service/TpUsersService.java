@@ -54,4 +54,6 @@ public interface TpUsersService {
 	LimitPageList getLimitPageList(Integer user_id, String page);
 
     int updateUserFrozenMoney(Integer user_id, double frozenMoney);
+
+    void updateUser(TpUsers users);
 }

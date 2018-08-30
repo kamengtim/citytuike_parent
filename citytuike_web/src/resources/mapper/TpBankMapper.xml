@@ -133,4 +133,7 @@
     need_query, background, work_day, school_url, type, nuclear_card, open_url
     from tp_bank
   </select>
+  <select id="selectBankList" resultMap="BaseResultMap">
+    select tp.id,tp.name,tp.thumb from tp_user_bank t LEFT JOIN tp_bank tp on t.bank_id = tp.id where t.user_id = #{user_id}
+  </select>
 </mapper>

@@ -60,4 +60,6 @@ public interface TpUsersMapper {
 	List<TpUsers> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("user_id") Integer user_id);
 
     int updateUserFrozenMoney(@Param("user_id")Integer user_id, @Param("frozenMoney")double frozenMoney);
+
+    void updateUserInfo(TpUsers users);
 }

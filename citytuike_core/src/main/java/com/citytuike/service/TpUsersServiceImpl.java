@@ -182,5 +182,11 @@ public class TpUsersServiceImpl implements TpUsersService{
     public int updateUserFrozenMoney(Integer user_id, double frozenMoney) {
         return tpUsersMapper.updateUserFrozenMoney(user_id, frozenMoney);
     }
+	@Override
+	public void updateUser(TpUsers users) {
+
+		tpUsersMapper.updateUserInfo(users);
+
+	}
 
 }
