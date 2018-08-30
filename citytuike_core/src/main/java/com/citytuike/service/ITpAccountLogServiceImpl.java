@@ -2,17 +2,13 @@ package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.mapper.TpAccountLogMapper;
-import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.mapper.TpUsersMapper;
 import com.citytuike.model.LimitPageList;
 import com.citytuike.model.Page;
 import com.citytuike.model.TpAccountLog;
-import com.citytuike.model.TpUsers;
-import com.citytuike.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

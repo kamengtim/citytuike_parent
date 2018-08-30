@@ -17,8 +17,6 @@ public interface TpAccountLogMapper {
 
     int updateByPrimaryKey(TpAccountLog record);
 
-<<<<<<< HEAD
-=======
     TpAccountLog selectUserMoney(Integer user_id);
 
 
@@ -27,5 +25,4 @@ public interface TpAccountLogMapper {
     List<TpAccountLog> selectUserMoneyDetail(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("user_id") Integer user_id, @Param("type") String type);
 
     double SumMoney(Integer user_id);
->>>>>>> 588eed3222952eb7bd34ba2f22254d881f442aac
 }

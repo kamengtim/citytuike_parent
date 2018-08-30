@@ -14,16 +14,13 @@ import com.citytuike.mobileutil.GZIPUtils;
 import com.citytuike.mobileutil.JsonHelper;
 import com.citytuike.mobileutil.http.*;
 import com.citytuike.model.TpSmsLog;
-import com.citytuike.model.TpSmsTemplate;
 import com.citytuike.util.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class SendMessageServiceImpl implements SendMessageService {

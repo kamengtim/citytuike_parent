@@ -61,4 +61,19 @@
     order_sn, order_id, change_type, second_type, third_type, status, is_delete
     from tp_account_log
   </select>
+  <select id="selectUserMoney" resultMap="BaseResultMap" >
+    select log_id, user_id, user_money, frozen_money, pay_points, change_time, desc,
+    order_sn, order_id, change_type, second_type, third_type, status, is_delete
+    from tp_account_log where log_id = #{user_id}
+  </select>
+  <select id="selectUserMoneyDetail" resultMap="BaseResultMap" >
+    select *
+    from tp_account_log where user_id = #{user_id} and change_type = #{type} limit #{startPos},#{pageSize}
+  </select>
+  <select id="accountDetail" resultType="int" >
+    select count(log_id)  from tp_account_log where user_id = #{user_id} and change_type = #{type}
+  </select>
+  <select id="SumMoney" resultType="double" >
+    select sum(user_money)+sum(frozen_money) as count_money  from tp_account_log where user_id = #{user_id}
+  </select>
 </mapper>

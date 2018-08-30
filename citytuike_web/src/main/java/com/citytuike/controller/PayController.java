@@ -510,6 +510,51 @@ public class PayController {
                 }
             }else if (pay_code.equals("alipayMobile")){
                 //手机网站支付宝
+                // 商户订单号，商户网站订单系统中唯一订单号，必填
+                String out_trade_no = tpOrder.getOrder_sn();
+                // 订单名称，必填
+                String subject = "卡盟订单";
+                System.out.println(subject);
+                // 付款金额，必填
+                String total_amount= tpOrder.getTotal_amount() + "";
+                // 商品描述，可空
+                String body = "卡盟订单商品";
+                // 超时时间 可空
+                String timeout_express="2m";
+                // 销售产品码 必填
+                String product_code="QUICK_WAP_WAY";
+                /**********************/
+                // SDK 公共请求类，包含公共请求参数，以及封装了签名与验签，开发者无需关注签名与验签
+                //调用RSA签名方式
+                AlipayClient client = new DefaultAlipayClient(AlipayConfig.URL, AlipayConfig.APPID, AlipayConfig.RSA_PRIVATE_KEY, AlipayConfig.FORMAT, AlipayConfig.CHARSET, AlipayConfig.ALIPAY_PUBLIC_KEY,AlipayConfig.SIGNTYPE);
+                AlipayTradeWapPayRequest alipay_request=new AlipayTradeWapPayRequest();
+
+                // 封装请求支付信息
+                AlipayTradeWapPayModel alipayModel=new AlipayTradeWapPayModel();
+                alipayModel.setOutTradeNo(out_trade_no);
+                alipayModel.setSubject(subject);
+                alipayModel.setTotalAmount(total_amount);
+                alipayModel.setBody(body);
+                alipayModel.setTimeoutExpress(timeout_express);
+                alipayModel.setProductCode(product_code);
+                alipay_request.setBizModel(alipayModel);
+                // 设置异步通知地址
+                alipay_request.setNotifyUrl(AlipayConfig.notify_url);
+                // 设置同步地址
+                alipay_request.setReturnUrl(AlipayConfig.return_url);
+
+                // form表单生产
+                String form = "";
+                // 调用SDK生成表单
+                try {
+                    form = client.pageExecute(alipay_request).getBody();
+                    data.put("url",form);
+                    data.put("type","jump");
+                    jsonObj.put("result", data);
+                    return jsonObj.toString();
+                } catch (AlipayApiException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return jsonObj.toString();
