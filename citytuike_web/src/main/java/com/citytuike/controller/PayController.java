@@ -428,7 +428,7 @@ public class PayController {
         return accountlogResult;
     }
     @RequestMapping(value="/getCode",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String yopTaketoken(Model model, @RequestParam(required=true) String order_sn,
+    public @ResponseBody String yopTaketoken(HttpServletResponse resp, Model model, @RequestParam(required=true) String order_sn,
                                              @RequestParam(required=false) String openid,
                                              @RequestParam(required=true) String token,
                                         @RequestParam(required=true) String pay_code) throws IOException {

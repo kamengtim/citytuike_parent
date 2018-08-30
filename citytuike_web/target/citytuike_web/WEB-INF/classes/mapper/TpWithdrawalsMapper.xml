@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpWithdrawalsMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpWithdrawals" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="create_time" property="create_time" jdbcType="INTEGER" />
+    <result column="check_time" property="check_time" jdbcType="INTEGER" />
+    <result column="pay_time" property="pay_time" jdbcType="INTEGER" />
+    <result column="refuse_time" property="refuse_time" jdbcType="INTEGER" />
+    <result column="bank_name" property="bank_name" jdbcType="VARCHAR" />
+    <result column="bank_card" property="bank_card" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="taxfee" property="taxfee" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="pay_code" property="pay_code" jdbcType="VARCHAR" />
+    <result column="error_code" property="error_code" jdbcType="VARCHAR" />
+    <result column="is_paid" property="is_paid" jdbcType="TINYINT" />
+    <result column="query_time" property="query_time" jdbcType="INTEGER" />
+    <result column="order_sn" property="order_sn" jdbcType="VARCHAR" />
+    <result column="serial_number" property="serial_number" jdbcType="VARCHAR" />
+    <result column="send_type" property="send_type" jdbcType="BIT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_withdrawals
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpWithdrawals" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_withdrawals (user_id, money, create_time, 
+      check_time, pay_time, refuse_time, 
+      bank_name, bank_card, realname, 
+      remark, taxfee, status, 
+      pay_code, error_code, is_paid, 
+      query_time, order_sn, serial_number, 
+      send_type)
+    values (#{user_id,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, #{create_time,jdbcType=INTEGER}, 
+      #{check_time,jdbcType=INTEGER}, #{pay_time,jdbcType=INTEGER}, #{refuse_time,jdbcType=INTEGER}, 
+      #{bank_name,jdbcType=VARCHAR}, #{bank_card,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{taxfee,jdbcType=DECIMAL}, #{status,jdbcType=BIT}, 
+      #{pay_code,jdbcType=VARCHAR}, #{error_code,jdbcType=VARCHAR}, #{is_paid,jdbcType=TINYINT}, 
+      #{query_time,jdbcType=INTEGER}, #{order_sn,jdbcType=VARCHAR}, #{serial_number,jdbcType=VARCHAR}, 
+      #{send_type,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpWithdrawals" >
+    update tp_withdrawals
+    set user_id = #{user_id,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      create_time = #{create_time,jdbcType=INTEGER},
+      check_time = #{check_time,jdbcType=INTEGER},
+      pay_time = #{pay_time,jdbcType=INTEGER},
+      refuse_time = #{refuse_time,jdbcType=INTEGER},
+      bank_name = #{bank_name,jdbcType=VARCHAR},
+      bank_card = #{bank_card,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      taxfee = #{taxfee,jdbcType=DECIMAL},
+      status = #{status,jdbcType=BIT},
+      pay_code = #{pay_code,jdbcType=VARCHAR},
+      error_code = #{error_code,jdbcType=VARCHAR},
+      is_paid = #{is_paid,jdbcType=TINYINT},
+      query_time = #{query_time,jdbcType=INTEGER},
+      order_sn = #{order_sn,jdbcType=VARCHAR},
+      serial_number = #{serial_number,jdbcType=VARCHAR},
+      send_type = #{send_type,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, money, create_time, check_time, pay_time, refuse_time, bank_name, 
+    bank_card, realname, remark, taxfee, status, pay_code, error_code, is_paid, query_time, 
+    order_sn, serial_number, send_type
+    from tp_withdrawals
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, money, create_time, check_time, pay_time, refuse_time, bank_name, 
+    bank_card, realname, remark, taxfee, status, pay_code, error_code, is_paid, query_time, 
+    order_sn, serial_number, send_type
+    from tp_withdrawals
+  </select>
+  <select id="CountWithdrawals" resultType="int">
+    select count(id) from tp_withdrawals where user_id = #{user_id}
+  </select>
+  <!-- 分页SQL语句 -->
+  <select id="selectByPage" resultType="com.citytuike.model.TpWithdrawals">
+    select *  from tp_withdrawals where user_id = #{user_id} limit #{startPos},#{pageSize}
+  </select>
+</mapper>

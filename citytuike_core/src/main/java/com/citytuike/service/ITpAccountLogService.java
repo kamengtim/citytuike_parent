@@ -5,9 +5,9 @@ import com.citytuike.model.LimitPageList;
 import com.citytuike.model.TpAccountLog;
 public interface ITpAccountLogService {
 
-
     int insertAccountLog(TpAccountLog tpAccountLog);
 
+    JSONObject UserMoney(Integer user_id);
 
     LimitPageList getDetail(Integer user_id, String type,String page);
 

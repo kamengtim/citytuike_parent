@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpDeviceLogMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpDeviceLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="device_id" property="device_id" jdbcType="INTEGER" />
+    <result column="action" property="action" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="message_id" property="message_id" jdbcType="VARCHAR" />
+    <result column="request_id" property="request_id" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="response" property="response" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_device_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpDeviceLog" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_device_log (device_id, action, add_time, 
+      message_id, request_id, status, 
+      response)
+    values (#{device_id,jdbcType=INTEGER}, #{action,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, 
+      #{message_id,jdbcType=VARCHAR}, #{request_id,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, 
+      #{response,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpDeviceLog" >
+    update tp_device_log
+    set device_id = #{device_id,jdbcType=INTEGER},
+      action = #{action,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      message_id = #{message_id,jdbcType=VARCHAR},
+      request_id = #{request_id,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      response = #{response,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, device_id, action, add_time, message_id, request_id, status, response
+    from tp_device_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, device_id, action, add_time, message_id, request_id, status, response
+    from tp_device_log
+  </select>
+  <select id="getTodayDevice" resultType="int">
+    select count(tp.id) from tp_device t left join tp_device_log tp on t.id = tp.device_id where t.user_id = #{user_id} and to_days(FROM_UNIXTIME(tp.add_time)) = to_days(now());
+  </select>
+  <select id="getTodayIncome" resultType="double">
+    select count(t.income) from tp_device t left join tp_device_log tp on t.id = tp.device_id where t.user_id = #{user_id} and to_days(FROM_UNIXTIME(t.today_time)) = to_days(now());
+  </select>
+  <select id="getCountMan" resultType="int">
+    select count(t.user_id) from tp_device t left join tp_device_log tp on t.id = tp.device_id where t.user_id = #{user_id} and to_days(FROM_UNIXTIME(t.today_time)) = to_days(now());
+  </select>
+</mapper>
