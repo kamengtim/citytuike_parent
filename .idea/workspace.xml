@@ -57,17 +57,7 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2562">
-              <caret line="585" column="7" lean-forward="true" selection-start-line="585" selection-start-column="7" selection-end-line="585" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -191,16 +181,6 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="citytuike" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike" type="462c0819:PsiDirectoryNode" />
-              <item name="controller" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -213,7 +193,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535709845700" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535710242029" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -350,16 +330,15 @@
       <workItem from="1535417442364" duration="23249000" />
       <workItem from="1535504313924" duration="25976000" />
       <workItem from="1535591006801" duration="17726000" />
-      <workItem from="1535677071197" duration="16386000" />
+      <workItem from="1535677071197" duration="16732000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34713000" />
+    <option name="totallyTimeSpent" value="35059000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="Image Layers" order="1" />
@@ -924,8 +903,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2562">
-          <caret line="585" column="7" lean-forward="true" selection-start-line="585" selection-start-column="7" selection-end-line="585" selection-end-column="7" />
+        <state relative-caret-position="338">
+          <caret line="701" column="14" lean-forward="true" selection-start-line="701" selection-start-column="14" selection-end-line="701" selection-end-column="14" />
         </state>
       </provider>
     </entry>
