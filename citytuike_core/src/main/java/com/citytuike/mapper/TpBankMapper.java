@@ -17,4 +17,6 @@ public interface TpBankMapper {
     int updateByPrimaryKey(TpBank record);
 
     List<TpBank> selectBankList(Integer user_id);
+
+    String selectBank(int id);
 }

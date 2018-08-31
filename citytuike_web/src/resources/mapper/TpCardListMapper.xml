@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpCardListMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpCardList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="logo" property="logo" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="apply_num" property="apply_num" jdbcType="INTEGER" />
+    <result column="tig" property="tig" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="gift" property="gift" jdbcType="CHAR" />
+    <result column="create_time" property="create_time" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="card_logo" property="card_logo" jdbcType="VARCHAR" />
+    <result column="card_logo2" property="card_logo2" jdbcType="VARCHAR" />
+    <result column="partner_money" property="partner_money" jdbcType="DECIMAL" />
+    <result column="chief_money" property="chief_money" jdbcType="DECIMAL" />
+    <result column="manager_money" property="manager_money" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="BIT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_card_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpCardList" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_card_list (logo, title, apply_num, 
+      tig, money, gift, create_time, 
+      url, card_logo, card_logo2, 
+      partner_money, chief_money, manager_money, 
+      status)
+    values (#{logo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{apply_num,jdbcType=INTEGER}, 
+      #{tig,jdbcType=VARCHAR}, #{money,jdbcType=DECIMAL}, #{gift,jdbcType=CHAR}, #{create_time,jdbcType=INTEGER}, 
+      #{url,jdbcType=VARCHAR}, #{card_logo,jdbcType=VARCHAR}, #{card_logo2,jdbcType=VARCHAR}, 
+      #{partner_money,jdbcType=DECIMAL}, #{chief_money,jdbcType=DECIMAL}, #{manager_money,jdbcType=DECIMAL}, 
+      #{status,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpCardList" >
+    update tp_card_list
+    set logo = #{logo,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      apply_num = #{apply_num,jdbcType=INTEGER},
+      tig = #{tig,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      gift = #{gift,jdbcType=CHAR},
+      create_time = #{create_time,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      card_logo = #{card_logo,jdbcType=VARCHAR},
+      card_logo2 = #{card_logo2,jdbcType=VARCHAR},
+      partner_money = #{partner_money,jdbcType=DECIMAL},
+      chief_money = #{chief_money,jdbcType=DECIMAL},
+      manager_money = #{manager_money,jdbcType=DECIMAL},
+      status = #{status,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, logo, title, apply_num, tig, money, gift, create_time, url, card_logo, 
+    card_logo2, partner_money, chief_money, manager_money, status
+    from tp_card_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, logo, title, apply_num, tig, money, gift, create_time, url, card_logo, 
+    card_logo2, partner_money, chief_money, manager_money, status
+    from tp_card_list
+  </select>
+  <select id="countCard" resultType="int">
+    select count(id) from tp_card_list
+  </select>
+</mapper>

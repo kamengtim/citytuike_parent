@@ -11,5 +11,7 @@ public interface TpBankService {
 
     JSONObject getJsonBank(TpBank tpBank);
 
-    JSONArray getBankList(Integer user_id);
+    List<TpBank> getBankList(Integer user_id);
+
+    JSONObject getBank(TpBank tpBank);
 }

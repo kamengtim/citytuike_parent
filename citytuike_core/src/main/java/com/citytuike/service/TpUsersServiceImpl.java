@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	@Autowired
 	private TpUsersMapper tpUsersMapper;
+	@Autowired
+	private TpDeviceMapper tpDeviceMapper;
 
 	public TpUsers findOneByLogo(String username, String password) {
 		return tpUsersMapper.findOneByLogo(username, password);
@@ -162,7 +165,7 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	public LimitPageList getLimitPageList(Integer user_id, String page) {
 		LimitPageList limitPageList = new LimitPageList();
-		int totalCount = tpUsersMapper.selectCountDevice(user_id);
+		int totalCount = tpDeviceMapper.selectCountDevice(user_id);
 		List<TpUsers> stuList = new ArrayList<TpUsers>();
 		Page PageSize = null;
 		if(page != null){
@@ -182,11 +185,26 @@ public class TpUsersServiceImpl implements TpUsersService{
     public int updateUserFrozenMoney(Integer user_id, double frozenMoney) {
         return tpUsersMapper.updateUserFrozenMoney(user_id, frozenMoney);
     }
+
 	@Override
-	public void updateUser(TpUsers users) {
+	public void updateUser(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat) {
+		tpUsersMapper.updateUserInfo(user_id,head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat);
+	}
 
-		tpUsersMapper.updateUserInfo(users);
 
+	@Override
+	public void deleteAddress(Integer user_id, String id) {
+		tpUsersMapper.deleteAddress(user_id,id);
+	}
+
+	@Override
+	public void updateUserAndMobile(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat, String mobile) {
+		tpUsersMapper.updateUserAndMobile(user_id,head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat,mobile);
+	}
+
+	@Override
+	public BigDecimal selectFrozen(Integer user_id) {
+		return tpUsersMapper.selectFrozen(user_id);
 	}
 
 }

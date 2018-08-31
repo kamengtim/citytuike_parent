@@ -9,4 +9,8 @@ public interface TpUserBankService {
     List<TpUserBank> getBankByUserId(Integer user_id);
 
     JSONObject getJsonBankAndUser(TpUserBank tpUserBank);
+
+    void save(TpUserBank tpUserBank);
+
+    void deleteBank(Integer user_id, String id);
 }

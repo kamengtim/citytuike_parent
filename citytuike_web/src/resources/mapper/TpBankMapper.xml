@@ -136,4 +136,7 @@
   <select id="selectBankList" resultMap="BaseResultMap">
     select tp.id,tp.name,tp.thumb from tp_user_bank t LEFT JOIN tp_bank tp on t.bank_id = tp.id where t.user_id = #{user_id}
   </select>
+  <select id="selectBank" resultType="string">
+    select name from tp_bank where id = #{id}
+  </select>
 </mapper>

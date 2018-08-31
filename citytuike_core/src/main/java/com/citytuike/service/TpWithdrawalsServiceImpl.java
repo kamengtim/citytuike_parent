@@ -1,21 +1,30 @@
 package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.citytuike.exception.SendMessageException;
+import com.citytuike.mapper.TpBankMapper;
+import com.citytuike.mapper.TpUserBankMapper;
+import com.citytuike.mapper.TpUsersMapper;
 import com.citytuike.mapper.TpWithdrawalsMapper;
-import com.citytuike.model.LimitPageList;
-import com.citytuike.model.Page;
-import com.citytuike.model.TpDevice;
-import com.citytuike.model.TpWithdrawals;
+import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class TpWithdrawalsServiceImpl implements TpWithdrawalsService {
     @Autowired
     private TpWithdrawalsMapper tpWithdrawalsMapper;
+    @Autowired
+    private TpBankMapper tpBankMapper;
+    @Autowired
+    private TpUserBankMapper tpUserBankMapper;
+    @Autowired
+    private TpUsersMapper tpUsersMapper;
     public LimitPageList getWithdrawalsList(Integer user_id,String page) {
         LimitPageList limitPageList = new LimitPageList();
         int count = tpWithdrawalsMapper.CountWithdrawals(user_id);
@@ -58,5 +67,36 @@ public class TpWithdrawalsServiceImpl implements TpWithdrawalsService {
         jsonObject.put("taxfee",tpWithdrawal.getTaxfee());
         jsonObject.put("user_id",tpWithdrawal.getUser_id());
         return jsonObject;
+    }
+
+    @Override
+    public BigDecimal selectWithdrawalsMoney(Integer user_id) {
+        return tpWithdrawalsMapper.selectWithdrawalsMoney(user_id);
+    }
+
+    @Override
+    public void ApplyForWithdrawals(Integer user_id, int id, float money) {
+        BigDecimal userMoney = tpUsersMapper.selectCountMoney(user_id);
+        TpWithdrawals tpWithdrawals = new TpWithdrawals();
+        if(money >= 15 && userMoney.intValue() >= 15){
+        tpWithdrawals.setUser_id(user_id);
+        tpWithdrawals.setMoney(BigDecimal.valueOf(money));
+        tpWithdrawals.setCreate_time((int)(new Date().getTime()/1000));
+        String bankName = tpBankMapper.selectBank(id);
+        tpWithdrawals.setBank_name(bankName);
+        TpUserBank tpUserBank = tpUserBankMapper.selectBankCard(id,user_id);
+        tpWithdrawals.setRealname(tpUserBank.getReal_name());
+        tpWithdrawals.setBank_card(tpUserBank.getBank_card());
+        tpWithdrawals.setStatus(false);
+        tpWithdrawals.setSend_type(false);
+        tpWithdrawals.setTaxfee(new BigDecimal(5));
+        tpWithdrawals.setIs_paid(Byte.valueOf("0"));
+        tpWithdrawals.setQuery_time(0);
+        tpWithdrawalsMapper.saveWithdrawals(tpWithdrawals);
+        BigDecimal newUserMoney = userMoney.subtract(BigDecimal.valueOf(money));
+        tpUsersMapper.updateUserMoney(user_id,newUserMoney);
+        }else{
+            throw new SendMessageException("最低提现金额:15");
+        }
     }
 }

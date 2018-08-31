@@ -56,6 +56,12 @@
     from tp_user_bank
   </select>
   <select id="selectBankByUserId" resultMap="BaseResultMap">
-    select * from tp_user_bank where user_id = #{user_id}
+    select * from tp_user_bank where user_id = #{user_id} and is_delete = 0
+  </select>
+  <update id="deleteBank" >
+    update tp_user_bank set is_delete = 1 where user_id = #{user_id} and id=#{id}
+  </update>
+  <select id="selectBankCard" resultMap="BaseResultMap">
+    select real_name,bank_card from tp_user_bank where user_id = 85 and bank_id = 2 AND is_delete = 0 order by add_time DESC limit 1
   </select>
 </mapper>

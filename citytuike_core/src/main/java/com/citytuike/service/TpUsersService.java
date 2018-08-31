@@ -55,5 +55,11 @@ public interface TpUsersService {
 
     int updateUserFrozenMoney(Integer user_id, double frozenMoney);
 
-    void updateUser(TpUsers users);
+	void updateUser(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat);
+
+	void deleteAddress(Integer user_id, String id);
+
+	void updateUserAndMobile(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat, String mobile);
+
+	BigDecimal selectFrozen(Integer user_id);
 }

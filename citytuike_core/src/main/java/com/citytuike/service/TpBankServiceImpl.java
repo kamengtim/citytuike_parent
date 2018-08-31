@@ -62,16 +62,25 @@ public class TpBankServiceImpl implements TpBankService {
         return jsonObject;
     }
     @Override
-    public JSONArray getBankList(Integer user_id) {
-        JSONObject jsonObject = new JSONObject();
-        JSONArray  jsonArray = new JSONArray();
+    public List<TpBank> getBankList(Integer user_id) {
         List<TpBank> tpBanks = tpBankMapper.selectBankList(user_id);
-        for (TpBank tpBank : tpBanks) {
-            jsonObject.put("id",tpBank.getId());
-            jsonObject.put("name",tpBank.getName());
-            jsonObject.put("thumb",tpBank.getThumb());
-            jsonArray.add(jsonObject);
-        }
-        return jsonArray;
+        /*for (TpBank tpBank : tpBanks) {
+            if(tpBank.getId() != jsonObject.get("id")){
+                jsonObject.put("id",tpBank.getId());
+                jsonObject.put("name",tpBank.getName());
+                jsonObject.put("thumb",tpBank.getThumb());
+                jsonArray.add(jsonObject);
+            }
+        }*/
+        return tpBanks;
+    }
+
+    @Override
+    public JSONObject getBank(TpBank tpBank) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id",tpBank.getId());
+        jsonObject.put("name",tpBank.getName());
+        jsonObject.put("thumb",tpBank.getThumb());
+        return jsonObject;
     }
 }

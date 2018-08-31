@@ -9,4 +9,5 @@ public interface TpSmsLogService {
 	int updateByStatus(TpSmsLog tpSmsLog);
 
 
+    String selectLog(String mobile);
 }
