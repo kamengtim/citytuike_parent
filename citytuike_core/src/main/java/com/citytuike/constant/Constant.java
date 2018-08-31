@@ -7,7 +7,7 @@ public class Constant {
 	public static String WEIXIN_USER = "WEIXIN_USER";
 	public static String REMOTE_ACCESS_TOKEN_URL = "";
 	public static String REMOTE_ACCESS_TOKEN_KEY = "";
-	public static String YOP_PAY_NOTIFYURL = "http://citytuike.ngrok.xiaomiqiu.cn/api/Payment/yop_pay_back";
+	public static String YOP_PAY_NOTIFYURL = "http://citytuike.ngrok.xiaomiqiu.cn/api/Payment/yop_payback";
 	//接口参数
 	public static final String[] TRADEORDER = {"parentMerchantNo","merchantNo","orderId","orderAmount","timeoutExpress","requestDate","redirectUrl","notifyUrl","goodsParamExt","paymentParamExt","industryParamExt","memo","riskParamExt","csUrl","fundProcessType","divideDetail","divideNotifyUrl"};
 	//支付方式

@@ -36,4 +36,8 @@ public interface TpOrderMapper {
 	int updateOrderByAlipay(TpOrder tpOrder);
 
     List<TpOrder> findAllOrderByUserId(@Param(value = "user_id")Integer user_id);
+
+    List<TpPlugin> findAllPlugin();
+
+    List<TpOrder> findAllOrderAndGoods(@Param(value = "user_id")Integer user_id);
 }

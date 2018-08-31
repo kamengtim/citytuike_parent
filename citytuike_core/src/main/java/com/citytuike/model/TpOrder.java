@@ -1,6 +1,7 @@
 package com.citytuike.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class TpOrder implements Serializable{
 
@@ -212,6 +213,16 @@ public class TpOrder implements Serializable{
 	 * 是否已退货
 	 */
 	private int is_return;
+
+	private List<TpOrderGoods> tpOrderGoodsList;
+
+	public List<TpOrderGoods> getTpOrderGoodsList() {
+		return tpOrderGoodsList;
+	}
+
+	public void setTpOrderGoodsList(List<TpOrderGoods> tpOrderGoodsList) {
+		this.tpOrderGoodsList = tpOrderGoodsList;
+	}
 
 	public Integer getOrder_id() {
 		return order_id;

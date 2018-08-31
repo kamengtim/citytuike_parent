@@ -8,7 +8,10 @@
 	<resultMap id="TpOrderGoods" type="com.citytuike.model.TpOrderGoods" >
 		<result column="rec_id" property="rec_id" />
 	</resultMap>
-	<!-- 分页SQL语句 -->  
+	<resultMap id="TpPlugin" type="com.citytuike.model.TpPlugin" >
+		<result column="code" property="code" />
+	</resultMap>
+	<!-- 分页SQL语句 -->
     <select id="findAllGoodsByOrderId" resultMap="TpOrderGoods">  
         select *  from tp_order_goods where order_id=#{order_id}
     </select>  
@@ -17,6 +20,9 @@
     </select>
     <select id="findOrderById" resultType="com.citytuike.model.TpOrder">
         select *  from tp_order where order_id=#{id}
+    </select>
+    <select id="findAllPlugin" resultMap="TpPlugin">
+        select *  from tp_plugin where status=1
     </select>
     <select id="findOrderByOrderSn" resultType="com.citytuike.model.TpOrder">
         select *  from tp_order where order_sn=#{out_trade_no}

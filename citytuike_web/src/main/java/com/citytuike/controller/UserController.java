@@ -39,6 +39,8 @@ public class UserController {
 	private TpWithdrawalsService tpWithdrawalsService;
 	@Autowired
 	private SendMessageService sendMessageService;
+	@Autowired
+	private TpOrderService tpOrderService;
 	/**
 	 * @param model
 	 * @param username
@@ -419,9 +421,7 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @param token
-	 * @param id
 	 * @return
 	 * 账户管理
 	 */
@@ -440,9 +440,7 @@ public class UserController {
 		return jsonObject.toString();
 	}
 	/**
-	 * @param model
 	 * @param token
-	 * @param id
 	 * @return
 	 * 收益明细列表
 	 */
@@ -480,9 +478,7 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @param token
-	 * @param id
 	 * @return
 	 * 银行卡列表
 	 */
@@ -509,9 +505,7 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @param token
-	 * @param id
 	 * @return
 	 * 提现申请列表
 	 */
@@ -542,9 +536,6 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
-	 * @param id
 	 * @return
 	 * 短信发送
 	 */
@@ -561,5 +552,260 @@ public class UserController {
 		}catch (Exception e){
 		throw new SendMessageException("发送超时");
 		}
+	}
+
+    /**
+     * @param user_id
+     * @return
+     * 根据用户ID 获取信息
+     */
+	@RequestMapping(value = "user_info_by_id",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String userInfoById(@RequestParam(required = true)String user_id, @RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+		TpUsers tpUsers = tpUsersService.findOneByUserId(Integer.parseInt(user_id));
+		if (null != tpUsers) {
+			data.put("nickname", tpUsers.getNickname());
+			data.put("invite_code", tpUsers.getInvite_code());
+			data.put("head_pic", tpUsers.getHead_pic());
+			data.put("level", tpUsers.getLevel());
+
+		}
+		jsonObj.put("result",data);
+		return jsonObj.toString();
+	}
+
+
+    /**
+     * @param invite_code
+     * @param token
+     * @return
+     * 根据invite_code 获取用户信息
+     */
+	@RequestMapping(value = "get_invite_code_user_info",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getInviteCodeUerInfo(@RequestParam(required = true)String invite_code, @RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+		TpUsers tpUsers = tpUsersService.findOneByInvite(invite_code);
+		if (null != tpUsers) {
+            data = tpUsersService.getUserlJson(tpUsers);
+		}
+		jsonObj.put("result",data);
+		return jsonObj.toString();
+	}
+    /**
+     * @return
+     * 根据im_id 获取用户信息
+     */
+	@RequestMapping(value = "user_info_by_im_id",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String userInfoByImId(@RequestParam(required = true)String im_id, @RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+		TpUsers tpUsers = tpUsersService.findOneByImId(im_id);
+		if (null != tpUsers) {
+			data.put("nickname", tpUsers.getNickname());
+			data.put("invite_code", tpUsers.getInvite_code());
+			data.put("head_pic", tpUsers.getHead_pic());
+			data.put("level", tpUsers.getLevel());
+			data.put("im_id", tpUsers.getIm_id());
+			data.put("im_pwd", tpUsers.getIm_pwd());
+			data.put("user_id", tpUsers.getUser_id());
+
+		}
+		jsonObj.put("result",data);
+		return jsonObj.toString();
+	}
+    /**
+     * @return
+     * 加入团队
+     */
+	@RequestMapping(value = "join",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String join(@RequestParam(required = true)String invite_code, @RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+		TpUsers tpUsers = tpUsersService.findOneByInvite(invite_code);
+		if (null != tpUsers) {
+		    TpUsers tpUsers2 = new TpUsers();
+		    tpUsers2.setUser_id(tpUsers1.getUser_id());
+            tpUsers2.setParent_id(tpUsers.getUser_id());
+            tpUsers2.setRelation(tpUsers.getRelation()+","+tpUsers.getUser_id());
+		    int result = tpUsersService.updateUserParent(tpUsers2);
+		    if (result > 0){
+                jsonObj.put("status", "1");
+                jsonObj.put("msg", "ok!");
+            }
+		}
+		jsonObj.put("result",data);
+		return jsonObj.toString();
+	}
+
+    /**
+     * @param token
+     * @return
+     * 意向代理人数统计
+     */
+	@RequestMapping(value = "team_device_count",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String teamDeviceCount(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        String startTime = String.valueOf(Util.getStartTime());
+        String endTime = String.valueOf(Util.getnowEndTime());
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        int allNum = tpUsersService.countByParentId(tpUsers1.getUser_id());
+        int dayNum = tpUsersService.countByParentIdDay(tpUsers1.getUser_id(), Integer.parseInt(startTime), Integer.parseInt(endTime));
+
+        data.put("count", allNum);
+        data.put("today", dayNum);
+
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+		jsonObj.put("result",data);
+		return jsonObj.toString();
+	}
+
+    /**
+     * @param token
+     * @return
+     * 机器顶部统计
+     */
+	@RequestMapping(value = "device_number",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String deviceNumber(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+
+        List<TpOrder> tpOrderList = tpOrderService.findAllOrderAndGoods(tpUsers1.getUser_id());
+        int self = 0;
+        int team = 0;
+        for (TpOrder tporder : tpOrderList) {
+            for (TpOrderGoods tpOrderGoods : tporder.getTpOrderGoodsList()) {
+                self += tpOrderGoods.getGoods_num();
+            }
+        }
+        List<TpUsers> tpUsersList = tpUsersService.findAllByUserParentId(tpUsers1.getUser_id());
+        for (TpUsers tpUsers : tpUsersList) {
+            List<TpOrder> tpOrderList1 = tpOrderService.findAllOrderAndGoods(tpUsers.getUser_id());
+            for (TpOrder tporder : tpOrderList1) {
+                for (TpOrderGoods tpOrderGoods : tporder.getTpOrderGoodsList()) {
+                    team += tpOrderGoods.getGoods_num();
+                }
+            }
+        }
+        data.put("count", self);
+        data.put("today", team);
+
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+		jsonObj.put("result",data);
+		return jsonObj.toString();
+	}
+
+    /**
+     * @param token
+     * @return
+     * 申请商务合作
+     */
+	@RequestMapping(value = "application_for_business_cooperation",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String applicationForBusinessCooperation(@RequestParam(required = true)String code,
+                                                                  @RequestParam(required = true)String token,
+                                                                  @RequestParam(required = true)String name,
+                                                                  @RequestParam(required = true)String email,
+                                                                  @RequestParam(required = true)String province,
+                                                                  @RequestParam(required = true)String city,
+                                                                  @RequestParam(required = true)String district,
+                                                                  @RequestParam(required = true)String type,
+                                                                  @RequestParam(required = true)String bank_name,
+                                                                  @RequestParam(required = true)String ways_of_cooperation,
+                                                                  @RequestParam(required = true)String company,
+                                                                  @RequestParam(required = true)String day_number,
+                                                                  @RequestParam(required = true)String details,
+                                                                  @RequestParam(required = true)String files,
+                                                                  @RequestParam(required = true)String reason){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+     /*   TpSmsLog tpSmsLog = tpSmsLogService.findOneByMobileAndCode(tpUsers1.getMobile(), code);
+		if (null == tpSmsLog) {
+			jsonObj.put("status", "3");
+			jsonObj.put("msg", "验证码错误!");
+			return jsonObj.toString();
+		}else {
+			if (tpSmsLog.getStatus() == 1) {
+				jsonObj.put("status", "4");
+				jsonObj.put("msg", "验证码已使用!");
+				return jsonObj.toString();
+			}
+		}*/
+        TpApplicationForBusinessCooperation tpApplication = new TpApplicationForBusinessCooperation();
+        tpApplication.setUser_id(tpUsers1.getUser_id());
+        tpApplication.setName(name);
+        tpApplication.setEmail(email);
+        tpApplication.setProvince(Integer.parseInt(province));
+        tpApplication.setCity(city);
+        tpApplication.setDistrict(Integer.parseInt(district));
+        tpApplication.setType(Integer.parseInt(type));
+        tpApplication.setBank_name(bank_name);
+        tpApplication.setWays_of_cooperation(ways_of_cooperation);
+        tpApplication.setCompany(company);
+        tpApplication.setDay_number(Integer.parseInt(day_number));
+        tpApplication.setDetails(details);
+        tpApplication.setFiles(files);
+        tpApplication.setMobile(tpUsers1.getMobile());
+        tpApplication.setReason(reason);
+        tpApplication.setRead(Integer.parseInt(""));
+        tpApplication.setReply_mess("");
+        int result = tpUsersService.insertApplicationforBusinessCooperation(tpApplication);
+        if (result > 0){
+            jsonObj.put("status", "1");
+            jsonObj.put("msg", "ok!");
+        }
+		jsonObj.put("result",data);
+		return jsonObj.toString();
 	}
 }

@@ -5,20 +5,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.mapper.TpOrderMapper;
-import com.citytuike.model.LimitPageList;
-import com.citytuike.model.Page;
-import com.citytuike.model.TpFreightConfig;
-import com.citytuike.model.TpGoods;
-import com.citytuike.model.TpInvoice;
-import com.citytuike.model.TpOrder;
-import com.citytuike.model.TpOrderAction;
-import com.citytuike.model.TpOrderGoods;
 
 @Service
 public class TpOrderServiceImpl implements TpOrderService{
@@ -225,6 +218,16 @@ public class TpOrderServiceImpl implements TpOrderService{
 
 	public List<TpOrder> findAllOrderByUserId(Integer user_id) {
 		return tpOrderMapper.findAllOrderByUserId(user_id);
+	}
+
+	@Override
+	public List<TpPlugin> findAllPlugin() {
+		return tpOrderMapper.findAllPlugin();
+	}
+
+	@Override
+	public List<TpOrder> findAllOrderAndGoods(Integer user_id) {
+		return tpOrderMapper.findAllOrderAndGoods(user_id);
 	}
 
 

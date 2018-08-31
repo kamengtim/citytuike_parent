@@ -183,4 +183,29 @@ public class TpUsersServiceImpl implements TpUsersService{
         return tpUsersMapper.updateUserFrozenMoney(user_id, frozenMoney);
     }
 
+	@Override
+	public TpUsers findOneByImId(String im_id) {
+		return tpUsersMapper.findOneByImId(im_id);
+	}
+
+	@Override
+	public int updateUserParent(TpUsers users) {
+		return tpUsersMapper.updateUserParent(users);
+	}
+
+	@Override
+	public int countByParentId(Integer user_id) {
+		return tpUsersMapper.countByParentId(user_id);
+	}
+
+	@Override
+	public int countByParentIdDay(Integer user_id, int startTime, int endTime) {
+		return tpUsersMapper.countByParentIdDay(user_id, startTime, endTime);
+	}
+
+	@Override
+	public int insertApplicationforBusinessCooperation(TpApplicationForBusinessCooperation tpApplication) {
+		return tpUsersMapper.insertApplicationforBusinessCooperation(tpApplication);
+	}
+
 }

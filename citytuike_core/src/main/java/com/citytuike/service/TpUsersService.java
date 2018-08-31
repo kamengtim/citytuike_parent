@@ -54,4 +54,14 @@ public interface TpUsersService {
 	LimitPageList getLimitPageList(Integer user_id, String page);
 
     int updateUserFrozenMoney(Integer user_id, double frozenMoney);
+
+    TpUsers findOneByImId(String im_id);
+
+	int updateUserParent(TpUsers users);
+
+	int countByParentId(Integer user_id);
+
+	int countByParentIdDay(Integer user_id, int startTime, int endTime);
+
+	int insertApplicationforBusinessCooperation(TpApplicationForBusinessCooperation tpApplication);
 }

@@ -1,12 +1,7 @@
 package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.model.LimitPageList;
-import com.citytuike.model.TpFreightConfig;
-import com.citytuike.model.TpInvoice;
-import com.citytuike.model.TpOrder;
-import com.citytuike.model.TpOrderAction;
-import com.citytuike.model.TpOrderGoods;
+import com.citytuike.model.*;
 
 import java.util.List;
 
@@ -43,4 +38,8 @@ public interface TpOrderService {
 	int updateOrderByAlipay(TpOrder tpOrder);
 
     List<TpOrder> findAllOrderByUserId(Integer user_id);
+
+    List<TpPlugin> findAllPlugin();
+
+    List<TpOrder> findAllOrderAndGoods(Integer user_id);
 }

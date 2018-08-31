@@ -1,9 +1,6 @@
 package com.citytuike.mapper;
 
-import com.citytuike.model.TpRegion;
-import com.citytuike.model.TpUserAddress;
-import com.citytuike.model.TpUserUpLog;
-import com.citytuike.model.TpUsers;
+import com.citytuike.model.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -60,4 +57,14 @@ public interface TpUsersMapper {
 	List<TpUsers> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("user_id") Integer user_id);
 
     int updateUserFrozenMoney(@Param("user_id")Integer user_id, @Param("frozenMoney")double frozenMoney);
+
+    TpUsers findOneByImId(@Param("im_id")String im_id);
+
+	int updateUserParent(TpUsers users);
+
+	int countByParentId(@Param("user_id")Integer user_id);
+
+	int countByParentIdDay(@Param("user_id")Integer user_id, @Param("startTime") int startTime, @Param("endTime")int endTime);
+
+	int insertApplicationforBusinessCooperation(TpApplicationForBusinessCooperation tpApplication);
 }
