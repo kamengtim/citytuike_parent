@@ -622,4 +622,5 @@ public class TpUsers  implements Serializable{
 	public void setPaper_number(Integer paper_number) {
 		this.paper_number = paper_number;
 	}
+
 }

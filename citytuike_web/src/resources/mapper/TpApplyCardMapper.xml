@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpApplyCardMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpApplyCard" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="CHAR" />
+    <result column="idcard" property="idcard" jdbcType="CHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_apply_card
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpApplyCard" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_apply_card (name, mobile, idcard, 
+      area, add_time, user_id
+      )
+    values (#{name,jdbcType=VARCHAR}, #{mobile,jdbcType=CHAR}, #{idcard,jdbcType=CHAR}, 
+      #{area,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpApplyCard" >
+    update tp_apply_card
+    set name = #{name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=CHAR},
+      idcard = #{idcard,jdbcType=CHAR},
+      area = #{area,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      user_id = #{user_id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, name, mobile, idcard, area, add_time, user_id
+    from tp_apply_card
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, mobile, idcard, area, add_time, user_id
+    from tp_apply_card
+  </select>
+  <delete id="deleteApplyPeople">
+    delete from tp_apply_card
+    where id = #{id,jdbcType=INTEGER} and user_id=#{user_id}
+  </delete>
+</mapper>

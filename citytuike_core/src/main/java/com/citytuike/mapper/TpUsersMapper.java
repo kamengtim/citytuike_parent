@@ -1,5 +1,6 @@
 package com.citytuike.mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -75,4 +76,12 @@ public interface TpUsersMapper {
 	BigDecimal selectFrozen(Integer user_id);
 
 	void updateUserMoney(@Param("user_id") Integer user_id, @Param("newUserMoney") BigDecimal newUserMoney);
+
+    TpUsers getInviteCodeUserInfo(String invite_code);
+
+    String selectAddrass(Integer user_id);
+
+    String selectCity(Integer user_id);
+
+    String selectDistrict(Integer user_id);
 }
