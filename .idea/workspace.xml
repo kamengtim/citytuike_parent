@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d3631420-443d-4220-8813-e3d934a6d5f8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-    </list>
+    <list default="true" id="d3631420-443d-4220-8813-e3d934a6d5f8" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/citytuike_web/target/" />
     <ignored path="$PROJECT_DIR$/citytuike_core/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -18,8 +16,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="455" column="39" lean-forward="true" selection-start-line="455" selection-start-column="39" selection-end-line="455" selection-end-column="39" />
+            <state relative-caret-position="135">
+              <caret line="491" column="40" lean-forward="true" selection-start-line="491" selection-start-column="40" selection-end-line="491" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -170,7 +168,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535710448577" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535710450615" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -307,12 +305,12 @@
       <workItem from="1535417442364" duration="23249000" />
       <workItem from="1535504313924" duration="25976000" />
       <workItem from="1535591006801" duration="17726000" />
-      <workItem from="1535677071197" duration="16984000" />
+      <workItem from="1535677071197" duration="17358000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4000" />
+    <option name="totallyTimeSpent" value="378000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
