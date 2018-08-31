@@ -6,42 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3631420-443d-4220-8813-e3d934a6d5f8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/constant/Constant.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/constant/Constant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpOrderMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpOrderMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpOrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpSmsLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpSmsLogServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/AlipayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/AlipayConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/Util.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/constant/Constant.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/constant/Constant.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpOrderMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpOrderMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpOrderService.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpOrderService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpOrderServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/service/TpOrderServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/AlipayConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/AlipayConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/configs/PayConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/configs/PayConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/PayController.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/PayController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpOrderMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/configs/PayConfig$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/configs/PayConfig$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/configs/PayConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/configs/PayConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/OrderController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/PayController.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/PayController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpOrderMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/lib/citytuike_core-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/lib/citytuike_core-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/configs/PayConfig$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/configs/PayConfig$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/configs/PayConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/configs/PayConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/controller/OrderController.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/controller/OrderController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/controller/PayController.class" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/controller/PayController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpOrderMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpOrderMapper.xml" afterDir="false" />
-    </list>
+    <list default="true" id="d3631420-443d-4220-8813-e3d934a6d5f8" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/citytuike_web/target/" />
     <ignored path="$PROJECT_DIR$/citytuike_core/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -70,14 +35,14 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="9" />
-          <entry key="java" value="57" />
+          <entry key="java" value="58" />
           <entry key="xml" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="9" />
-          <entry key="JAVA" value="57" />
+          <entry key="JAVA" value="58" />
           <entry key="XML" value="10" />
         </counts>
       </usages-collector>
@@ -96,8 +61,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="598" column="39" lean-forward="true" selection-start-line="598" selection-start-column="39" selection-end-line="598" selection-end-column="39" />
+            <state relative-caret-position="-2562">
+              <caret line="585" column="7" lean-forward="true" selection-start-line="585" selection-start-column="7" selection-end-line="585" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -173,7 +138,7 @@
     <option name="FILTER_DEBUG" value="false" />
     <option name="CUSTOM_FILTER" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="120" />
     <option name="y" value="23" />
     <option name="width" value="1265" />
@@ -194,71 +159,6 @@
             <path>
               <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
               <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_core" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
               <item name="citytuike_web" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -290,16 +190,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="citytuike" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike" type="462c0819:PsiDirectoryNode" />
-              <item name="configs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
@@ -310,21 +200,6 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="citytuike" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="citytuike_parent" type="b2602c69:ProjectViewProjectNode" />
-              <item name="citytuike_parent" type="462c0819:PsiDirectoryNode" />
-              <item name="citytuike_web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="mapper" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -338,7 +213,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535709176237" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535709845700" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -475,15 +350,15 @@
       <workItem from="1535417442364" duration="23249000" />
       <workItem from="1535504313924" duration="25976000" />
       <workItem from="1535591006801" duration="17726000" />
-      <workItem from="1535677071197" duration="16127000" />
+      <workItem from="1535677071197" duration="16386000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34454000" />
+    <option name="totallyTimeSpent" value="34713000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
@@ -505,7 +380,7 @@
       <window_info anchor="bottom" id="Message" order="8" />
       <window_info anchor="bottom" id="Find" order="9" sideWeight="0.5815565" weight="0.30868167" />
       <window_info anchor="bottom" id="Run" order="10" weight="0.42872456" />
-      <window_info anchor="bottom" id="Debug" order="11" sideWeight="0.641258" weight="0.2743837" />
+      <window_info anchor="bottom" id="Debug" order="11" sideWeight="0.641258" visible="true" weight="0.043944266" />
       <window_info anchor="bottom" id="Cvs" order="12" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="13" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="14" />
@@ -1049,8 +924,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="598" column="39" lean-forward="true" selection-start-line="598" selection-start-column="39" selection-end-line="598" selection-end-column="39" />
+        <state relative-caret-position="-2562">
+          <caret line="585" column="7" lean-forward="true" selection-start-line="585" selection-start-column="7" selection-end-line="585" selection-end-column="7" />
         </state>
       </provider>
     </entry>

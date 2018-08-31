@@ -11,10 +11,33 @@
 	<resultMap id="TpPlugin" type="com.citytuike.model.TpPlugin" >
 		<result column="code" property="code" />
 	</resultMap>
+
+	<!-- 一对多查询关联  -->
+	<resultMap type="com.citytuike.model.TpOrder" id="orderResultMap">
+		<!-- 实体类属性对应数据库的主键字段，不然主键会查不到 -->
+		<id property="order_id" column="order_id"/>
+		<!-- 用collection标签 ,也是实体类属性要对应数据库字段-->
+		<collection property="tpOrderGoodsList" column="order_id"
+					select="com.citytuike.mapper.TpOrderMapper.findAllGoodsByOrderId">
+		</collection>
+	</resultMap>
+
+
 	<!-- 分页SQL语句 -->
-    <select id="findAllGoodsByOrderId" resultMap="TpOrderGoods">  
-        select *  from tp_order_goods where order_id=#{order_id}
+    <select id="findAllOrderAndGoods" resultMap="orderResultMap">
+        SELECT
+			*
+		FROM
+			tp_order o
+		LEFT JOIN tp_order_goods g ON o.order_id = g.order_id
+		WHERE
+			o.user_id = #{user_id}
+		AND o.pay_status = 1
+		AND g.goods_id = 144;
     </select>  
+    <select id="findAllGoodsByOrderId" resultMap="TpOrderGoods">
+        select *  from tp_order_goods where order_id=#{order_id}
+    </select>
     <select id="findAllOrderByUserId" resultMap="TpOrderGoods">
         select *  from tp_order where user_id=#{user_id} and pay_status=1
     </select>

@@ -8,6 +8,9 @@
 	<resultMap id="TpUserAddress" type="com.citytuike.model.TpUserAddress" >
 		<result column="address_id" property="address_id" />
 	</resultMap>
+	<resultMap id="TpSmsLog" type="com.citytuike.model.TpSmsLog" >
+		<result column="id" property="id" />
+	</resultMap>
 	<resultMap id="TpUsers" type="com.citytuike.model.TpUsers" >
 		<result column="user_id" property="user_id" />
 		<result column="email" property="email" />
@@ -116,12 +119,20 @@
 		from tp_users as t where t.mobile=#{username} and t.password=#{password}
 	</select>
 	<select id="findOneByOpenId" resultType="TpUsers">
-		select <include refid="Base_Column_List" />
+		select *
 		from tp_users as t where t.openid=#{openid}
+	</select>
+	<select id="findOneByMobileAndCode" resultType="TpSmsLog">
+		select <include refid="Base_Column_List" />
+		from tp_sms_log as t where t.mobile=#{username} and t.code=#{mobileCode}
 	</select>
 	<select id="findOneByUserId" resultType="TpUsers">
 		select <include refid="Base_Column_List" />
 		from tp_users as t where t.user_id=#{user_id}
+	</select>
+	<select id="findOneByImId" resultType="TpUsers">
+		select <include refid="Base_Column_List" />
+		from tp_users as t where t.im_id=#{im_id}
 	</select>
 	<select id="findOneByMobile" resultType="TpUsers">
 		select <include refid="Base_Column_List" />
@@ -287,6 +298,45 @@
 			#{is_default}
 		);
 	</insert>
+	<insert id="insertApplicationforBusinessCooperation" parameterType="com.citytuike.model.TpApplicationForBusinessCooperation" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO tp_users (
+			user_id,
+			name,
+			email,
+			province,
+			city,
+			district,
+			type,
+            bank_name,
+			ways_of_cooperation,
+			company,
+			day_number,
+			details,
+			files,
+			mobile,
+			reason,
+			read,
+			reply_mess
+		) VALUES (
+			#{user_id},
+			#{name},
+			#{email},
+			#{province},
+			#{city},
+			#{district},
+			#{type},
+            #{bank_name},
+			#{ways_of_cooperation},
+			#{company},
+			#{day_number},
+			#{details},
+			#{files},
+			#{mobile},
+			#{reason},
+			#{read},
+			#{reply_mess}
+		);
+	</insert>
 	<insert id="insertUserUpLog" parameterType="com.citytuike.model.TpUserUpLog" useGeneratedKeys="true" keyProperty="id" >
 		INSERT INTO tp_users (
 			user_id,
@@ -304,6 +354,13 @@
 			<if test="token != null">
 				token=#{token}
 			</if>
+		WHERE user_id = #{user_id}
+	</update>
+	<update id="updateUserParent" parameterType="com.citytuike.model.TpUsers" >
+		UPDATE tp_users
+		SET
+				parent_id=#{parent_id},
+				relation=#{relation}
 		WHERE user_id = #{user_id}
 	</update>
 	<update id="updateBytokenOut" parameterType="com.citytuike.model.TpUsers" >
@@ -336,37 +393,37 @@
 		UPDATE tp_user_address
 		SET 
 			<if test="consignee != null">
-				consignee=#{consignee}
+				consignee=#{consignee},
 			</if>
 			<if test="email != null">
-				and email=#{email}
+				 email=#{email},
 			</if>
 			<if test="country != null">
-				and country=#{country}
+				 country=#{country},
 			</if>
 			<if test="province != null">
-				and province=#{province}
+				 province=#{province},
 			</if>
 			<if test="city != null">
-				and city=#{city}
+				 city=#{city},
 			</if>
 			<if test="district != null">
-				and district=#{district}
+				 district=#{district},
 			</if>
 			<if test="twon != null">
-				and twon=#{twon}
+				 twon=#{twon},
 			</if>
 			<if test="address != null">
-				and address=#{address}
+				address=#{address},
 			</if>
 			<if test="zipcode != null">
-				and zipcode=#{zipcode}
+				zipcode=#{zipcode},
 			</if>
 			<if test="mobile != null">
-				and mobile=#{mobile}
+				 mobile=#{mobile},
 			</if>
 			<if test="is_default != null">
-				and is_default=#{is_default}
+				 is_default=#{is_default}
 			</if>
 		WHERE address_id = #{address_id}
 	</update>
@@ -385,5 +442,13 @@
 	<!-- 分页SQL语句 -->
 	<select id="selectByPage" resultType="TpUsers">
 		select *  from tp_users where parent_id = #{user_id} limit #{startPos},#{pageSize}
+	</select>
+	<select id="countByParentId" resultType="int">
+		SELECT count(1)
+		FROM tp_users where parent_id=#{user_id} and  level=0
+	</select>
+	<select id="countByParentIdDay" resultType="int">
+		SELECT count(1)
+		FROM tp_users where parent_id=#{user_id} and  level=0 and (reg_time &gt;= #{startTime} and  reg_time &lt;= #{endTime})
 	</select>
 </mapper>
