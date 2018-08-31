@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,8 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	@Autowired
 	private TpUsersMapper tpUsersMapper;
+	@Autowired
+	private TpDeviceMapper tpDeviceMapper;
 
 	public TpUsers findOneByLogo(String username, String password) {
 		return tpUsersMapper.findOneByLogo(username, password);
@@ -162,7 +165,7 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	public LimitPageList getLimitPageList(Integer user_id, String page) {
 		LimitPageList limitPageList = new LimitPageList();
-		int totalCount = tpUsersMapper.selectCountDevice(user_id);
+		int totalCount = tpDeviceMapper.selectCountDevice(user_id);
 		List<TpUsers> stuList = new ArrayList<TpUsers>();
 		Page PageSize = null;
 		if(page != null){
@@ -205,7 +208,28 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	@Override
 	public int insertApplicationforBusinessCooperation(TpApplicationForBusinessCooperation tpApplication) {
-		return tpUsersMapper.insertApplicationforBusinessCooperation(tpApplication);
+		return 0;
 	}
+
+	@Override
+	public void updateUser(Integer user_id, String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat) {
+
+	}
+
+	@Override
+	public void deleteAddress(Integer user_id, String id) {
+
+	}
+
+	@Override
+	public void updateUserAndMobile(Integer user_id, String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat, String mobile) {
+
+	}
+
+	@Override
+	public BigDecimal selectFrozen(Integer user_id) {
+		return null;
+	}
+
 
 }

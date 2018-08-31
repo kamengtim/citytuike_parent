@@ -52,8 +52,6 @@ public interface TpUsersMapper {
 
 	List<TpUsers> selectParentId(Integer user_id);
 
-	int selectCountDevice(Integer user_id);
-
 	List<TpUsers> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("user_id") Integer user_id);
 
     int updateUserFrozenMoney(@Param("user_id")Integer user_id, @Param("frozenMoney")double frozenMoney);
@@ -67,4 +65,14 @@ public interface TpUsersMapper {
 	int countByParentIdDay(@Param("user_id")Integer user_id, @Param("startTime") int startTime, @Param("endTime")int endTime);
 
 	int insertApplicationforBusinessCooperation(TpApplicationForBusinessCooperation tpApplication);
+
+	void deleteAddress(@Param("user_id") Integer user_id, @Param("id") String id);
+
+	void updateUserInfo(@Param("user_id") Integer user_id,@Param("head_pic") String head_pic, @Param("nickname") String nickname, @Param("qq") String qq, @Param("sex") String sex, @Param("birthday") String birthday, @Param("province") String province, @Param("city") String city, @Param("district") String district, @Param("email") String email, @Param("scene") String scene, @Param("wechat_qrcode") String wechat_qrcode, @Param("wechat") String wechat);
+
+	void updateUserAndMobile(@Param("user_id") Integer user_id,@Param("head_pic") String head_pic, @Param("nickname") String nickname, @Param("qq") String qq, @Param("sex") String sex, @Param("birthday") String birthday, @Param("province") String province, @Param("city") String city, @Param("district") String district, @Param("email") String email, @Param("scene") String scene, @Param("wechat_qrcode") String wechat_qrcode, @Param("wechat") String wechat, @Param("mobile") String mobile);
+
+	BigDecimal selectFrozen(Integer user_id);
+
+	void updateUserMoney(@Param("user_id") Integer user_id, @Param("newUserMoney") BigDecimal newUserMoney);
 }

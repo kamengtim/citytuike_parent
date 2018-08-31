@@ -1,5 +1,6 @@
 package com.citytuike.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.mapper.TpBankMapper;
 import com.citytuike.model.TpBank;
@@ -58,6 +59,28 @@ public class TpBankServiceImpl implements TpBankService {
         jsonObject.put("work_day",tpBank.getWork_day());
         jsonObject.put("year_fee",tpBank.getYear_fee());
         jsonObject.put("type",tpBank.getType());
+        return jsonObject;
+    }
+    @Override
+    public List<TpBank> getBankList(Integer user_id) {
+        List<TpBank> tpBanks = tpBankMapper.selectBankList(user_id);
+        /*for (TpBank tpBank : tpBanks) {
+            if(tpBank.getId() != jsonObject.get("id")){
+                jsonObject.put("id",tpBank.getId());
+                jsonObject.put("name",tpBank.getName());
+                jsonObject.put("thumb",tpBank.getThumb());
+                jsonArray.add(jsonObject);
+            }
+        }*/
+        return tpBanks;
+    }
+
+    @Override
+    public JSONObject getBank(TpBank tpBank) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id",tpBank.getId());
+        jsonObject.put("name",tpBank.getName());
+        jsonObject.put("thumb",tpBank.getThumb());
         return jsonObject;
     }
 }

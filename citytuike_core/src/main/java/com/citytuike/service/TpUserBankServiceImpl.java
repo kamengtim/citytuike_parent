@@ -34,4 +34,14 @@ public class TpUserBankServiceImpl implements TpUserBankService {
         jsonObject.put("user_id",tpUserBank.getUser_id());
         return jsonObject;
     }
+
+    @Override
+    public void save(TpUserBank tpUserBank) {
+        tpUserBankMapper.insert(tpUserBank);
+    }
+
+    @Override
+    public void deleteBank(Integer user_id, String id) {
+        tpUserBankMapper.deleteBank(user_id,id);
+    }
 }

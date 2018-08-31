@@ -73,4 +73,7 @@
       #{code,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{msg,jdbcType=VARCHAR},
       #{scene,jdbcType=INTEGER}, #{error_msg,jdbcType=LONGVARCHAR})
 	</insert>
+	<select id="selectLog" resultType="string">
+		select code from tp_sms_log where mobile = #{mobile} and FROM_UNIXTIME(add_time) >= DATE_SUB(NOW(),INTERVAL 180 SECOND) order by code desc limit 1;
+	</select>
 </mapper>

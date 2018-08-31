@@ -42,6 +42,8 @@
 		<result column="level" property="level" />
 		<result column="discount" property="discount" />
 		<result column="total_amount" property="total_amount" />
+		<result column="paper_number" property="paper_number"/>
+		<result column="paper_number_allowance" property="paper_number_allowance"/>
 		<result column="is_lock" property="is_lock" />
 		<result column="is_distribut" property="is_distribut" />
 		<result column="first_leader" property="first_leader" />
@@ -451,4 +453,49 @@
 		SELECT count(1)
 		FROM tp_users where parent_id=#{user_id} and  level=0 and (reg_time &gt;= #{startTime} and  reg_time &lt;= #{endTime})
 	</select>
+	<update id="updateUserInfo">
+		update tp_users
+		set email = #{email,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=BIT},
+		birthday = #{birthday,jdbcType=INTEGER},
+		qq = #{qq,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		head_pic = #{head_pic,jdbcType=VARCHAR},
+		province = #{province,jdbcType=INTEGER},
+		city = #{city,jdbcType=INTEGER},
+		district = #{district,jdbcType=INTEGER},
+		nickname = #{nickname,jdbcType=VARCHAR},
+		token = #{token,jdbcType=VARCHAR},
+		wechat = #{wechat,jdbcType=VARCHAR},
+		token = #{token,jdbcType=VARCHAR},
+		wechat_qrcode = #{wechat_qrcode,jdbcType=VARCHAR}
+		where user_id = #{user_id,jdbcType=INTEGER}
+	</update>
+	<delete id="deleteAddress">
+		delete from tp_user_address where user_id = #{user_id} and address_id = #{id}
+	</delete>
+	<update id="updateUserAndMobile">
+		update tp_users
+		set email = #{email,jdbcType=VARCHAR},
+		sex = #{sex,jdbcType=BIT},
+		birthday = #{birthday,jdbcType=INTEGER},
+		qq = #{qq,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		head_pic = #{head_pic,jdbcType=VARCHAR},
+		province = #{province,jdbcType=INTEGER},
+		city = #{city,jdbcType=INTEGER},
+		district = #{district,jdbcType=INTEGER},
+		nickname = #{nickname,jdbcType=VARCHAR},
+		token = #{token,jdbcType=VARCHAR},
+		wechat = #{wechat,jdbcType=VARCHAR},
+		token = #{token,jdbcType=VARCHAR},
+		wechat_qrcode = #{wechat_qrcode,jdbcType=VARCHAR}
+		where user_id = #{user_id,jdbcType=INTEGER}
+	</update>
+	<select id="selectFrozen" resultType="bigdecimal">
+		select frozen_money from tp_users where user_id = #{user_id}
+	</select>
+	<update id="updateUserMoney" >
+		update tp_users set user_money = #{newUserMoney} where user_id = #{user_id}
+	</update>
 </mapper>

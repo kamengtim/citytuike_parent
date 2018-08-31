@@ -1,14 +1,13 @@
 package com.citytuike.controller;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.citytuike.exception.SendMessageException;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
+import com.citytuike.util.MD5Utils;
+import com.citytuike.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.citytuike.util.MD5Utils;
-import com.citytuike.util.Util;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("api/User")
@@ -41,6 +40,11 @@ public class UserController {
 	private SendMessageService sendMessageService;
 	@Autowired
 	private TpOrderService tpOrderService;
+    private TpReportListService  tpReportListService;
+	@Autowired
+	private ITpDeviceService tpDeviceService;
+	@Autowired
+    private TpCardListService tpCardListSevice;
 	/**
 	 * @param model
 	 * @param username
@@ -596,16 +600,137 @@ public class UserController {
 		JSONArray jsonArray = new JSONArray();
         TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
         if (null == tpUsers1) {
+            TpUsers tpUsers = tpUsersService.findOneByInvite(invite_code);
+            if (null != tpUsers) {
+                data = tpUsersService.getUserlJson(tpUsers);
+            }
+            jsonObj.put("result",data);
+
+        }
+        return jsonObj.toString();
+    }
+	/**
+	 * @param token
+	 * @return
+	 * 更新用户信息
+	 */
+	@RequestMapping(value = "userinfo",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String UserInfo(@RequestParam(required = true)String token,
+										 @RequestParam(required = false)String head_pic,
+										 @RequestParam(required = false)String nickname,
+										 @RequestParam(required = false)String qq,
+										 @RequestParam(required = false)String sex,
+										 @RequestParam(required = false)String birthday,
+										 @RequestParam(required = false)String province,
+										 @RequestParam(required = false)String city,
+										 @RequestParam(required = false)String district,
+										 @RequestParam(required = false)String email,
+										 @RequestParam(required = false)String mobile,
+										 @RequestParam(required = false)String scene,
+										 @RequestParam(required = false)String wechat_qrcode,
+										 @RequestParam(required = false)String wechat,
+										 @RequestParam(required = false)String mobile_code){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		if(mobile_code == null || mobile == null){
+			tpUsersService.updateUser(tpUsers.getUser_id(),head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat);
+		}else{
+			if(mobile_code != null || mobile != null){
+			tpUsersService.updateUserAndMobile(tpUsers.getUser_id(),head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat,mobile);
+			}else{
+				return "验证码不能为空";
+			}
+		}
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "修改成功!");
+		jsonObj.put("result",jsonArray);
+		return "修改成功";
+	}
+	/**
+	 * @param token
+	 * @return
+	 * 发卡行列表
+	 */
+	@RequestMapping(value = "bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String Bank(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray bankList = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		List<TpBank>tpBanks = tpBankService.getBankList(tpUsers.getUser_id());
+		for (TpBank tpBank : tpBanks) {
+			JSONObject bank = tpBankService.getBank(tpBank);
+			bankList.add(bank);
+		}
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		jsonObj.put("result",bankList);
+		return jsonObj.toString();
+	}
+	/**
+	 * @param token
+	 * @return
+	 * 投诉
+	 */
+	@RequestMapping(value = "send_report",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String sendReport(@RequestParam(required = true)String token,
+										   @RequestParam(required = true)String address,
+										   @RequestParam(required = true)String report_mess,
+										   @RequestParam(required = true)String image,
+										   @RequestParam(required = true)String area){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpReportList tpReportList = new TpReportList();
+		tpReportList.setUser_id(tpUsers.getUser_id());
+		tpReportList.setAddress(address);
+		tpReportList.setReport_mess(report_mess);
+		tpReportList.setImage(image);
+		tpReportList.setArea(area);
+		tpReportList.setSend_time((int)(new Date().getTime()/1000));
+		tpReportList.setStatus(false);
+		tpReportList.setReport_mess("");
+		tpReportList.setHan_time(null);
+		try{
+		tpReportListService.save(tpReportList);
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "投诉处理中!");
+		        }catch (Exception e){
+			jsonObj.put("status", "2");
+			jsonObj.put("msg", "投诉失败!");
+		}
+		return jsonObj.toString();
+	}
+	/**
+     * @param token
+     * @return
+     * 投诉记录
+     */
+    @RequestMapping(value = "report_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String ReportList(@RequestParam(required = true)String token){
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
-		TpUsers tpUsers = tpUsersService.findOneByInvite(invite_code);
-		if (null != tpUsers) {
-            data = tpUsersService.getUserlJson(tpUsers);
-		}
-		jsonObj.put("result",data);
-		return jsonObj.toString();
+
 	}
     /**
      * @return
@@ -713,6 +838,216 @@ public class UserController {
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
+        List<TpReportList> tpReportLists = tpReportListService.getSendReport(tpUsers1.getUser_id());
+        for (TpReportList tpReportList : tpReportLists) {
+          JSONObject jsonObject =  tpReportListService.getJsonReport(tpReportList);
+          jsonArray.add(jsonObject);
+        }
+        jsonObj.put("result",jsonArray);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+        return jsonObj.toString();
+    }
+    /**
+     * @param token
+     * @return
+     * 热门城市
+     */
+	@RequestMapping(value = "get_hot_city",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getHotCity(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("id",1);
+		jsonObject.put("area_name","北京");
+		jsonObject.put("level","1");
+		jsonObject.put("parent_id","0");
+		jsonArray.add(jsonObject);
+		JSONObject jsonObject1 = new JSONObject();
+		jsonObject1.put("id","10543");
+		jsonObject1.put("area_name","上海");
+		jsonObject1.put("level","1");
+		jsonObject1.put("parent_id","0");
+		jsonArray.add(jsonObject1);
+		JSONObject jsonObject2 = new JSONObject();
+		jsonObject2.put("id","28558");
+		jsonObject2.put("area_name","深圳");
+		jsonObject2.put("level","2");
+		jsonObject2.put("parent_id","28240");
+		jsonArray.add(jsonObject2);
+		JSONObject jsonObject3 = new JSONObject();
+		jsonObject3.put("id","28241");
+		jsonObject3.put("area_name","广州");
+		jsonObject3.put("level","2");
+		jsonObject3.put("parent_id","28240");
+		jsonArray.add(jsonObject3);
+		JSONObject jsonObject4 = new JSONObject();
+		jsonObject4.put("id","338");
+		jsonObject4.put("area_name","天津");
+		jsonObject4.put("level","1");
+		jsonObject4.put("parent_id","0");
+		jsonArray.add(jsonObject4);
+		JSONObject jsonObject5 = new JSONObject();
+		jsonObject5.put("id","31929");
+		jsonObject5.put("area_name","重庆");
+		jsonObject5.put("level","1");
+		jsonObject5.put("parent_id","0");
+		jsonArray.add(jsonObject5);
+		jsonObj.put("region_list",jsonArray);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+	/**
+	 * @param token
+	 * @param id
+	 * @return
+	 * 删除银行卡
+	 */
+	@RequestMapping(value = "del_bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String delBank(@RequestParam(required = true)String token,
+										@RequestParam(required = true)String id){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		try{
+			tpUserBankService.deleteBank(tpUsers.getUser_id(),id);
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "删除成功!");
+
+		}catch (Exception e){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "删除失败!");
+		}
+		return jsonObj.toString();
+	}
+	/**
+	 * @param token
+	 * @return
+	 * 添加银行卡(未测试)
+	 */
+	@RequestMapping(value = "add_bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String addBank(@RequestParam(required = true)String token,
+										@RequestParam(required = true)String real_name,
+										@RequestParam(required = true)String mobile,
+										@RequestParam(required = true)String bank_card,
+										@RequestParam(required = true)String bank_id,
+										@RequestParam(required = true)String bank_name,
+										@RequestParam(required = true)String branch,
+										@RequestParam(required = true)String mobile_code){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		String code = tpSmsLogService.selectLog(mobile);
+		if(mobile_code.equals(code)){
+			TpUserBank tpUserBank = new TpUserBank();
+			tpUserBank.setAdd_time((int)(new Date().getTime()/1000));
+			tpUserBank.setBank_card(bank_card);
+			tpUserBank.setBank_id(Integer.valueOf(bank_id));
+			tpUserBank.setBank_name(bank_name);
+			tpUserBank.setBranch(branch);
+			tpUserBank.setBranch_area(null);
+			tpUserBank.setId_card(null);
+			tpUserBank.setIs_delete(Byte.valueOf("0"));
+			tpUserBank.setMobile(mobile);
+			tpUserBank.setReal_name(real_name);
+			tpUserBank.setUser_id(tpUsers.getUser_id());
+			tpUserBankService.save(tpUserBank);
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "ok");
+			jsonObj.put("result","");
+			return jsonObj.toString();
+		}else{
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "验证码不正确");
+			jsonObj.put("result","");
+			return jsonObj.toString();
+		}
+	}
+	/**
+	 * @param token
+	 * @param id
+	 * @return
+	 * 删除地址
+	 */
+	@RequestMapping(value = "del_address",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String delAddress(@RequestParam(required = true)String token,
+										   @RequestParam(required = true)String id){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		try{
+		tpUsersService.deleteAddress(tpUsers.getUser_id(),id);
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "删除成功!");
+		        }catch (Exception e){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "删除失败!");
+		}
+		return jsonObj.toString();
+	}
+    /**
+     * @param token
+     * @return
+     * 个人中心 总收益、广告收益、已提现
+     */
+	@RequestMapping(value = "user_account_statistics",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String userAccountStatistics(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject jsonObject = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+        BigDecimal income = tpDeviceService.getSumMoneyDevice(tpUsers.getUser_id());
+        BigDecimal ad_income = tpUsersService.selectFrozen(tpUsers.getUser_id());
+        BigDecimal draw = tpWithdrawalsService.selectWithdrawalsMoney(tpUsers.getUser_id());
+        jsonObject.put("income",income);
+        jsonObject.put("ad_income",ad_income);
+        jsonObject.put("draw",draw);
+        jsonObj.put("result",jsonObject);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+        return jsonObj.toString();
+	}
+    /**
+     * @param token
+     * @param id
+     * @return
+     * 用户提现
+     */
+    @RequestMapping(value = "get_money",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String getMoney(@RequestParam(required = true)String token,
+                                         @RequestParam(required = true)int id,
+                                         @RequestParam(required = true)float money){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+        if (null == tpUsers1) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
 
         List<TpOrder> tpOrderList = tpOrderService.findAllOrderAndGoods(tpUsers1.getUser_id());
         int self = 0;
@@ -761,51 +1096,52 @@ public class UserController {
                                                                   @RequestParam(required = true)String details,
                                                                   @RequestParam(required = true)String files,
                                                                   @RequestParam(required = true)String reason){
-		JSONObject jsonObj = new JSONObject();
-		JSONObject data = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
-        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
-        if (null == tpUsers1) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
-            return jsonObj.toString();
-        }
-     /*   TpSmsLog tpSmsLog = tpSmsLogService.findOneByMobileAndCode(tpUsers1.getMobile(), code);
-		if (null == tpSmsLog) {
-			jsonObj.put("status", "3");
-			jsonObj.put("msg", "验证码错误!");
-			return jsonObj.toString();
-		}else {
-			if (tpSmsLog.getStatus() == 1) {
-				jsonObj.put("status", "4");
-				jsonObj.put("msg", "验证码已使用!");
-				return jsonObj.toString();
-			}
-		}*/
-        TpApplicationForBusinessCooperation tpApplication = new TpApplicationForBusinessCooperation();
-        tpApplication.setUser_id(tpUsers1.getUser_id());
-        tpApplication.setName(name);
-        tpApplication.setEmail(email);
-        tpApplication.setProvince(Integer.parseInt(province));
-        tpApplication.setCity(city);
-        tpApplication.setDistrict(Integer.parseInt(district));
-        tpApplication.setType(Integer.parseInt(type));
-        tpApplication.setBank_name(bank_name);
-        tpApplication.setWays_of_cooperation(ways_of_cooperation);
-        tpApplication.setCompany(company);
-        tpApplication.setDay_number(Integer.parseInt(day_number));
-        tpApplication.setDetails(details);
-        tpApplication.setFiles(files);
-        tpApplication.setMobile(tpUsers1.getMobile());
-        tpApplication.setReason(reason);
-        tpApplication.setRead(Integer.parseInt(""));
-        tpApplication.setReply_mess("");
-        int result = tpUsersService.insertApplicationforBusinessCooperation(tpApplication);
-        if (result > 0){
+            JSONObject jsonObj = new JSONObject();
+            JSONObject data = new JSONObject();
+            TpUsers tpUsers = tpUsersService.findOneByToken(token);
+            if (null == tpUsers) {
+                jsonObj.put("status", "0");
+                jsonObj.put("msg", "请先登陆!");
+                return jsonObj.toString();
+            }
+         /*   TpSmsLog tpSmsLog = tpSmsLogService.findOneByMobileAndCode(tpUsers1.getMobile(), code);
+            if (null == tpSmsLog) {
+                jsonObj.put("status", "3");
+                jsonObj.put("msg", "验证码错误!");
+                return jsonObj.toString();
+            }else {
+                if (tpSmsLog.getStatus() == 1) {
+                    jsonObj.put("status", "4");
+                    jsonObj.put("msg", "验证码已使用!");
+                    return jsonObj.toString();
+                }
+            }*/
+            TpApplicationForBusinessCooperation tpApplication = new TpApplicationForBusinessCooperation();
+            tpApplication.setUser_id(tpUsers.getUser_id());
+            tpApplication.setName(name);
+            tpApplication.setEmail(email);
+            tpApplication.setProvince(Integer.parseInt(province));
+            tpApplication.setCity(city);
+            tpApplication.setDistrict(Integer.parseInt(district));
+            tpApplication.setType(Integer.parseInt(type));
+            tpApplication.setBank_name(bank_name);
+            tpApplication.setWays_of_cooperation(ways_of_cooperation);
+            tpApplication.setCompany(company);
+            tpApplication.setDay_number(Integer.parseInt(day_number));
+            tpApplication.setDetails(details);
+            tpApplication.setFiles(files);
+            tpApplication.setMobile(tpUsers.getMobile());
+            tpApplication.setReason(reason);
+            tpApplication.setRead(Integer.parseInt(""));
+            tpApplication.setReply_mess("");
+            int result = tpUsersService.insertApplicationforBusinessCooperation(tpApplication);
+            if (result > 0){
+                jsonObj.put("status", "1");
+                jsonObj.put("msg", "ok!");
+            }
+            jsonObj.put("result",data);
             jsonObj.put("status", "1");
             jsonObj.put("msg", "ok!");
-        }
-		jsonObj.put("result",data);
-		return jsonObj.toString();
-	}
-}
+            return jsonObj.toString();
+	    }
+    }

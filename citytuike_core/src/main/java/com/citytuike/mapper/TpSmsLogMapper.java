@@ -12,4 +12,6 @@ public interface TpSmsLogMapper {
 
 
     void saveMsg(TpSmsLog tpSmsLog);
+
+    String selectLog(String mobile);
 }

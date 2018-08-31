@@ -21,6 +21,11 @@ public class TpSmsLogServiceImpl implements TpSmsLogService{
 	public int updateByStatus(TpSmsLog tpSmsLog) {
 		return tpSmsLogMapper.updateByStatus(tpSmsLog);
 	}
-	
+
+	@Override
+	public String selectLog(String mobile) {
+		return tpSmsLogMapper.selectLog(mobile);
+	}
+
 
 }

@@ -3,6 +3,7 @@ package com.citytuike.mapper;
 import com.citytuike.model.TpWithdrawals;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TpWithdrawalsMapper {
@@ -19,4 +20,8 @@ public interface TpWithdrawalsMapper {
     int CountWithdrawals(Integer user_id);
 
     List<TpWithdrawals> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("user_id") Integer user_id);
+
+    BigDecimal selectWithdrawalsMoney(Integer user_id);
+
+    void saveWithdrawals(TpWithdrawals tpWithdrawals);
 }

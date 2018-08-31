@@ -64,4 +64,11 @@ public interface TpUsersService {
 	int countByParentIdDay(Integer user_id, int startTime, int endTime);
 
 	int insertApplicationforBusinessCooperation(TpApplicationForBusinessCooperation tpApplication);
+	void updateUser(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat);
+
+	void deleteAddress(Integer user_id, String id);
+
+	void updateUserAndMobile(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat, String mobile);
+
+	BigDecimal selectFrozen(Integer user_id);
 }

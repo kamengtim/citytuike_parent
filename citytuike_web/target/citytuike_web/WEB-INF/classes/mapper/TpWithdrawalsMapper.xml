@@ -86,4 +86,21 @@
   <select id="selectByPage" resultType="com.citytuike.model.TpWithdrawals">
     select *  from tp_withdrawals where user_id = #{user_id} limit #{startPos},#{pageSize}
   </select>
+  <select id="selectWithdrawalsMoney" resultType="bigdecimal">
+    select sum(money) from tp_withdrawals where user_id = #{user_id}
+  </select>
+  <insert id="saveWithdrawals" parameterType="com.citytuike.model.TpWithdrawals" useGeneratedKeys="true" keyProperty="id">
+    insert into tp_withdrawals (user_id, money, create_time,
+      bank_name, bank_card, realname,
+      remark, taxfee, status,
+      pay_code, error_code, is_paid,
+      query_time, order_sn, serial_number,
+      send_type)
+    values (#{user_id,jdbcType=INTEGER}, #{money,jdbcType=DECIMAL}, #{create_time,jdbcType=INTEGER},
+      #{bank_name,jdbcType=VARCHAR}, #{bank_card,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{taxfee,jdbcType=DECIMAL}, #{status,jdbcType=BIT},
+      #{pay_code,jdbcType=VARCHAR}, #{error_code,jdbcType=VARCHAR}, #{is_paid,jdbcType=TINYINT},
+      #{query_time,jdbcType=INTEGER}, #{order_sn,jdbcType=VARCHAR}, #{serial_number,jdbcType=VARCHAR},
+      #{send_type,jdbcType=BIT})
+  </insert>
 </mapper>

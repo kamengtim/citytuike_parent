@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpReportListMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpReportList" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="send_time" property="send_time" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="han_time" property="han_time" jdbcType="INTEGER" />
+    <result column="report_mess" property="report_mess" jdbcType="LONGVARCHAR" />
+    <result column="image" property="image" jdbcType="LONGVARCHAR" />
+    <result column="reply_mess" property="reply_mess" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_report_list
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpReportList" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_report_list (area, user_id, address, 
+      send_time, status, han_time, 
+      report_mess, image, reply_mess
+      )
+    values (#{area,jdbcType=VARCHAR}, #{user_id,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{send_time,jdbcType=INTEGER}, #{status,jdbcType=BIT}, #{han_time,jdbcType=INTEGER}, 
+      #{report_mess,jdbcType=LONGVARCHAR}, #{image,jdbcType=LONGVARCHAR}, #{reply_mess,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpReportList" >
+    update tp_report_list
+    set area = #{area,jdbcType=VARCHAR},
+      user_id = #{user_id,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      send_time = #{send_time,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      han_time = #{han_time,jdbcType=INTEGER},
+      report_mess = #{report_mess,jdbcType=LONGVARCHAR},
+      image = #{image,jdbcType=LONGVARCHAR},
+      reply_mess = #{reply_mess,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, area, user_id, address, send_time, status, han_time, report_mess, image, 
+    reply_mess
+    from tp_report_list
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, area, user_id, address, send_time, status, han_time, report_mess, image, 
+    reply_mess
+    from tp_report_list
+  </select>
+  <select id="getSendReport" resultMap="BaseResultMap">
+    select id, area, user_id, address, send_time, status, han_time, report_mess, image,
+    reply_mess
+    from tp_report_list where user_id = #{user_id}
+  </select>
+</mapper>
