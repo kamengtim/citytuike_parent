@@ -1046,7 +1046,7 @@ public class UserController {
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-        BigDecimal income = tpUsersService.getSumMoneyDevice(tpUsers.getUser_id());
+        BigDecimal income = tpDeviceService.getSumMoneyDevice(tpUsers.getUser_id());
         BigDecimal ad_income = tpUsersService.selectFrozen(tpUsers.getUser_id());
         BigDecimal draw = tpWithdrawalsService.selectWithdrawalsMoney(tpUsers.getUser_id());
         jsonObject.put("income",income);
@@ -1240,7 +1240,6 @@ public class UserController {
         return jsonObj.toString();
     }
 	/**
-	 * @param model
 	 * @param token
 	 * @param id
 	 * @return
@@ -1270,9 +1269,7 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @param token
-	 * @param id
 	 * @return
 	 * 修改密码
 	 */
@@ -1311,9 +1308,7 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @param token
-	 * @param id
 	 * @return
 	 * 收益明细中的收益统计
 	 */
@@ -1333,7 +1328,6 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @param token
 	 * @param id
 	 * @return
@@ -1356,9 +1350,6 @@ public class UserController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
-	 * @param id
 	 * @return
 	 * 信用卡申请列表
 	 */
@@ -1377,9 +1368,6 @@ public class UserController {
 		return jsonObj.toJSONString();
 	}
     /**
-     * @param model
-     * @param token
-     * @param id
      * @return
      * 添加支付宝账号
      */
@@ -1400,9 +1388,6 @@ public class UserController {
         return jsonObj.toString();
     }
     /**
-     * @param model
-     * @param token
-     * @param id
      * @return
      * 支付账号列表
      */
@@ -1428,8 +1413,6 @@ public class UserController {
         return jsonObj.toString();
     }
     /**
-     * @param model
-     * @param token
      * @param id
      * @return
      * 支付宝提现
@@ -1449,4 +1432,118 @@ public class UserController {
         }
         return jsonObj.toString();
     }
+
+	/**
+	 * @param token
+	 * @param flag
+	 *  1为首页2为个人中心3为订单4为消息
+	 * @return
+	 */
+	@RequestMapping(value = "plateMsg",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String plateMsg(@RequestParam(required = true)String token,
+											   @RequestParam(required = true)int flag){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpPlateMsg tpPlateMsg = tpUsersService.findPlatMsgByFlagd(flag);
+		if (null != tpPlateMsg){
+			data.put("id", tpPlateMsg.getId());
+			data.put("content", tpPlateMsg.getContent());
+			data.put("title", tpPlateMsg.getTitle());
+			data.put("create_time", tpPlateMsg.getCreate_time());
+			data.put("right_title", tpPlateMsg.getRight_title());
+			data.put("flag", tpPlateMsg.getFlag());
+			jsonObj.put("result", data);
+
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "ok!");
+		}
+		return jsonObj.toString();
+	}
+
+	/**
+	 * @param token
+	 * @return
+	 * 系统通知
+	 */
+	@RequestMapping(value = "sysMessage",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String sysMessage(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		List<TpSysMessage> tpSysMessageList = tpUsersService.findAllSysMessage();
+		for (TpSysMessage tpMessage: tpSysMessageList) {
+			JSONObject jsonObj1 = new JSONObject();
+			jsonObj1.put("send_msg", tpMessage.getSend_msg());
+			jsonObj1.put("send_time", tpMessage.getSend_time());
+			jsonObj1.put("sys_msg_id", tpMessage.getId());
+			TpSysMessageUser tpSysMessageUser = tpUsersService.findOneBySysIdAndUserId(tpMessage.getId(), tpUsers.getUser_id());
+			if (null != tpSysMessageUser){
+				JSONObject jsonObject2 = new JSONObject();
+				jsonObject2.put("id", tpSysMessageUser.getId());
+				jsonObject2.put("user_id", tpSysMessageUser.getUser_id());
+				jsonObject2.put("sys_msg_id", tpSysMessageUser.getSys_msg_id());
+				jsonObject2.put("status", tpSysMessageUser.getStatus());
+				jsonObject2.put("create_time", tpSysMessageUser.getCreate_time());
+				jsonObj1.put("user", jsonObject2);
+			}else{
+				jsonObj1.put("user", "");
+			}
+			jsonArray.add(String.valueOf(jsonObj1));
+		}
+		jsonObj.put("result", jsonArray);
+
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+
+	/**
+	 * @param token
+	 * @return
+	 * 系统通知判断
+	 */
+	@RequestMapping(value = "getSysList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getSysList(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		List<TpSysMessage> tpSysMessageList = tpUsersService.findAllSysMessage();
+		for (TpSysMessage tpMessage: tpSysMessageList) {
+			JSONObject jsonObj1 = new JSONObject();
+			jsonObj1.put("send_msg", tpMessage.getSend_msg());
+			jsonObj1.put("send_time", tpMessage.getSend_time());
+			jsonObj1.put("sys_msg_id", tpMessage.getId());
+			TpSysMessageUser tpSysMessageUser = tpUsersService.findOneBySysIdAndUserId(tpMessage.getId(), tpUsers.getUser_id());
+			if (null != tpSysMessageUser){
+				jsonObj1.put("user_id", tpSysMessageUser.getUser_id());
+				jsonObj1.put("read", "1");
+			}else{
+				jsonObj1.put("read", "0");
+			}
+			jsonArray.add(jsonObj1);
+		}
+		jsonObj.put("result", jsonArray);
+
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+
+
 }

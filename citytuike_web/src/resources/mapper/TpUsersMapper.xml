@@ -8,6 +8,9 @@
 	<resultMap id="TpUserAddress" type="com.citytuike.model.TpUserAddress" >
 		<result column="address_id" property="address_id" />
 	</resultMap>
+	<resultMap id="TpSysMessage" type="com.citytuike.model.TpSysMessage" >
+		<result column="id" property="id" />
+	</resultMap>
 	<resultMap id="TpSmsLog" type="com.citytuike.model.TpSmsLog" >
 		<result column="id" property="id" />
 	</resultMap>
@@ -432,11 +435,20 @@
 	<select id="selectCountMoney" resultType="bigdecimal">
 		select user_money from tp_users where user_id=#{user_id}
 	</select>
+	<select id="findOneBySysIdAndUserId" resultType="com.citytuike.model.TpSysMessageUser">
+		select * from tp_sys_message where user_id=#{user_id}and id=#{id};
+	</select>
+	<select id="findPlatMsgByFlagd" resultType="com.citytuike.model.TpPlateMsg">
+		select * from tp_plate_msg where flag=#{flag}
+	</select>
 	<select id="selectRegTime" resultType="int">
 		select reg_time FROM  tp_users WHERE user_id = #{user_id}
 	</select>
 	<select id="selectParentId" resultMap="TpUsers">
 		select * FROM  tp_users WHERE parent_id = #{user_id}
+	</select>
+	<select id="findAllSysMessage" resultMap="TpSysMessage">
+		select * FROM  tp_sys_message;
 	</select>
 	<!-- 分页SQL语句 -->
 	<select id="selectByPage" resultType="TpUsers">

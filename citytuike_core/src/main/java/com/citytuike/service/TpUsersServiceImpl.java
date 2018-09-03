@@ -298,6 +298,22 @@ public class TpUsersServiceImpl implements TpUsersService{
     }
 
 	@Override
+	public TpPlateMsg findPlatMsgByFlagd(int flag) {
+		return tpUsersMapper.findPlatMsgByFlagd(flag);
+	}
+
+	@Override
+	public List<TpSysMessage> findAllSysMessage() {
+		return tpUsersMapper.findAllSysMessage();
+	}
+
+	@Override
+	public TpSysMessageUser findOneBySysIdAndUserId(Integer id, Integer user_id) {
+		return tpUsersMapper.findOneBySysIdAndUserId(id, user_id);
+	}
+
+
+	@Override
 	public int selectMobile(Integer user_id) {
 		return tpUsersMapper.selectMobile(user_id);
 	}

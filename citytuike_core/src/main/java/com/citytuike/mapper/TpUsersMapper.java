@@ -96,4 +96,10 @@ public interface TpUsersMapper {
 	TpUsers incomeCount(Integer user_id);
 
 	TpUsers selectUserByMobile(String mobile);
+
+    List<TpSysMessage> findAllSysMessage();
+
+	TpPlateMsg findPlatMsgByFlagd(@Param("flag")int flag);
+
+	TpSysMessageUser findOneBySysIdAndUserId(@Param("id")Integer id, @Param("user_id")Integer user_id);
 }

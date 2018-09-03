@@ -83,4 +83,10 @@ public interface TpUsersService {
 	JSONObject UserMoney(Integer user_id);
 
 	JSONObject incomeCount(Integer user_id);
+
+    TpPlateMsg findPlatMsgByFlagd(int flag);
+
+	List<TpSysMessage> findAllSysMessage();
+
+	TpSysMessageUser findOneBySysIdAndUserId(Integer id, Integer user_id);
 }
