@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpApplyReportMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpApplyReport" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="idcard" property="idcard" jdbcType="CHAR" />
+    <result column="mobile" property="mobile" jdbcType="CHAR" />
+    <result column="name_first" property="name_first" jdbcType="CHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="bank_name" property="bank_name" jdbcType="VARCHAR" />
+    <result column="bank_id" property="bank_id" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="tig" property="tig" jdbcType="VARCHAR" />
+    <result column="send_gift" property="send_gift" jdbcType="BIT" />
+    <result column="gift" property="gift" jdbcType="CHAR" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="name_last" property="name_last" jdbcType="CHAR" />
+    <result column="id_card_all" property="id_card_all" jdbcType="VARCHAR" />
+    <result column="mobile_all" property="mobile_all" jdbcType="CHAR" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_apply_report
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpApplyReport" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_apply_report (idcard, mobile, name_first, 
+      add_time, bank_name, bank_id, 
+      status, tig, send_gift, gift, 
+      money, name_last, id_card_all, 
+      mobile_all, user_id)
+    values (#{idcard,jdbcType=CHAR}, #{mobile,jdbcType=CHAR}, #{name_first,jdbcType=CHAR}, 
+      #{add_time,jdbcType=INTEGER}, #{bank_name,jdbcType=VARCHAR}, #{bank_id,jdbcType=INTEGER}, 
+      #{status,jdbcType=BIT}, #{tig,jdbcType=VARCHAR}, #{send_gift,jdbcType=BIT}, #{gift,jdbcType=CHAR}, 
+      #{money,jdbcType=DECIMAL}, #{name_last,jdbcType=CHAR}, #{id_card_all,jdbcType=VARCHAR}, 
+      #{mobile_all,jdbcType=CHAR}, #{user_id,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpApplyReport" >
+    update tp_apply_report
+    set idcard = #{idcard,jdbcType=CHAR},
+      mobile = #{mobile,jdbcType=CHAR},
+      name_first = #{name_first,jdbcType=CHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      bank_name = #{bank_name,jdbcType=VARCHAR},
+      bank_id = #{bank_id,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT},
+      tig = #{tig,jdbcType=VARCHAR},
+      send_gift = #{send_gift,jdbcType=BIT},
+      gift = #{gift,jdbcType=CHAR},
+      money = #{money,jdbcType=DECIMAL},
+      name_last = #{name_last,jdbcType=CHAR},
+      id_card_all = #{id_card_all,jdbcType=VARCHAR},
+      mobile_all = #{mobile_all,jdbcType=CHAR},
+      user_id = #{user_id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, idcard, mobile, name_first, add_time, bank_name, bank_id, status, tig, 
+    send_gift, gift, money, name_last, id_card_all, mobile_all, user_id
+    from tp_apply_report
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, idcard, mobile, name_first, add_time, bank_name, bank_id, status, tig, 
+    send_gift, gift, money, name_last, id_card_all, mobile_all, user_id
+    from tp_apply_report
+  </select>
+</mapper>

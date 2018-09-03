@@ -7,32 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d3631420-443d-4220-8813-e3d934a6d5f8" name="Default Changelist" comment="Default Changelist">
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpCardListMapper.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpReportListMapper.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpCardList.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpReportList.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpReportListService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpReportListServiceImpl.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpCardListMapper.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpReportListMapper.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpApplyCardMapper.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUserLevelMapper.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpApplyCard.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUserLevel.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardService.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardServiceImpl.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpApplyCardMapper.xml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUserLevelMapper.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpBankMapper.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpBankMapper.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpSmsLogMapper.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpSmsLogMapper.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUserBankMapper.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUserBankMapper.java" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpWithdrawalsMapper.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpWithdrawalsMapper.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpBankService.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpBankService.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpBankServiceImpl.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpBankServiceImpl.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpSmsLogService.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpSmsLogService.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpSmsLogServiceImpl.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpSmsLogServiceImpl.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUserBankService.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUserBankService.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUserBankServiceImpl.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUserBankServiceImpl.java" />
+      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpWithdrawalsService.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpWithdrawalsService.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpWithdrawalsServiceImpl.java" afterPath="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpWithdrawalsServiceImpl.java" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpBankMapper.class" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpBankMapper.class" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpMessageMapper.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpSmsLogMapper.class" afterPath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/mapper/TpSmsLogMapper.class" />
@@ -61,27 +48,8 @@
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/BaseMessage.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/MD5Utils.class" afterPath="" />
       <change beforePath="$PROJECT_DIR$/citytuike_core/target/classes/com/citytuike/util/TextsMessage.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/pom.xml" afterPath="$PROJECT_DIR$/citytuike_web/pom.xml" />
       <change beforePath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java" afterPath="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpBankMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpBankMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpSmsLogMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpSmsLogMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUserBankMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUserBankMapper.xml" />
       <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpWithdrawalsMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpWithdrawalsMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/META-INF/MANIFEST.MF" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/UserController.class" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/com/citytuike/controller/UserController.class" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpBankMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpBankMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpSmsLogMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpSmsLogMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpUserBankMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpUserBankMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpUsersMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpUsersMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpWithdrawalsMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/classes/mapper/TpWithdrawalsMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/lib/citytuike_core-1.0-SNAPSHOT.jar" afterPath="$PROJECT_DIR$/citytuike_web/target/citytuike_web/WEB-INF/lib/citytuike_core-1.0-SNAPSHOT.jar" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/controller/UserController.class" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/com/citytuike/controller/UserController.class" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpBankMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpBankMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpSmsLogMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpSmsLogMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpUserBankMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpUserBankMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpUsersMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpUsersMapper.xml" />
-      <change beforePath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpWithdrawalsMapper.xml" afterPath="$PROJECT_DIR$/citytuike_web/target/classes/mapper/TpWithdrawalsMapper.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/citytuike_web/target/" />
     <ignored path="$PROJECT_DIR$/citytuike_core/target/" />
@@ -133,86 +101,72 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="960" column="16" lean-forward="true" selection-start-line="960" selection-start-column="16" selection-end-line="960" selection-end-column="16" />
-              <folding>
-                <element signature="e#33331#33332#0" expanded="true" />
-                <element signature="e#33358#33359#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TpCardListService.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="7" />
+            <state relative-caret-position="211">
+              <caret line="1011" column="44" lean-forward="false" selection-start-line="1011" selection-start-column="44" selection-end-line="1011" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TpCardListServiceImpl.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListServiceImpl.java">
+      <file leaf-file-name="TpApplyCard.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpApplyCard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="43" column="41" lean-forward="false" selection-start-line="43" selection-start-column="41" selection-end-line="43" selection-end-column="41" />
+            <state relative-caret-position="204">
+              <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TpApplyCardMapper.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpApplyCardMapper.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TpApplyCardMapper.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpApplyCardMapper.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="45" column="59" lean-forward="false" selection-start-line="45" selection-start-column="59" selection-end-line="45" selection-end-column="59" />
+              <folding>
+                <marker date="1535712585834" expanded="true" signature="828:891" ph="delete from tp_apply_card... " />
+                <marker date="1535712585834" expanded="true" signature="1021:1295" ph="insert into tp_apply_card... " />
+                <marker date="1535712585834" expanded="true" signature="1396:1705" ph="update tp_apply_card... " />
+                <marker date="1535712585834" expanded="true" signature="1818:1935" ph="select id, n... tp_apply_card" />
+                <marker date="1535712585834" expanded="true" signature="2005:2084" ph="select id, n... tp_apply_card" />
+                <marker date="1535712585834" expanded="true" signature="2135:2221" ph="delete from tp_apply_card... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TpApplyCardService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="8" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TpApplyCardServiceImpl.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardServiceImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="376">
+              <caret line="27" column="43" lean-forward="false" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#526#527#0" expanded="true" />
-                <element signature="e#577#578#0" expanded="true" />
-                <element signature="e#1671#1672#0" expanded="true" />
-                <element signature="e#1722#1723#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TpCardListMapper.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpCardListMapper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="18" column="17" lean-forward="false" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TpCardListMapper.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpCardListMapper.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="66" column="38" lean-forward="false" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
-              <folding>
-                <marker date="1535702630782" expanded="true" signature="1415:1477" ph="delete from tp_card_list... " />
-                <marker date="1535702630782" expanded="true" signature="1606:2240" ph="insert into tp_card_list... " />
-                <marker date="1535702630782" expanded="true" signature="2340:3037" ph="update tp_card_list... " />
-                <marker date="1535702630782" expanded="true" signature="3150:3358" ph="select id, l... tp_card_list" />
-                <marker date="1535702630782" expanded="true" signature="3428:3598" ph="select id, l... tp_card_list" />
-                <marker date="1535702630782" expanded="true" signature="3658:3692" ph="select count... tp_card_list" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TpReportListMapper.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpReportListMapper.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="19" column="2" lean-forward="false" selection-start-line="19" selection-start-column="2" selection-end-line="19" selection-end-column="2" />
-              <folding>
-                <marker date="1535615006763" expanded="true" signature="1076:1140" ph="delete from tp_report_list... " />
-                <marker date="1535615006763" expanded="true" signature="1271:1710" ph="insert into tp_report_list... " />
-                <marker date="1535615006763" expanded="true" signature="1812:2293" ph="update tp_report_list... " />
-                <marker date="1535615006763" expanded="true" signature="2406:2567" ph="select id, a... tp_report_list" />
-                <marker date="1535615006763" expanded="true" signature="2637:2760" ph="select id, a... tp_report_list" />
-                <marker date="1535615006763" expanded="true" signature="2833:2982" ph="select id, a... tp_report_list" />
+                <element signature="e#976#977#0" expanded="true" />
+                <element signature="e#1039#1040#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -221,38 +175,42 @@
       <file leaf-file-name="TpUsersMapper.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="382" column="13" lean-forward="false" selection-start-line="382" selection-start-column="13" selection-end-line="382" selection-end-column="13" />
+            <state relative-caret-position="227">
+              <caret line="443" column="13" lean-forward="true" selection-start-line="443" selection-start-column="13" selection-end-line="443" selection-end-column="13" />
               <folding>
-                <marker date="1535700615256" expanded="true" signature="4053:4172" ph="select from tp_users" />
-                <marker date="1535700615256" expanded="true" signature="4238:4327" ph="select from tp_users" />
-                <marker date="1535700615256" expanded="true" signature="4393:4484" ph="select from tp_users" />
-                <marker date="1535700615256" expanded="true" signature="4550:4641" ph="select from tp_users" />
-                <marker date="1535700615256" expanded="true" signature="4707:4801" ph="select from tp_users" />
-                <marker date="1535700615256" expanded="true" signature="4872:4945" ph="select * fro... tp_user" />
-                <marker date="1535700615256" expanded="true" signature="5020:5079" ph="select * fro... tp_user_address" />
-                <marker date="1535700615256" expanded="true" signature="5151:5231" ph="select * fro... tp_user_address" />
-                <marker date="1535700615256" expanded="true" signature="5306:5367" ph="select * fro... tp_user_address" />
-                <marker date="1535700615256" expanded="true" signature="5434:5482" ph="select * fro... tp_region" />
-                <marker date="1535700615256" expanded="true" signature="5566:5654" ph="select from tp_users" />
-                <marker date="1535700615256" expanded="true" signature="5779:7306" ph="INSERT INTO tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="7610:7985" ph="INSERT INTO tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="8121:8237" ph="INSERT INTO tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="8328:8436" ph="UPDATE tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="8527:8635" ph="UPDATE tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="8738:8815" ph="UPDATE tp_users_address... " />
-                <marker date="1535700615256" expanded="true" signature="8905:8972" ph="UPDATE tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="9068:9149" ph="UPDATE tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="9247:10038" ph="UPDATE tp_user_address... " />
-                <marker date="1535700615256" expanded="true" signature="10108:10164" ph="select user_... tp_users" />
-                <marker date="1535700615256" expanded="true" signature="10224:10281" ph="select reg_t... tp_users" />
-                <marker date="1535700615256" expanded="true" signature="10345:10397" ph="select * FRO... tp_users" />
-                <marker date="1535700615256" expanded="true" signature="10478:10560" ph="select * fro... tp_users" />
-                <marker date="1535700615256" expanded="true" signature="10604:11220" ph="update tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="11263:11340" ph="delete from tp_user_address... " />
-                <marker date="1535700615256" expanded="true" signature="11389:12005" ph="update tp_users... " />
-                <marker date="1535700615256" expanded="true" signature="12071:12131" ph="select froze... tp_users" />
-                <marker date="1535700615256" expanded="true" signature="12177:12252" ph="update tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="4053:4172" ph="select from tp_users" />
+                <marker date="1535709173177" expanded="true" signature="4238:4327" ph="select from tp_users" />
+                <marker date="1535709173177" expanded="true" signature="4393:4484" ph="select from tp_users" />
+                <marker date="1535709173177" expanded="true" signature="4550:4641" ph="select from tp_users" />
+                <marker date="1535709173177" expanded="true" signature="4707:4801" ph="select from tp_users" />
+                <marker date="1535709173177" expanded="true" signature="4872:4945" ph="select * fro... tp_user" />
+                <marker date="1535709173177" expanded="true" signature="5020:5079" ph="select * fro... tp_user_address" />
+                <marker date="1535709173177" expanded="true" signature="5151:5231" ph="select * fro... tp_user_address" />
+                <marker date="1535709173177" expanded="true" signature="5306:5367" ph="select * fro... tp_user_address" />
+                <marker date="1535709173177" expanded="true" signature="5434:5482" ph="select * fro... tp_region" />
+                <marker date="1535709173177" expanded="true" signature="5566:5654" ph="select from tp_users" />
+                <marker date="1535709173177" expanded="true" signature="5779:7306" ph="INSERT INTO tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="7610:7985" ph="INSERT INTO tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="8121:8237" ph="INSERT INTO tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="8328:8436" ph="UPDATE tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="8527:8635" ph="UPDATE tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="8738:8815" ph="UPDATE tp_users_address... " />
+                <marker date="1535709173177" expanded="true" signature="8905:8972" ph="UPDATE tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="9068:9149" ph="UPDATE tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="9247:10038" ph="UPDATE tp_user_address... " />
+                <marker date="1535709173177" expanded="true" signature="10108:10164" ph="select user_... tp_users" />
+                <marker date="1535709173177" expanded="true" signature="10224:10281" ph="select reg_t... tp_users" />
+                <marker date="1535709173177" expanded="true" signature="10345:10397" ph="select * FRO... tp_users" />
+                <marker date="1535709173177" expanded="true" signature="10478:10560" ph="select * fro... tp_users" />
+                <marker date="1535709173177" expanded="true" signature="10604:11220" ph="update tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="11263:11340" ph="delete from tp_user_address... " />
+                <marker date="1535709173177" expanded="true" signature="11389:12005" ph="update tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="12071:12131" ph="select froze... tp_users" />
+                <marker date="1535709173177" expanded="true" signature="12177:12252" ph="update tp_users... " />
+                <marker date="1535709173177" expanded="true" signature="12324:12381" ph="select * fro... tp_users" />
+                <marker date="1535709173177" expanded="true" signature="12444:12572" ph="select tp.na... tp_user_address" />
+                <marker date="1535709173177" expanded="true" signature="12632:12756" ph="select tp.na... tp_user_address" />
+                <marker date="1535709173177" expanded="true" signature="12820:12948" ph="select tp.na... tp_user_address" />
               </folding>
             </state>
           </provider>
@@ -261,8 +219,8 @@
       <file leaf-file-name="TpUsersMapper.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+            <state relative-caret-position="233">
+              <caret line="79" column="43" lean-forward="true" selection-start-line="79" selection-start-column="43" selection-end-line="79" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -271,22 +229,22 @@
       <file leaf-file-name="TpUsersServiceImpl.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1291">
-              <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
+            <state relative-caret-position="-741">
+              <caret line="214" column="22" lean-forward="false" selection-start-line="214" selection-start-column="22" selection-end-line="214" selection-end-column="22" />
               <folding>
-                <element signature="e#3614#3615#0" expanded="true" />
-                <element signature="e#3670#3671#0" expanded="true" />
-                <element signature="e#3732#3733#0" expanded="true" />
-                <element signature="e#3792#3793#0" expanded="true" />
-                <element signature="e#3848#3849#0" expanded="true" />
-                <element signature="e#3898#3899#0" expanded="true" />
-                <element signature="e#4073#4074#0" expanded="true" />
-                <element signature="e#4119#4120#0" expanded="true" />
-                <element signature="e#5660#5669#0" expanded="true" />
-                <element signature="e#6769#6770#0" expanded="true" />
-                <element signature="e#6815#6816#0" expanded="true" />
-                <element signature="e#7288#7289#0" expanded="true" />
-                <element signature="e#7337#7338#0" expanded="true" />
+                <element signature="e#3723#3724#0" expanded="true" />
+                <element signature="e#3779#3780#0" expanded="true" />
+                <element signature="e#3841#3842#0" expanded="true" />
+                <element signature="e#3901#3902#0" expanded="true" />
+                <element signature="e#3957#3958#0" expanded="true" />
+                <element signature="e#4007#4008#0" expanded="true" />
+                <element signature="e#4182#4183#0" expanded="true" />
+                <element signature="e#4228#4229#0" expanded="true" />
+                <element signature="e#5769#5778#0" expanded="true" />
+                <element signature="e#6878#6879#0" expanded="true" />
+                <element signature="e#6924#6925#0" expanded="true" />
+                <element signature="e#7397#7398#0" expanded="true" />
+                <element signature="e#7446#7447#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -295,8 +253,8 @@
       <file leaf-file-name="TpUsersService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3">
-              <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+            <state relative-caret-position="279">
+              <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -324,6 +282,8 @@
       <find>地址</find>
       <find>提现</find>
       <find>删除</find>
+      <find>add</find>
+      <find>get_invite_code_user_info</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -341,7 +301,6 @@
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/SendMessageServiceImpl.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/ITpAccountLogService.java" />
         <option value="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/PayController.java" />
-        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/util/ResultModel.java" />
         <option value="$PROJECT_DIR$/citytuike_web/pom.xml" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpBankServiceImpl.java" />
@@ -356,7 +315,6 @@
         <option value="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpSmsLogMapper.xml" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUserBankService.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUserBankServiceImpl.java" />
-        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpWithdrawalsService.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpBankService.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpBankMapper.java" />
@@ -368,14 +326,23 @@
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpWithdrawalsServiceImpl.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpCardList.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListSeviceImpl.java" />
-        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" />
-        <option value="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" />
-        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListService.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListServiceImpl.java" />
         <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpCardListMapper.java" />
         <option value="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpCardListMapper.xml" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUserLevel.java" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUserLevelMapper.java" />
+        <option value="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUserLevelMapper.xml" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java" />
+        <option value="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java" />
         <option value="$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardService.java" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardServiceImpl.java" />
+        <option value="$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpApplyCardMapper.xml" />
+        <option value="$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpApplyCardMapper.java" />
       </list>
     </option>
   </component>
@@ -398,9 +365,9 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="222" />
-    <option name="y" value="37" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="110" />
+    <option name="y" value="158" />
     <option name="width" value="1089" />
     <option name="height" value="647" />
   </component>
@@ -944,7 +911,7 @@
       <workItem from="1535417442364" duration="23249000" />
       <workItem from="1535504313924" duration="25976000" />
       <workItem from="1535591006801" duration="7722000" />
-      <workItem from="1535678374887" duration="21671000" />
+      <workItem from="1535678374887" duration="29259000" />
     </task>
     <task id="LOCAL-00001" summary="Default Changelist">
       <created>1535606528919</created>
@@ -953,15 +920,21 @@
       <option name="project" value="LOCAL" />
       <updated>1535606528919</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Default Changelist">
+      <created>1535705321065</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1535705321065</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50478000" />
+    <option name="totallyTimeSpent" value="58066000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="222" y="37" width="1089" height="647" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -974,13 +947,13 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2361516" sideWeight="0.84931505" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31240544" sideWeight="0.84931505" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32361516" sideWeight="0.099804305" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3420797" sideWeight="0.15068494" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2857143" sideWeight="0.494655" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.108552635" sideWeight="0.494655" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1033,82 +1006,13 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$PROJECT_DIR$/citytuike_web/src/main/webapp/WEB-INF/lib/yop-java-sdk-2.2.8-jdk18.jar!/com/yeepay/g3/sdk/yop/exception/DecryptFailedException.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="6" column="0" lean-forward="false" selection-start-line="5" selection-start-column="40" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_web/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="503">
-          <caret line="91" column="20" lean-forward="false" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/db.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="20" lean-forward="false" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpBank.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="88" column="16" lean-forward="false" selection-start-line="88" selection-start-column="16" selection-end-line="88" selection-end-column="16" />
-          <folding>
-            <element signature="e#1369#1370#0" expanded="false" />
-            <element signature="e#1397#1398#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/generatorConfig.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="5" lean-forward="false" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/applicationContext.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="43" column="84" lean-forward="true" selection-start-line="43" selection-start-column="84" selection-end-line="43" selection-end-column="84" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/MyBatisCfg.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-194">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/springmvc-servlet.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="105" column="43" lean-forward="false" selection-start-line="105" selection-start-column="43" selection-end-line="105" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpReportList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="27" lean-forward="false" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpReportListMapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="8" lean-forward="false" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1116,6 +1020,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="15" lean-forward="false" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1123,6 +1030,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="125">
           <caret line="20" column="22" lean-forward="false" selection-start-line="20" selection-start-column="22" selection-end-line="20" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#516#517#0" expanded="false" />
+            <element signature="e#579#580#0" expanded="false" />
+            <element signature="e#1415#1416#0" expanded="false" />
+            <element signature="e#1470#1471#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1378,10 +1292,10 @@
         <state relative-caret-position="165">
           <caret line="45" column="5" lean-forward="true" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
           <folding>
-            <element signature="e#1573#1574#0" expanded="true" />
-            <element signature="e#1624#1625#0" expanded="true" />
-            <element signature="e#1696#1697#0" expanded="true" />
-            <element signature="e#1751#1752#0" expanded="true" />
+            <element signature="e#1573#1574#0" expanded="false" />
+            <element signature="e#1624#1625#0" expanded="false" />
+            <element signature="e#1696#1697#0" expanded="false" />
+            <element signature="e#1751#1752#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1443,86 +1357,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="382" column="13" lean-forward="false" selection-start-line="382" selection-start-column="13" selection-end-line="382" selection-end-column="13" />
-          <folding>
-            <marker date="1535700615256" expanded="true" signature="4053:4172" ph="select from tp_users" />
-            <marker date="1535700615256" expanded="true" signature="4238:4327" ph="select from tp_users" />
-            <marker date="1535700615256" expanded="true" signature="4393:4484" ph="select from tp_users" />
-            <marker date="1535700615256" expanded="true" signature="4550:4641" ph="select from tp_users" />
-            <marker date="1535700615256" expanded="true" signature="4707:4801" ph="select from tp_users" />
-            <marker date="1535700615256" expanded="true" signature="4872:4945" ph="select * fro... tp_user" />
-            <marker date="1535700615256" expanded="true" signature="5020:5079" ph="select * fro... tp_user_address" />
-            <marker date="1535700615256" expanded="true" signature="5151:5231" ph="select * fro... tp_user_address" />
-            <marker date="1535700615256" expanded="true" signature="5306:5367" ph="select * fro... tp_user_address" />
-            <marker date="1535700615256" expanded="true" signature="5434:5482" ph="select * fro... tp_region" />
-            <marker date="1535700615256" expanded="true" signature="5566:5654" ph="select from tp_users" />
-            <marker date="1535700615256" expanded="true" signature="5779:7306" ph="INSERT INTO tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="7610:7985" ph="INSERT INTO tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="8121:8237" ph="INSERT INTO tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="8328:8436" ph="UPDATE tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="8527:8635" ph="UPDATE tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="8738:8815" ph="UPDATE tp_users_address... " />
-            <marker date="1535700615256" expanded="true" signature="8905:8972" ph="UPDATE tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="9068:9149" ph="UPDATE tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="9247:10038" ph="UPDATE tp_user_address... " />
-            <marker date="1535700615256" expanded="true" signature="10108:10164" ph="select user_... tp_users" />
-            <marker date="1535700615256" expanded="true" signature="10224:10281" ph="select reg_t... tp_users" />
-            <marker date="1535700615256" expanded="true" signature="10345:10397" ph="select * FRO... tp_users" />
-            <marker date="1535700615256" expanded="true" signature="10478:10560" ph="select * fro... tp_users" />
-            <marker date="1535700615256" expanded="true" signature="10604:11220" ph="update tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="11263:11340" ph="delete from tp_user_address... " />
-            <marker date="1535700615256" expanded="true" signature="11389:12005" ph="update tp_users... " />
-            <marker date="1535700615256" expanded="true" signature="12071:12131" ph="select froze... tp_users" />
-            <marker date="1535700615256" expanded="true" signature="12177:12252" ph="update tp_users... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3">
-          <caret line="16" column="12" lean-forward="false" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1291">
-          <caret line="22" column="0" lean-forward="true" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-          <folding>
-            <element signature="e#3614#3615#0" expanded="true" />
-            <element signature="e#3670#3671#0" expanded="true" />
-            <element signature="e#3732#3733#0" expanded="true" />
-            <element signature="e#3792#3793#0" expanded="true" />
-            <element signature="e#3848#3849#0" expanded="true" />
-            <element signature="e#3898#3899#0" expanded="true" />
-            <element signature="e#4073#4074#0" expanded="true" />
-            <element signature="e#4119#4120#0" expanded="true" />
-            <element signature="e#5660#5669#0" expanded="true" />
-            <element signature="e#6769#6770#0" expanded="true" />
-            <element signature="e#6815#6816#0" expanded="true" />
-            <element signature="e#7288#7289#0" expanded="true" />
-            <element signature="e#7337#7338#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpCardListService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="12" column="7" lean-forward="true" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="7" />
+          <caret line="12" column="7" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="12" selection-end-column="7" />
           <folding />
         </state>
       </provider>
@@ -1566,14 +1404,184 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUserLevel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="20" column="18" lean-forward="true" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUserLevelMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="40" column="9" lean-forward="true" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+          <folding>
+            <marker date="1535706107284" expanded="true" signature="728:804" ph="delete from tp_user_level... " />
+            <marker date="1535706107284" expanded="true" signature="893:1147" ph="insert into tp_user_level... " />
+            <marker date="1535706107284" expanded="true" signature="1248:1509" ph="update tp_user_level... " />
+            <marker date="1535706107284" expanded="true" signature="1620:1749" ph="select level... " />
+            <marker date="1535706107284" expanded="true" signature="1819:1897" ph="select level... " />
+            <marker date="1535706107284" expanded="true" signature="1966:2003" ph="select level... tp_user_level" />
+            <marker date="1535706107284" expanded="true" signature="1966:2027" ph="select level... tp_user_level" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpUsers.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="624" column="0" lean-forward="false" selection-start-line="624" selection-start-column="0" selection-end-line="624" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUserLevelMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="18" column="11" lean-forward="false" selection-start-line="18" selection-start-column="11" selection-end-line="18" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpUsersMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="443" column="13" lean-forward="true" selection-start-line="443" selection-start-column="13" selection-end-line="443" selection-end-column="13" />
+          <folding>
+            <marker date="1535709173177" expanded="true" signature="4053:4172" ph="select from tp_users" />
+            <marker date="1535709173177" expanded="true" signature="4238:4327" ph="select from tp_users" />
+            <marker date="1535709173177" expanded="true" signature="4393:4484" ph="select from tp_users" />
+            <marker date="1535709173177" expanded="true" signature="4550:4641" ph="select from tp_users" />
+            <marker date="1535709173177" expanded="true" signature="4707:4801" ph="select from tp_users" />
+            <marker date="1535709173177" expanded="true" signature="4872:4945" ph="select * fro... tp_user" />
+            <marker date="1535709173177" expanded="true" signature="5020:5079" ph="select * fro... tp_user_address" />
+            <marker date="1535709173177" expanded="true" signature="5151:5231" ph="select * fro... tp_user_address" />
+            <marker date="1535709173177" expanded="true" signature="5306:5367" ph="select * fro... tp_user_address" />
+            <marker date="1535709173177" expanded="true" signature="5434:5482" ph="select * fro... tp_region" />
+            <marker date="1535709173177" expanded="true" signature="5566:5654" ph="select from tp_users" />
+            <marker date="1535709173177" expanded="true" signature="5779:7306" ph="INSERT INTO tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="7610:7985" ph="INSERT INTO tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="8121:8237" ph="INSERT INTO tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="8328:8436" ph="UPDATE tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="8527:8635" ph="UPDATE tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="8738:8815" ph="UPDATE tp_users_address... " />
+            <marker date="1535709173177" expanded="true" signature="8905:8972" ph="UPDATE tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="9068:9149" ph="UPDATE tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="9247:10038" ph="UPDATE tp_user_address... " />
+            <marker date="1535709173177" expanded="true" signature="10108:10164" ph="select user_... tp_users" />
+            <marker date="1535709173177" expanded="true" signature="10224:10281" ph="select reg_t... tp_users" />
+            <marker date="1535709173177" expanded="true" signature="10345:10397" ph="select * FRO... tp_users" />
+            <marker date="1535709173177" expanded="true" signature="10478:10560" ph="select * fro... tp_users" />
+            <marker date="1535709173177" expanded="true" signature="10604:11220" ph="update tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="11263:11340" ph="delete from tp_user_address... " />
+            <marker date="1535709173177" expanded="true" signature="11389:12005" ph="update tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="12071:12131" ph="select froze... tp_users" />
+            <marker date="1535709173177" expanded="true" signature="12177:12252" ph="update tp_users... " />
+            <marker date="1535709173177" expanded="true" signature="12324:12381" ph="select * fro... tp_users" />
+            <marker date="1535709173177" expanded="true" signature="12444:12572" ph="select tp.na... tp_user_address" />
+            <marker date="1535709173177" expanded="true" signature="12632:12756" ph="select tp.na... tp_user_address" />
+            <marker date="1535709173177" expanded="true" signature="12820:12948" ph="select tp.na... tp_user_address" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpUsersMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="79" column="43" lean-forward="true" selection-start-line="79" selection-start-column="43" selection-end-line="79" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/model/TpApplyCard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="67" column="0" lean-forward="true" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpUsersServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-741">
+          <caret line="214" column="22" lean-forward="false" selection-start-line="214" selection-start-column="22" selection-end-line="214" selection-end-column="22" />
+          <folding>
+            <element signature="e#3723#3724#0" expanded="true" />
+            <element signature="e#3779#3780#0" expanded="true" />
+            <element signature="e#3841#3842#0" expanded="true" />
+            <element signature="e#3901#3902#0" expanded="true" />
+            <element signature="e#3957#3958#0" expanded="true" />
+            <element signature="e#4007#4008#0" expanded="true" />
+            <element signature="e#4182#4183#0" expanded="true" />
+            <element signature="e#4228#4229#0" expanded="true" />
+            <element signature="e#5769#5778#0" expanded="true" />
+            <element signature="e#6878#6879#0" expanded="true" />
+            <element signature="e#6924#6925#0" expanded="true" />
+            <element signature="e#7397#7398#0" expanded="true" />
+            <element signature="e#7446#7447#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/citytuike_web/src/main/java/com/citytuike/controller/UserController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="960" column="16" lean-forward="true" selection-start-line="960" selection-start-column="16" selection-end-line="960" selection-end-column="16" />
+        <state relative-caret-position="211">
+          <caret line="1011" column="44" lean-forward="false" selection-start-line="1011" selection-start-column="44" selection-end-line="1011" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="8" lean-forward="true" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/service/TpApplyCardServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="27" column="43" lean-forward="false" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
           <folding>
-            <element signature="e#33331#33332#0" expanded="true" />
-            <element signature="e#33358#33359#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#976#977#0" expanded="true" />
+            <element signature="e#1039#1040#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_web/src/resources/mapper/TpApplyCardMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="45" column="59" lean-forward="false" selection-start-line="45" selection-start-column="59" selection-end-line="45" selection-end-column="59" />
+          <folding>
+            <marker date="1535712585834" expanded="true" signature="828:891" ph="delete from tp_apply_card... " />
+            <marker date="1535712585834" expanded="true" signature="1021:1295" ph="insert into tp_apply_card... " />
+            <marker date="1535712585834" expanded="true" signature="1396:1705" ph="update tp_apply_card... " />
+            <marker date="1535712585834" expanded="true" signature="1818:1935" ph="select id, n... tp_apply_card" />
+            <marker date="1535712585834" expanded="true" signature="2005:2084" ph="select id, n... tp_apply_card" />
+            <marker date="1535712585834" expanded="true" signature="2135:2221" ph="delete from tp_apply_card... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/citytuike_core/src/main/java/com/citytuike/mapper/TpApplyCardMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
