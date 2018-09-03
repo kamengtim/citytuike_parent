@@ -51,10 +51,10 @@ public class DeviceController {
         }
         JSONObject jsonObject1 = new JSONObject();
         jsonObject1.put("device_num",tpDeviceService.selectCountDevice(tpUsers.getUser_id()));
-        jsonObject1.put("income",tpUsersService.selectCountMoney(tpUsers.getUser_id()));
+        jsonObject1.put("income",tpUsersService.getSumMoneyDevice(tpUsers.getUser_id()));
         int beginData = tpUsersService.selectRegTime(tpUsers.getUser_id());
         int i = ((int)new Date().getTime() - beginData)/1000/60/60/24;
-        jsonObject1.put("day_avg_income",tpUsersService.selectCountMoney(tpUsers.getUser_id()).divide(BigDecimal.valueOf((int)i)));
+        jsonObject1.put("day_avg_income",tpUsersService.getSumMoneyDevice(tpUsers.getUser_id()).divide(BigDecimal.valueOf((int)i)));
         jsonObject1.put("ad_number",0);
         jsonArray.add(jsonObject1);
         jsonObj.put("return",jsonArray);
@@ -143,10 +143,10 @@ public class DeviceController {
         }
         JSONObject jsonObject1 = new JSONObject();
         jsonObject1.put("device_num",tpDeviceService.selectCountDevice(tpUsers.getUser_id()));
-        jsonObject1.put("income",tpUsersService.selectCountMoney(tpUsers.getUser_id()));
+        jsonObject1.put("income",tpUsersService.getSumMoneyDevice(tpUsers.getUser_id()));
         int beginData = tpUsersService.selectRegTime(tpUsers.getUser_id());
         int i = ((int)new Date().getTime() - beginData)/1000/60/60/24;
-        jsonObject1.put("day_avg_income",tpUsersService.selectCountMoney(tpUsers.getUser_id()).divide(BigDecimal.valueOf((int)i),10,BigDecimal.ROUND_HALF_DOWN));
+        jsonObject1.put("day_avg_income",tpUsersService.getSumMoneyDevice(tpUsers.getUser_id()).divide(BigDecimal.valueOf((int)i),10,BigDecimal.ROUND_HALF_DOWN));
         jsonObject1.put("ad_number",0);
         jsonArray.add(jsonObject1);
         LimitPageList limitPageList = tpUsersService.getLimitPageList(tpUsers.getUser_id(),page);

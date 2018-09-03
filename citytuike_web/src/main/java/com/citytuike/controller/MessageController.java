@@ -73,8 +73,8 @@ public class MessageController {
         data.put("per_page", limitPageList.getPage().getPageSize());
         data.put("last_page",limitPageList.getPage().getTotalPageCount());
         JSONObject message = tpUserMessageService.NewselectMessage(tpUsers.getUser_id(),cate);
-        data.put("return",message);
-        jsonObj.put("return",data);
+        data.put("list",message);
+        jsonObj.put("result",data);
         jsonObj.put("status","1");
         jsonObj.put("msg","请求成功");
         return jsonObj.toString();

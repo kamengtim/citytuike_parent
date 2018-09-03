@@ -17,4 +17,6 @@ public interface TpCardListMapper {
     int updateByPrimaryKey(TpCardList record);
 
     int countCard();
+
+    TpCardList selectUserBankById(String cardid);
 }

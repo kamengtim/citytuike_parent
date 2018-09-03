@@ -47,6 +47,10 @@ public class UserController {
     private TpCardListService tpCardListSevice;
 	@Autowired
     private TpApplyCardService tpApplyCardService;
+	@Autowired
+	private TpApplyReportService tpApplyReportService;
+	@Autowired
+    private TpUserAliAccountService tpUserAliAccountService;
 	/**
 	 * @param model
 	 * @param username
@@ -442,7 +446,7 @@ public class UserController {
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-		JSONObject jsonObject = tpAccountLogService.UserMoney(tpUsers.getUser_id());
+		JSONObject jsonObject = tpUsersService.UserMoney(tpUsers.getUser_id());
 		return jsonObject.toString();
 	}
 	/**
@@ -1042,7 +1046,7 @@ public class UserController {
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-        BigDecimal income = tpDeviceService.getSumMoneyDevice(tpUsers.getUser_id());
+        BigDecimal income = tpUsersService.getSumMoneyDevice(tpUsers.getUser_id());
         BigDecimal ad_income = tpUsersService.selectFrozen(tpUsers.getUser_id());
         BigDecimal draw = tpWithdrawalsService.selectWithdrawalsMoney(tpUsers.getUser_id());
         jsonObject.put("income",income);
@@ -1233,6 +1237,216 @@ public class UserController {
         jsonObj.put("result",data);
         jsonObj.put("status", "1");
         jsonObj.put("msg", "ok!");
+        return jsonObj.toString();
+    }
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 提交信用卡申请
+	 */
+	@RequestMapping(value = "applyCard",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String applyCard(@RequestParam(required = true)String token,
+										  @RequestParam(required = true)String mobile_code	,
+										  @RequestParam(required = true)String cardid,
+										  @RequestParam(required = true)String id){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject object = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		int count = tpSmsLogService.selectCode(mobile_code);
+		if(count > 0 ){
+		tpCardListSevice.save(mobile_code,cardid,id);
+		}else{
+			return "验证码错误";
+		}
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 修改密码
+	 */
+	@RequestMapping(value = "password",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String Password(@RequestParam(required = true)String new_password,
+										 @RequestParam(required = true)String confirm_password,
+										 @RequestParam(required = true)String code,
+										 @RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		int count = tpUsersService.selectMobile(tpUsers.getUser_id());
+		if(count > 0){
+			String newPwd = MD5Utils.md5("TPSHOP" + new_password);
+			String pwd = MD5Utils.md5("TPSHOP" + confirm_password);
+			if(newPwd.equals(pwd)){
+				int num = tpSmsLogService.selectCode(code);
+				if(num > 0 ){
+				tpUsersService.updatePwd(tpUsers.getUser_id(),newPwd);
+
+				}else{
+					return "请输入正确的验证码";
+				}
+			}else{
+				return "两次密码输入不一致";
+			}
+		}else{
+			return "请先绑定手机号";
+		}
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 收益明细中的收益统计
+	 */
+	@RequestMapping(value = "income_count",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String incomeCount(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		JSONObject jsonObject = tpUsersService.incomeCount(tpUsers.getUser_id());
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		jsonObj.put("result",jsonObject);
+		return jsonObj.toString();
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 交易申请中心图
+	 */
+	@RequestMapping(value = "cardDetail",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String cardDetail(@RequestParam(required = true)String token,
+										   @RequestParam(required = true)int id){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		JSONObject jsonObject = tpCardListSevice.cardDetail(id);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		jsonObj.put("result",jsonObject);
+		return jsonObj.toString();
+	}
+	/**
+	 * @param model
+	 * @param token
+	 * @param id
+	 * @return
+	 * 信用卡申请列表
+	 */
+	@RequestMapping(value = "getCardList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getCardList(){
+	    JSONObject jsonObj = new JSONObject();
+	    JSONObject object = new JSONObject();
+		List<TpApplyReport>tpApplyReports = tpApplyReportService.getCardList();
+		for (TpApplyReport tpApplyReport : tpApplyReports) {
+			JSONObject jsonObject = tpApplyReportService.getJsonApplyReport(tpApplyReport);
+			object.put("0",jsonObject);
+		}
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+		jsonObj.put("result",object);
+		return jsonObj.toJSONString();
+	}
+    /**
+     * @param model
+     * @param token
+     * @param id
+     * @return
+     * 添加支付宝账号
+     */
+    @RequestMapping(value = "add_ali_account",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String addAliAccount(@RequestParam(required = true)String real_name,
+                                              @RequestParam(required = true)String mobile,
+                                              @RequestParam(required = true)String account,
+                                              @RequestParam(required = true)String mobile_code){
+        JSONObject jsonObj = new JSONObject();
+        int count = tpSmsLogService.selectCode(mobile_code);
+        if(count > 0 ){
+            tpUserAliAccountService.addAliAccount(real_name,mobile,account);
+        }else{
+            return "验证码错误";
+        }
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+        return jsonObj.toString();
+    }
+    /**
+     * @param model
+     * @param token
+     * @param id
+     * @return
+     * 支付账号列表
+     */
+    @RequestMapping(value = "ali_account",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String AliAccount(@RequestParam(required = false)String page){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        LimitPageList  limitPageList = tpUserAliAccountService.AliAccount(page);
+        List<TpUserAliAccount> list = (List<TpUserAliAccount>)limitPageList.getList();
+        for (TpUserAliAccount tpUserAliAccount : list) {
+           JSONObject jsonObject =  tpUserAliAccountService.getJsonUserAliAccount(tpUserAliAccount);
+           jsonArray.add(jsonObject);
+        }
+        data.put("current_page", limitPageList.getPage().getPageNow());
+        data.put("total", limitPageList.getPage().getTotalCount());
+        data.put("per_page", limitPageList.getPage().getPageSize());
+        data.put("last_page",limitPageList.getPage().getTotalPageCount());
+        data.put("data",jsonArray);
+        jsonObj.put("result",data);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+        return jsonObj.toString();
+    }
+    /**
+     * @param model
+     * @param token
+     * @param id
+     * @return
+     * 支付宝提现
+     */
+    @RequestMapping(value = "get_money_ali",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String getMoneyAli(@RequestParam(required = true)String id,
+                                            @RequestParam(required = true)String money){
+        JSONObject jsonObj= new JSONObject();
+        tpUserAliAccountService.getMoneyAli(id,money);
+        try{
+            tpUserAliAccountService.getMoneyAli(id,money);
+            jsonObj.put("status", "1");
+            jsonObj.put("msg", "ok!");
+        }catch (Exception e){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "提现失败!");
+        }
         return jsonObj.toString();
     }
 }

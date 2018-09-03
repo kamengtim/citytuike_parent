@@ -73,4 +73,14 @@ public interface TpUsersService {
 	BigDecimal selectFrozen(Integer user_id);
 
 	JSONObject getInviteCodeUserInfo(String invite_code);
+
+    int selectMobile(Integer user_id);
+
+	void updatePwd(Integer user_id,String new_password);
+
+	BigDecimal getSumMoneyDevice(Integer user_id);
+
+	JSONObject UserMoney(Integer user_id);
+
+	JSONObject incomeCount(Integer user_id);
 }

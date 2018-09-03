@@ -65,4 +65,19 @@
     send_gift, gift, money, name_last, id_card_all, mobile_all, user_id
     from tp_apply_report
   </select>
+  <insert id="save" keyProperty="id" parameterType="com.citytuike.model.TpApplyReport" useGeneratedKeys="true">
+    insert into tp_apply_report (idcard, mobile, name_first,
+      add_time, bank_name, bank_id,
+      status, tig, send_gift, gift,
+      money, name_last, id_card_all,
+      mobile_all, user_id)
+    values (#{idcard,jdbcType=CHAR}, #{mobile,jdbcType=CHAR}, #{name_first,jdbcType=CHAR},
+      #{add_time,jdbcType=INTEGER}, #{bank_name,jdbcType=VARCHAR}, #{bank_id,jdbcType=INTEGER},
+      #{status,jdbcType=BIT}, #{tig,jdbcType=VARCHAR}, #{send_gift,jdbcType=BIT}, #{gift,jdbcType=CHAR},
+      #{money,jdbcType=DECIMAL}, #{name_last,jdbcType=CHAR}, #{id_card_all,jdbcType=VARCHAR},
+      #{mobile_all,jdbcType=CHAR}, #{user_id,jdbcType=INTEGER})
+  </insert>
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from tp_apply_report
+  </select>
 </mapper>

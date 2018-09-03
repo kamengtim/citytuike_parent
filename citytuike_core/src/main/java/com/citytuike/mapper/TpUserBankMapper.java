@@ -21,4 +21,6 @@ public interface TpUserBankMapper {
     void deleteBank(@Param("user_id") Integer user_id, @Param("id") String id);
 
     TpUserBank selectBankCard(@Param("id") int id, @Param("user_id") Integer user_id);
+
+    TpUserBank selectUserBankById(Integer user_id);
 }

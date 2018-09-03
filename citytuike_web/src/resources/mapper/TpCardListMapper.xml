@@ -66,4 +66,7 @@
   <select id="countCard" resultType="int">
     select count(id) from tp_card_list
   </select>
+  <select id="selectUserBankById" resultMap="BaseResultMap">
+    select * from tp_card_list where id = #{cardid}
+  </select>
 </mapper>

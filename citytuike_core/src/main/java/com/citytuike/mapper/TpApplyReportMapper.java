@@ -1,6 +1,7 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpApplyReport;
+
 import java.util.List;
 
 public interface TpApplyReportMapper {
@@ -13,4 +14,8 @@ public interface TpApplyReportMapper {
     List<TpApplyReport> selectAll();
 
     int updateByPrimaryKey(TpApplyReport record);
+
+    void save(TpApplyReport tpApplyReport);
+
+    List<TpApplyReport> selectList();
 }

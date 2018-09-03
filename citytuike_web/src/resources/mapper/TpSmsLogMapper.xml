@@ -76,4 +76,7 @@
 	<select id="selectLog" resultType="string">
 		select code from tp_sms_log where mobile = #{mobile} and FROM_UNIXTIME(add_time) >= DATE_SUB(NOW(),INTERVAL 180 SECOND) order by code desc limit 1;
 	</select>
+	<select id="selectCode" resultType="int">
+		select count(id) from tp_sms_log where  code = #{mobile_code} and FROM_UNIXTIME(add_time) >= DATE_SUB(NOW(),INTERVAL 10000 SECOND) order by code desc limit 1;
+	</select>
 </mapper>

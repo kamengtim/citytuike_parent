@@ -17,4 +17,6 @@ public interface TpApplyCardMapper {
     int updateByPrimaryKey(TpApplyCard record);
 
     void deleteApplyPeople(@Param("user_id") Integer user_id, @Param("id") int id);
+
+    TpApplyCard selectListId(String id);
 }

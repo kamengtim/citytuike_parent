@@ -84,4 +84,16 @@ public interface TpUsersMapper {
     String selectCity(Integer user_id);
 
     String selectDistrict(Integer user_id);
+
+    int selectMobile(Integer user_id);
+
+	void updatePwd(@Param("user_id") Integer user_id, @Param("new_password") String new_password);
+
+	BigDecimal getSumMoneyDevice(Integer user_id);
+
+	TpUsers UserMoney(Integer user_id);
+
+	TpUsers incomeCount(Integer user_id);
+
+	TpUsers selectUserByMobile(String mobile);
 }

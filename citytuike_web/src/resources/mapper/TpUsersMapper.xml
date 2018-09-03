@@ -507,4 +507,22 @@
 	<select id="selectDistrict" resultType="string">
 		select tp.name from tp_user_address t LEFT JOIN tp_region tp on t.district = tp.id where user_id = #{user_id} and is_default = 1
 	</select>
+	<select id="selectMobile" resultType="int">
+		select count(mobile) from tp_users where user_id =#{user_id}
+	</select>
+	<update id="updatePwd">
+		update tp_users set password = #{new_password} where user_id = #{user_id}
+	</update>
+	<select id="getSumMoneyDevice" resultType="bigdecimal">
+		select distribut_money from tp_users where user_id = #{user_id}
+	</select>
+	<select id="UserMoney" resultType="TpUsers">
+		select * from tp_users where user_id = #{user_id}
+	</select>
+	<select id="incomeCount" resultType="TpUsers">
+		select sale_number from tp_users where user_id = #{user_id}
+	</select>
+	<select id="selectUserByMobile" resultType="TpUsers">
+		select * from tp_users where mobile=#{mobile}
+	</select>
 </mapper>

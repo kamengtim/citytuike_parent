@@ -186,7 +186,7 @@ public class TpUsers  implements Serializable{
 	/**
 	 * 销售数量
 	 */
-	private String sale_number;
+	private Integer sale_number;
 	/**
 	 *
 	 */
@@ -560,11 +560,11 @@ public class TpUsers  implements Serializable{
 		this.relation = relation;
 	}
 
-	public String getSale_number() {
+	public int getSale_number() {
 		return sale_number;
 	}
 
-	public void setSale_number(String sale_number) {
+	public void setSale_number(int sale_number) {
 		this.sale_number = sale_number;
 	}
 

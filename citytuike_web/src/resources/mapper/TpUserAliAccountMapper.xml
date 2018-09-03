@@ -41,4 +41,22 @@
     select id, real_name, mobile, account, user_id, add_time, is_delete
     from tp_user_ali_account
   </select>
+  <insert id="save" parameterType="com.citytuike.model.TpUserAliAccount" useGeneratedKeys="true" keyProperty="id">
+    insert into tp_user_ali_account (real_name, mobile, account,
+      user_id, add_time, is_delete
+      )
+    values (#{real_name,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR},
+      #{user_id,jdbcType=INTEGER}, #{add_time,jdbcType=INTEGER}, #{is_delete,jdbcType=TINYINT}
+      )
+  </insert>
+  <select id="selectAliAccount" resultType="int">
+    select count(id) from tp_user_ali_account;
+  </select>
+  <select id="selectAliAccountList" resultMap="BaseResultMap" >
+    select *
+    from tp_user_ali_account limit #{startPos},#{pageSize}
+  </select>
+  <select id="selectAliById" resultMap="BaseResultMap">
+    select * from tp_user_ali_account where id = #{id}
+  </select>
 </mapper>

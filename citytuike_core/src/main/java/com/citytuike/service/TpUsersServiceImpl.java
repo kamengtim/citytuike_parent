@@ -296,4 +296,45 @@ public class TpUsersServiceImpl implements TpUsersService{
         data.put("district_name",district_name);
         return data;
     }
+
+	@Override
+	public int selectMobile(Integer user_id) {
+		return tpUsersMapper.selectMobile(user_id);
+	}
+
+	@Override
+	public void updatePwd(Integer user_id,String new_password) {
+		tpUsersMapper.updatePwd(user_id,new_password);
+	}
+
+	@Override
+	public BigDecimal getSumMoneyDevice(Integer user_id) {
+		return tpUsersMapper.getSumMoneyDevice(user_id);
+	}
+
+	@Override
+	public JSONObject UserMoney(Integer user_id) {
+		TpUsers tpUsers = tpUsersMapper.UserMoney(user_id);
+		JSONObject jsonObj = new JSONObject();
+		double UserMoney = tpUsers.getUser_money();
+		double FrozenMoney = tpUsers.getFrozen_money();
+		double balance = tpUsers.getDistribut_money();
+		jsonObj.put("balance",balance);
+		return jsonObj;
+	}
+
+	@Override
+	public JSONObject incomeCount(Integer user_id) {
+	    JSONObject jsonObject = new JSONObject();
+		TpUsers tpUsers = tpUsersMapper.incomeCount(user_id);
+		int saleNumber = tpUsers.getSale_number();
+		double distribut_money = tpUsers.getDistribut_money();
+		int paper = 0 ;
+		int ad = 0 ;
+        jsonObject.put("sale",saleNumber*1450);
+        jsonObject.put("distribut_money",distribut_money);
+        jsonObject.put("paper",paper);
+        jsonObject.put("ad",ad);
+		return jsonObject;
+	}
 }

@@ -27,5 +27,11 @@ public class TpSmsLogServiceImpl implements TpSmsLogService{
 		return tpSmsLogMapper.selectLog(mobile);
 	}
 
+	@Override
+	public int selectCode(String mobile_code) {
+	   return tpSmsLogMapper.selectCode(mobile_code);
+
+	}
+
 
 }

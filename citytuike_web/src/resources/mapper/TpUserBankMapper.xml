@@ -64,4 +64,7 @@
   <select id="selectBankCard" resultMap="BaseResultMap">
     select real_name,bank_card from tp_user_bank where user_id = 85 and bank_id = 2 AND is_delete = 0 order by add_time DESC limit 1
   </select>
+  <select id="selectUserBankById" resultMap="BaseResultMap">
+    select * from tp_user_bank where user_id = #{user_id}
+  </select>
 </mapper>

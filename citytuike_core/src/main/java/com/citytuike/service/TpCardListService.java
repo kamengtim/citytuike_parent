@@ -11,4 +11,8 @@ public interface TpCardListService {
     JSONObject getJsonString(TpCardList tpCardList);
 
     int countCard();
+
+    void save(String mobile_code, String cardid, String id);
+
+    JSONObject cardDetail(Integer id);
 }

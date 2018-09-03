@@ -45,4 +45,7 @@
     delete from tp_apply_card
     where id = #{id,jdbcType=INTEGER} and user_id=#{user_id}
   </delete>
+  <select id="selectListId" resultMap="BaseResultMap">
+    select id, name, mobile, idcard, area, add_time, user_id from tp_apply_card where id = #{id}
+  </select>
 </mapper>
