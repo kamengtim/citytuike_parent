@@ -22,7 +22,6 @@ public class MessageController {
     private TpMessageService tpMessageService;
     @Autowired
     private TpUserMessageService tpUserMessageService;
-    @RequestMapping(value = "index",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     /**
      * @param model
      * @param id
@@ -30,6 +29,7 @@ public class MessageController {
      * @return
      * 消息首页
      */
+    @RequestMapping(value = "index",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public @ResponseBody String Index(@RequestParam(required = true) String token) {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("status", "0");
@@ -41,7 +41,7 @@ public class MessageController {
             return jsonObj.toString();
         }
         JSONObject data = tpUserMessageService.selectMessage(tpUsers.getUser_id());
-        jsonObj.put("return", data);
+        jsonObj.put("result", data);
         jsonObj.put("status", "1");
         jsonObj.put("msg", "请求成功");
         return jsonObj.toString();

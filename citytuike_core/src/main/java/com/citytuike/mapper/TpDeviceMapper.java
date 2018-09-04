@@ -23,4 +23,10 @@ public interface TpDeviceMapper {
     List<TpDevice> selectIncome(Integer user_id);
 
     List<TpDevice> selectParent(Integer user_id);
+
+    List<TpDevice> statistics(Integer user_id);
+
+    TpDevice getOnlyDevice(@Param("user_id") Integer user_id, @Param("device_id") String device_id, @Param("device_sn") String device_sn);
+
+    void updateDeviceNumber(@Param("number") String number, @Param("device_sn") String device_sn);
 }

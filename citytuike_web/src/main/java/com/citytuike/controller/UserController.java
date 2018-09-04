@@ -1421,7 +1421,6 @@ public class UserController {
     public @ResponseBody String getMoneyAli(@RequestParam(required = true)String id,
                                             @RequestParam(required = true)String money){
         JSONObject jsonObj= new JSONObject();
-        tpUserAliAccountService.getMoneyAli(id,money);
         try{
             tpUserAliAccountService.getMoneyAli(id,money);
             jsonObj.put("status", "1");
@@ -1544,6 +1543,4 @@ public class UserController {
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();
 	}
-
-
 }

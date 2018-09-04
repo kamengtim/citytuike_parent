@@ -27,7 +27,7 @@ public class TpWithdrawals {
 
     private BigDecimal taxfee;
 
-    private Boolean status;
+    private int status;
 
     private String pay_code;
 
@@ -139,11 +139,11 @@ public class TpWithdrawals {
         this.taxfee = taxfee;
     }
 
-    public Boolean getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

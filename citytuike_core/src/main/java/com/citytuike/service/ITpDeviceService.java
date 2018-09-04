@@ -21,4 +21,12 @@ public interface ITpDeviceService {
     BigDecimal getSumMoneyDevice(Integer user_id);
 
     List<TpDevice> getParentId(Integer user_id);
+
+    JSONObject statistics(Integer user_id);
+
+    LimitPageList selectDeviceList(Integer user_id,String page);
+
+    JSONObject getNewDeviceJson(TpDevice tpDevice);
+
+    JSONObject getOnlyDevice(Integer user_id, String device_id, String device_sn);
 }

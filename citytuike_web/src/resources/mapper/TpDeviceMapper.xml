@@ -138,4 +138,13 @@
   <select id="selectParent" resultMap="BaseResultMap" >
     select * from tp_device WHERE user_id = #{user_id}
   </select>
+  <select id="statistics" resultMap="BaseResultMap">
+     select * from tp_device WHERE user_id = #{user_id}
+  </select>
+    <select id="getOnlyDevice" resultMap="BaseResultMap">
+        select * from tp_device where id = #{device_id} and device_sn =#{device_sn} AND  user_id =#{user_id}
+    </select>
+  <update id="updateDeviceNumber">
+    update tp_device set paper_number = paper_number + #{number} ,paper_inventory = paper_inventory + #{number} where device_sn = #{device_sn}
+  </update>
 </mapper>

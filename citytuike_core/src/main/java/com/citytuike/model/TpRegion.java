@@ -11,7 +11,7 @@ public class TpRegion implements Serializable{
 	/**
 	 * id
 	 */
-	private int id;
+	private Integer id;
 	/**
 	 * 地区名称
 	 */
@@ -19,25 +19,25 @@ public class TpRegion implements Serializable{
 	/**
 	 * 地区等级 分省市县区
 	 */
-	private String level;
+	private Byte level;
 	/**
 	 * 父id
 	 */
-	private String parent_id;
+	private Integer parent_id;
 	/**
-	 * 
+	 *
 	 */
 	private String initials;
 	/**
 	 * 地区机器数量
 	 */
-	private int num;
+	private Integer num;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -49,19 +49,19 @@ public class TpRegion implements Serializable{
 		this.name = name;
 	}
 
-	public String getLevel() {
+	public Byte getLevel() {
 		return level;
 	}
 
-	public void setLevel(String level) {
+	public void setLevel(Byte level) {
 		this.level = level;
 	}
 
-	public String getParent_id() {
+	public Integer getParent_id() {
 		return parent_id;
 	}
 
-	public void setParent_id(String parent_id) {
+	public void setParent_id(Integer parent_id) {
 		this.parent_id = parent_id;
 	}
 
@@ -73,11 +73,11 @@ public class TpRegion implements Serializable{
 		this.initials = initials;
 	}
 
-	public int getNum() {
+	public Integer getNum() {
 		return num;
 	}
 
-	public void setNum(int num) {
+	public void setNum(Integer num) {
 		this.num = num;
 	}
 }

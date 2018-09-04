@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpRegionMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpRegion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="parent_id" property="parent_id" jdbcType="INTEGER" />
+    <result column="initials" property="initials" jdbcType="CHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_region
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpRegion" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_region (name, level, parent_id, 
+      initials, num)
+    values (#{name,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, #{parent_id,jdbcType=INTEGER}, 
+      #{initials,jdbcType=CHAR}, #{num,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpRegion" >
+    update tp_region
+    set name = #{name,jdbcType=VARCHAR},
+      level = #{level,jdbcType=TINYINT},
+      parent_id = #{parent_id,jdbcType=INTEGER},
+      initials = #{initials,jdbcType=CHAR},
+      num = #{num,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, name, level, parent_id, initials, num
+    from tp_region
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, level, parent_id, initials, num
+    from tp_region
+  </select>
+  <select id="getAddressProvince" resultType="string" >
+    select name
+    from tp_region where id = #{province}
+  </select>
+  <select id="getAddressCity" resultType="string" >
+    select name
+    from tp_region where id = #{city}
+  </select>
+  <select id="getAddressDistrict" resultType="string" >
+    select name
+    from tp_region where id = #{district}
+  </select>
+</mapper>
