@@ -40,4 +40,6 @@ public interface TpOrderMapper {
     List<TpPlugin> findAllPlugin();
 
     List<TpOrder> findAllOrderAndGoods(@Param(value = "user_id")Integer user_id);
+
+	TpOrder getConsigneeByMobile(Integer user_id);
 }

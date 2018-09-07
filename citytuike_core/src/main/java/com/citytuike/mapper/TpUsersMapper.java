@@ -102,4 +102,8 @@ public interface TpUsersMapper {
 	TpPlateMsg findPlatMsgByFlagd(@Param("flag")int flag);
 
 	TpSysMessageUser findOneBySysIdAndUserId(@Param("id")Integer id, @Param("user_id")Integer user_id);
+
+    TpUsers getUserNameByMobile(String mobile);
+
+    TpUsers getInviteCode(Integer user_id);
 }

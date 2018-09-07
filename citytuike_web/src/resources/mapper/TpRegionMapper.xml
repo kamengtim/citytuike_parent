@@ -49,4 +49,7 @@
     select name
     from tp_region where id = #{district}
   </select>
+  <select id="getCityName" resultType="string">
+    SELECT name from tp_region where id = #{city}
+  </select>
 </mapper>

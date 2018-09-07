@@ -1,6 +1,7 @@
 package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alipay.api.domain.DataEntry;
 import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.mapper.TpRegionMapper;
 import com.citytuike.model.*;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service@Transactional
@@ -240,6 +242,30 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
         data.put("today_num", tpDevice.getToday_num());
         data.put("today_time", tpDevice.getToday_time());
         return data;
+    }
+
+    @Override
+    public JSONObject selectDeviceBySn(String deviceSn) {
+        TpDevice tpDevice = tpDeviceMapper.selectDeviceBySn(deviceSn);
+        JSONObject deviceJson = getDeviceJson(tpDevice);
+        return deviceJson;
+    }
+
+    @Override
+    public void getConf(Integer user_id,String device_sn, String province, String city, String district, String landmark_picture) {
+        tpDeviceMapper.insertDevice(user_id,device_sn,province,province,city,district,landmark_picture);
+    }
+
+    @Override
+    public List<TpDevice> getHaveDeviceCity() {
+        List<TpDevice>tpDevices = tpDeviceMapper.getHaveDeviceCity();
+        return tpDevices;
+    }
+
+    @Override
+    public TpDevice getUserDevice(String productKey, String deviceName, String lat, String lng) {
+        TpDevice tpDevice = tpDeviceMapper.getUserDevice(productKey,deviceName);
+        return tpDevice;
     }
 
 }

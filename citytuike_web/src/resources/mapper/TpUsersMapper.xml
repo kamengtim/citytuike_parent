@@ -537,4 +537,10 @@
 	<select id="selectUserByMobile" resultType="TpUsers">
 		select * from tp_users where mobile=#{mobile}
 	</select>
+	<select id="getUserNameByMobile" resultType="TpUsers">
+		select * from tp_users where mobile= #{mobile}
+	</select>
+	<select id="getInviteCode" resultType="TpUsers">
+		select * from tp_users where user_id = #{user_id}
+	</select>
 </mapper>

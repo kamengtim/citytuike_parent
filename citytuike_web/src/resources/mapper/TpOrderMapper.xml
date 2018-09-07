@@ -301,6 +301,8 @@
 		UPDATE tp_order SET pay_code=#{pay_code}, pay_name=#{pay_name},
 		pay_time=#{pay_time}, transaction_id=#{transaction_id}, pay_status=#{pay_status} WHERE order_id = #{order_id}
 	</update>
-
+	<select id="getConsigneeByMobile" resultType="com.citytuike.model.TpOrder">
+		select consignee,add_time,order_sn from tp_order where user_id = #{user_id} and add_time is not null order by add_time desc limit 1;
+	</select>
 	
 </mapper>

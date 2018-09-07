@@ -21,4 +21,6 @@ public interface TpRegionMapper {
     String getAddressCity(Integer city);
 
     String getAddressDistrict(Integer district);
+
+    String getCityName(Integer city);
 }

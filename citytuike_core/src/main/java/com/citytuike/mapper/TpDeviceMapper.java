@@ -29,4 +29,12 @@ public interface TpDeviceMapper {
     TpDevice getOnlyDevice(@Param("user_id") Integer user_id, @Param("device_id") String device_id, @Param("device_sn") String device_sn);
 
     void updateDeviceNumber(@Param("number") String number, @Param("device_sn") String device_sn);
+
+    TpDevice selectDeviceBySn(String deviceSn);
+
+    void insertDevice(@Param("user_id") Integer user_id, @Param("device_sn") String device_sn, @Param("province") String province, @Param("province1") String province1, @Param("city") String city, @Param("district") String district, @Param("landmark_picture") String landmark_picture);
+
+    List<TpDevice> getHaveDeviceCity();
+
+    TpDevice getUserDevice(@Param("productKey") String productKey, @Param("deviceName") String deviceName);
 }
