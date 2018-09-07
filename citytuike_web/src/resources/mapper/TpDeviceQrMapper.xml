@@ -77,4 +77,7 @@
       lng = #{lng,jdbcType=DECIMAL}
     where scene_str = #{scene_str_v2,jdbcType=INTEGER}
   </update>
+  <select id="getLatAndLng" resultMap="BaseResultMap">
+    SELECT lat,lng from tp_device_qr where scene_str = #{scene_str_v2,jdbcType=INTEGER}
+  </select>
 </mapper>

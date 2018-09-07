@@ -231,17 +231,26 @@ public class DeviceController {
         return jsonObj.toString();
     }
     @RequestMapping(value = "getMpList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String getMpList( HttpServletRequest request,@RequestParam(required = true)String scene_str_v2,
+    public @ResponseBody String getMpList(@RequestParam(required = true)String scene_str_v2,
                                           @RequestParam(required = true)String lat,
-                                          @RequestParam(required = true)String lng){
-        TpUsers tpUsers = (TpUsers) request.getAttribute("p-token");
+                                          @RequestParam(required = true)String lng,
+                                          @RequestParam(required = true)String token){
         JSONObject jsonObj = new JSONObject();
+        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
        int status = tpDeviceQrService.selectStatus(scene_str_v2);
        if(status == 1){
            throw new SenderException("该二维码已经被使用");
        }
        if(status == 0){
-           tpDeviceQrService.updateQR(scene_str_v2,lat,lng,status,tpUsers.getUser_id());
+           double v = tpDeviceQrService.updateQR(scene_str_v2, lat, lng, status, tpUsers.getUser_id());
+           if(v > 10){
+               return "请在机器旁边进行扫码";
+           }
        }
         jsonObj.put("status","1");
         jsonObj.put("msg","成功");

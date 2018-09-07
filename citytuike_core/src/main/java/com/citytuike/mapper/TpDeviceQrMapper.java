@@ -21,6 +21,8 @@ public interface TpDeviceQrMapper {
 
     int selectStatus(String scene_str_v2);
 
-    void updateQR(@Param("scene_str_v2") String scene_str_v2, @Param("user_id") Integer user_id, @Param("user_id1") Integer user_id1, @Param("scan_time") Integer scan_time, @Param("status") Integer status);
 
+    TpDeviceQr getLatAndLng(String scene_str_v2);
+
+    void updateQR(@Param("item_type") Integer item_type, @Param("item_id") Integer item_id, @Param("scene_str_v2") String scene_str_v2, @Param("user_id") Integer user_id, @Param("user_id1") Integer user_id1, @Param("scan_time") Integer scan_time, @Param("status") Integer status, @Param("lat") BigDecimal lat, @Param("lng") BigDecimal lng, @Param("add_time") Integer add_time);
 }
