@@ -3,7 +3,7 @@ package com.citytuike.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TpUserWallet implements Serializable {
+public class TpUserFinance implements Serializable {
     /**
      * id
      */
@@ -13,17 +13,33 @@ public class TpUserWallet implements Serializable {
      */
     private Integer user_id;
     /**
-     * 可用余额
+     * 类型（1增加|2减少）
      */
-    private double balance;
+    private Integer change_type;
+    /**
+     * 变化金额
+     */
+    private double amount;
+    /**
+     * 用户剩余可用金额
+     */
+    private double user_balance;
+    /**
+     * 业务标识
+     */
+    private String biz_sign;
+    /**
+     * 业务单号
+     */
+    private String biz_sn;
+    /**
+     * 业务备注
+     */
+    private String remark;
     /**
      * 创建时间
      */
     private Date created_at;
-    /**
-     * 更新时间
-     */
-    private Date updated_at;
 
     public Integer getId() {
         return id;
@@ -41,12 +57,52 @@ public class TpUserWallet implements Serializable {
         this.user_id = user_id;
     }
 
-    public double getBalance() {
-        return balance;
+    public Integer getChange_type() {
+        return change_type;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public void setChange_type(Integer change_type) {
+        this.change_type = change_type;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public double getUser_balance() {
+        return user_balance;
+    }
+
+    public void setUser_balance(double user_balance) {
+        this.user_balance = user_balance;
+    }
+
+    public String getBiz_sign() {
+        return biz_sign;
+    }
+
+    public void setBiz_sign(String biz_sign) {
+        this.biz_sign = biz_sign;
+    }
+
+    public String getBiz_sn() {
+        return biz_sn;
+    }
+
+    public void setBiz_sn(String biz_sn) {
+        this.biz_sn = biz_sn;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public Date getCreated_at() {
@@ -55,13 +111,5 @@ public class TpUserWallet implements Serializable {
 
     public void setCreated_at(Date created_at) {
         this.created_at = created_at;
-    }
-
-    public Date getUpdated_at() {
-        return updated_at;
-    }
-
-    public void setUpdated_at(Date updated_at) {
-        this.updated_at = updated_at;
     }
 }

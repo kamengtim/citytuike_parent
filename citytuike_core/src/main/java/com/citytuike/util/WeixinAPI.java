@@ -526,9 +526,9 @@ public class WeixinAPI {
 	 * @return
 	 * @throws WeixinApiException
 	 */
-	public  String wxConfig() throws WeixinApiException {
-
-//        Map<String, String> ret = new HashMap<String, String>();
+	public  Map<String, String> getWXConfig() throws WeixinApiException {
+		String url = "http://paper.kamengjinfu.com/api/Wechat/share";
+        Map<String, String> ret = new HashMap<String, String>();
 		String jsapi_ticket = null;
         String nonce_str = null;
         String timestamp = null;
@@ -565,17 +565,17 @@ public class WeixinAPI {
 		}
 
         //注意这里参数名必须全部小写，且必须有序
-//        string1.append("jsapi_ticket=").append(jsapi_ticket).append("&noncestr=").append(nonce_str)
-//        	.append("&timestamp=").append( timestamp).append("&url=").append( url);
-//
-//        signature = SHA1.encrypt(string1.toString());
-//        ret.put("appid", this.appid);
-//        ret.put("url", url);
-//        ret.put("jsapi_ticket", jsapi_ticket);
-//        ret.put("nonceStr", nonce_str);
-//        ret.put("timestamp", timestamp);
-//        ret.put("signature", signature);
+        string1.append("jsapi_ticket=").append(jsapi_ticket).append("&noncestr=").append(nonce_str)
+        	.append("&timestamp=").append( timestamp).append("&url=").append( url);
 
-        return jsapi_ticket;
+        signature = SHA1.encrypt(string1.toString());
+        ret.put("appid", this.appid);
+        ret.put("url", url);
+        ret.put("jsapi_ticket", string1.toString());
+        ret.put("nonceStr", nonce_str);
+        ret.put("timestamp", timestamp);
+        ret.put("signature", signature);
+
+        return ret;
 	}
 }

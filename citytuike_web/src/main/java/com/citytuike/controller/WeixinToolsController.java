@@ -111,7 +111,7 @@ public class WeixinToolsController {
             TpUsers user = tpUsersService.findOneByOpenId(openid);
             if(user != null){
                 System.out.println("用户已授权！！");
-            }
+        }
         }
         String code = request.getParameter("code");
         System.out.println("code is1 " + code);

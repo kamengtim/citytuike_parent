@@ -5,6 +5,9 @@
 	<resultMap id="TpRegion" type="com.citytuike.model.TpRegion" >
 		<result column="id" property="id" />
 	</resultMap>
+	<resultMap id="TpUserWallet" type="com.citytuike.model.TpUserWallet" >
+		<result column="id" property="id" />
+	</resultMap>
 	<resultMap id="TpUserAddress" type="com.citytuike.model.TpUserAddress" >
 		<result column="address_id" property="address_id" />
 	</resultMap>
@@ -163,7 +166,16 @@
 	<select id="findAllByLevel" resultMap="TpRegion">
 		select * from tp_region as t where t.level=#{id}
 	</select>
-	
+	<select id="findRegionById" resultMap="TpRegion">
+		select * from tp_region as t where t.id=#{regions_id}
+	</select>
+	<select id="findRegionByParentId" resultMap="TpRegion">
+		select * from tp_region as t where t.parent_id=#{id}
+	</select>
+	<select id="findWalletByUserId" resultMap="TpUserWallet">
+		select * from tp_user_wallet as t where t.user_id=#{user_id}
+	</select>
+
 	<!--token查询 -->
 	<select id="findOneByToken" resultType="TpUsers">
 		select <include refid="Base_Column_List" /> 
@@ -275,7 +287,7 @@
 		</selectKey>-->
 	</insert>
 	<insert id="insertUserAddress" parameterType="com.citytuike.model.TpUserAddress" useGeneratedKeys="true" keyProperty="address_id" >
-		INSERT INTO tp_users (
+		INSERT INTO tp_user_address (
 			user_id,
 			consignee,
 			email,
@@ -304,7 +316,7 @@
 		);
 	</insert>
 	<insert id="insertApplicationforBusinessCooperation" parameterType="com.citytuike.model.TpApplicationForBusinessCooperation" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO tp_users (
+		INSERT INTO tp_application_for_business_cooperation (
 			user_id,
 			name,
 			email,
@@ -343,10 +355,26 @@
 		);
 	</insert>
 	<insert id="insertUserUpLog" parameterType="com.citytuike.model.TpUserUpLog" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO tp_users (
+		INSERT INTO tp_user_up_log (
 			user_id,
 			level,
 			add_time
+		) VALUES (
+			#{user_id},
+			#{level},
+			#{add_time}
+		);
+	</insert>
+	<insert id="insertUserFinance" parameterType="com.citytuike.model.TpUserFinance" useGeneratedKeys="true" keyProperty="id" >
+		INSERT INTO tp_user_finance (
+			user_id,
+			change_type,
+			amount,
+			user_balance,
+			biz_sign,
+			biz_sn,
+			remark,
+			created_at
 		) VALUES (
 			#{user_id},
 			#{level},
@@ -393,6 +421,13 @@
 		SET
 				frozen_money=#{frozen_money}
 		WHERE user_id=#{user_id}
+	</update>
+	<update id="updateUserWalletBalance" parameterType="com.citytuike.model.TpUserWallet" >
+		UPDATE tp_user_wallet
+		SET
+				balance=#{balance}.
+				updated_at=#{updated_at}
+		WHERE id=#{id}
 	</update>
 	<update id="updateUserAddress" parameterType="com.citytuike.model.TpUserAddress" >
 		UPDATE tp_user_address

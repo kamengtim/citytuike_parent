@@ -312,6 +312,31 @@ public class TpUsersServiceImpl implements TpUsersService{
 		return tpUsersMapper.findOneBySysIdAndUserId(id, user_id);
 	}
 
+	@Override
+	public TpRegion findRegionById(Integer regions_id) {
+		return tpUsersMapper.findRegionById(regions_id);
+	}
+
+	@Override
+	public List<TpRegion> findRegionByParentId(int id) {
+		return tpUsersMapper.findRegionByParentId(id);
+	}
+
+	@Override
+	public TpUserWallet findWalletByUserId(Integer user_id) {
+		return tpUsersMapper.findWalletByUserId(user_id);
+	}
+
+	@Override
+	public int updateUserWalletBalance(TpUserWallet tpUserWallet1) {
+		return tpUsersMapper.updateUserWalletBalance(tpUserWallet1);
+	}
+
+	@Override
+	public int insertUserFinance(TpUserFinance tpUserFinance) {
+		return tpUsersMapper.insertUserFinance(tpUserFinance);
+	}
+
 
 	@Override
 	public int selectMobile(Integer user_id) {

@@ -1,207 +1,96 @@
 package com.citytuike.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class TpAdMaterial implements Serializable {
+public class TpAdApply implements Serializable {
     /**
-     * 广告id
+     * id
      */
-    private Integer material_id;
+    private Integer id;
     /**
-     * 广告类型
+     * 申请订单唯一编号
      */
-    private Integer media_type;
+    private String order_sn;
     /**
-     * 广告名称
-     */
-    private String ad_name;
-    /**
-     * 链接地址
-     */
-    private String ad_link;
-    /**
-     * 图片地址
-     */
-    private String ad_code;
-    /**
-     * 投放时间
-     */
-    private Integer start_time;
-    /**
-     * 结束时间
-     */
-    private Integer end_time;
-    /**
-     * 添加人
-     */
-    private String link_man;
-    /**
-     * 添加人邮箱
-     */
-    private String link_email;
-    /**
-     * 添加人联系电话
-     */
-    private String link_phone;
-    /**
-     * 点击量
-     */
-    private Integer click_count;
-    /**
-     * 是否显示
-     */
-    private Integer enabled;
-    /**
-     * 排序
-     */
-    private Integer orderby;
-    /**
-     * 是否开启浏览器新窗口
-     */
-    private Integer target;
-    /**
-     * 背景颜色
-     */
-    private String bgcolor;
-    /**
-     * 所属用户
+     * 用户Id
      */
     private Integer user_id;
     /**
-     * 广告分类
+     * 类型（1屏幕广告|2二维码|3纸巾|4APP广告）
      */
-    private Integer cat_id;
+    private Integer cate;
     /**
-     * 广告描述
+     * 行业（默认0）
      */
-    private String description;
+    private Integer trade_id;
     /**
-     *
+     * 周期天数
      */
-    private Integer add_time;
+    private Integer days;
     /**
-     *
+     * 链接地址
      */
-    private Integer order_id;
+    private String url;
+    /**
+     * 描述
+     */
+    private String describe;
+    /**
+     * 纸巾广告面数
+     */
+    private Integer side;
+    /**
+     * 纸巾广告总数量
+     */
+    private Integer launch_num;
+    /**
+     * 订单总价格
+     */
+    private double amount;
+    /**
+     * 状态（apply申请|pass通过审核|reject驳回|cancel取消|fail失效）
+     */
+    private String state;
+    /**
+     * 支付状态（0提交|1已支付|2失效）
+     */
+    private Integer pay_status;
+    /**
+     * 广告投放开始日期
+     */
+    private Date launch_at;
+    /**
+     * 支付时间
+     */
+    private Date paid_at;
+    /**
+     * 审核时间
+     */
+    private Date audited_at;
+    /**
+     * 创建时间
+     */
+    private Date created_at;
+    /**
+     * 更新时间
+     */
+    private Date updated_at;
 
-    public Integer getMaterial_id() {
-        return material_id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setMaterial_id(Integer material_id) {
-        this.material_id = material_id;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Integer getMedia_type() {
-        return media_type;
+    public String getOrder_sn() {
+        return order_sn;
     }
 
-    public void setMedia_type(Integer media_type) {
-        this.media_type = media_type;
-    }
-
-    public String getAd_name() {
-        return ad_name;
-    }
-
-    public void setAd_name(String ad_name) {
-        this.ad_name = ad_name;
-    }
-
-    public String getAd_link() {
-        return ad_link;
-    }
-
-    public void setAd_link(String ad_link) {
-        this.ad_link = ad_link;
-    }
-
-    public String getAd_code() {
-        return ad_code;
-    }
-
-    public void setAd_code(String ad_code) {
-        this.ad_code = ad_code;
-    }
-
-    public Integer getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(Integer start_time) {
-        this.start_time = start_time;
-    }
-
-    public Integer getEnd_time() {
-        return end_time;
-    }
-
-    public void setEnd_time(Integer end_time) {
-        this.end_time = end_time;
-    }
-
-    public String getLink_man() {
-        return link_man;
-    }
-
-    public void setLink_man(String link_man) {
-        this.link_man = link_man;
-    }
-
-    public String getLink_email() {
-        return link_email;
-    }
-
-    public void setLink_email(String link_email) {
-        this.link_email = link_email;
-    }
-
-    public String getLink_phone() {
-        return link_phone;
-    }
-
-    public void setLink_phone(String link_phone) {
-        this.link_phone = link_phone;
-    }
-
-    public Integer getClick_count() {
-        return click_count;
-    }
-
-    public void setClick_count(Integer click_count) {
-        this.click_count = click_count;
-    }
-
-    public Integer getEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(Integer enabled) {
-        this.enabled = enabled;
-    }
-
-    public Integer getOrderby() {
-        return orderby;
-    }
-
-    public void setOrderby(Integer orderby) {
-        this.orderby = orderby;
-    }
-
-    public Integer getTarget() {
-        return target;
-    }
-
-    public void setTarget(Integer target) {
-        this.target = target;
-    }
-
-    public String getBgcolor() {
-        return bgcolor;
-    }
-
-    public void setBgcolor(String bgcolor) {
-        this.bgcolor = bgcolor;
+    public void setOrder_sn(String order_sn) {
+        this.order_sn = order_sn;
     }
 
     public Integer getUser_id() {
@@ -212,35 +101,123 @@ public class TpAdMaterial implements Serializable {
         this.user_id = user_id;
     }
 
-    public Integer getCat_id() {
-        return cat_id;
+    public Integer getCate() {
+        return cate;
     }
 
-    public void setCat_id(Integer cat_id) {
-        this.cat_id = cat_id;
+    public void setCate(Integer cate) {
+        this.cate = cate;
     }
 
-    public String getDescription() {
-        return description;
+    public Integer getTrade_id() {
+        return trade_id;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTrade_id(Integer trade_id) {
+        this.trade_id = trade_id;
     }
 
-    public Integer getAdd_time() {
-        return add_time;
+    public Integer getDays() {
+        return days;
     }
 
-    public void setAdd_time(Integer add_time) {
-        this.add_time = add_time;
+    public void setDays(Integer days) {
+        this.days = days;
     }
 
-    public Integer getOrder_id() {
-        return order_id;
+    public String getUrl() {
+        return url;
     }
 
-    public void setOrder_id(Integer order_id) {
-        this.order_id = order_id;
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public Integer getSide() {
+        return side;
+    }
+
+    public void setSide(Integer side) {
+        this.side = side;
+    }
+
+    public Integer getLaunch_num() {
+        return launch_num;
+    }
+
+    public void setLaunch_num(Integer launch_num) {
+        this.launch_num = launch_num;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Integer getPay_status() {
+        return pay_status;
+    }
+
+    public void setPay_status(Integer pay_status) {
+        this.pay_status = pay_status;
+    }
+
+    public Date getLaunch_at() {
+        return launch_at;
+    }
+
+    public void setLaunch_at(Date launch_at) {
+        this.launch_at = launch_at;
+    }
+
+    public Date getPaid_at() {
+        return paid_at;
+    }
+
+    public void setPaid_at(Date paid_at) {
+        this.paid_at = paid_at;
+    }
+
+    public Date getAudited_at() {
+        return audited_at;
+    }
+
+    public void setAudited_at(Date audited_at) {
+        this.audited_at = audited_at;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
+    }
+
+    public Date getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Date updated_at) {
+        this.updated_at = updated_at;
     }
 }

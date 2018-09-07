@@ -1,20 +1,29 @@
 package com.citytuike.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
-public class TpAdCategory implements Serializable {
+public class TpUserWallet implements Serializable {
     /**
      * id
      */
     private Integer id;
     /**
-     *
+     * 用户ID
      */
-    private String name;
+    private Integer user_id;
     /**
-     *
+     * 可用余额
      */
-    private String remark;
+    private double balance;
+    /**
+     * 创建时间
+     */
+    private Date created_at;
+    /**
+     * 更新时间
+     */
+    private Date updated_at;
 
     public Integer getId() {
         return id;
@@ -24,19 +33,35 @@ public class TpAdCategory implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getUser_id() {
+        return user_id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
-    public String getRemark() {
-        return remark;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
+    }
+
+    public Date getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(Date updated_at) {
+        this.updated_at = updated_at;
     }
 }

@@ -23,6 +23,8 @@ public interface ITpDeviceService {
 
     List<TpDevice> getParentId(Integer user_id);
 
+    List<TpDevice> findByCity(int id);
+
     JSONObject statistics(Integer user_id);
 
     LimitPageList selectDeviceList(Integer user_id,String page);

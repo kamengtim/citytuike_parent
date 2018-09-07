@@ -1,10 +1,11 @@
 package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.domain.DataEntry;
 import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.mapper.TpRegionMapper;
-import com.citytuike.model.*;
+import com.citytuike.model.LimitPageList;
+import com.citytuike.model.Page;
+import com.citytuike.model.TpDevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +103,11 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
     public List<TpDevice> getParentId(Integer user_id) {
        return tpDeviceMapper.selectParent(user_id);
 
+    }
+
+    @Override
+    public List<TpDevice> findByCity(int id) {
+        return tpDeviceMapper.findByCity(id);
     }
 
     @Override

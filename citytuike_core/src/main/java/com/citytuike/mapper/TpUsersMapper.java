@@ -103,6 +103,16 @@ public interface TpUsersMapper {
 
 	TpSysMessageUser findOneBySysIdAndUserId(@Param("id")Integer id, @Param("user_id")Integer user_id);
 
+    TpRegion findRegionById(@Param("regions_id")Integer regions_id);
+
+	List<TpRegion> findRegionByParentId(@Param("id")int id);
+
+    TpUserWallet findWalletByUserId(@Param("user_id")Integer user_id);
+
+    int updateUserWalletBalance(TpUserWallet tpUserWallet1);
+
+	int insertUserFinance(TpUserFinance tpUserFinance);
+
     TpUsers getUserNameByMobile(String mobile);
 
     TpUsers getInviteCode(Integer user_id);

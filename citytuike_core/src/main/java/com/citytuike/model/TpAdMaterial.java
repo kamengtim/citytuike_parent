@@ -2,7 +2,7 @@ package com.citytuike.model;
 
 import java.io.Serializable;
 
-public class TpAdApplyMaterial implements Serializable {
+public class TpAdMaterial implements Serializable {
     /**
      * 广告id
      */

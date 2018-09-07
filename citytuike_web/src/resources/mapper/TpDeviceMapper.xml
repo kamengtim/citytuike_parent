@@ -46,27 +46,27 @@
   <insert id="insert" parameterType="com.citytuike.model.TpDevice" useGeneratedKeys="true" keyProperty="id" >
     insert into tp_device (device_sn, ad_position_id, qrscene, 
       iot_id, product_key, device_name, 
-      device_secret, add_time, user_id, 
-      paper_number, paper_send, paper_inventory, 
-      income, one_income, capacity, 
-      active_time, no_send, open_status, 
-      online, landmark_picture, province, 
-      city, district, is_active, 
-      order_id, goods_id, distribution_time, 
-      address, longitude, latitude, 
-      active_code, shipping_sn, shipping_name, 
+      device_secret, add_time, user_id,
+      paper_number, paper_send, paper_inventory,
+      income, one_income, capacity,
+      active_time, no_send, open_status,
+      online, landmark_picture, province,
+      city, district, is_active,
+      order_id, goods_id, distribution_time,
+      address, longitude, latitude,
+      active_code, shipping_sn, shipping_name,
       today_num, today_time)
     values (#{device_sn,jdbcType=VARCHAR}, #{ad_position_id,jdbcType=INTEGER}, #{qrscene,jdbcType=VARCHAR}, 
-      #{iot_id,jdbcType=VARCHAR}, #{product_key,jdbcType=VARCHAR}, #{device_name,jdbcType=VARCHAR}, 
-      #{device_secret,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, 
-      #{paper_number,jdbcType=INTEGER}, #{paper_send,jdbcType=INTEGER}, #{paper_inventory,jdbcType=INTEGER}, 
-      #{income,jdbcType=DECIMAL}, #{one_income,jdbcType=DECIMAL}, #{capacity,jdbcType=INTEGER}, 
-      #{active_time,jdbcType=INTEGER}, #{no_send,jdbcType=BIT}, #{open_status,jdbcType=BIT}, 
-      #{online,jdbcType=BIT}, #{landmark_picture,jdbcType=VARCHAR}, #{province,jdbcType=INTEGER}, 
-      #{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER}, #{is_active,jdbcType=TINYINT}, 
-      #{order_id,jdbcType=INTEGER}, #{goods_id,jdbcType=INTEGER}, #{distribution_time,jdbcType=INTEGER}, 
-      #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE}, 
-      #{active_code,jdbcType=VARCHAR}, #{shipping_sn,jdbcType=VARCHAR}, #{shipping_name,jdbcType=VARCHAR}, 
+      #{iot_id,jdbcType=VARCHAR}, #{product_key,jdbcType=VARCHAR}, #{device_name,jdbcType=VARCHAR},
+      #{device_secret,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER},
+      #{paper_number,jdbcType=INTEGER}, #{paper_send,jdbcType=INTEGER}, #{paper_inventory,jdbcType=INTEGER},
+      #{income,jdbcType=DECIMAL}, #{one_income,jdbcType=DECIMAL}, #{capacity,jdbcType=INTEGER},
+      #{active_time,jdbcType=INTEGER}, #{no_send,jdbcType=BIT}, #{open_status,jdbcType=BIT},
+      #{online,jdbcType=BIT}, #{landmark_picture,jdbcType=VARCHAR}, #{province,jdbcType=INTEGER},
+      #{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER}, #{is_active,jdbcType=TINYINT},
+      #{order_id,jdbcType=INTEGER}, #{goods_id,jdbcType=INTEGER}, #{distribution_time,jdbcType=INTEGER},
+      #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE},
+      #{active_code,jdbcType=VARCHAR}, #{shipping_sn,jdbcType=VARCHAR}, #{shipping_name,jdbcType=VARCHAR},
       #{today_num,jdbcType=INTEGER}, #{today_time,jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpDevice" >
@@ -109,10 +109,10 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, device_sn, ad_position_id, qrscene, iot_id, product_key, device_name, 
-    device_secret, add_time, user_id, paper_number, paper_send, paper_inventory, income, 
-    one_income, capacity, active_time, no_send, open_status, online, landmark_picture, 
-    province, city, district, is_active, order_id, goods_id, distribution_time, address, 
+    select id, device_sn, ad_position_id, qrscene, iot_id, product_key, device_name,
+    device_secret, add_time, user_id, paper_number, paper_send, paper_inventory, income,
+    one_income, capacity, active_time, no_send, open_status, online, landmark_picture,
+    province, city, district, is_active, order_id, goods_id, distribution_time, address,
     longitude, latitude, active_code, shipping_sn, shipping_name, today_num, today_time
     from tp_device
     where id = #{id,jdbcType=INTEGER}
@@ -137,6 +137,9 @@
   </select>
   <select id="selectParent" resultMap="BaseResultMap" >
     select * from tp_device WHERE user_id = #{user_id}
+  </select>
+  <select id="findByCity" resultMap="BaseResultMap" >
+    select * from tp_device WHERE district = #{id}
   </select>
   <select id="statistics" resultMap="BaseResultMap">
      select * from tp_device WHERE user_id = #{user_id}

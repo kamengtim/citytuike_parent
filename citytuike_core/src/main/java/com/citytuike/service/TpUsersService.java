@@ -89,4 +89,14 @@ public interface TpUsersService {
 	List<TpSysMessage> findAllSysMessage();
 
 	TpSysMessageUser findOneBySysIdAndUserId(Integer id, Integer user_id);
+
+    TpRegion findRegionById(Integer regions_id);
+
+	List<TpRegion> findRegionByParentId(int id);
+
+    TpUserWallet findWalletByUserId(Integer user_id);
+
+    int updateUserWalletBalance(TpUserWallet tpUserWallet1);
+
+	int insertUserFinance(TpUserFinance tpUserFinance);
 }

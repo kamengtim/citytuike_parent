@@ -1,170 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xxl.job.admin.dao.XxlJobInfoDao">
+<mapper namespace="com.citytuike.mapper.TpAdMapper">
 	
-	<resultMap id="XxlJobInfo" type="com.xxl.job.admin.core.model.XxlJobInfo" >
-		<result column="id" property="id" />
-	
-		<result column="job_group" property="jobGroup" />
-	    <result column="job_cron" property="jobCron" />
-	    <result column="job_desc" property="jobDesc" />
-	    
-	    <result column="add_time" property="addTime" />
-	    <result column="update_time" property="updateTime" />
-	    
-	    <result column="author" property="author" />
-	    <result column="alarm_email" property="alarmEmail" />
- 
-		<result column="executor_route_strategy" property="executorRouteStrategy" />
-		<result column="executor_handler" property="executorHandler" />
-	    <result column="executor_param" property="executorParam" />
-		<result column="executor_block_strategy" property="executorBlockStrategy" />
-		<result column="executor_fail_strategy" property="executorFailStrategy" />
-	    
-	    <result column="glue_type" property="glueType" />
-	    <result column="glue_source" property="glueSource" />
-	    <result column="glue_remark" property="glueRemark" />
-		<result column="glue_updatetime" property="glueUpdatetime" />
- 
-		<result column="child_jobkey" property="childJobKey" />
+	<resultMap id="TpStatisticsDataMap" type="com.citytuike.model.TpStatisticsData" >
+		<result column="rec_id" property="rec_id" />
 	</resultMap>
- 
-	<sql id="Base_Column_List">
-		t.id,
-		t.job_group,
-		t.job_cron,
-		t.job_desc,
-		t.add_time,
-		t.update_time,
-		t.author,
-		t.alarm_email,
-		t.executor_route_strategy,
-		t.executor_handler,
-		t.executor_param,
-		t.executor_block_strategy,
-		t.executor_fail_strategy,
-		t.glue_type,
-		t.glue_source,
-		t.glue_remark,
-		t.glue_updatetime,
-		t.child_jobkey
-	</sql>
-	
-	<select id="pageList" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
-		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
-		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
-			</if>
-			<if test="executorHandler != null and executorHandler != ''">
-				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
-			</if>
-		</trim>
-		ORDER BY id DESC
-		LIMIT #{offset}, #{pagesize}
+	<resultMap id="TpAdTradeMap" type="com.citytuike.model.TpAdTrade" >
+		<result column="trade_id" property="trade_id" />
+	</resultMap>
+	<resultMap id="TpAdTopUpMap" type="com.citytuike.model.TpAdTopUp" >
+		<result column="id" property="id" />
+	</resultMap>
+	<resultMap id="TpAdApplyMap" type="com.citytuike.model.TpAdApply" >
+		<result column="id" property="id" />
+	</resultMap>
+	<resultMap id="TpAdApplyMaterialMap" type="com.citytuike.model.TpAdApplyMaterial" >
+		<result column="id" property="id" />
+	</resultMap>
+	<resultMap id="TpAdApplyRegionMap" type="com.citytuike.model.TpAdApplyRegion" >
+		<result column="id" property="id" />
+	</resultMap>
+
+	<select id="findStatisticsDataByDeviceId" parameterType="java.util.HashMap" resultMap="TpStatisticsDataMap">
+		SELECT * FROM tp_statistics_data where object_id=#{id} and  year=#{year} and  month=#{month} and  day=#{day}
 	</select>
-	
-	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
-		SELECT count(1)
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
-		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
-			</if>
-			<if test="executorHandler != null and executorHandler != ''">
-				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
-			</if>
-		</trim>
+	<select id="findAllAdTrade" parameterType="java.util.HashMap" resultMap="TpAdTradeMap">
+		SELECT * FROM tp_ad_trade where ISNULL(parent_id)
 	</select>
- 
-	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobInfo" useGeneratedKeys="true" keyProperty="id" >
-		INSERT INTO XXL_JOB_QRTZ_TRIGGER_INFO (
-			job_group,
-			job_cron,
-			job_desc,
-			add_time,
-			update_time,
-			author,
-			alarm_email,
-            executor_route_strategy,
-			executor_handler,
-			executor_param,
-			executor_block_strategy,
-			executor_fail_strategy,
-			glue_type,
-			glue_source,
-			glue_remark,
-			glue_updatetime,
-			child_jobkey
-		) VALUES (
-			#{jobGroup},
-			#{jobCron}, 
-			#{jobDesc},
-			NOW(),
-			NOW(),
-			#{author},
-			#{alarmEmail},
-			#{executorRouteStrategy},
-			#{executorHandler},
-			#{executorParam},
-			#{executorBlockStrategy},
-			#{executorFailStrategy},
-			#{glueType},
-			#{glueSource},
-			#{glueRemark},
-			NOW(),
-			#{childJobKey}
-		);
-		<!--<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
-			SELECT LAST_INSERT_ID()
-			/*SELECT @@IDENTITY AS id*/
-		</selectKey>-->
-	</insert>
- 
-	<select id="loadById" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
-		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
-		WHERE t.id = #{id}
+	<select id="findAdApplyMaterialByApplyId" parameterType="java.util.HashMap" resultMap="TpAdApplyMaterialMap">
+		SELECT * FROM tp_ad_apply_material where id=#{id}
 	</select>
-	
-	<update id="update" parameterType="com.xxl.job.admin.core.model.XxlJobInfo" >
-		UPDATE XXL_JOB_QRTZ_TRIGGER_INFO
-		SET 
-			job_cron = #{jobCron},
-			job_desc = #{jobDesc},
-			update_time = NOW(),
-			author = #{author},
-			alarm_email = #{alarmEmail},
-			executor_route_strategy = #{executorRouteStrategy},
-			executor_handler = #{executorHandler},
-			executor_param = #{executorParam},
-			executor_block_strategy = #{executorBlockStrategy},
-			executor_fail_strategy = #{executorFailStrategy},
-			glue_type = #{glueType},
-			glue_source = #{glueSource},
-			glue_remark = #{glueRemark},
-			glue_updatetime = #{glueUpdatetime},
-			child_jobkey = #{childJobKey}
-		WHERE id = #{id}
+	<select id="findAdApplyRegionByApplyId" parameterType="java.util.HashMap" resultMap="TpAdApplyRegionMap">
+		SELECT * FROM tp_ad_apply_region where id=#{id}
+	</select>
+	<select id="findAllAdTradeByParentId" parameterType="java.util.HashMap" resultMap="TpAdTradeMap">
+		SELECT * FROM tp_ad_trade where parent_id=#{trade_id}
+	</select>
+	<select id="getTopUpCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tp_ad_top_up where pay_status=1
+    </select>
+	<select id="getApplyCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tp_ad_apply where state='pass'
+    </select>
+	<select id="selectTopUpByPage" resultMap="TpAdTopUpMap">
+        select *  from tp_ad_top_up where pay_status=1 limit #{startPos},#{pageSize}
+    </select>
+	<select id="selectApplyByPage" resultMap="TpAdApplyMap">
+        select *  from tp_ad_apply where state='pass' limit #{startPos},#{pageSize}
+    </select>
+	<select id="findAdApplyByOrderSn" resultMap="TpAdApplyMap">
+        select *  from tp_ad_apply where order_sn=#{apply_sn}
+    </select>
+	<select id="findTradeById" resultMap="TpAdTradeMap">
+        select *  from tp_ad_trade where id=#{apply_sn}
+    </select>
+	<insert id="insertAdApply" parameterType="com.citytuike.model.TpAdApply" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_ad_apply (order_sn, user_id, cate,
+      trade_id, days, url,
+      describe, side, launch_num,
+      amount, state, pay_status,launch_at,paid_at,
+      audited_at,created_at, updated_at)
+    values (#{order_sn}, #{user_id}, #{cate},
+      #{trade_id}, #{days}, #{url},
+      #{describe}, #{side}, #{launch_num},
+      #{amount}, #{state}, #{pay_status},#{launch_at},paid_at},
+      #{audited_at},#{created_at}, #{updated_at})
+  </insert>
+	<insert id="insertAdApplyRegion" parameterType="com.citytuike.model.TpAdApplyRegion" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_ad_apply_region (apply_id, region_id, num
+    values (#{apply_id}, #{region_id}, #{num}
+  </insert>
+	<insert id="insertAdApplyMaterial" parameterType="com.citytuike.model.TpAdApplyMaterial" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_ad_apply_material (apply_id, url, display,sort
+    values (#{apply_id}, #{url}, #{display}, #{sort}
+  </insert>
+	<insert id="insertAdTopUp" parameterType="com.citytuike.model.TpAdTopUp" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_ad_top_up (user_id, order_sn,
+      order_amount, pay_status, remark,
+      transaction_id, paid_at, created_at,
+      updated_at
+    values (#{user_id}, #{order_sn},
+      #{order_amount}, #{pay_status},  #{remark},
+      #{transaction_id}, #{paid_at}, #{created_at},
+      #{updated_at})
+  </insert>
+	<update id="updateAdApply" parameterType="com.citytuike.model.TpAdApply" >
+		UPDATE tp_ad_apply
+		SET
+				pay_status=#{pay_status}.
+				paid_at=#{paid_at},
+				launch_at=#{launch_at},
+				updated_at=#{updated_at}
+		WHERE order_sn=#{order_sn}
 	</update>
-	
-	<delete id="delete" parameterType="java.util.HashMap">
-		DELETE
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO
-		WHERE id = #{id}
-	</delete>
- 
-	<select id="getJobsByGroup" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
-		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
-		WHERE t.job_group = #{jobGroup}
-	</select>
- 
-	<select id="findAllCount" resultType="int">
-		SELECT count(1)
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO
-	</select>
- 
 </mapper>

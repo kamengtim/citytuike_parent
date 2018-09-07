@@ -8,17 +8,13 @@ public class TpAdCategory implements Serializable {
      */
     private Integer id;
     /**
-     * 申请订单ID
+     *
      */
-    private Integer apply_id;
+    private String name;
     /**
-     * 地区ID
+     *
      */
-    private Integer region_id;
-    /**
-     * 机器数量
-     */
-    private Integer num;
+    private String remark;
 
     public Integer getId() {
         return id;
@@ -28,27 +24,19 @@ public class TpAdCategory implements Serializable {
         this.id = id;
     }
 
-    public Integer getApply_id() {
-        return apply_id;
+    public String getName() {
+        return name;
     }
 
-    public void setApply_id(Integer apply_id) {
-        this.apply_id = apply_id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getRegion_id() {
-        return region_id;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setRegion_id(Integer region_id) {
-        this.region_id = region_id;
-    }
-
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
