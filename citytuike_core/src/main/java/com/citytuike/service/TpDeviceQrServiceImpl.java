@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Service@Transactional
 public class TpDeviceQrServiceImpl implements TpDeviceQrService {
+    private static double EARTH_RADIUS = 6371.393;
     @Autowired
     private TpDeviceQrMapper tpDeviceQrMapper;
     @Autowired
@@ -47,10 +48,29 @@ public class TpDeviceQrServiceImpl implements TpDeviceQrService {
     }
 
     @Override
-    public void updateQR(String scene_str_v2, String lat, String lng, int status,Integer user_id) {
+    public double updateQR(String scene_str_v2, String lat, String lng, int status,Integer user_id) {
+
         TpDeviceQr tpDeviceQr = new TpDeviceQr();
         tpDeviceQr.setScan_time((int)(new Date().getTime()/1000));
         tpDeviceQr.setStatus(1);
-        tpDeviceQrMapper.updateQR(scene_str_v2,user_id,user_id,tpDeviceQr.getScan_time(),tpDeviceQr.getStatus());
+        TpDeviceQr tpDeviceQr1 = tpDeviceQrMapper.getLatAndLng(scene_str_v2);
+        tpDeviceQr.setItem_type(2);
+        tpDeviceQr.setItem_id(1);
+        tpDeviceQrMapper.updateQR(tpDeviceQr.getItem_type(),tpDeviceQr.getItem_id(),scene_str_v2,user_id,user_id,tpDeviceQr.getScan_time(),tpDeviceQr.getStatus(),tpDeviceQr1.getLat(),tpDeviceQr1.getLng(),tpDeviceQr1.getAdd_time());
+        BigDecimal latOld = tpDeviceQr1.getLat();
+        BigDecimal lngOld = tpDeviceQr1.getLng();
+        double a = rad(new BigDecimal(lat).doubleValue()) - rad(latOld.doubleValue());
+        double b = rad(new BigDecimal(lng).doubleValue()) - rad(lngOld.doubleValue());
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+                Math.cos(rad(new BigDecimal(lat).doubleValue()))*Math.cos(rad(latOld.doubleValue()))*Math.pow(Math.sin(b/2),2)));
+        s = s * EARTH_RADIUS;
+        s = Math.round(s * 1000);
+        return s;
+
     }
+    private static double rad(double d)
+    {
+        return d * Math.PI / 180.0;
+    }
+
 }

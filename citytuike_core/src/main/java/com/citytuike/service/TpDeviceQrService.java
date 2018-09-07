@@ -5,5 +5,5 @@ public interface TpDeviceQrService {
 
     int selectStatus(String scene_str_v2);
 
-    void updateQR(String scene_str_v2, String lat, String lng, int status, Integer user_id);
+    double updateQR(String scene_str_v2, String lat, String lng, int status, Integer user_id);
 }
