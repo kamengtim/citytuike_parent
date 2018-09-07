@@ -85,13 +85,13 @@ public class TpUserAliAccountServiceImpl implements TpUserAliAccountService {
             tpWithdrawals.setBank_name(bankName);
             tpWithdrawals.setRealname(tpUserAliAccount.getReal_name());
             tpWithdrawals.setBank_card("");
-            tpWithdrawals.setStatus(false);
+            tpWithdrawals.setStatus(0);
             tpWithdrawals.setSend_type(true);
             tpWithdrawals.setTaxfee(new BigDecimal(5));
             tpWithdrawals.setIs_paid(Byte.valueOf("0"));
             tpWithdrawals.setQuery_time(0);
             tpWithdrawalsMapper.saveWithdrawals(tpWithdrawals);
-            BigDecimal newUserMoney = userMoney.subtract(BigDecimal.valueOf(Integer.parseInt(money)));
+            BigDecimal newUserMoney = userMoney.subtract((BigDecimal.valueOf(Integer.parseInt(money))).multiply(new BigDecimal(1).subtract(new BigDecimal(0.05))));
             tpUsersMapper.updateUserMoney(tpUserAliAccount.getUser_id(),newUserMoney);
         }else{
             throw new SendMessageException("最低提现金额:15");

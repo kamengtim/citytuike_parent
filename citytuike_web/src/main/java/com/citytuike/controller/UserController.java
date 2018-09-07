@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -59,8 +60,8 @@ public class UserController {
 	 * 登陆
 	 */
 	@RequestMapping(value="/do_login",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String doLogin(Model model,@RequestParam(required=true) String username,
-			@RequestParam(required=true) String password){
+	public @ResponseBody String doLogin(HttpServletRequest request,Model model, @RequestParam(required=true) String username,
+										@RequestParam(required=true) String password){
 		String pwd = MD5Utils.md5("TPSHOP" + password);
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -69,6 +70,7 @@ public class UserController {
 		TpUsers tpUsers = tpUsersService.findOneByLogo(username, pwd);
 		if (null != tpUsers) {
 			String token = MD5Utils.md5(System.currentTimeMillis()+Util.generateString(16));
+			request.setAttribute("p-token",token);
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
 			if (result > 0) {
@@ -79,13 +81,14 @@ public class UserController {
 			}else {
 				System.out.println("系统错误!");
 			}
-			
+
 		}else {
 			jsonObj.put("status", "-1");
 			jsonObj.put("msg", "账号不存在!");
 		}
 		return jsonObj.toString();
 	}
+
 	/**
 	 * @param model
 	 * @param nickname
@@ -457,7 +460,7 @@ public class UserController {
 	@RequestMapping(value="/account_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	public @ResponseBody String AccountList(@RequestParam(required = true)String token,
 											@RequestParam(required = true)String type,
-											@RequestParam(required = false)String page){
+											@RequestParam(required = false,defaultValue = "1")String page){
 		JSONObject data = new JSONObject();
 		JSONObject jsonObj = new JSONObject();
 		JSONArray  jsonArray = new JSONArray();
@@ -521,7 +524,7 @@ public class UserController {
 	 */
 	@RequestMapping(value = "withdrawals_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
 	public @ResponseBody String WithdrawalsList(@RequestParam(required = true)String token,
-												@RequestParam(required = false)String page){
+												@RequestParam(required = false,defaultValue = "1")String page){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
@@ -815,7 +818,6 @@ public class UserController {
 	public @ResponseBody String teamDeviceCount(@RequestParam(required = true)String token){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		JSONArray jsonArray = new JSONArray();
         TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
         String startTime = String.valueOf(Util.getStartTime());
         String endTime = String.valueOf(Util.getnowEndTime());
@@ -1392,7 +1394,7 @@ public class UserController {
      * 支付账号列表
      */
     @RequestMapping(value = "ali_account",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String AliAccount(@RequestParam(required = false)String page){
+    public @ResponseBody String AliAccount(@RequestParam(required = false,defaultValue = "1")String page){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -1421,7 +1423,6 @@ public class UserController {
     public @ResponseBody String getMoneyAli(@RequestParam(required = true)String id,
                                             @RequestParam(required = true)String money){
         JSONObject jsonObj= new JSONObject();
-        tpUserAliAccountService.getMoneyAli(id,money);
         try{
             tpUserAliAccountService.getMoneyAli(id,money);
             jsonObj.put("status", "1");
@@ -1544,6 +1545,4 @@ public class UserController {
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();
 	}
-
-
 }

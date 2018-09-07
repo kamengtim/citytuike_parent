@@ -7,13 +7,15 @@ import com.citytuike.eucp.inter.http.v1.dto.response.MoResponse;
 import com.citytuike.eucp.inter.http.v1.dto.response.ReportResponse;
 import com.citytuike.eucp.inter.http.v1.dto.response.SmsResponse;
 import com.citytuike.exception.SendMessageException;
-import com.citytuike.mapper.TpSmsLogMapper;
-import com.citytuike.mapper.TpSmsTemplateMapper;
+import com.citytuike.mapper.*;
 import com.citytuike.mobileutil.AES;
 import com.citytuike.mobileutil.GZIPUtils;
 import com.citytuike.mobileutil.JsonHelper;
 import com.citytuike.mobileutil.http.*;
+import com.citytuike.model.TpOrder;
 import com.citytuike.model.TpSmsLog;
+import com.citytuike.model.TpUserAddress;
+import com.citytuike.model.TpUsers;
 import com.citytuike.util.ResultModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,13 +30,32 @@ public class SendMessageServiceImpl implements SendMessageService {
     private TpSmsTemplateMapper tpSmsTemplateMapper;
     @Autowired
     private TpSmsLogMapper logMapper;
+    @Autowired
+    private TpUsersMapper tpUsersMapper;
+    @Autowired
+    private TpOrderMapper tpOrderMapper;
     public void sendVerifyCode(String type, String scene, String mobile, String send, String verify_code, String unique_id) {
+        String content= "";
         //生成验证码
         String randCode = String.valueOf((Math.random() * 9 + 1) * 1000000).toString().substring(0, 6);
         String msg = tpSmsTemplateMapper.selectScene(scene);
-        String content = msg.replace("${code}",randCode);
-        try{
+        if(scene.equals("6")){
+        content = msg.replace("${code}",randCode);
         sendReadMsg(content,mobile);
+        }else if(scene.equals("1")){
+        content = msg.replace("${code}",randCode);
+        }else if(scene.equals("5")){
+        TpUsers tpUsers =  tpUsersMapper.getUserNameByMobile(mobile);
+        TpOrder tpOrder = tpOrderMapper.getConsigneeByMobile(tpUsers.getUser_id());
+        content = msg.replace("${consignee}",tpOrder.getConsignee());
+        content = content.replace("${user_name}",tpUsers.getNickname());
+        content = content.replace("${order_sn}",tpOrder.getOrder_sn());
+        sendReadMsg(content,mobile);
+        }else if(scene.equals("2")){
+        content = msg.replace("${code}",randCode);
+        sendReadMsg(content,mobile);
+        }
+        try{
         TpSmsLog tpSmsLog = new TpSmsLog();
         tpSmsLog.setMobile(mobile);
         tpSmsLog.setSession_id("a4nlq1f02mmatnrlrbr8vhjpt5");

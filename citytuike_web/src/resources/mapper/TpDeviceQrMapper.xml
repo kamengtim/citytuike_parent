@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpDeviceQrMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpDeviceQr" >
+    <id column="qr_id" property="qr_id" jdbcType="INTEGER" />
+    <result column="scene_str" property="scene_str" jdbcType="VARCHAR" />
+    <result column="item_type" property="item_type" jdbcType="INTEGER" />
+    <result column="item_id" property="item_id" jdbcType="INTEGER" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="scan_user_id" property="scan_user_id" jdbcType="INTEGER" />
+    <result column="scan_time" property="scan_time" jdbcType="INTEGER" />
+    <result column="lat" property="lat" jdbcType="DECIMAL" />
+    <result column="lng" property="lng" jdbcType="DECIMAL" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_device_qr
+    where qr_id = #{qr_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpDeviceQr" >
+    insert into tp_device_qr (qr_id, scene_str, item_type, 
+      item_id, add_time, status, 
+      scan_user_id, scan_time, lat, 
+      lng)
+    values (#{qr_id,jdbcType=INTEGER}, #{scene_str,jdbcType=VARCHAR}, #{item_type,jdbcType=INTEGER}, 
+      #{item_id,jdbcType=INTEGER}, #{add_time,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{scan_user_id,jdbcType=INTEGER}, #{scan_time,jdbcType=INTEGER}, #{lat,jdbcType=DECIMAL}, 
+      #{lng,jdbcType=DECIMAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpDeviceQr" >
+    update tp_device_qr
+    set scene_str = #{scene_str,jdbcType=VARCHAR},
+      item_type = #{item_type,jdbcType=INTEGER},
+      item_id = #{item_id,jdbcType=INTEGER},
+      add_time = #{add_time,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      scan_user_id = #{scan_user_id,jdbcType=INTEGER},
+      scan_time = #{scan_time,jdbcType=INTEGER},
+      lat = #{lat,jdbcType=DECIMAL},
+      lng = #{lng,jdbcType=DECIMAL}
+    where qr_id = #{qr_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select qr_id, scene_str, item_type, item_id, add_time, status, scan_user_id, scan_time, 
+    lat, lng
+    from tp_device_qr
+    where qr_id = #{qr_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select qr_id, scene_str, item_type, item_id, add_time, status, scan_user_id, scan_time, 
+    lat, lng
+    from tp_device_qr
+  </select>
+  <insert id="saveQr" parameterType="com.citytuike.model.TpDeviceQr">
+    insert into tp_device_qr (qr_id, scene_str, item_type,
+      item_id, add_time, status,
+      scan_user_id, scan_time, lat,
+      lng)
+    values (#{qr_id,jdbcType=INTEGER}, #{scene_str,jdbcType=VARCHAR}, #{item_type,jdbcType=INTEGER},
+      #{item_id,jdbcType=INTEGER}, #{add_time,jdbcType=INTEGER}, #{status,jdbcType=INTEGER},
+      #{user_id,jdbcType=INTEGER}, 0, #{lat,jdbcType=DECIMAL},
+      #{lng,jdbcType=DECIMAL})
+  </insert>
+  <select id="selectStatus" resultType="int">
+    SELECT status from tp_device_qr where scene_str = #{scene_str_v2}
+  </select>
+  <update id="updateQR">
+    update tp_device_qr
+    set
+      item_type = #{item_type,jdbcType=INTEGER},
+      item_id = #{item_id,jdbcType=INTEGER},
+      add_time = #{add_time,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      scan_user_id = #{user_id,jdbcType=INTEGER},
+      scan_time = #{scan_time,jdbcType=INTEGER},
+      lat = #{lat,jdbcType=DECIMAL},
+      lng = #{lng,jdbcType=DECIMAL}
+    where scene_str = #{scene_str_v2,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpUserAddressMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpUserAddress" >
+    <id column="address_id" property="address_id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="INTEGER" />
+    <result column="city" property="city" jdbcType="INTEGER" />
+    <result column="district" property="district" jdbcType="INTEGER" />
+    <result column="twon" property="twon" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zipcode" property="zipcode" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="is_default" property="is_default" jdbcType="BIT" />
+    <result column="is_pickup" property="is_pickup" jdbcType="BIT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_user_address
+    where address_id = #{address_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpUserAddress" >
+    insert into tp_user_address (address_id, user_id, consignee, 
+      email, country, province, 
+      city, district, twon, 
+      address, zipcode, mobile, 
+      is_default, is_pickup)
+    values (#{address_id,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, #{consignee,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{country,jdbcType=INTEGER}, #{province,jdbcType=INTEGER}, 
+      #{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER}, #{twon,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{is_default,jdbcType=BIT}, #{is_pickup,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpUserAddress" >
+    update tp_user_address
+    set user_id = #{user_id,jdbcType=INTEGER},
+      consignee = #{consignee,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      country = #{country,jdbcType=INTEGER},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      twon = #{twon,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      zipcode = #{zipcode,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      is_default = #{is_default,jdbcType=BIT},
+      is_pickup = #{is_pickup,jdbcType=BIT}
+    where address_id = #{address_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select address_id, user_id, consignee, email, country, province, city, district, 
+    twon, address, zipcode, mobile, is_default, is_pickup
+    from tp_user_address
+    where address_id = #{address_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select address_id, user_id, consignee, email, country, province, city, district, 
+    twon, address, zipcode, mobile, is_default, is_pickup
+    from tp_user_address
+  </select>
+</mapper>

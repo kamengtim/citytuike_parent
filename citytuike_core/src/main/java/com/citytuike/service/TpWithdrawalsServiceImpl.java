@@ -87,13 +87,13 @@ public class TpWithdrawalsServiceImpl implements TpWithdrawalsService {
         TpUserBank tpUserBank = tpUserBankMapper.selectBankCard(id,user_id);
         tpWithdrawals.setRealname(tpUserBank.getReal_name());
         tpWithdrawals.setBank_card(tpUserBank.getBank_card());
-        tpWithdrawals.setStatus(false);
+        tpWithdrawals.setStatus(0);
         tpWithdrawals.setSend_type(false);
         tpWithdrawals.setTaxfee(new BigDecimal(5));
         tpWithdrawals.setIs_paid(Byte.valueOf("0"));
         tpWithdrawals.setQuery_time(0);
         tpWithdrawalsMapper.saveWithdrawals(tpWithdrawals);
-        BigDecimal newUserMoney = userMoney.subtract(BigDecimal.valueOf(money));
+        BigDecimal newUserMoney = userMoney.subtract((BigDecimal.valueOf(money)).multiply(new BigDecimal(1).subtract(new BigDecimal(0.05))));
         tpUsersMapper.updateUserMoney(user_id,newUserMoney);
         }else{
             throw new SendMessageException("最低提现金额:15");

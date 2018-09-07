@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpPaperLogMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpPaperLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="device_id" property="device_id" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="income" property="income" jdbcType="DECIMAL" />
+    <result column="scene_str" property="scene_str" jdbcType="VARCHAR" />
+    <result column="handel_user_id" property="handel_user_id" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_paper_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpPaperLog" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_paper_log (device_id, number, type, 
+      add_time, income, scene_str, 
+      handel_user_id)
+    values (#{device_id,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, #{type,jdbcType=TINYINT}, 
+      #{add_time,jdbcType=INTEGER}, #{income,jdbcType=DECIMAL}, #{scene_str,jdbcType=VARCHAR}, 
+      #{handel_user_id,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpPaperLog" >
+    update tp_paper_log
+    set device_id = #{device_id,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      type = #{type,jdbcType=TINYINT},
+      add_time = #{add_time,jdbcType=INTEGER},
+      income = #{income,jdbcType=DECIMAL},
+      scene_str = #{scene_str,jdbcType=VARCHAR},
+      handel_user_id = #{handel_user_id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, device_id, number, type, add_time, income, scene_str, handel_user_id
+    from tp_paper_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, device_id, number, type, add_time, income, scene_str, handel_user_id
+    from tp_paper_log
+  </select>
+  <select id="selectCount" resultType="int">
+    select count(id)
+    from tp_paper_log where device_id=#{device_id}
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap">
+    select id, device_id, number, type, add_time, income, scene_str, handel_user_id
+    from tp_paper_log where device_id=#{device_id}
+  </select>
+  <select id="selectCountToDay" resultType="int">
+   select count(id)
+    from tp_paper_log where device_id= #{device_id}  and  to_days(( FROM_UNIXTIME(add_time))) = to_days(now());
+  </select>
+  <select id="selectByPageToDay" resultMap="BaseResultMap">
+    select id, device_id, number, type, add_time, income, scene_str, handel_user_id
+    from tp_paper_log where device_id=#{device_id} and  to_days(( FROM_UNIXTIME(add_time))) = to_days(now());
+  </select>
+  <select id="selectCountToWeek" resultType="int">
+    select count(id)
+    from tp_paper_log where device_id=#{device_id} and YEARWEEK(date_format(( FROM_UNIXTIME(add_time)),'%Y-%m-%d')) = YEARWEEK(now());
+  </select>
+  <select id="selectByPageToWeek" resultMap="BaseResultMap">
+    select id, device_id, number, type, add_time, income, scene_str, handel_user_id from tp_paper_log where device_id=#{device_id} and  YEARWEEK(date_format(( FROM_UNIXTIME(add_time)),'%Y-%m-%d')) = YEARWEEK(now());
+  </select>
+  <select id="selectCountToMonth" resultType="int">
+    select count(id) from tp_paper_log where device_id=#{device_id} and  DATE_FORMAT(( FROM_UNIXTIME(add_time)),'%Y%m' ) = DATE_FORMAT( CURDATE( ),'%Y%m' )
+  </select>
+  <select id="selectByPageToMonth" resultMap="BaseResultMap">
+    select id, device_id, number, type, add_time, income, scene_str, handel_user_id from tp_paper_log where device_id=#{device_id} and  DATE_FORMAT(( FROM_UNIXTIME(add_time)),'%Y%m' ) = DATE_FORMAT( CURDATE( ),'%Y%m' )
+  </select>
+  <select id="savePaperLog" resultType="int">
+    select tp.id from tp_paper_log t left join tp_device tp on t.device_id = tp.id where tp.device_sn = #{device_sn} order BY t.add_time DESC LIMIT 1;
+  </select>
+  <insert id="insertPaperLog" parameterType="com.citytuike.model.TpPaperLog" useGeneratedKeys="true" keyProperty="id">
+    insert into tp_paper_log (device_id, number, type,
+      add_time, income, scene_str,
+      handel_user_id)
+    values (#{device_id,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, #{type,jdbcType=TINYINT},
+      #{add_time,jdbcType=INTEGER}, #{income,jdbcType=DECIMAL}, #{scene_str,jdbcType=VARCHAR},
+      #{handel_user_id,jdbcType=INTEGER})
+  </insert>
+</mapper>
