@@ -42,6 +42,8 @@
 		<result column="level" property="level" />
 		<result column="discount" property="discount" />
 		<result column="total_amount" property="total_amount" />
+		<result column="paper_number" property="paper_number"/>
+		<result column="paper_number_allowance" property="paper_number_allowance"/>
 		<result column="is_lock" property="is_lock" />
 		<result column="is_distribut" property="is_distribut" />
 		<result column="first_leader" property="first_leader" />
@@ -393,7 +395,7 @@
 		UPDATE tp_user_address
 		SET 
 			<if test="consignee != null">
-				consignee=#{consignee}
+				consignee=#{consignee},
 			</if>
 			<if test="email != null">
 				 email=#{email},
@@ -435,9 +437,6 @@
 	</select>
 	<select id="selectParentId" resultMap="TpUsers">
 		select * FROM  tp_users WHERE parent_id = #{user_id}
-	</select>
-	<select id="selectCountDevice" resultType="int">
-		select count(user_id) FROM  tp_users WHERE user_id = #{user_id}
 	</select>
 	<!-- 分页SQL语句 -->
 	<select id="selectByPage" resultType="TpUsers">
@@ -496,4 +495,16 @@
 	<update id="updateUserMoney" >
 		update tp_users set user_money = #{newUserMoney} where user_id = #{user_id}
 	</update>
+	<select id="getInviteCodeUserInfo" resultType="TpUsers">
+		select * from tp_users where invite_code = #{invite_code}
+	</select>
+	<select id="selectAddrass" resultType="string">
+		select tp.name from tp_user_address t LEFT JOIN tp_region tp on t.province = tp.id where user_id = #{user_id} and is_default = 1
+	</select>
+	<select id="selectCity" resultType="string">
+		select tp.name from tp_user_address t LEFT JOIN tp_region tp on t.city = tp.id where user_id = #{user_id} and is_default = 1
+	</select>
+	<select id="selectDistrict" resultType="string">
+		select tp.name from tp_user_address t LEFT JOIN tp_region tp on t.district = tp.id where user_id = #{user_id} and is_default = 1
+	</select>
 </mapper>

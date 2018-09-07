@@ -438,9 +438,6 @@
 	<select id="selectParentId" resultMap="TpUsers">
 		select * FROM  tp_users WHERE parent_id = #{user_id}
 	</select>
-	<select id="selectCountDevice" resultType="int">
-		select count(user_id) FROM  tp_users WHERE user_id = #{user_id}
-	</select>
 	<!-- 分页SQL语句 -->
 	<select id="selectByPage" resultType="TpUsers">
 		select *  from tp_users where parent_id = #{user_id} limit #{startPos},#{pageSize}
@@ -498,4 +495,16 @@
 	<update id="updateUserMoney" >
 		update tp_users set user_money = #{newUserMoney} where user_id = #{user_id}
 	</update>
+	<select id="getInviteCodeUserInfo" resultType="TpUsers">
+		select * from tp_users where invite_code = #{invite_code}
+	</select>
+	<select id="selectAddrass" resultType="string">
+		select tp.name from tp_user_address t LEFT JOIN tp_region tp on t.province = tp.id where user_id = #{user_id} and is_default = 1
+	</select>
+	<select id="selectCity" resultType="string">
+		select tp.name from tp_user_address t LEFT JOIN tp_region tp on t.city = tp.id where user_id = #{user_id} and is_default = 1
+	</select>
+	<select id="selectDistrict" resultType="string">
+		select tp.name from tp_user_address t LEFT JOIN tp_region tp on t.district = tp.id where user_id = #{user_id} and is_default = 1
+	</select>
 </mapper>
