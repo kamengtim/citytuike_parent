@@ -1,10 +1,10 @@
 package com.citytuike.model;
 
-import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TpUserMessage {
+public class TpUserMessage implements Serializable {
     private Integer rec_id;
 
     private Integer user_id;

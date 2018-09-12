@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpApplyReport {
+import java.io.Serializable;
+
+public class TpApplyReport implements Serializable {
     private Integer id;
 
     private String idcard;

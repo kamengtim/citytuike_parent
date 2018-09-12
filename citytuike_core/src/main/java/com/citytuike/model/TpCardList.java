@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TpCardList {
+public class TpCardList implements Serializable {
     private Integer id;
 
     private String logo;

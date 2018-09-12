@@ -1,9 +1,15 @@
 package com.citytuike.model;
 
+<<<<<<< Updated upstream
 import java.util.ArrayList;
 import java.util.List;
 
 public class TpMessage {
+=======
+import java.io.Serializable;
+
+public class TpMessage implements Serializable {
+>>>>>>> Stashed changes
     private Integer message_id;
 
     private Short admin_id;

@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TpWithdrawals {
+public class TpWithdrawals implements Serializable {
     private Integer id;
 
     private Integer user_id;

@@ -13,5 +13,13 @@ public class Constant {
 	//支付方式
 	public static final String[] CASHIER = {"merchantNo","token","timestamp","directPayType","cardType","userNo","userType","ext"};
 
+	public static String OCR_HOST = "http://qyocrbl.market.alicloudapi.com";
+	public static String OCR_PATH = "/clouds/ocr/businessLicense";
+	public static String OCR_METHOD = "POST";
+	public static String OCR_APPCODE = "你自己的AppCode";
 
+	public static String WEATHER_HOST = "https://jisutqybmf.market.alicloudapi.com";
+	public static String WEATHER_PATH = "/weather/query";
+	public static String WEATHER_METHOD = "GET";
+	public static String WEATHER_APPCODE = "你自己的AppCode";
 }

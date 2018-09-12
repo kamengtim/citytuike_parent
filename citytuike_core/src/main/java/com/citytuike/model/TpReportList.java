@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpReportList {
+import java.io.Serializable;
+
+public class TpReportList implements Serializable {
     private Integer id;
 
     private String area;

@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpUserBank {
+import java.io.Serializable;
+
+public class TpUserBank implements Serializable {
     private Integer id;
 
     private String real_name;

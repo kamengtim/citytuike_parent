@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TpDeviceQr {
+public class TpDeviceQr implements Serializable {
     private Integer qr_id;
 
     private String scene_str;

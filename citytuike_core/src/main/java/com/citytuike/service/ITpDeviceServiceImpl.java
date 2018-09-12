@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service@Transactional
+@Service
+@Transactional
 public class ITpDeviceServiceImpl implements ITpDeviceService {
     @Autowired
     private TpDeviceMapper tpDeviceMapper;

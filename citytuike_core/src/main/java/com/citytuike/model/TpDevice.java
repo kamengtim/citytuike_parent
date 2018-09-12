@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TpDevice {
+public class TpDevice implements Serializable {
     private Integer id;
 
     private String device_sn;

@@ -1,10 +1,16 @@
 package com.citytuike.util;
 
+import sun.misc.BASE64Encoder;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.Random;
 
 public class Util<main> {
@@ -167,4 +173,5 @@ public class Util<main> {
         System.out.println("当前时间：" + new Date());
         System.out.println("当前时间：" + getDateAndNumber(16));
     }
+
 }

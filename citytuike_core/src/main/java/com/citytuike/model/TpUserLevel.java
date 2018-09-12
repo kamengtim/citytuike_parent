@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TpUserLevel {
+public class TpUserLevel implements Serializable {
     private Short level_id;
 
     private String level_name;
