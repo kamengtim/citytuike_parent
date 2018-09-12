@@ -1,5 +1,8 @@
 package com.citytuike.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TpMessage {
     private Integer message_id;
 
@@ -14,6 +17,18 @@ public class TpMessage {
     private String message;
 
     private String data;
+
+    private List<TpUserMessage> tpUserMessages = new ArrayList<>();
+
+    public List<TpUserMessage> getTpUserMessages() {
+        return tpUserMessages;
+    }
+
+    public void setTpUserMessages(List<TpUserMessage> tpUserMessages) {
+        this.tpUserMessages = tpUserMessages;
+    }
+
+
 
     public Integer getMessage_id() {
         return message_id;

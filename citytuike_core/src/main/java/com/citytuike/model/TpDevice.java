@@ -69,11 +69,31 @@ public class TpDevice {
 
     private String shipping_sn;
 
+    public int isLack_paper() {
+        return lack_paper;
+    }
+
+    public void setLack_paper(int lack_paper) {
+        this.lack_paper = lack_paper;
+    }
+
     private String shipping_name;
 
     private Integer today_num;
 
     private Integer today_time;
+
+    private int lack_paper;
+
+    private int run_status;
+
+    public int getRun_status() {
+        return run_status;
+    }
+
+    public void setRun_status(int run_status) {
+        this.run_status = run_status;
+    }
 
     public Integer getId() {
         return id;

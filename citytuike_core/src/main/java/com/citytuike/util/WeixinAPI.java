@@ -42,8 +42,8 @@ public class WeixinAPI {
 	
 	@Autowired
 	private TpUsersService tpUsersService;
-	protected String appid = "";
-	protected String appsecret = "";
+	protected static String appid = "wxe9d5bc1243f072af";
+	protected static String appsecret = "7d91813087aa11efa593b0b3fa163a03";
 	protected static Map<String, JSONObject> tokenStock = new HashMap<String, JSONObject>();
 	protected static Map<String, JSONObject> webTokenStock = new HashMap<String, JSONObject>();
 	protected static Map<String, JSONObject> jsTokenStock = new HashMap<String, JSONObject>();
@@ -53,7 +53,7 @@ public class WeixinAPI {
 	 * @return
 	 * @throws WeixinApiException 
 	 */
-	protected JSONObject jsonGet(String urls) throws WeixinApiException {
+	protected static JSONObject jsonGet(String urls) throws WeixinApiException {
 
 		JSONObject jsonObject = null;
 
@@ -99,7 +99,7 @@ public class WeixinAPI {
 	        jsonObject = new JSONObject( sb.toString() );
 			if (jsonObject.has("errcode") && jsonObject.getInt("errcode") > 0) {
 				if(jsonObject.getInt("errcode") == 40001){
-					this.refreshAccessToken();
+					refreshAccessToken();
 				}
 				
 				throw new PermissionException(jsonObject.getString("errmsg"));
@@ -127,7 +127,7 @@ public class WeixinAPI {
 	 * @param text
 	 * @return
 	 */
-	protected JSONObject jsonPost(String urls, String text) throws WeixinApiException {
+	protected static JSONObject jsonPost(String urls, String text) throws WeixinApiException {
 
 		JSONObject jsonObject = null;
 
@@ -176,7 +176,7 @@ public class WeixinAPI {
 			jsonObject = new JSONObject( sb.toString() );
 			if (jsonObject.has("errcode") && jsonObject.getInt("errcode") > 0) {
 				if(jsonObject.getInt("errcode") == 40001){
-					this.refreshAccessToken();
+					refreshAccessToken();
 				}
 				
 				//throw new PermissionException(jsonObject.getString("errmsg"));
@@ -238,16 +238,16 @@ public class WeixinAPI {
 		}
 	}
 
-	protected JSONObject newToken() throws WeixinApiException {
+	protected static  JSONObject newToken() throws WeixinApiException {
 		StringBuffer url = new StringBuffer();
 		url.append(
 				"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=")
 				.append(appid).append("&secret=").append(appsecret);
-		return this.jsonGet(url.toString());
+		return jsonGet(url.toString());
 
 	}
 
-	public String getAccessToken() throws WeixinApiException {
+	public static String getAccessToken() throws WeixinApiException {
 		/*if(Config.USE_REMOTE_ACCESS_TOKEN){
 			return getRemoteAccessToken();
 		}*/
@@ -261,7 +261,7 @@ public class WeixinAPI {
 				System.out.println("new token is " + newtoken.getString("access_token"));
 				if (newtoken.has("expires_in") && newtoken.getInt("expires_in") > 0) {
 					newtoken.put("expires", System.currentTimeMillis() + newtoken.getLong("expires_in")*1000);
-					tokenStock.put(this.appid, newtoken);
+					tokenStock.put(appid, newtoken);
 					return newtoken.getString("access_token");
 				} else {
 					throw new AccessTokenException("Can't get access_token");
@@ -338,7 +338,7 @@ public class WeixinAPI {
 		}
 	}
 	
-	protected void refreshAccessToken() throws WeixinApiException{
+	protected static void refreshAccessToken() throws WeixinApiException{
 		/*if(Config.USE_REMOTE_ACCESS_TOKEN){
 			getRemoteAccessToken( true );
 		}*/
@@ -346,7 +346,7 @@ public class WeixinAPI {
 			JSONObject newtoken = newToken();
 			if (newtoken.has("expires_in") && newtoken.getInt("expires_in") > 0) {
 				newtoken.put("expires", System.currentTimeMillis() + newtoken.getLong("expires_in")*1000);
-				tokenStock.put(this.appid, newtoken);
+				tokenStock.put(appid, newtoken);
 			} else {
 				throw new AccessTokenException("Can't get access_token");
 			}
@@ -407,18 +407,18 @@ public class WeixinAPI {
 	}
 	
 	//生成字符串场景二维码
-	public String getStrQRTicket(String strScene) throws WeixinApiException{
+	public static String getStrQRTicket(String strScene) throws WeixinApiException{
 		try{
 			JSONObject param = new JSONObject();
-			param.put("action_name", "QR_LIMIT_STR_SCENE");
+			param.put("action_name", "QR_SCENE");
 			JSONObject actioninfo = new JSONObject();
 			JSONObject scene = new JSONObject();
 			scene.put("scene_str", strScene);
 			actioninfo.put("scene", scene);
 			param.put("action_info", actioninfo );
 			System.out.println("字符串二维码请求参数：" + param.toString());
-			String url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".concat(this.getAccessToken());
-			JSONObject rets = this.jsonPost(url, param.toString() );
+			String url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".concat(getAccessToken());
+			JSONObject rets = jsonPost(url, param.toString() );
 			System.out.println("ticket is " + rets.getString("ticket"));
 			if(rets.has("ticket")){
 				return rets.getString("ticket");

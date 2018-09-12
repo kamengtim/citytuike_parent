@@ -8,4 +8,6 @@ public interface TpUserMessageService {
     JSONObject NewselectMessage(Integer user_id, String cate);
 
     JSONObject selectMessageDetail(Integer user_id, String rec_id);
+
+    void setMessageReadByCat(Integer user_id, String cate, Integer message_id);
 }

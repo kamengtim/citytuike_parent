@@ -578,4 +578,61 @@
 	<select id="getInviteCode" resultType="TpUsers">
 		select * from tp_users where user_id = #{user_id}
 	</select>
+	<select id="getPaperNum" resultType="TpUsers">
+		SELECT paper_number from tp_users where user_id = #{user_id}
+	</select>
+	<update id="update">
+		update tp_users
+    set email = #{email,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      paypwd = #{paypwd,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=BIT},
+      birthday = #{birthday,jdbcType=INTEGER},
+      user_money = #{user_money,jdbcType=DECIMAL},
+      frozen_money = #{frozen_money,jdbcType=DECIMAL},
+      distribut_money = #{distribut_money,jdbcType=DECIMAL},
+      underling_number = #{underling_number,jdbcType=INTEGER},
+      pay_points = #{pay_points,jdbcType=INTEGER},
+      address_id = #{address_id,jdbcType=INTEGER},
+      reg_time = #{reg_time,jdbcType=INTEGER},
+      last_login = #{last_login,jdbcType=INTEGER},
+      last_ip = #{last_ip,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      mobile_validated = #{mobile_validated,jdbcType=TINYINT},
+      oauth = #{oauth,jdbcType=VARCHAR},
+      openid = #{openid,jdbcType=VARCHAR},
+      unionid = #{unionid,jdbcType=VARCHAR},
+      head_pic = #{head_pic,jdbcType=VARCHAR},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      email_validated = #{email_validated,jdbcType=BIT},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      level = #{level,jdbcType=BIT},
+      discount = #{discount,jdbcType=DECIMAL},
+      total_amount = #{total_amount,jdbcType=DECIMAL},
+      is_lock = #{is_lock,jdbcType=BIT},
+      is_distribut = #{is_distribut,jdbcType=BIT},
+      first_leader = #{first_leader,jdbcType=INTEGER},
+      second_leader = #{second_leader,jdbcType=INTEGER},
+      third_leader = #{third_leader,jdbcType=INTEGER},
+      token = #{token,jdbcType=VARCHAR},
+      message_mask = #{message_mask,jdbcType=BIT},
+      push_id = #{push_id,jdbcType=VARCHAR},
+      distribut_level = #{distribut_level,jdbcType=TINYINT},
+      is_vip = #{is_vip,jdbcType=BIT},
+      invite_code = #{invite_code,jdbcType=VARCHAR},
+      relation = #{relation,jdbcType=VARCHAR},
+      sale_number = #{sale_number,jdbcType=INTEGER},
+      parent_id = #{parent_id,jdbcType=INTEGER},
+      wechat = #{wechat,jdbcType=VARCHAR},
+      wechat_qrcode = #{wechat_qrcode,jdbcType=VARCHAR},
+      set_pass = #{set_pass,jdbcType=BIT},
+      im_id = #{im_id,jdbcType=VARCHAR},
+      im_pwd = #{im_pwd,jdbcType=VARCHAR},
+      paper_number = #{paper_number,jdbcType=INTEGER},
+      paper_number_allowance = paper_number_allowance -1
+    where user_id = #{user_id,jdbcType=INTEGER}
+	</update>
 </mapper>

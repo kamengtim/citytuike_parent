@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpReplacementPartsMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpReplacementParts" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="device_id" property="device_id" jdbcType="INTEGER" />
+    <result column="shipping_name" property="shipping_name" jdbcType="VARCHAR" />
+    <result column="invoice_no" property="invoice_no" jdbcType="VARCHAR" />
+    <result column="shipping_time" property="shipping_time" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="linkman" property="linkman" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="inspect_status" property="inspect_status" jdbcType="TINYINT" />
+    <result column="inspect_time" property="inspect_time" jdbcType="INTEGER" />
+    <result column="refute_reason" property="refute_reason" jdbcType="VARCHAR" />
+    <result column="refute_time" property="refute_time" jdbcType="INTEGER" />
+    <result column="refute_imgs" property="refute_imgs" jdbcType="VARCHAR" />
+    <result column="confirm_time" property="confirm_time" jdbcType="INTEGER" />
+    <result column="files" property="files" jdbcType="LONGVARCHAR" />
+    <result column="shipping_files" property="shipping_files" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_replacement_parts
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpReplacementParts" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_replacement_parts (user_id, name, reason, 
+      add_time, device_id, shipping_name, 
+      invoice_no, shipping_time, address, 
+      status, linkman, mobile, 
+      inspect_status, inspect_time, refute_reason, 
+      refute_time, refute_imgs, confirm_time, 
+      files, shipping_files)
+    values (#{user_id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, 
+      #{add_time,jdbcType=INTEGER}, #{device_id,jdbcType=INTEGER}, #{shipping_name,jdbcType=VARCHAR}, 
+      #{invoice_no,jdbcType=VARCHAR}, #{shipping_time,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{linkman,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{inspect_status,jdbcType=TINYINT}, #{inspect_time,jdbcType=INTEGER}, #{refute_reason,jdbcType=VARCHAR}, 
+      #{refute_time,jdbcType=INTEGER}, #{refute_imgs,jdbcType=VARCHAR}, #{confirm_time,jdbcType=INTEGER}, 
+      #{files,jdbcType=LONGVARCHAR}, #{shipping_files,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpReplacementParts" >
+    update tp_replacement_parts
+    set user_id = #{user_id,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      device_id = #{device_id,jdbcType=INTEGER},
+      shipping_name = #{shipping_name,jdbcType=VARCHAR},
+      invoice_no = #{invoice_no,jdbcType=VARCHAR},
+      shipping_time = #{shipping_time,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      linkman = #{linkman,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      inspect_status = #{inspect_status,jdbcType=TINYINT},
+      inspect_time = #{inspect_time,jdbcType=INTEGER},
+      refute_reason = #{refute_reason,jdbcType=VARCHAR},
+      refute_time = #{refute_time,jdbcType=INTEGER},
+      refute_imgs = #{refute_imgs,jdbcType=VARCHAR},
+      confirm_time = #{confirm_time,jdbcType=INTEGER},
+      files = #{files,jdbcType=LONGVARCHAR},
+      shipping_files = #{shipping_files,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, name, reason, add_time, device_id, shipping_name, invoice_no, 
+    shipping_time, address, status, linkman, mobile, inspect_status, inspect_time, refute_reason, 
+    refute_time, refute_imgs, confirm_time, files, shipping_files
+    from tp_replacement_parts
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, name, reason, add_time, device_id, shipping_name, invoice_no, 
+    shipping_time, address, status, linkman, mobile, inspect_status, inspect_time, refute_reason, 
+    refute_time, refute_imgs, confirm_time, files, shipping_files
+    from tp_replacement_parts
+  </select>
+  <insert id="insertReplacement" parameterType="com.citytuike.model.TpReplacementParts" useGeneratedKeys="true" keyProperty="id">
+    insert into tp_replacement_parts (user_id, name, reason,
+      add_time, device_id, shipping_name,
+      invoice_no, shipping_time, address,
+      status, linkman, mobile,
+      inspect_status, inspect_time, refute_reason,
+      refute_time, refute_imgs, confirm_time,
+      files, shipping_files)
+    values (#{user_id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR},
+      #{add_time,jdbcType=INTEGER}, #{device_id,jdbcType=INTEGER}, #{shipping_name,jdbcType=VARCHAR},
+      #{invoice_no,jdbcType=VARCHAR}, #{shipping_time,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR},
+      #{status,jdbcType=TINYINT}, #{linkman,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+      #{inspect_status,jdbcType=TINYINT}, #{inspect_time,jdbcType=INTEGER}, #{refute_reason,jdbcType=VARCHAR},
+      #{refute_time,jdbcType=INTEGER}, #{refute_imgs,jdbcType=VARCHAR}, #{confirm_time,jdbcType=INTEGER},
+      #{files,jdbcType=LONGVARCHAR}, #{shipping_files,jdbcType=LONGVARCHAR})
+  </insert>
+  <select id="getCount" resultType="int">
+    SELECT count(id) from tp_replacement_parts
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap">
+    <!-- 分页SQL语句 -->
+    select *  from tp_replacement_parts limit #{startPos},#{pageSize}
+  </select>
+</mapper>

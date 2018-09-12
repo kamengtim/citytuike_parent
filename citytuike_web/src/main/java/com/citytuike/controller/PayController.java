@@ -18,7 +18,6 @@ import com.citytuike.util.AlipayConfig;
 import com.citytuike.util.Config;
 import com.citytuike.util.PayUtils;
 import com.citytuike.util.Util;
-import com.google.gson.JsonArray;
 import com.yeepay.g3.sdk.yop.client.YopClient3;
 import com.yeepay.g3.sdk.yop.client.YopRequest;
 import com.yeepay.g3.sdk.yop.client.YopResponse;

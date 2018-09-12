@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpAppVersionMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpAppVersion" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="code" property="code" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="is_use" property="is_use" jdbcType="BIT" />
+    <result column="is_flag" property="is_flag" jdbcType="BIT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_app_version
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpAppVersion" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_app_version (code, url, add_time, 
+      is_use, is_flag)
+    values (#{code,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, 
+      #{is_use,jdbcType=BIT}, #{is_flag,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpAppVersion" >
+    update tp_app_version
+    set code = #{code,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      is_use = #{is_use,jdbcType=BIT},
+      is_flag = #{is_flag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, code, url, add_time, is_use, is_flag
+    from tp_app_version
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, code, url, add_time, is_use, is_flag
+    from tp_app_version
+  </select>
+  <select id="getVersion" resultMap="BaseResultMap">
+    SELECT id, code, url, add_time, is_use, is_flag from tp_app_version
+  </select>
+</mapper>

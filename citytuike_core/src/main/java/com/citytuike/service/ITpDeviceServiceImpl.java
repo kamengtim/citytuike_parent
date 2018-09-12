@@ -274,4 +274,32 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
         return tpDevice;
     }
 
+    @Override
+    public TpDevice getDeviceId(BigDecimal lng, BigDecimal lat) {
+        TpDevice tpDevice = tpDeviceMapper.getDeviceId(lng,lat);
+        return tpDevice;
+    }
+
+    @Override
+    public TpDevice getDevice(String productKey, String deviceName) {
+        TpDevice userDevice = tpDeviceMapper.getUserDevice(productKey, deviceName);
+        return userDevice;
+    }
+
+    @Override
+    public void updateType(TpDevice tpDevice) {
+        tpDeviceMapper.updateType(tpDevice);
+    }
+
+    @Override
+    public TpDevice getDeviceById(String device_id) {
+        TpDevice tpDevice = tpDeviceMapper.getDeviceById(device_id);
+        return tpDevice;
+    }
+
+    @Override
+    public void updateRunStatus(TpDevice tpDevice) {
+        tpDeviceMapper.updateRunStatus(tpDevice);
+    }
+
 }

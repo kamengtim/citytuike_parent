@@ -40,4 +40,14 @@ public interface ITpDeviceService {
     List<TpDevice> getHaveDeviceCity();
 
     TpDevice getUserDevice(String productKey, String deviceName, String lat, String lng);
+
+    TpDevice getDeviceId(BigDecimal lng, BigDecimal lat);
+
+    TpDevice getDevice(String productKey, String deviceName);
+
+    void updateType(TpDevice tpDevice);
+
+    TpDevice getDeviceById(String device_id);
+
+    void updateRunStatus(TpDevice tpDevice);
 }

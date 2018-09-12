@@ -2,6 +2,7 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.LimitPageList;
+import com.citytuike.model.TpMessage;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpMessageService;
 import com.citytuike.service.TpUserMessageService;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("api/Message")
 public class MessageController {
@@ -23,9 +26,6 @@ public class MessageController {
     @Autowired
     private TpUserMessageService tpUserMessageService;
     /**
-     * @param model
-     * @param id
-     * @param p
      * @return
      * 消息首页
      */
@@ -41,15 +41,13 @@ public class MessageController {
             return jsonObj.toString();
         }
         JSONObject data = tpUserMessageService.selectMessage(tpUsers.getUser_id());
+
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
         jsonObj.put("msg", "请求成功");
         return jsonObj.toString();
     }
     /**
-     * @param model
-     * @param id
-     * @param p
      * @return
      * 消息列表
      */
@@ -72,23 +70,26 @@ public class MessageController {
         data.put("total", limitPageList.getPage().getTotalCount());
         data.put("per_page", limitPageList.getPage().getPageSize());
         data.put("last_page",limitPageList.getPage().getTotalPageCount());
-        JSONObject message = tpUserMessageService.NewselectMessage(tpUsers.getUser_id(),cate);
-        data.put("list",message);
+        List<TpMessage>tpMessages = (List<TpMessage>) limitPageList.getList();
+        for (TpMessage tpMessage : tpMessages) {
+            JSONObject jsonObject = tpMessageService.getJson(tpMessage,tpUsers.getUser_id());
+            data.put("data",jsonObject);
+        tpUserMessageService.setMessageReadByCat(tpUsers.getUser_id(),cate,tpMessage.getMessage_id());
+        }
+        //消息设置为已读
+       // JSONObject message = tpUserMessageService.NewselectMessage(tpUsers.getUser_id(),cate);
         jsonObj.put("result",data);
         jsonObj.put("status","1");
         jsonObj.put("msg","请求成功");
         return jsonObj.toString();
     }
     /**
-     * @param model
-     * @param id
-     * @param p
      * @return
      * 消息详情
      */
     @RequestMapping(value = "detail",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public @ResponseBody String Detail(@RequestParam(required = true)String token,
-                                       @RequestParam(required = true)String rec_id){
+                                       @RequestParam(required = true,defaultValue = "13")String rec_id){
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "失败!");
@@ -104,5 +105,4 @@ public class MessageController {
         jsonObj.put("msg","请求成功");
         return jsonObj.toString();
     }
-
 }

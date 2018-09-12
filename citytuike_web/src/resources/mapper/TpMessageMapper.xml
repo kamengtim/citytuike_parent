@@ -51,10 +51,23 @@
   </select>
   <!-- 分页SQL语句 -->
   <select id="selectByPage" resultMap="BaseResultMap">
-    select *  from tp_message where message_id = #{message_id} limit #{startPos},#{pageSize}
+    SELECT m.category,m.message_id,um.status,m.send_time,m.type,m.data FROM tp_message m
+                    INNER JOIN tp_user_message um ON (um.message_id=m.message_id AND um.user_id = #{user_id} )
+                    WHERE m.type = 0 AND m.category = #{cate} AND m.data!=""
+                    UNION (SELECT m.category,m.message_id, 1 AS status,m.send_time,m.type,m.data FROM tp_message m
+                    WHERE m.type = 1 AND m.category = #{cate} AND m.data!="")
+                    ORDER BY send_time DESC LIMIT  #{startPos},#{pageSize}
   </select>
     <select id="NewSelectMessageByMessageId" resultMap="BaseResultMap" >
         select message_id, admin_id, type, category, send_time, message, data
         from tp_message where message_id = #{message_id} and category = #{category}
     </select>
+  <select id="selectMessage" resultMap="BaseResultMap">
+SELECT m.category,m.message_id,um.status,m.send_time,m.type,m.data,m.message FROM tp_message m
+                    INNER JOIN tp_user_message um ON (um.message_id=m.message_id AND um.user_id = #{user_id})
+                    WHERE m.type = 0 AND m.category = #{category}
+                    UNION (SELECT m.category,m.message_id, 1 AS status,m.send_time,m.type,m.data,m.message FROM tp_message m
+										WHERE m.type = 1 AND m.category = #{category} )
+                    ORDER BY send_time DESC LIMIT 1,10
+  </select>
 </mapper>

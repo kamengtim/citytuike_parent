@@ -21,4 +21,9 @@ public interface TpUserMessageMapper {
     List<TpUserMessage> NewSelectMessageByUser(@Param("user_id") Integer user_id, @Param("cate") String cate);
 
     List<TpUserMessage> selectMessageByUserDetail(@Param("user_id") Integer user_id, @Param("rec_id") String rec_id);
+
+
+    List<TpUserMessage> selectStutsa(@Param("message_id") Integer message_id, @Param("category") Integer category);
+
+    void setMessageReadByCat(@Param("user_id") Integer user_id, @Param("cate") String cate, @Param("message_id") Integer message_id);
 }

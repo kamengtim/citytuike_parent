@@ -3,6 +3,7 @@ package com.citytuike.mapper;
 import com.citytuike.model.TpDevice;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TpDeviceMapper {
@@ -39,4 +40,20 @@ public interface TpDeviceMapper {
     List<TpDevice> getHaveDeviceCity();
 
     TpDevice getUserDevice(@Param("productKey") String productKey, @Param("deviceName") String deviceName);
+
+    TpDevice getDeviceId(@Param("lng") BigDecimal lng, @Param("lat") BigDecimal lat);
+
+    TpDevice getDevice(Integer device_id);
+
+    void update(TpDevice tpDevice);
+
+    int toDayCountPaper(Integer id);
+
+    int allToDayPaper();
+
+    void updateType(TpDevice tpDevice);
+
+    TpDevice getDeviceById(String device_id);
+
+    void updateRunStatus(TpDevice tpDevice);
 }

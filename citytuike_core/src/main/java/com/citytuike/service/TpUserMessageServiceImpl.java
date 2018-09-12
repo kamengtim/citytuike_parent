@@ -18,9 +18,24 @@ public class TpUserMessageServiceImpl implements TpUserMessageService {
     @Autowired
     private TpMessageMapper tpMessageMapper;
     public JSONObject selectMessage(Integer user_id) {
-        List<TpUserMessage> tpUserMessages = tpUserMessageMapper.selectMessageByUser(user_id);
+        int []categorys =  new int[]{0,10,11,12,15,16,17};
+        //List<TpUserMessage> tpUserMessages = tpUserMessageMapper.selectMessageByUser(user_id);
         JSONObject data = new JSONObject();
-        for (TpUserMessage tpUserMessage : tpUserMessages) {
+        for (int category : categorys) {
+            List<TpMessage>tpMessages = tpMessageMapper.selectMessage(category,user_id);
+            for (TpMessage tpMessage : tpMessages) {
+                List<TpUserMessage>tpUserMessages = tpUserMessageMapper.selectStutsa(tpMessage.getMessage_id(),tpMessage.getCategory());
+                for (TpUserMessage tpUserMessage : tpUserMessages) {
+                data.put("status",tpUserMessage.getStatus());
+                data.put("category",tpMessage.getCategory());
+                data.put("message_id",tpMessage.getMessage_id());
+                data.put("send_time",tpMessage.getSend_time());
+                data.put("type",tpMessage.getType());
+                data.put("data",tpMessage.getData());
+                }
+            }
+        }
+       /* for (TpUserMessage tpUserMessage : tpUserMessages) {
         data.put("category",tpUserMessage.getCategory());
         data.put("message_id",tpUserMessage.getMessage_id());
         data.put("status",tpUserMessage.getStatus());
@@ -32,7 +47,7 @@ public class TpUserMessageServiceImpl implements TpUserMessageService {
                 data.put("data",tpMessage.getData());
                 data.put("message",tpMessage.getMessage());
             }
-        }
+        }*/
         return data;
     }
 
@@ -72,5 +87,10 @@ public class TpUserMessageServiceImpl implements TpUserMessageService {
             }
         }
         return data;
+    }
+
+    @Override
+    public void setMessageReadByCat(Integer user_id, String cate,Integer message_id) {
+        tpUserMessageMapper.setMessageReadByCat(user_id,cate,message_id);
     }
 }

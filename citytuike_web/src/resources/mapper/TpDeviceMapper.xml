@@ -38,6 +38,8 @@
     <result column="shipping_name" property="shipping_name" jdbcType="VARCHAR" />
     <result column="today_num" property="today_num" jdbcType="INTEGER" />
     <result column="today_time" property="today_time" jdbcType="INTEGER" />
+    <result column="lack_paper" property="lack_paper"/>
+    <result column="run_status" property="run_status"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tp_device
@@ -167,5 +169,138 @@
   </select>
   <select id="getUserDevice" resultMap="BaseResultMap">
     select * from tp_device where product_key =#{productKey} and device_name = #{deviceName}
+  </select>
+  <select id="getDeviceId" resultMap="BaseResultMap">
+    SELECT longitude,latitude from tp_device where longitude =#{lng} and latitude = #{lat}
+  </select>
+    <select id="getDevice" resultMap="BaseResultMap">
+        select * from tp_device where id = #{device_id}
+    </select>
+  <update id="update">
+    update tp_device
+    set device_sn = #{device_sn,jdbcType=VARCHAR},
+      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
+      qrscene = #{qrscene,jdbcType=VARCHAR},
+      iot_id = #{iot_id,jdbcType=VARCHAR},
+      product_key = #{product_key,jdbcType=VARCHAR},
+      device_name = #{device_name,jdbcType=VARCHAR},
+      device_secret = #{device_secret,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      user_id = #{user_id,jdbcType=INTEGER},
+      paper_number = #{paper_number,jdbcType=INTEGER},
+      paper_send = paper_send + 1,
+      paper_inventory = paper_inventory -1,
+      income = #{income,jdbcType=DECIMAL},
+      one_income = #{one_income,jdbcType=DECIMAL},
+      capacity = #{capacity,jdbcType=INTEGER},
+      active_time = #{active_time,jdbcType=INTEGER},
+      no_send = #{no_send,jdbcType=BIT},
+      open_status = #{open_status,jdbcType=BIT},
+      online = #{online,jdbcType=BIT},
+      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      is_active = #{is_active,jdbcType=TINYINT},
+      order_id = #{order_id,jdbcType=INTEGER},
+      goods_id = #{goods_id,jdbcType=INTEGER},
+      distribution_time = #{distribution_time,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      active_code = #{active_code,jdbcType=VARCHAR},
+      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
+      shipping_name = #{shipping_name,jdbcType=VARCHAR},
+      today_num = #{today_num,jdbcType=INTEGER},
+      today_time = #{today_time,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="toDayCountPaper" resultMap="BaseResultMap">
+    select sum(t.paper_send) from tp_device t left join tp_device_log tp on t.id = tp.device_id where t.id = #{id}  and to_days(FROM_UNIXTIME(tp.add_time)) = to_days(now());
+  </select>
+  <select id="allToDayPaper" resultMap="BaseResultMap">
+        select sum(t.paper_send) from tp_device t left join tp_device_log tp on t.id = tp.device_id where to_days(FROM_UNIXTIME(tp.add_time)) = to_days(now());
+  </select>
+  <update id="updateType">
+    update tp_device
+    set device_sn = #{device_sn,jdbcType=VARCHAR},
+      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
+      qrscene = #{qrscene,jdbcType=VARCHAR},
+      iot_id = #{iot_id,jdbcType=VARCHAR},
+      product_key = #{product_key,jdbcType=VARCHAR},
+      device_name = #{device_name,jdbcType=VARCHAR},
+      device_secret = #{device_secret,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      user_id = #{user_id,jdbcType=INTEGER},
+      paper_number = #{paper_number,jdbcType=INTEGER},
+      paper_send = #{paper_send,jdbcType=INTEGER},
+      paper_inventory = #{paper_inventory,jdbcType=INTEGER},
+      income = #{income,jdbcType=DECIMAL},
+      one_income = #{one_income,jdbcType=DECIMAL},
+      capacity = #{capacity,jdbcType=INTEGER},
+      active_time = #{active_time,jdbcType=INTEGER},
+      no_send = #{no_send,jdbcType=BIT},
+      open_status = #{open_status,jdbcType=BIT},
+      online = #{online,jdbcType=BIT},
+      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      is_active = #{is_active,jdbcType=TINYINT},
+      order_id = #{order_id,jdbcType=INTEGER},
+      goods_id = #{goods_id,jdbcType=INTEGER},
+      distribution_time = #{distribution_time,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      active_code = #{active_code,jdbcType=VARCHAR},
+      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
+      shipping_name = #{shipping_name,jdbcType=VARCHAR},
+      today_num = #{today_num,jdbcType=INTEGER},
+      today_time = #{today_time,jdbcType=INTEGER},
+      lack_paper = #{lack_paper}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getDeviceById" resultMap="BaseResultMap">
+    SELECT * from tp_device where id= #{device_id}
+  </select>
+  <select id="updateRunStatus" resultMap="BaseResultMap">
+     update tp_device
+    set device_sn = #{device_sn,jdbcType=VARCHAR},
+      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
+      qrscene = #{qrscene,jdbcType=VARCHAR},
+      iot_id = #{iot_id,jdbcType=VARCHAR},
+      product_key = #{product_key,jdbcType=VARCHAR},
+      device_name = #{device_name,jdbcType=VARCHAR},
+      device_secret = #{device_secret,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      user_id = #{user_id,jdbcType=INTEGER},
+      paper_number = #{paper_number,jdbcType=INTEGER},
+      paper_send = #{paper_send,jdbcType=INTEGER},
+      paper_inventory = #{paper_inventory,jdbcType=INTEGER},
+      income = #{income,jdbcType=DECIMAL},
+      one_income = #{one_income,jdbcType=DECIMAL},
+      capacity = #{capacity,jdbcType=INTEGER},
+      active_time = #{active_time,jdbcType=INTEGER},
+      no_send = #{no_send,jdbcType=BIT},
+      open_status = #{open_status,jdbcType=BIT},
+      online = #{online,jdbcType=BIT},
+      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      is_active = #{is_active,jdbcType=TINYINT},
+      order_id = #{order_id,jdbcType=INTEGER},
+      goods_id = #{goods_id,jdbcType=INTEGER},
+      distribution_time = #{distribution_time,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=DOUBLE},
+      latitude = #{latitude,jdbcType=DOUBLE},
+      active_code = #{active_code,jdbcType=VARCHAR},
+      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
+      shipping_name = #{shipping_name,jdbcType=VARCHAR},
+      today_num = #{today_num,jdbcType=INTEGER},
+      today_time = #{today_time,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
   </select>
 </mapper>

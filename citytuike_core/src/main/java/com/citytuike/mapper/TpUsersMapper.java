@@ -116,4 +116,8 @@ public interface TpUsersMapper {
     TpUsers getUserNameByMobile(String mobile);
 
     TpUsers getInviteCode(Integer user_id);
+
+    int getPaperNum(Integer user_id);
+
+	void update(TpUsers tpUsers);
 }

@@ -68,6 +68,13 @@ public class TpDeviceQrServiceImpl implements TpDeviceQrService {
         return s;
 
     }
+
+    @Override
+    public TpDeviceQr getLatAndLng(String scene_str_v2) {
+        TpDeviceQr tpDeviceQr = tpDeviceQrMapper.getLatAndLng(scene_str_v2);
+        return tpDeviceQr;
+    }
+
     private static double rad(double d)
     {
         return d * Math.PI / 180.0;

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpOrderGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpOrderGoods" >
+    <id column="rec_id" property="rec_id" jdbcType="INTEGER" />
+    <result column="order_id" property="order_id" jdbcType="INTEGER" />
+    <result column="goods_id" property="goods_id" jdbcType="INTEGER" />
+    <result column="goods_name" property="goods_name" jdbcType="VARCHAR" />
+    <result column="goods_sn" property="goods_sn" jdbcType="VARCHAR" />
+    <result column="goods_num" property="goods_num" jdbcType="SMALLINT" />
+    <result column="final_price" property="final_price" jdbcType="DECIMAL" />
+    <result column="goods_price" property="goods_price" jdbcType="DECIMAL" />
+    <result column="cost_price" property="cost_price" jdbcType="DECIMAL" />
+    <result column="member_goods_price" property="member_goods_price" jdbcType="DECIMAL" />
+    <result column="give_integral" property="give_integral" jdbcType="INTEGER" />
+    <result column="bar_code" property="bar_code" jdbcType="VARCHAR" />
+    <result column="is_comment" property="is_comment" jdbcType="BIT" />
+    <result column="prom_type" property="prom_type" jdbcType="BIT" />
+    <result column="prom_id" property="prom_id" jdbcType="INTEGER" />
+    <result column="is_send" property="is_send" jdbcType="BIT" />
+    <result column="delivery_id" property="delivery_id" jdbcType="INTEGER" />
+    <result column="sku" property="sku" jdbcType="VARCHAR" />
+    <result column="original_img" property="original_img" jdbcType="VARCHAR" />
+    <result column="goods_type" property="goods_type" jdbcType="SMALLINT" />
+    <result column="type" property="type" jdbcType="BIT" />
+    <result column="spec_key" property="spec_key" jdbcType="LONGVARCHAR" />
+    <result column="spec_key_name" property="spec_key_name" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_order_goods
+    where rec_id = #{rec_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpOrderGoods" >
+    insert into tp_order_goods (rec_id, order_id, goods_id, 
+      goods_name, goods_sn, goods_num, 
+      final_price, goods_price, cost_price, 
+      member_goods_price, give_integral, bar_code, 
+      is_comment, prom_type, prom_id, 
+      is_send, delivery_id, sku, 
+      original_img, goods_type, type, 
+      spec_key, spec_key_name)
+    values (#{rec_id,jdbcType=INTEGER}, #{order_id,jdbcType=INTEGER}, #{goods_id,jdbcType=INTEGER}, 
+      #{goods_name,jdbcType=VARCHAR}, #{goods_sn,jdbcType=VARCHAR}, #{goods_num,jdbcType=SMALLINT}, 
+      #{final_price,jdbcType=DECIMAL}, #{goods_price,jdbcType=DECIMAL}, #{cost_price,jdbcType=DECIMAL}, 
+      #{member_goods_price,jdbcType=DECIMAL}, #{give_integral,jdbcType=INTEGER}, #{bar_code,jdbcType=VARCHAR}, 
+      #{is_comment,jdbcType=BIT}, #{prom_type,jdbcType=BIT}, #{prom_id,jdbcType=INTEGER}, 
+      #{is_send,jdbcType=BIT}, #{delivery_id,jdbcType=INTEGER}, #{sku,jdbcType=VARCHAR}, 
+      #{original_img,jdbcType=VARCHAR}, #{goods_type,jdbcType=SMALLINT}, #{type,jdbcType=BIT}, 
+      #{spec_key,jdbcType=LONGVARCHAR}, #{spec_key_name,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpOrderGoods" >
+    update tp_order_goods
+    set order_id = #{order_id,jdbcType=INTEGER},
+      goods_id = #{goods_id,jdbcType=INTEGER},
+      goods_name = #{goods_name,jdbcType=VARCHAR},
+      goods_sn = #{goods_sn,jdbcType=VARCHAR},
+      goods_num = #{goods_num,jdbcType=SMALLINT},
+      final_price = #{final_price,jdbcType=DECIMAL},
+      goods_price = #{goods_price,jdbcType=DECIMAL},
+      cost_price = #{cost_price,jdbcType=DECIMAL},
+      member_goods_price = #{member_goods_price,jdbcType=DECIMAL},
+      give_integral = #{give_integral,jdbcType=INTEGER},
+      bar_code = #{bar_code,jdbcType=VARCHAR},
+      is_comment = #{is_comment,jdbcType=BIT},
+      prom_type = #{prom_type,jdbcType=BIT},
+      prom_id = #{prom_id,jdbcType=INTEGER},
+      is_send = #{is_send,jdbcType=BIT},
+      delivery_id = #{delivery_id,jdbcType=INTEGER},
+      sku = #{sku,jdbcType=VARCHAR},
+      original_img = #{original_img,jdbcType=VARCHAR},
+      goods_type = #{goods_type,jdbcType=SMALLINT},
+      type = #{type,jdbcType=BIT},
+      spec_key = #{spec_key,jdbcType=LONGVARCHAR},
+      spec_key_name = #{spec_key_name,jdbcType=LONGVARCHAR}
+    where rec_id = #{rec_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select rec_id, order_id, goods_id, goods_name, goods_sn, goods_num, final_price, 
+    goods_price, cost_price, member_goods_price, give_integral, bar_code, is_comment, 
+    prom_type, prom_id, is_send, delivery_id, sku, original_img, goods_type, type, spec_key, 
+    spec_key_name
+    from tp_order_goods
+    where rec_id = #{rec_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select rec_id, order_id, goods_id, goods_name, goods_sn, goods_num, final_price, 
+    goods_price, cost_price, member_goods_price, give_integral, bar_code, is_comment, 
+    prom_type, prom_id, is_send, delivery_id, sku, original_img, goods_type, type, spec_key, 
+    spec_key_name
+    from tp_order_goods
+  </select>
+  <select id="getGoodsUrl" resultType="string">
+    select tp.image_url from tp_order_goods t LEFT join tp_goods_images tp on t.goods_id = tp.goods_id where t.order_id = #{order_id} and t.goods_id = #{goods_id} order by tp.image_url  desc limit 1
+  </select>
+</mapper>

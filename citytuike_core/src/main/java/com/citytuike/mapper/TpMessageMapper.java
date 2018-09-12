@@ -20,7 +20,10 @@ public interface TpMessageMapper {
 
     int selectCount(Integer user_id);
 
-    List<TpMessage> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("message_id") Integer message_id, @Param("cate") String cate);
 
     List<TpMessage> NewSelectMessageByMessageId(@Param("message_id") Integer message_id, @Param("category") Integer category);
+
+    List<TpMessage> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("message_id") Integer message_id, @Param("cate") String cate, @Param("user_id") Integer user_id);
+
+    List<TpMessage> selectMessage(@Param("category") int category, @Param("user_id") Integer user_id);
 }

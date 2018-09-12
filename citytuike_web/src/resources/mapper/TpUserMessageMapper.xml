@@ -7,7 +7,7 @@
     <result column="message_id" property="message_id" jdbcType="INTEGER" />
     <result column="category" property="category" jdbcType="INTEGER" />
     <result column="status" property="status" jdbcType="BIT" />
-      <association property="messages" columnPrefix="tp_" javaType="com.citytuike.model.TpMessage">
+      <association property="messages" columnPrefix="m_" javaType="com.citytuike.model.TpMessage">
           <id column="message_id" property="message_id"/>
           <result column="admin_id" property="admin_id"/>
           <result column="message" property="message"/>
@@ -55,5 +55,14 @@
     <select id="selectMessageByUserDetail" resultMap="BaseResultMap" >
         select rec_id, user_id, message_id, category, status
         from tp_user_message where user_id =#{user_id} and rec_id = #{rec_id}
+    </select>
+    <insert id="setMessageReadByCat" parameterType="com.citytuike.model.TpUserMessage" >
+        insert into tp_user_message (user_id, message_id,
+        category, status)
+        values  (#{user_id,jdbcType=INTEGER}, #{message_id,jdbcType=INTEGER},
+        #{cate,jdbcType=INTEGER}, 1)
+    </insert>
+    <select id="selectStutsa" resultMap="BaseResultMap">
+        select status from tp_user_message where message_id = #{message_id} and category =#{category}
     </select>
 </mapper>

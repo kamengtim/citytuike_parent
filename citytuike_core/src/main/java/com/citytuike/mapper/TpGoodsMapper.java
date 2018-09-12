@@ -29,5 +29,8 @@ public interface TpGoodsMapper {
 	int insertGoodsCollect(TpGoodsCollect tpGoodsCollect);
 
 	List<TpGoodsImages> findByGoodsId(@Param(value = "goodsId") Integer goodsId);
-
+    /*
+    * 查询图片路劲
+    * */
+    String getGoodsUrl(Integer order_id);
 }

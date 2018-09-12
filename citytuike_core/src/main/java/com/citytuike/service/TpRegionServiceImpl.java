@@ -13,4 +13,16 @@ public class TpRegionServiceImpl implements TpRegionService {
         String cityName = tpRegionMapper.getCityName(city);
         return cityName;
     }
+
+    @Override
+    public String getProvince(Integer province) {
+        String provinceNmae = tpRegionMapper.getProvince(province);
+        return provinceNmae;
+    }
+
+    @Override
+    public String getDistrict(Integer district) {
+        String districtName = tpRegionMapper.getDistrict(district);
+        return districtName;
+    }
 }

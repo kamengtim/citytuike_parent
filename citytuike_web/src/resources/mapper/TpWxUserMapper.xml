@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpWxUserMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpWxUser" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="wxname" property="wxname" jdbcType="VARCHAR" />
+    <result column="aeskey" property="aeskey" jdbcType="VARCHAR" />
+    <result column="encode" property="encode" jdbcType="BIT" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="appsecret" property="appsecret" jdbcType="VARCHAR" />
+    <result column="wxid" property="wxid" jdbcType="VARCHAR" />
+    <result column="weixin" property="weixin" jdbcType="CHAR" />
+    <result column="headerpic" property="headerpic" jdbcType="CHAR" />
+    <result column="token" property="token" jdbcType="CHAR" />
+    <result column="w_token" property="w_token" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="INTEGER" />
+    <result column="updatetime" property="updatetime" jdbcType="INTEGER" />
+    <result column="tplcontentid" property="tplcontentid" jdbcType="VARCHAR" />
+    <result column="share_ticket" property="share_ticket" jdbcType="VARCHAR" />
+    <result column="share_dated" property="share_dated" jdbcType="CHAR" />
+    <result column="authorizer_access_token" property="authorizer_access_token" jdbcType="VARCHAR" />
+    <result column="authorizer_refresh_token" property="authorizer_refresh_token" jdbcType="VARCHAR" />
+    <result column="authorizer_expires" property="authorizer_expires" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="BIT" />
+    <result column="web_access_token" property="web_access_token" jdbcType="VARCHAR" />
+    <result column="web_refresh_token" property="web_refresh_token" jdbcType="VARCHAR" />
+    <result column="web_expires" property="web_expires" jdbcType="INTEGER" />
+    <result column="qr" property="qr" jdbcType="VARCHAR" />
+    <result column="wait_access" property="wait_access" jdbcType="BIT" />
+    <result column="on_show" property="on_show" jdbcType="BIT" />
+    <result column="menu_config" property="menu_config" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_wx_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpWxUser" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_wx_user (uid, wxname, aeskey, 
+      encode, appid, appsecret, 
+      wxid, weixin, headerpic, 
+      token, w_token, create_time, 
+      updatetime, tplcontentid, share_ticket, 
+      share_dated, authorizer_access_token, authorizer_refresh_token, 
+      authorizer_expires, type, web_access_token, 
+      web_refresh_token, web_expires, qr, 
+      wait_access, on_show, menu_config
+      )
+    values (#{uid,jdbcType=INTEGER}, #{wxname,jdbcType=VARCHAR}, #{aeskey,jdbcType=VARCHAR}, 
+      #{encode,jdbcType=BIT}, #{appid,jdbcType=VARCHAR}, #{appsecret,jdbcType=VARCHAR}, 
+      #{wxid,jdbcType=VARCHAR}, #{weixin,jdbcType=CHAR}, #{headerpic,jdbcType=CHAR}, 
+      #{token,jdbcType=CHAR}, #{w_token,jdbcType=VARCHAR}, #{create_time,jdbcType=INTEGER}, 
+      #{updatetime,jdbcType=INTEGER}, #{tplcontentid,jdbcType=VARCHAR}, #{share_ticket,jdbcType=VARCHAR}, 
+      #{share_dated,jdbcType=CHAR}, #{authorizer_access_token,jdbcType=VARCHAR}, #{authorizer_refresh_token,jdbcType=VARCHAR}, 
+      #{authorizer_expires,jdbcType=CHAR}, #{type,jdbcType=BIT}, #{web_access_token,jdbcType=VARCHAR}, 
+      #{web_refresh_token,jdbcType=VARCHAR}, #{web_expires,jdbcType=INTEGER}, #{qr,jdbcType=VARCHAR}, 
+      #{wait_access,jdbcType=BIT}, #{on_show,jdbcType=BIT}, #{menu_config,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpWxUser" >
+    update tp_wx_user
+    set uid = #{uid,jdbcType=INTEGER},
+      wxname = #{wxname,jdbcType=VARCHAR},
+      aeskey = #{aeskey,jdbcType=VARCHAR},
+      encode = #{encode,jdbcType=BIT},
+      appid = #{appid,jdbcType=VARCHAR},
+      appsecret = #{appsecret,jdbcType=VARCHAR},
+      wxid = #{wxid,jdbcType=VARCHAR},
+      weixin = #{weixin,jdbcType=CHAR},
+      headerpic = #{headerpic,jdbcType=CHAR},
+      token = #{token,jdbcType=CHAR},
+      w_token = #{w_token,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=INTEGER},
+      updatetime = #{updatetime,jdbcType=INTEGER},
+      tplcontentid = #{tplcontentid,jdbcType=VARCHAR},
+      share_ticket = #{share_ticket,jdbcType=VARCHAR},
+      share_dated = #{share_dated,jdbcType=CHAR},
+      authorizer_access_token = #{authorizer_access_token,jdbcType=VARCHAR},
+      authorizer_refresh_token = #{authorizer_refresh_token,jdbcType=VARCHAR},
+      authorizer_expires = #{authorizer_expires,jdbcType=CHAR},
+      type = #{type,jdbcType=BIT},
+      web_access_token = #{web_access_token,jdbcType=VARCHAR},
+      web_refresh_token = #{web_refresh_token,jdbcType=VARCHAR},
+      web_expires = #{web_expires,jdbcType=INTEGER},
+      qr = #{qr,jdbcType=VARCHAR},
+      wait_access = #{wait_access,jdbcType=BIT},
+      on_show = #{on_show,jdbcType=BIT},
+      menu_config = #{menu_config,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, uid, wxname, aeskey, encode, appid, appsecret, wxid, weixin, headerpic, 
+    token, w_token, create_time, updatetime, tplcontentid, share_ticket, share_dated, 
+    authorizer_access_token, authorizer_refresh_token, authorizer_expires, type, web_access_token, 
+    web_refresh_token, web_expires, qr, wait_access, on_show, menu_config
+    from tp_wx_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, uid, wxname, aeskey, encode, appid, appsecret, wxid, weixin, headerpic, 
+    token, w_token, create_time, updatetime, tplcontentid, share_ticket, share_dated, 
+    authorizer_access_token, authorizer_refresh_token, authorizer_expires, type, web_access_token, 
+    web_refresh_token, web_expires, qr, wait_access, on_show, menu_config
+    from tp_wx_user
+  </select>
+  <select id="getWxUser" resultMap="BaseResultMap">
+    select * from tp_wx_user where on_show = 1
+  </select>
+</mapper>
