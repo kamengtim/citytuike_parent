@@ -1,6 +1,7 @@
 package com.citytuike.service;
 
 import com.citytuike.mapper.TpRegionMapper;
+import com.citytuike.model.TpRegion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,11 @@ public class TpRegionServiceImpl implements TpRegionService {
     public String getDistrict(Integer district) {
         String districtName = tpRegionMapper.getDistrict(district);
         return districtName;
+    }
+
+    @Override
+    public TpRegion getNameByFanId(Integer address) {
+        TpRegion tpRegion = tpRegionMapper.getNameByFanId(address);
+        return tpRegion;
     }
 }

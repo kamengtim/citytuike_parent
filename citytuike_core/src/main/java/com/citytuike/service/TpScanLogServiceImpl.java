@@ -97,7 +97,7 @@ public class TpScanLogServiceImpl implements TpScanLogService {
         jsonObi.put("number",1);
         jsonArray.add(jsonObi);
         //将jsonObj存到Redis中
-        JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
+        JedisPool pool = new JedisPool( "localhost");
         Jedis jedis = pool.getResource();
         jedis.set("d_send_paper_list", String.valueOf(jsonArray));
         return jsonObject;

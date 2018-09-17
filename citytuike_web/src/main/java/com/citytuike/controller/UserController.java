@@ -4,11 +4,13 @@ package com.citytuike.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.exception.SendMessageException;
+import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.MD5Utils;
 import com.citytuike.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("api/User")
@@ -52,6 +55,8 @@ public class UserController {
 	private TpApplyReportService tpApplyReportService;
 	@Autowired
     private TpUserAliAccountService tpUserAliAccountService;
+	@Autowired
+	private RedisTemplate redisTemplate;
 	/**
 	 * @param model
 	 * @param username
@@ -71,6 +76,7 @@ public class UserController {
 		if (null != tpUsers) {
 			String token = MD5Utils.md5(System.currentTimeMillis()+Util.generateString(16));
 			request.setAttribute("p-token",token);
+			redisTemplate.expire(RedisConstant.CURRENT_USER+token,30, TimeUnit.DAYS);
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
 			if (result > 0) {

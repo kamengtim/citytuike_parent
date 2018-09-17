@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpReplacementParts {
+import java.io.Serializable;
+
+public class TpReplacementParts implements Serializable{
     private Integer id;
 
     private Integer user_id;
@@ -21,13 +23,13 @@ public class TpReplacementParts {
 
     private String address;
 
-    private Byte status;
+    private Integer status;
 
     private String linkman;
 
     private String mobile;
 
-    private Byte inspect_status;
+    private Integer inspect_status;
 
     private Integer inspect_time;
 
@@ -123,11 +125,11 @@ public class TpReplacementParts {
         this.address = address;
     }
 
-    public Byte getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -147,11 +149,11 @@ public class TpReplacementParts {
         this.mobile = mobile;
     }
 
-    public Byte getInspect_status() {
+    public Integer getInspect_status() {
         return inspect_status;
     }
 
-    public void setInspect_status(Byte inspect_status) {
+    public void setInspect_status(Integer inspect_status) {
         this.inspect_status = inspect_status;
     }
 

@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.iot.model.v20180120.QueryDeviceDetailResponse;
 import com.citytuike.exception.WeixinApiException;
-import com.citytuike.interceptor.KeyExpiredListener;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.AliyunIotApi;
@@ -12,6 +11,7 @@ import com.citytuike.util.WeixinAPI;
 import com.sun.xml.internal.ws.client.SenderException;
 import com.swetake.util.Qrcode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import javax.imageio.ImageIO;
-import javax.swing.plaf.synth.Region;
+import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -55,13 +54,14 @@ public class DeviceController {
     private TpReplacementPartsService  tpReplacementPartsService;
     @Autowired
     private TpAppVersionService tpAppVersionService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * @return 获取设备配置
      */
     @RequestMapping(value = "getConf", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody
-    String getConf(@RequestParam(required = true) String deviceSn) {
+    public @ResponseBody String getConf(@RequestParam(required = true) String deviceSn) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObject = tpDeviceService.selectDeviceBySn(deviceSn);
         jsonObj.put("status", "1");
@@ -357,10 +357,10 @@ public class DeviceController {
     public @ResponseBody String checkPaperToken(@RequestParam(required = true) String paper_token) {
         //待完善,此处应该根据redisTemple取值判断值
         JSONObject jsonObj = new JSONObject();
-        JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
-        Jedis jedis = pool.getResource();
-        jedis.psubscribe(new KeyExpiredListener(), paper_token);
-        jedis.expire(paper_token, 1800);
+        String str = (String) redisTemplate.opsForValue().get(paper_token);
+        if(str == null){
+            return "错误的场景码";
+        }
         jsonObj.put("status", "1");
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
@@ -373,11 +373,9 @@ public class DeviceController {
     public @ResponseBody String getPaperWx(@RequestParam(required = true) String paper_token) {
         //待完善,此处应该根据redisTemple取值判断值
         JSONObject jsonObj = new JSONObject();
-        JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
-        Jedis jedis = pool.getResource();
         //这里下面是对的
         List<TpScanLog> tpScanLogs = tpScanLogService.findAlltpScanLogService();
-        String data =  jedis.get(paper_token);
+        String data = (String) redisTemplate.opsForValue().get(paper_token);
         if(data == null){
             return "错误的场景码或者您已领取";
         }else if(data.length() == 0){
@@ -395,9 +393,8 @@ public class DeviceController {
                     return "错误的场景码4";
                 }
                 tpScanLogService.update(tpScanLogs.get(i).getId());
-            }else{
-                is_test=true;
             }
+        is_test=true;
         JSONObject jsonObject= tpScanLogService.sendPaperWx(tpScanLogs.get(i).getId(),tpScanLogs.get(i).getDevice_id(),paper_token,is_test);
         jsonObj.put("result",jsonObject);
         }
@@ -418,7 +415,6 @@ public class DeviceController {
             return "机器不存在";
         }
         tpDevice.setLack_paper(Integer.parseInt(type));
-        tpDeviceService.updateType(tpDevice);
         if(type.equals("1")){
             jsonObject.put("title","缺纸消息");
             jsonObject.put("discription","当前设备缺纸，请尽快补充");
@@ -429,8 +425,9 @@ public class DeviceController {
             jsonObject.put("latitude",tpDevice.getLatitude());
             object.put("category",12);
             object.put("type",0);
-
+            //TOdo 这里应该有推送业务
         }
+        tpDeviceService.updateType(tpDevice);
         jsonObj.put("status", "1");
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
@@ -507,9 +504,9 @@ public class DeviceController {
     public @ResponseBody String device_info(@RequestParam(required = true) String id){
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObject = new JSONObject();
-        JSONObject data = new JSONObject();
         TpDevice tpDevice = tpDeviceService.getDeviceById(id);
-        if(tpDevice != null){
+        String online_status = "";
+        if(tpDevice == null){
             return "错误的设备";
         }
         AliyunIotApi aliyunIotApi = new AliyunIotApi();
@@ -518,20 +515,19 @@ public class DeviceController {
         if(status.equals("ONLINE")){
             tpDevice.setOnline(true);
             tpDeviceService.updateRunStatus(tpDevice);
-            JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost");
-            Jedis jedis = pool.getResource();
-            String online_status =jedis.get("device_online_status_"+id);
+            online_status = (String) redisTemplate.opsForValue().get("device_online_status_"+id);
             if(online_status != null){
                 Random random = new Random();
                 for (int i = 70; i <85 ; i++) {
                     online_status = String.valueOf((random.nextInt(9)+1));
-                    jedis.set("device_online_status_"+id, online_status, String.valueOf(15*60));
+                    redisTemplate.opsForValue().set("device_online_status_"+id, online_status, 15*60);
                 }
+            }
             }else{
                 tpDevice.setOnline(false);
                 tpDeviceService.updateRunStatus(tpDevice);
                 online_status = "离线";
-            }
+        }
             String cityName = tpRegionService.getCityName(tpDevice.getCity());
             String province =tpRegionService.getProvince(tpDevice.getProvince());
             String district =tpRegionService.getDistrict(tpDevice.getDistrict());
@@ -542,7 +538,6 @@ public class DeviceController {
             jsonObject.put("name",tpUsers.getNickname());
             jsonObject.put("region",province+cityName+district);
             jsonObject.put("paper","正常");
-        }
         jsonObj.put("result",jsonObject);
         jsonObj.put("status", "1");
         jsonObj.put("msg", "ok");

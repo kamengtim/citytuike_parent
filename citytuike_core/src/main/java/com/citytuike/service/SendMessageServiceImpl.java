@@ -55,8 +55,8 @@ public class SendMessageServiceImpl implements SendMessageService {
         content = msg.replace("${code}",randCode);
         sendReadMsg(content,mobile);
         }
-        try{
         TpSmsLog tpSmsLog = new TpSmsLog();
+        try{
         tpSmsLog.setMobile(mobile);
         tpSmsLog.setSession_id("a4nlq1f02mmatnrlrbr8vhjpt5");
         tpSmsLog.setAdd_time((int) (new Date().getTime()/1000));
@@ -67,6 +67,8 @@ public class SendMessageServiceImpl implements SendMessageService {
         tpSmsLog.setError_msg("");
         logMapper.saveMsg(tpSmsLog);
         }catch (Exception e){
+         tpSmsLog.setStatus(0);
+         logMapper.updateByStatus(tpSmsLog);
          throw new SendMessageException("发送超时");
         }
     }

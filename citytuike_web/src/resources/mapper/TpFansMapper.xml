@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpFansMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpFans" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="logo" property="logo" jdbcType="VARCHAR" />
+    <result column="tag" property="tag" jdbcType="BIT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="fan_num" property="fan_num" jdbcType="VARCHAR" />
+    <result column="fan_dev" property="fan_dev" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="INTEGER" />
+    <result column="shop_price" property="shop_price" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="INTEGER" />
+    <result column="catename" property="catename" jdbcType="VARCHAR" />
+    <result column="auth" property="auth" jdbcType="BIT" />
+    <result column="auth_body" property="auth_body" jdbcType="VARCHAR" />
+    <result column="original" property="original" jdbcType="BIT" />
+    <result column="read_num" property="read_num" jdbcType="VARCHAR" />
+    <result column="industry" property="industry" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="BIT" />
+    <result column="sel_class" property="sel_class" jdbcType="BIT" />
+    <result column="scale_man" property="scale_man" jdbcType="VARCHAR" />
+    <result column="scale_women" property="scale_women" jdbcType="VARCHAR" />
+    <result column="liu" property="liu" jdbcType="BIT" />
+    <result column="auth_bodys" property="auth_bodys" jdbcType="BIT" />
+    <result column="auth_body_change" property="auth_body_change" jdbcType="BIT" />
+    <result column="used_existx" property="used_existx" jdbcType="BIT" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="monmoney" property="monmoney" jdbcType="VARCHAR" />
+    <result column="admoney" property="admoney" jdbcType="VARCHAR" />
+    <result column="wechat" property="wechat" jdbcType="VARCHAR" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_fans
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpFans" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_fans (logo, tag, title, 
+      fan_num, fan_dev, createtime, 
+      shop_price, address, catename, 
+      auth, auth_body, original, 
+      read_num, industry, type, 
+      sel_class, scale_man, scale_women, 
+      liu, auth_bodys, auth_body_change, 
+      used_existx, account, monmoney, 
+      admoney, wechat, user_id
+      )
+    values (#{logo,jdbcType=VARCHAR}, #{tag,jdbcType=BIT}, #{title,jdbcType=VARCHAR}, 
+      #{fan_num,jdbcType=VARCHAR}, #{fan_dev,jdbcType=VARCHAR}, #{createtime,jdbcType=INTEGER}, 
+      #{shop_price,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER}, #{catename,jdbcType=VARCHAR}, 
+      #{auth,jdbcType=BIT}, #{auth_body,jdbcType=VARCHAR}, #{original,jdbcType=BIT}, 
+      #{read_num,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{type,jdbcType=BIT}, 
+      #{sel_class,jdbcType=BIT}, #{scale_man,jdbcType=VARCHAR}, #{scale_women,jdbcType=VARCHAR}, 
+      #{liu,jdbcType=BIT}, #{auth_bodys,jdbcType=BIT}, #{auth_body_change,jdbcType=BIT}, 
+      #{used_existx,jdbcType=BIT}, #{account,jdbcType=VARCHAR}, #{monmoney,jdbcType=VARCHAR}, 
+      #{admoney,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{user_id,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpFans" >
+    update tp_fans
+    set logo = #{logo,jdbcType=VARCHAR},
+      tag = #{tag,jdbcType=BIT},
+      title = #{title,jdbcType=VARCHAR},
+      fan_num = #{fan_num,jdbcType=VARCHAR},
+      fan_dev = #{fan_dev,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=INTEGER},
+      shop_price = #{shop_price,jdbcType=VARCHAR},
+      address = #{address,jdbcType=INTEGER},
+      catename = #{catename,jdbcType=VARCHAR},
+      auth = #{auth,jdbcType=BIT},
+      auth_body = #{auth_body,jdbcType=VARCHAR},
+      original = #{original,jdbcType=BIT},
+      read_num = #{read_num,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR},
+      type = #{type,jdbcType=BIT},
+      sel_class = #{sel_class,jdbcType=BIT},
+      scale_man = #{scale_man,jdbcType=VARCHAR},
+      scale_women = #{scale_women,jdbcType=VARCHAR},
+      liu = #{liu,jdbcType=BIT},
+      auth_bodys = #{auth_bodys,jdbcType=BIT},
+      auth_body_change = #{auth_body_change,jdbcType=BIT},
+      used_existx = #{used_existx,jdbcType=BIT},
+      account = #{account,jdbcType=VARCHAR},
+      monmoney = #{monmoney,jdbcType=VARCHAR},
+      admoney = #{admoney,jdbcType=VARCHAR},
+      wechat = #{wechat,jdbcType=VARCHAR},
+      user_id = #{user_id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, logo, tag, title, fan_num, fan_dev, createtime, shop_price, address, catename, 
+    auth, auth_body, original, read_num, industry, type, sel_class, scale_man, scale_women, 
+    liu, auth_bodys, auth_body_change, used_existx, account, monmoney, admoney, wechat, 
+    user_id
+    from tp_fans
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, logo, tag, title, fan_num, fan_dev, createtime, shop_price, address, catename, 
+    auth, auth_body, original, read_num, industry, type, sel_class, scale_man, scale_women, 
+    liu, auth_bodys, auth_body_change, used_existx, account, monmoney, admoney, wechat, 
+    user_id
+    from tp_fans
+  </select>
+  <select id="getCount" resultType="int">
+    SELECT count(id) from tp_fans
+    <include refid="base_where"/>
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap">
+     SELECT * from tp_fans
+     <include refid="base_where"/>
+  </select>
+  <sql id="base_where">
+    <where>
+      <if test="area_id != null and industry != null">
+        AND address =#{area_id} and industry = #{industry} and used_existx = 1
+      </if>
+      <if test="area_id != null">
+        AND address =#{area_id} and used_existx = 1
+      </if>
+      <if test="industry != null">
+        AND industry = #{industry} and used_existx = 1
+      </if>
+      <if test="industry == null and  industry == null">
+        AND  used_existx = 1
+      </if>
+    </where>
+  </sql>
+  <select id="fansDetails" resultMap="BaseResultMap">
+    SELECT * from tp_fans where id = #{id}
+  </select>
+  <select id="fansTypeList" resultMap="BaseResultMap">
+    select * from tp_fans where type = 1;
+  </select>
+  <insert id="saveFansList" parameterType="com.citytuike.model.TpFans" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_fans (logo, tag, title,
+    fan_num, fan_dev, createtime,
+    shop_price, address, catename,
+    auth, auth_body, original,
+    read_num, industry, type,
+    sel_class, scale_man, scale_women,
+    liu, auth_bodys, auth_body_change,
+    used_existx, account, monmoney,
+    admoney, wechat, user_id
+    )
+    values (#{logo,jdbcType=VARCHAR}, #{tag,jdbcType=BIT}, #{title,jdbcType=VARCHAR},
+    #{fan_num,jdbcType=VARCHAR}, #{fan_dev,jdbcType=VARCHAR}, #{createtime,jdbcType=INTEGER},
+    #{shop_price,jdbcType=VARCHAR}, #{address,jdbcType=INTEGER}, #{catename,jdbcType=VARCHAR},
+    #{auth,jdbcType=BIT}, #{auth_body,jdbcType=VARCHAR}, #{original,jdbcType=BIT},
+    #{read_num,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{type,jdbcType=BIT},
+    #{sel_class,jdbcType=BIT}, #{scale_man,jdbcType=VARCHAR}, #{scale_women,jdbcType=VARCHAR},
+    #{liu,jdbcType=BIT}, #{auth_bodys,jdbcType=BIT}, #{auth_body_change,jdbcType=BIT},
+    #{used_existx,jdbcType=BIT}, #{account,jdbcType=VARCHAR}, #{monmoney,jdbcType=VARCHAR},
+    #{admoney,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{user_id,jdbcType=INTEGER}
+    )
+  </insert>
+</mapper>

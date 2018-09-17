@@ -18,7 +18,8 @@ public interface TpReplacementPartsMapper {
 
     void insertReplacement(TpReplacementParts tpReplacementParts);
 
-    int getCount();
 
-    List<TpReplacementParts> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize);
+    int getCount(@Param("status") Integer status);
+
+    List<TpReplacementParts> selectByPage(@Param("i") int i, @Param("i1") int i1, @Param("status") Integer status);
 }

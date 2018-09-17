@@ -32,25 +32,25 @@ public class TpReplacementPartsServiceImpl implements TpReplacementPartsService 
         tpReplacementParts.setDevice_id(tpDevice.getId());
         tpReplacementParts.setFiles(files);
         tpReplacementParts.setAddress(address);
-        tpReplacementParts.setStatus(Byte.valueOf("1"));
-        tpReplacementParts.setInspect_status(Byte.valueOf("1"));
+        tpReplacementParts.setStatus(1);
+        tpReplacementParts.setInspect_status(1);
         tpReplacementPartsMapper.insertReplacement(tpReplacementParts);
     }
 
     @Override
     public LimitPageList getLimitPageList(Integer type, String pageNo, String pageSize) {
         LimitPageList LimitPageStuList = new LimitPageList();
-        int count = tpReplacementPartsMapper.getCount();
+        int count = tpReplacementPartsMapper.getCount(type);
         List<TpReplacementParts> stuList=new ArrayList<TpReplacementParts>();
         Page page=null;
         if(pageNo != null){
             page=new Page(count, Integer.parseInt(pageNo));
             page.setPageSize(Integer.parseInt(pageSize));
-            stuList=tpReplacementPartsMapper.selectByPage(page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpReplacementPartsMapper.selectByPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize),type);//从startPos开始，获取pageSize条数据
         }else{
             page=new Page(count, 1);
             page.setPageSize(Integer.parseInt(pageSize));
-            stuList=tpReplacementPartsMapper.selectByPage(page.getStartPos(), page.getPageSize());
+            stuList=tpReplacementPartsMapper.selectByPage(Integer.parseInt(pageNo), Integer.parseInt(pageSize),type);
         }
         LimitPageStuList.setPage(page);
         LimitPageStuList.setList(stuList);
@@ -87,9 +87,9 @@ public class TpReplacementPartsServiceImpl implements TpReplacementPartsService 
         jsonObject.put("shop_img",url);
         jsonObject.put("order_id",tpDevice.getOrder_id());
         jsonObject.put("device_name",tpDevice.getDevice_name());
-        if(type.equals("1")){
+        if(type == 1){
             jsonObject.put("status_str",tpReplacementPart.getInspect_status());
-        }else if(type.equals("0")){
+        }else if(type == 0){
             jsonObject.put("status_str","申请中");
         }else{
             jsonObject.put("status_str",tpReplacementPart.getStatus());

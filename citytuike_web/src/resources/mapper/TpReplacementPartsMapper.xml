@@ -12,10 +12,10 @@
     <result column="invoice_no" property="invoice_no" jdbcType="VARCHAR" />
     <result column="shipping_time" property="shipping_time" jdbcType="INTEGER" />
     <result column="address" property="address" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="status" property="status"/>
     <result column="linkman" property="linkman" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
-    <result column="inspect_status" property="inspect_status" jdbcType="TINYINT" />
+    <result column="inspect_status" property="inspect_status"/>
     <result column="inspect_time" property="inspect_time" jdbcType="INTEGER" />
     <result column="refute_reason" property="refute_reason" jdbcType="VARCHAR" />
     <result column="refute_time" property="refute_time" jdbcType="INTEGER" />
@@ -99,9 +99,22 @@
   </insert>
   <select id="getCount" resultType="int">
     SELECT count(id) from tp_replacement_parts
+    <include refid="base_where"/>
   </select>
   <select id="selectByPage" resultMap="BaseResultMap">
     <!-- 分页SQL语句 -->
-    select *  from tp_replacement_parts limit #{startPos},#{pageSize}
+    select *  from tp_replacement_parts
+    <include refid="base_where"/>
+    limit #{i},#{i1}
   </select>
+  <sql id="base_where">
+    <where>
+    <if test="status != null">
+      and status = #{status}
+    </if>
+    <if test="status == null">
+      and 1 = 1
+    </if>
+    </where>
+  </sql>
 </mapper>

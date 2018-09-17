@@ -21,7 +21,8 @@
 		<!--true时，对任意延迟属性的调用会使带有延迟加载属性的对象完整加载；
 		  false，每种属性将会按需加载。
 		  默认为：true-->
-		<setting name="aggressiveLazyLoading" value="false" /> 
+		<setting name="aggressiveLazyLoading" value="false" />
+		<setting name="jdbcTypeForNull" value="NULL" />
 	</settings>
 	<typeAliases>
 		<package name="com.citytuike.model" />

@@ -9,12 +9,10 @@ import com.aliyuncs.iot.model.v20180120.QueryDeviceDetailResponse;
 import org.apache.commons.codec.binary.Base64;
 
 public class AliyunIotApi {
-    private DefaultAcsClient client;
-    public void _construct(){
-        client = ClientUtil.createClient();
-    }
+    private DefaultAcsClient client = ClientUtil.createClient();
 
-    public PubResponse put(String product_key, String device_name,String paper_token) {
+
+    public PubResponse put(String product_key, String device_name, String paper_token) {
         PubRequest request = new PubRequest();
         String topic = "/"+ product_key +"/" + device_name +"/"+ "get";
         request.setProductKey(product_key);
@@ -36,6 +34,7 @@ public class AliyunIotApi {
     public QueryDeviceDetailResponse queryDeviceDetailRequest(String product_key, String device_name) {
         QueryDeviceDetailRequest request = new QueryDeviceDetailRequest();
         request.setProductKey(product_key);
+        request.setDeviceName(device_name);
         QueryDeviceDetailResponse response = null;
         try {
             response = client.getAcsResponse(request);

@@ -58,4 +58,7 @@
   <select id="getDistrict" resultType="string">
     SELECT name from tp_region where id = #{district}
   </select>
+  <select id="getNameByFanId" resultMap="BaseResultMap">
+    SELECT name from tp_region where id = #{address}
+  </select>
 </mapper>

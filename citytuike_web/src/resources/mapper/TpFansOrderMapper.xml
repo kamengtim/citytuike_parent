@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpFansOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpFansOrder" >
+    <id column="order_id" property="order_id" jdbcType="INTEGER" />
+    <result column="order_sn" property="order_sn" jdbcType="VARCHAR" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="order_status" property="order_status" jdbcType="BIT" />
+    <result column="shipping_status" property="shipping_status" jdbcType="BIT" />
+    <result column="pay_status" property="pay_status" jdbcType="BIT" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="INTEGER" />
+    <result column="city" property="city" jdbcType="INTEGER" />
+    <result column="district" property="district" jdbcType="INTEGER" />
+    <result column="twon" property="twon" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="zipcode" property="zipcode" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="shipping_code" property="shipping_code" jdbcType="VARCHAR" />
+    <result column="shipping_name" property="shipping_name" jdbcType="VARCHAR" />
+    <result column="pay_code" property="pay_code" jdbcType="VARCHAR" />
+    <result column="pay_name" property="pay_name" jdbcType="VARCHAR" />
+    <result column="invoice_title" property="invoice_title" jdbcType="VARCHAR" />
+    <result column="taxpayer" property="taxpayer" jdbcType="VARCHAR" />
+    <result column="goods_price" property="goods_price" jdbcType="DECIMAL" />
+    <result column="shipping_price" property="shipping_price" jdbcType="DECIMAL" />
+    <result column="user_money" property="user_money" jdbcType="DECIMAL" />
+    <result column="coupon_price" property="coupon_price" jdbcType="DECIMAL" />
+    <result column="integral" property="integral" jdbcType="INTEGER" />
+    <result column="integral_money" property="integral_money" jdbcType="DECIMAL" />
+    <result column="order_amount" property="order_amount" jdbcType="DECIMAL" />
+    <result column="total_amount" property="total_amount" jdbcType="DECIMAL" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="shipping_time" property="shipping_time" jdbcType="INTEGER" />
+    <result column="confirm_time" property="confirm_time" jdbcType="INTEGER" />
+    <result column="pay_time" property="pay_time" jdbcType="INTEGER" />
+    <result column="transaction_id" property="transaction_id" jdbcType="VARCHAR" />
+    <result column="prom_id" property="prom_id" jdbcType="INTEGER" />
+    <result column="prom_type" property="prom_type" jdbcType="TINYINT" />
+    <result column="order_prom_id" property="order_prom_id" jdbcType="SMALLINT" />
+    <result column="order_prom_amount" property="order_prom_amount" jdbcType="DECIMAL" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="user_note" property="user_note" jdbcType="VARCHAR" />
+    <result column="admin_note" property="admin_note" jdbcType="VARCHAR" />
+    <result column="parent_sn" property="parent_sn" jdbcType="VARCHAR" />
+    <result column="is_distribut" property="is_distribut" jdbcType="BIT" />
+    <result column="paid_money" property="paid_money" jdbcType="DECIMAL" />
+    <result column="deleted" property="deleted" jdbcType="BIT" />
+    <result column="settle_status" property="settle_status" jdbcType="TINYINT" />
+    <result column="all_income" property="all_income" jdbcType="DECIMAL" />
+    <result column="invoice_email" property="invoice_email" jdbcType="VARCHAR" />
+    <result column="invoice_contact" property="invoice_contact" jdbcType="VARCHAR" />
+    <result column="invoice_fee" property="invoice_fee" jdbcType="DECIMAL" />
+    <result column="goods_id" property="goods_id" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_fans_order
+    where order_id = #{order_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpFansOrder" >
+    insert into tp_fans_order (order_id, order_sn, user_id, 
+      order_status, shipping_status, pay_status, 
+      consignee, country, province, 
+      city, district, twon, 
+      address, zipcode, mobile, 
+      email, shipping_code, shipping_name, 
+      pay_code, pay_name, invoice_title, 
+      taxpayer, goods_price, shipping_price, 
+      user_money, coupon_price, integral, 
+      integral_money, order_amount, total_amount, 
+      add_time, shipping_time, confirm_time, 
+      pay_time, transaction_id, prom_id, 
+      prom_type, order_prom_id, order_prom_amount, 
+      discount, user_note, admin_note, 
+      parent_sn, is_distribut, paid_money, 
+      deleted, settle_status, all_income, 
+      invoice_email, invoice_contact, invoice_fee, 
+      goods_id)
+    values (#{order_id,jdbcType=INTEGER}, #{order_sn,jdbcType=VARCHAR}, #{user_id,jdbcType=INTEGER}, 
+      #{order_status,jdbcType=BIT}, #{shipping_status,jdbcType=BIT}, #{pay_status,jdbcType=BIT}, 
+      #{consignee,jdbcType=VARCHAR}, #{country,jdbcType=INTEGER}, #{province,jdbcType=INTEGER}, 
+      #{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER}, #{twon,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{shipping_code,jdbcType=VARCHAR}, #{shipping_name,jdbcType=VARCHAR}, 
+      #{pay_code,jdbcType=VARCHAR}, #{pay_name,jdbcType=VARCHAR}, #{invoice_title,jdbcType=VARCHAR}, 
+      #{taxpayer,jdbcType=VARCHAR}, #{goods_price,jdbcType=DECIMAL}, #{shipping_price,jdbcType=DECIMAL}, 
+      #{user_money,jdbcType=DECIMAL}, #{coupon_price,jdbcType=DECIMAL}, #{integral,jdbcType=INTEGER}, 
+      #{integral_money,jdbcType=DECIMAL}, #{order_amount,jdbcType=DECIMAL}, #{total_amount,jdbcType=DECIMAL}, 
+      #{add_time,jdbcType=INTEGER}, #{shipping_time,jdbcType=INTEGER}, #{confirm_time,jdbcType=INTEGER}, 
+      #{pay_time,jdbcType=INTEGER}, #{transaction_id,jdbcType=VARCHAR}, #{prom_id,jdbcType=INTEGER}, 
+      #{prom_type,jdbcType=TINYINT}, #{order_prom_id,jdbcType=SMALLINT}, #{order_prom_amount,jdbcType=DECIMAL}, 
+      #{discount,jdbcType=DECIMAL}, #{user_note,jdbcType=VARCHAR}, #{admin_note,jdbcType=VARCHAR}, 
+      #{parent_sn,jdbcType=VARCHAR}, #{is_distribut,jdbcType=BIT}, #{paid_money,jdbcType=DECIMAL}, 
+      #{deleted,jdbcType=BIT}, #{settle_status,jdbcType=TINYINT}, #{all_income,jdbcType=DECIMAL}, 
+      #{invoice_email,jdbcType=VARCHAR}, #{invoice_contact,jdbcType=VARCHAR}, #{invoice_fee,jdbcType=DECIMAL}, 
+      #{goods_id,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpFansOrder" >
+    update tp_fans_order
+    set order_sn = #{order_sn,jdbcType=VARCHAR},
+      user_id = #{user_id,jdbcType=INTEGER},
+      order_status = #{order_status,jdbcType=BIT},
+      shipping_status = #{shipping_status,jdbcType=BIT},
+      pay_status = #{pay_status,jdbcType=BIT},
+      consignee = #{consignee,jdbcType=VARCHAR},
+      country = #{country,jdbcType=INTEGER},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      twon = #{twon,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      zipcode = #{zipcode,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      shipping_code = #{shipping_code,jdbcType=VARCHAR},
+      shipping_name = #{shipping_name,jdbcType=VARCHAR},
+      pay_code = #{pay_code,jdbcType=VARCHAR},
+      pay_name = #{pay_name,jdbcType=VARCHAR},
+      invoice_title = #{invoice_title,jdbcType=VARCHAR},
+      taxpayer = #{taxpayer,jdbcType=VARCHAR},
+      goods_price = #{goods_price,jdbcType=DECIMAL},
+      shipping_price = #{shipping_price,jdbcType=DECIMAL},
+      user_money = #{user_money,jdbcType=DECIMAL},
+      coupon_price = #{coupon_price,jdbcType=DECIMAL},
+      integral = #{integral,jdbcType=INTEGER},
+      integral_money = #{integral_money,jdbcType=DECIMAL},
+      order_amount = #{order_amount,jdbcType=DECIMAL},
+      total_amount = #{total_amount,jdbcType=DECIMAL},
+      add_time = #{add_time,jdbcType=INTEGER},
+      shipping_time = #{shipping_time,jdbcType=INTEGER},
+      confirm_time = #{confirm_time,jdbcType=INTEGER},
+      pay_time = #{pay_time,jdbcType=INTEGER},
+      transaction_id = #{transaction_id,jdbcType=VARCHAR},
+      prom_id = #{prom_id,jdbcType=INTEGER},
+      prom_type = #{prom_type,jdbcType=TINYINT},
+      order_prom_id = #{order_prom_id,jdbcType=SMALLINT},
+      order_prom_amount = #{order_prom_amount,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=DECIMAL},
+      user_note = #{user_note,jdbcType=VARCHAR},
+      admin_note = #{admin_note,jdbcType=VARCHAR},
+      parent_sn = #{parent_sn,jdbcType=VARCHAR},
+      is_distribut = #{is_distribut,jdbcType=BIT},
+      paid_money = #{paid_money,jdbcType=DECIMAL},
+      deleted = #{deleted,jdbcType=BIT},
+      settle_status = #{settle_status,jdbcType=TINYINT},
+      all_income = #{all_income,jdbcType=DECIMAL},
+      invoice_email = #{invoice_email,jdbcType=VARCHAR},
+      invoice_contact = #{invoice_contact,jdbcType=VARCHAR},
+      invoice_fee = #{invoice_fee,jdbcType=DECIMAL},
+      goods_id = #{goods_id,jdbcType=INTEGER}
+    where order_id = #{order_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select order_id, order_sn, user_id, order_status, shipping_status, pay_status, consignee, 
+    country, province, city, district, twon, address, zipcode, mobile, email, shipping_code, 
+    shipping_name, pay_code, pay_name, invoice_title, taxpayer, goods_price, shipping_price, 
+    user_money, coupon_price, integral, integral_money, order_amount, total_amount, add_time, 
+    shipping_time, confirm_time, pay_time, transaction_id, prom_id, prom_type, order_prom_id, 
+    order_prom_amount, discount, user_note, admin_note, parent_sn, is_distribut, paid_money, 
+    deleted, settle_status, all_income, invoice_email, invoice_contact, invoice_fee, 
+    goods_id
+    from tp_fans_order
+    where order_id = #{order_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select order_id, order_sn, user_id, order_status, shipping_status, pay_status, consignee, 
+    country, province, city, district, twon, address, zipcode, mobile, email, shipping_code, 
+    shipping_name, pay_code, pay_name, invoice_title, taxpayer, goods_price, shipping_price, 
+    user_money, coupon_price, integral, integral_money, order_amount, total_amount, add_time, 
+    shipping_time, confirm_time, pay_time, transaction_id, prom_id, prom_type, order_prom_id, 
+    order_prom_amount, discount, user_note, admin_note, parent_sn, is_distribut, paid_money, 
+    deleted, settle_status, all_income, invoice_email, invoice_contact, invoice_fee, 
+    goods_id
+    from tp_fans_order
+  </select>
+</mapper>

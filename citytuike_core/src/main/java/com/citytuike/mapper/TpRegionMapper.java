@@ -27,4 +27,6 @@ public interface TpRegionMapper {
     String getProvince(Integer province);
 
     String getDistrict(Integer district);
+
+    TpRegion getNameByFanId(Integer address);
 }
