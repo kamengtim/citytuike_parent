@@ -6,13 +6,14 @@ import com.citytuike.constant.Constant;
 import com.citytuike.exception.WeixinApiException;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpUsersService;
+import com.citytuike.util.Auth;
 import com.citytuike.util.Base64Img;
 import com.citytuike.util.HttpUtils;
-import com.citytuike.util.RedisUtil;
 import com.citytuike.util.WeixinAPI;
 import com.yeepay.shade.org.apache.http.HttpResponse;
 import com.yeepay.shade.org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Controller
 @RequestMapping("api")
@@ -31,6 +32,8 @@ public class PubliclController {
 
     @Autowired
     private TpUsersService tpUsersService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * @param model
@@ -144,8 +147,6 @@ public class PubliclController {
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
-
-
         Map<String, String> headers = new HashMap<String, String>();
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
         headers.put("Authorization", "APPCODE " + Constant.OCR_APPCODE);
@@ -205,7 +206,6 @@ public class PubliclController {
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
-
         Map<String, String> headers = new HashMap<String, String>();
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
         headers.put("Authorization", "APPCODE " + Constant.WEATHER_APPCODE);
@@ -256,6 +256,38 @@ public class PubliclController {
         }
 
 
+        jsonObj.put("result", data);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+
+        return jsonObj.toString();
+    }
+
+    /**
+     * @param model
+     * @param token
+     * @param domain
+     * 七牛上传token
+     * @return
+     */
+    @RequestMapping(value="/Upload/qiniu_token",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    public @ResponseBody  String qiniuToken(Model model, @RequestParam(required=true) String token,
+                                               @RequestParam(required=true) String domain) {
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "登陆失败!");
+        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        Auth auth = Auth.create(Constant.QINIU_ACCESSKEY,Constant.QINIU_SECRETKEY);
+        String tokenqiniu = auth.uploadToken(domain);
+        data.put("domain", domain);
+        data.put("expires", 36000);
+        data.put("token", tokenqiniu);
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
         jsonObj.put("msg", "ok!");

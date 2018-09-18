@@ -19,7 +19,7 @@ public class TpMessage implements Serializable {
 
     private String data;
 
-    private List<TpUserMessage> tpUserMessages = new ArrayList<>();
+    private List<TpUserMessage> tpUserMessages = new ArrayList<TpUserMessage>();
 
     public List<TpUserMessage> getTpUserMessages() {
         return tpUserMessages;
