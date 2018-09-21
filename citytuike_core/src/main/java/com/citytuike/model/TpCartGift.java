@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TpCartGift {
+public class TpCartGift implements Serializable{
     private Integer id;
 
     private String gift_name;

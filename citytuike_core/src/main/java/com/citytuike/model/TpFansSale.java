@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpFansSale {
+import java.io.Serializable;
+
+public class TpFansSale implements Serializable{
     private Integer id;
 
     private String industry;

@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpWxUser {
+import java.io.Serializable;
+
+public class TpWxUser implements Serializable{
     private Integer id;
 
     private Integer uid;

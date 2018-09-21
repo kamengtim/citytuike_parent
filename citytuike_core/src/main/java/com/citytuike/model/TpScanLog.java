@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpScanLog {
+import java.io.Serializable;
+
+public class TpScanLog implements Serializable{
     private Integer id;
 
     private Integer user_id;

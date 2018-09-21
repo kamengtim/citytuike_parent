@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class TpFansOrder {
+public class TpFansOrder implements Serializable{
     private Integer order_id;
 
     private String order_sn;

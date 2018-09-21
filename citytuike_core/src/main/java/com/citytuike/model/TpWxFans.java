@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpWxFans {
+import java.io.Serializable;
+
+public class TpWxFans implements Serializable{
     private Integer id;
 
     private Integer user_id;

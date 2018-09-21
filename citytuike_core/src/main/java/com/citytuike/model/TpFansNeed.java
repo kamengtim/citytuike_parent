@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpFansNeed {
+import java.io.Serializable;
+
+public class TpFansNeed implements Serializable{
     private Integer id;
 
     private Integer user_id;

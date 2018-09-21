@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpArticle {
+import java.io.Serializable;
+
+public class TpArticle implements Serializable{
     private Integer article_id;
 
     private Short cat_id;

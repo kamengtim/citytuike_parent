@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpAppVersion {
+import java.io.Serializable;
+
+public class TpAppVersion implements Serializable{
     private Integer id;
 
     private Integer code;
