@@ -303,4 +303,9 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
         tpDeviceMapper.updateRunStatus(tpDevice);
     }
 
+    @Override
+    public void updateVersion(String get_version, String imei) {
+        tpDeviceMapper.updateVersion(get_version,imei);
+    }
+
 }

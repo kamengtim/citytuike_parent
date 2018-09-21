@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpFansNeedMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpFansNeed" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="uid" property="uid" jdbcType="VARCHAR" />
+    <result column="contacts" property="contacts" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="CHAR" />
+    <result column="qq" property="qq" jdbcType="VARCHAR" />
+    <result column="wechat" property="wechat" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="VARCHAR" />
+    <result column="industry" property="industry" jdbcType="INTEGER" />
+    <result column="product" property="product" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="fans_time" property="fans_time" jdbcType="VARCHAR" />
+    <result column="fans_sex" property="fans_sex" jdbcType="BIT" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="day_add_number" property="day_add_number" jdbcType="INTEGER" />
+    <result column="type_sel" property="type_sel" jdbcType="BIT" />
+    <result column="wechat_type" property="wechat_type" jdbcType="BIT" />
+    <result column="head_img" property="head_img" jdbcType="VARCHAR" />
+    <result column="flag" property="flag" jdbcType="BIT" />
+    <result column="appid" property="appid" jdbcType="VARCHAR" />
+    <result column="appsecret" property="appsecret" jdbcType="VARCHAR" />
+    <result column="is_flag" property="is_flag" jdbcType="BIT" />
+    <result column="ip_flag" property="ip_flag" jdbcType="BIT" />
+    <result column="message" property="message" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_fans_need
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpFansNeed" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_fans_need (user_id, nickname, uid, 
+      contacts, mobile, qq, 
+      wechat, email, add_time, 
+      industry, product, number, 
+      fans_time, fans_sex, area, 
+      company, day_add_number, type_sel, 
+      wechat_type, head_img, flag, 
+      appid, appsecret, is_flag, 
+      ip_flag, message)
+    values (#{user_id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR}, 
+      #{contacts,jdbcType=VARCHAR}, #{mobile,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR}, 
+      #{wechat,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{add_time,jdbcType=VARCHAR}, 
+      #{industry,jdbcType=INTEGER}, #{product,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, 
+      #{fans_time,jdbcType=VARCHAR}, #{fans_sex,jdbcType=BIT}, #{area,jdbcType=VARCHAR}, 
+      #{company,jdbcType=VARCHAR}, #{day_add_number,jdbcType=INTEGER}, #{type_sel,jdbcType=BIT}, 
+      #{wechat_type,jdbcType=BIT}, #{head_img,jdbcType=VARCHAR}, #{flag,jdbcType=BIT}, 
+      #{appid,jdbcType=VARCHAR}, #{appsecret,jdbcType=VARCHAR}, #{is_flag,jdbcType=BIT}, 
+      #{ip_flag,jdbcType=BIT}, #{message,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpFansNeed" >
+    update tp_fans_need
+    set user_id = #{user_id,jdbcType=INTEGER},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=VARCHAR},
+      contacts = #{contacts,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=CHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      wechat = #{wechat,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=INTEGER},
+      product = #{product,jdbcType=VARCHAR},
+      number = #{number,jdbcType=INTEGER},
+      fans_time = #{fans_time,jdbcType=VARCHAR},
+      fans_sex = #{fans_sex,jdbcType=BIT},
+      area = #{area,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      day_add_number = #{day_add_number,jdbcType=INTEGER},
+      type_sel = #{type_sel,jdbcType=BIT},
+      wechat_type = #{wechat_type,jdbcType=BIT},
+      head_img = #{head_img,jdbcType=VARCHAR},
+      flag = #{flag,jdbcType=BIT},
+      appid = #{appid,jdbcType=VARCHAR},
+      appsecret = #{appsecret,jdbcType=VARCHAR},
+      is_flag = #{is_flag,jdbcType=BIT},
+      ip_flag = #{ip_flag,jdbcType=BIT},
+      message = #{message,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, nickname, uid, contacts, mobile, qq, wechat, email, add_time, 
+    industry, product, number, fans_time, fans_sex, area, company, day_add_number, type_sel, 
+    wechat_type, head_img, flag, appid, appsecret, is_flag, ip_flag, message
+    from tp_fans_need
+    where user_id = #{user_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, nickname, uid, contacts, mobile, qq, wechat, email, add_time, 
+    industry, product, number, fans_time, fans_sex, area, company, day_add_number, type_sel, 
+    wechat_type, head_img, flag, appid, appsecret, is_flag, ip_flag, message
+    from tp_fans_need
+  </select>
+  <insert id="save" parameterType="com.citytuike.model.TpFansNeed" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_fans_need (user_id, nickname, uid,
+    contacts, mobile, qq,
+    wechat, email, add_time,
+    industry, product, number,
+    fans_time, fans_sex, area,
+    company, day_add_number, type_sel,
+    wechat_type, head_img, flag,
+    appid, appsecret, is_flag,
+    ip_flag, message)
+    values (#{user_id,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{uid,jdbcType=VARCHAR},
+    #{contacts,jdbcType=VARCHAR}, #{mobile,jdbcType=CHAR}, #{qq,jdbcType=VARCHAR},
+    #{wechat,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{add_time,jdbcType=VARCHAR},
+    #{industry,jdbcType=INTEGER}, #{product,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER},
+    #{fans_time,jdbcType=VARCHAR}, #{fans_sex,jdbcType=BIT}, #{area,jdbcType=VARCHAR},
+    #{company,jdbcType=VARCHAR}, #{day_add_number,jdbcType=INTEGER}, #{type_sel,jdbcType=BIT},
+    #{wechat_type,jdbcType=BIT}, #{head_img,jdbcType=VARCHAR}, #{flag,jdbcType=BIT},
+    #{appid,jdbcType=VARCHAR}, #{appsecret,jdbcType=VARCHAR}, #{is_flag,jdbcType=BIT},
+    #{ip_flag,jdbcType=BIT}, #{message,jdbcType=LONGVARCHAR})
+  </insert>
+  <select id="getNeedByOrderId" resultMap="BaseResultMap">
+    SELECT * from tp_fans_need where user_id = #{user_id} and id = #{order_id}
+  </select>
+</mapper>

@@ -11,9 +11,11 @@ public interface TpWxUserMapper {
 
     TpWxUser selectByPrimaryKey(Integer id);
 
-    List<TpWxUser> selectAll();
+    TpWxUser selectAll();
 
     int updateByPrimaryKey(TpWxUser record);
 
     List<TpWxUser> getWxUser();
+
+    TpWxUser getWxUserById();
 }

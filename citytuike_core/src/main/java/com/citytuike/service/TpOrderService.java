@@ -42,4 +42,6 @@ public interface TpOrderService {
     List<TpPlugin> findAllPlugin();
 
     List<TpOrder> findAllOrderAndGoods(Integer user_id);
+
+    void save(TpFansOrder tpFansOrder);
 }

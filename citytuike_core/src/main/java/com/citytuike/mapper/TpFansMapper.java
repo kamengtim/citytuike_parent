@@ -26,4 +26,6 @@ public interface TpFansMapper {
     List fansTypeList();
 
     void saveFansList(TpFans tpFans);
+
+    TpFans getFansOrderSn(Integer id);
 }

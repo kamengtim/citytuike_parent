@@ -8,6 +8,7 @@
     <result column="add_time" property="add_time" jdbcType="INTEGER" />
     <result column="is_use" property="is_use" jdbcType="BIT" />
     <result column="is_flag" property="is_flag" jdbcType="BIT" />
+    <result column="hash_val" property="hash_val"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tp_app_version
@@ -38,6 +39,10 @@
     from tp_app_version
   </select>
   <select id="getVersion" resultMap="BaseResultMap">
-    SELECT id, code, url, add_time, is_use, is_flag from tp_app_version
+    SELECT id, code, url, add_time, is_use, is_flag,hash_val from tp_app_version order by code desc
   </select>
+  <select id="getNewVersion" resultMap="BaseResultMap">
+    SELECT id, code, url, add_time, is_use, is_flag,hash_val from tp_app_version where is_use = 1 order by code desc
+  </select>
+
 </mapper>

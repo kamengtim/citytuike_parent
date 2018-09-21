@@ -16,4 +16,5 @@ public interface TpSmsLogMapper {
     String selectLog(String mobile);
 
     int selectCode(String mobile_code);
+
 }

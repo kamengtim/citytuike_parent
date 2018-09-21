@@ -85,4 +85,10 @@ public class TpFansServiceImpl implements TpFansService {
         tpFansMapper.saveFansList(tpFans);
     }
 
+    @Override
+    public TpFans getFansOrderSn(Integer id) {
+       return  tpFansMapper.getFansOrderSn(id);
+
+    }
+
 }

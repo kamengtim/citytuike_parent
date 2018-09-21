@@ -70,6 +70,16 @@ public class TpDevice implements Serializable {
 
     private String shipping_sn;
 
+    public String getApp_version() {
+        return app_version;
+    }
+
+    public void setApp_version(String app_version) {
+        this.app_version = app_version;
+    }
+
+    private String app_version;
+
     public int isLack_paper() {
         return lack_paper;
     }

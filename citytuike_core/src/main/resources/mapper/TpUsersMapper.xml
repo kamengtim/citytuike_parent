@@ -635,4 +635,13 @@
       paper_number_allowance = paper_number_allowance -1
     where user_id = #{user_id,jdbcType=INTEGER}
 	</update>
+	<select id="getToken" resultType="TpUsers">
+		SELECT * FROM  tp_users where token = #{token}
+	</select>
+	<select id="income" resultType="TpUsers">
+		select * from tp_user ORDER BY distribut_money desc limit 30
+	</select>
+	<select id="sale" resultType="TpUsers">
+		select * from tp_user ORDER BY sale_number desc limit 30
+	</select>
 </mapper>

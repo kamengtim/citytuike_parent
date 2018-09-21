@@ -522,4 +522,5 @@ public class TpFansOrder {
     public void setGoods_id(Integer goods_id) {
         this.goods_id = goods_id;
     }
+
 }

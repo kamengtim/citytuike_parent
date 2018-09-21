@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpWxFansMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpWxFans" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="add_ref_date" property="add_ref_date" jdbcType="VARCHAR" />
+    <result column="add_user_source" property="add_user_source" jdbcType="INTEGER" />
+    <result column="new_user" property="new_user" jdbcType="INTEGER" />
+    <result column="cancel_user" property="cancel_user" jdbcType="INTEGER" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="cumulate_user" property="cumulate_user" jdbcType="INTEGER" />
+    <result column="count_ref_date" property="count_ref_date" jdbcType="VARCHAR" />
+    <result column="count_user_source" property="count_user_source" jdbcType="INTEGER" />
+    <result column="flag_date" property="flag_date" jdbcType="VARCHAR" />
+    <result column="need_fans_id" property="need_fans_id" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_wx_fans
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpWxFans" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_wx_fans (user_id, add_ref_date, add_user_source, 
+      new_user, cancel_user, add_time, 
+      cumulate_user, count_ref_date, count_user_source, 
+      flag_date, need_fans_id)
+    values (#{user_id,jdbcType=INTEGER}, #{add_ref_date,jdbcType=VARCHAR}, #{add_user_source,jdbcType=INTEGER}, 
+      #{new_user,jdbcType=INTEGER}, #{cancel_user,jdbcType=INTEGER}, #{add_time,jdbcType=INTEGER}, 
+      #{cumulate_user,jdbcType=INTEGER}, #{count_ref_date,jdbcType=VARCHAR}, #{count_user_source,jdbcType=INTEGER}, 
+      #{flag_date,jdbcType=VARCHAR}, #{need_fans_id,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpWxFans" >
+    update tp_wx_fans
+    set user_id = #{user_id,jdbcType=INTEGER},
+      add_ref_date = #{add_ref_date,jdbcType=VARCHAR},
+      add_user_source = #{add_user_source,jdbcType=INTEGER},
+      new_user = #{new_user,jdbcType=INTEGER},
+      cancel_user = #{cancel_user,jdbcType=INTEGER},
+      add_time = #{add_time,jdbcType=INTEGER},
+      cumulate_user = #{cumulate_user,jdbcType=INTEGER},
+      count_ref_date = #{count_ref_date,jdbcType=VARCHAR},
+      count_user_source = #{count_user_source,jdbcType=INTEGER},
+      flag_date = #{flag_date,jdbcType=VARCHAR},
+      need_fans_id = #{need_fans_id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, add_ref_date, add_user_source, new_user, cancel_user, add_time, 
+    cumulate_user, count_ref_date, count_user_source, flag_date, need_fans_id
+    from tp_wx_fans
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, add_ref_date, add_user_source, new_user, cancel_user, add_time, 
+    cumulate_user, count_ref_date, count_user_source, flag_date, need_fans_id
+    from tp_wx_fans
+  </select>
+  <select id="getWxFans" resultMap="BaseResultMap">
+    SELECT * FROM tp_wx_fans WHERE user_id =#{user_id} and need_fans_id = #{id} AND DATE_FORMAT( count_ref_date, '%Y-%m-%d') &lt; DATE_FORMAT( NOW(), '%Y-%m-%d')
+  </select>
+  <select id="getWxFansByWx" resultMap="BaseResultMap">
+    SELECT * FROM tp_wx_fans WHERE user_id =#{user_id} and need_fans_id = #{id} AND flag_date = #{ref_date}
+  </select>
+  <update id="updateWx">
+    update tp_wx_fans
+    set
+      add_time = #{add_time},
+      cumulate_user = #{cumulate_user},
+      count_ref_date = #{ref_date},
+    where flag_date = #{ref_date} and need_fans_id = #{id}
+  </update>
+  <select id="addWx" resultMap="BaseResultMap">
+    SELECT * from tp_wx_fans where user_id =#{user_id} and need_fans_id = #{id} and add_ref_date=#{ref_date}
+  </select>
+  <update id="updateWxNew">
+   update tp_wx_fans
+    set
+      id = #{id},
+      add_ref_date = #{ref_date,jdbcType=VARCHAR},
+      new_user = #{newuser,jdbcType=INTEGER},
+      add_time = #{add_time},
+      cancel_user = #{canceluser},
+      cumulate_user = #{cumulate_user},
+      count_ref_date = #{ref_date}
+    where flag_date = #{ref_date} and need_fans_id = #{need_fans_id}
+  </update>
+</mapper>

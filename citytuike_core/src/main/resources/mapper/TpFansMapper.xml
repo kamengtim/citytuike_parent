@@ -155,4 +155,7 @@
     #{admoney,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{user_id,jdbcType=INTEGER}
     )
   </insert>
+  <select id="getFansOrderSn" resultMap="BaseResultMap">
+    select * from tp_fans where id = #{id}
+  </select>
 </mapper>

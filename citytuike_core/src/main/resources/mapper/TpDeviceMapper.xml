@@ -38,6 +38,7 @@
     <result column="shipping_name" property="shipping_name" jdbcType="VARCHAR" />
     <result column="today_num" property="today_num" jdbcType="INTEGER" />
     <result column="today_time" property="today_time" jdbcType="INTEGER" />
+    <result column="app_version" property="app_version"/>
     <result column="lack_paper" property="lack_paper"/>
     <result column="run_status" property="run_status"/>
   </resultMap>
@@ -303,4 +304,7 @@
       today_time = #{today_time,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <update id="updateVersion">
+    update tp_device set app_version = #{get_version} where device_sn = #{imei}
+  </update>
 </mapper>

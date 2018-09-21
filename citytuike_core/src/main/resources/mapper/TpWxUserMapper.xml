@@ -106,4 +106,7 @@
   <select id="getWxUser" resultMap="BaseResultMap">
     select * from tp_wx_user where on_show = 1
   </select>
+  <select id="getWxUserById" resultMap="BaseResultMap">
+    SELECT * from tp_wx_user where id = 27
+  </select>
 </mapper>

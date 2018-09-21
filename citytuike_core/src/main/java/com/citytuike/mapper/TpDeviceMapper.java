@@ -56,4 +56,6 @@ public interface TpDeviceMapper {
     TpDevice getDeviceById(String device_id);
 
     void updateRunStatus(TpDevice tpDevice);
+
+    void updateVersion(@Param("get_version") String get_version, @Param("imei") String imei);
 }

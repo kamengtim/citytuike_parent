@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpCartGiftMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpCartGift" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="gift_name" property="gift_name" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="INTEGER" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="gift_type" property="gift_type" jdbcType="BIT" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="card_list_id" property="card_list_id" jdbcType="INTEGER" />
+    <result column="report_id" property="report_id" jdbcType="INTEGER" />
+    <result column="mess" property="mess" jdbcType="VARCHAR" />
+    <result column="orderid" property="orderid" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="CHAR" />
+    <result column="taskid" property="taskid" jdbcType="VARCHAR" />
+    <result column="obtain" property="obtain" jdbcType="BIT" />
+    <result column="user_time" property="user_time" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_cart_gift
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpCartGift" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_cart_gift (gift_name, create_time, add_time, 
+      gift_type, status, money, user_id, 
+      card_list_id, report_id, mess, 
+      orderid, mobile, taskid, 
+      obtain, user_time)
+    values (#{gift_name,jdbcType=VARCHAR}, #{create_time,jdbcType=INTEGER}, #{add_time,jdbcType=INTEGER}, 
+      #{gift_type,jdbcType=BIT}, #{status,jdbcType=BIT}, #{money,jdbcType=DECIMAL}, #{user_id,jdbcType=INTEGER}, 
+      #{card_list_id,jdbcType=INTEGER}, #{report_id,jdbcType=INTEGER}, #{mess,jdbcType=VARCHAR}, 
+      #{orderid,jdbcType=VARCHAR}, #{mobile,jdbcType=CHAR}, #{taskid,jdbcType=VARCHAR}, 
+      #{obtain,jdbcType=BIT}, #{user_time,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpCartGift" >
+    update tp_cart_gift
+    set gift_name = #{gift_name,jdbcType=VARCHAR},
+      create_time = #{create_time,jdbcType=INTEGER},
+      add_time = #{add_time,jdbcType=INTEGER},
+      gift_type = #{gift_type,jdbcType=BIT},
+      status = #{status,jdbcType=BIT},
+      money = #{money,jdbcType=DECIMAL},
+      user_id = #{user_id,jdbcType=INTEGER},
+      card_list_id = #{card_list_id,jdbcType=INTEGER},
+      report_id = #{report_id,jdbcType=INTEGER},
+      mess = #{mess,jdbcType=VARCHAR},
+      orderid = #{orderid,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=CHAR},
+      taskid = #{taskid,jdbcType=VARCHAR},
+      obtain = #{obtain,jdbcType=BIT},
+      user_time = #{user_time,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, gift_name, create_time, add_time, gift_type, status, money, user_id, card_list_id, 
+    report_id, mess, orderid, mobile, taskid, obtain, user_time
+    from tp_cart_gift
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, gift_name, create_time, add_time, gift_type, status, money, user_id, card_list_id, 
+    report_id, mess, orderid, mobile, taskid, obtain, user_time
+    from tp_cart_gift
+  </select>
+  <select id="getCount" resultMap="BaseResultMap">
+    select count(id) from tp_cart_gift where user_id = #{user_id}
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap">
+    SELECT * from tp_cart_gift where user_id = #{user_id} and status = 2 and obtain = 2
+  </select>
+</mapper>

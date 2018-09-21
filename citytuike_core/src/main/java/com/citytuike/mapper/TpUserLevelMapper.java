@@ -21,4 +21,5 @@ public interface TpUserLevelMapper {
 
     String selectLevelName(Integer level);
 
+    TpUserLevel getLevelName(Integer level);
 }

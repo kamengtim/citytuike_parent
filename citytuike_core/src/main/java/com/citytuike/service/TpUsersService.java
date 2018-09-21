@@ -99,4 +99,10 @@ public interface TpUsersService {
     int updateUserWalletBalance(TpUserWallet tpUserWallet1);
 
 	int insertUserFinance(TpUserFinance tpUserFinance);
+
+	TpUsers getToken(String token);
+
+	List<TpUsers> income();
+
+	List<TpUsers> sale();
 }

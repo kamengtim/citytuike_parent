@@ -13,6 +13,16 @@ public class TpAppVersion {
 
     private Boolean is_flag;
 
+    private String hash_val;
+
+    public String getHash_val() {
+        return hash_val;
+    }
+
+    public void setHash_val(String hash_val) {
+        this.hash_val = hash_val;
+    }
+
     public Integer getId() {
         return id;
     }

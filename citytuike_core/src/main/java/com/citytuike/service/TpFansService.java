@@ -21,4 +21,6 @@ public interface TpFansService {
     PageInfo fansTypeList();
 
     void saveFansList(TpFans tpFans);
+
+    TpFans getFansOrderSn(Integer id);
 }

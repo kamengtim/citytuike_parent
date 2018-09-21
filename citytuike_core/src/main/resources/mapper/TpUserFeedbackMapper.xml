@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpUserFeedbackMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpUserFeedback" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="cs_id" property="cs_id" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="user_send" property="user_send" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="is_delete" property="is_delete" jdbcType="TINYINT" />
+    <result column="send_date" property="send_date" jdbcType="DATE" />
+    <result column="send_time" property="send_time" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <association property="tpUsers" javaType="com.citytuike.model.TpUsers">
+      <id property="user_id" column="user_id"/>
+      <result property="nickname" column="nickname"/>
+    </association>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_user_feedback
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpUserFeedback" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_user_feedback (user_id, cs_id, type, 
+      user_send, status, is_delete, 
+      send_date, send_time, content
+      )
+    values (#{user_id,jdbcType=INTEGER}, #{cs_id,jdbcType=INTEGER}, #{type,jdbcType=CHAR}, 
+      #{user_send,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{is_delete,jdbcType=TINYINT}, 
+      #{send_date,jdbcType=DATE}, #{send_time,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpUserFeedback" >
+    update tp_user_feedback
+    set user_id = #{user_id,jdbcType=INTEGER},
+      cs_id = #{cs_id,jdbcType=INTEGER},
+      type = #{type,jdbcType=CHAR},
+      user_send = #{user_send,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      is_delete = #{is_delete,jdbcType=TINYINT},
+      send_date = #{send_date,jdbcType=DATE},
+      send_time = #{send_time,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, cs_id, type, user_send, status, is_delete, send_date, send_time, 
+    content
+    from tp_user_feedback
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, cs_id, type, user_send, status, is_delete, send_date, send_time, 
+    content
+    from tp_user_feedback
+  </select>
+  <select id="fansTypeList" resultMap="BaseResultMap">
+    select t.content,t.type,t.send_time,t.user_send feedback,tp.nickname from tp_user_feedback t left join tp_users tp
+    on t.user_id = tp.user_id
+    where t.is_delete = 0 and t.user_id = #{user_id}
+    order by t.id desc
+  </select>
+</mapper>

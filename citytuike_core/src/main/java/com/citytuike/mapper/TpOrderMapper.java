@@ -42,4 +42,6 @@ public interface TpOrderMapper {
     List<TpOrder> findAllOrderAndGoods(@Param(value = "user_id")Integer user_id);
 
 	TpOrder getConsigneeByMobile(Integer user_id);
+
+    void save(TpFansOrder tpFansOrder);
 }

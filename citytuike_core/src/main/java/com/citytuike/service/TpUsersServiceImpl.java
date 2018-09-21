@@ -337,6 +337,12 @@ public class TpUsersServiceImpl implements TpUsersService{
 		return tpUsersMapper.insertUserFinance(tpUserFinance);
 	}
 
+	@Override
+	public TpUsers getToken(String token) {
+		return tpUsersMapper.getToken(token);
+	}
+
+
 
 	@Override
 	public int selectMobile(Integer user_id) {
@@ -377,5 +383,17 @@ public class TpUsersServiceImpl implements TpUsersService{
         jsonObject.put("paper",paper);
         jsonObject.put("ad",ad);
 		return jsonObject;
+	}
+
+	@Override
+	public  List<TpUsers> income() {
+		List<TpUsers> tpUsers = tpUsersMapper.income();
+		return tpUsers;
+	}
+
+	@Override
+	public List<TpUsers> sale() {
+		List<TpUsers> tpUsers = tpUsersMapper.sale();
+		return tpUsers;
 	}
 }

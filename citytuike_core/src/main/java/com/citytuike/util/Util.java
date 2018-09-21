@@ -173,5 +173,12 @@ public class Util<main> {
         System.out.println("当前时间：" + new Date());
         System.out.println("当前时间：" + getDateAndNumber(16));
     }
+    public static String transferLongToDate(String dateFormat, Long millSec){
+        String result = null;
+        Date date = new Date(millSec*1000);
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        result =  sdf.format(date);
+        return result;
 
+    }
 }

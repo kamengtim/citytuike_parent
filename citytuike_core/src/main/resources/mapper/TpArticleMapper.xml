@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpArticle" >
+    <id column="article_id" property="article_id" jdbcType="INTEGER" />
+    <result column="cat_id" property="cat_id" jdbcType="SMALLINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="author_email" property="author_email" jdbcType="VARCHAR" />
+    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+    <result column="article_type" property="article_type" jdbcType="BIT" />
+    <result column="is_open" property="is_open" jdbcType="BIT" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="file_url" property="file_url" jdbcType="VARCHAR" />
+    <result column="open_type" property="open_type" jdbcType="BIT" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="click" property="click" jdbcType="INTEGER" />
+    <result column="publish_time" property="publish_time" jdbcType="INTEGER" />
+    <result column="thumb" property="thumb" jdbcType="VARCHAR" />
+    <result column="top" property="top" jdbcType="BIT" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_article
+    where article_id = #{article_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpArticle" >
+    insert into tp_article (article_id, cat_id, title, 
+      author, author_email, keywords, 
+      article_type, is_open, add_time, 
+      file_url, open_type, link, 
+      click, publish_time, thumb, 
+      top, content, description
+      )
+    values (#{article_id,jdbcType=INTEGER}, #{cat_id,jdbcType=SMALLINT}, #{title,jdbcType=VARCHAR}, 
+      #{author,jdbcType=VARCHAR}, #{author_email,jdbcType=VARCHAR}, #{keywords,jdbcType=VARCHAR}, 
+      #{article_type,jdbcType=BIT}, #{is_open,jdbcType=BIT}, #{add_time,jdbcType=INTEGER}, 
+      #{file_url,jdbcType=VARCHAR}, #{open_type,jdbcType=BIT}, #{link,jdbcType=VARCHAR}, 
+      #{click,jdbcType=INTEGER}, #{publish_time,jdbcType=INTEGER}, #{thumb,jdbcType=VARCHAR}, 
+      #{top,jdbcType=BIT}, #{content,jdbcType=LONGVARCHAR}, #{description,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpArticle" >
+    update tp_article
+    set cat_id = #{cat_id,jdbcType=SMALLINT},
+      title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      author_email = #{author_email,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      article_type = #{article_type,jdbcType=BIT},
+      is_open = #{is_open,jdbcType=BIT},
+      add_time = #{add_time,jdbcType=INTEGER},
+      file_url = #{file_url,jdbcType=VARCHAR},
+      open_type = #{open_type,jdbcType=BIT},
+      link = #{link,jdbcType=VARCHAR},
+      click = #{click,jdbcType=INTEGER},
+      publish_time = #{publish_time,jdbcType=INTEGER},
+      thumb = #{thumb,jdbcType=VARCHAR},
+      top = #{top,jdbcType=BIT},
+      content = #{content,jdbcType=LONGVARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where article_id = #{article_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select article_id, cat_id, title, author, author_email, keywords, article_type, is_open, 
+    add_time, file_url, open_type, link, click, publish_time, thumb, top, content, description
+    from tp_article
+    where article_id = #{article_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select article_id, cat_id, title, author, author_email, keywords, article_type, is_open, 
+    add_time, file_url, open_type, link, click, publish_time, thumb, top, content, description
+    from tp_article
+  </select>
+  <select id="getArticleList" resultMap="BaseResultMap">
+    SELECT * from tp_article where cat_id =#{cat_id} and is_open = 1 order by add_time desc
+  </select>
+  <select id="getArticleCon" resultMap="BaseResultMap">
+    SELECT * from tp_article where article_id = #{article_id}
+  </select>
+  <update id="update">
+    update tp_article
+    set cat_id = #{cat_id,jdbcType=SMALLINT},
+      title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      author_email = #{author_email,jdbcType=VARCHAR},
+      keywords = #{keywords,jdbcType=VARCHAR},
+      article_type = #{article_type,jdbcType=BIT},
+      is_open = #{is_open,jdbcType=BIT},
+      add_time = #{add_time,jdbcType=INTEGER},
+      file_url = #{file_url,jdbcType=VARCHAR},
+      open_type = #{open_type,jdbcType=BIT},
+      link = #{link,jdbcType=VARCHAR},
+      click = #{click,jdbcType=INTEGER},
+      publish_time = #{publish_time,jdbcType=INTEGER},
+      thumb = #{thumb,jdbcType=VARCHAR},
+      top = #{top,jdbcType=BIT},
+      content = #{content,jdbcType=LONGVARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where article_id = #{article_id,jdbcType=INTEGER}
+  </update>
+</mapper>

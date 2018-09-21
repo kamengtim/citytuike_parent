@@ -15,4 +15,5 @@ public interface TpCardListService {
     void save(String mobile_code, String cardid, String id);
 
     JSONObject cardDetail(Integer id);
+
 }

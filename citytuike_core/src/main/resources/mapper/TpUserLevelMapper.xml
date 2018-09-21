@@ -38,4 +38,7 @@
   <select id="selectLevelName" resultType="string">
     select level_name from tp_user_level where level_id= #{level}
   </select>
+  <select id="getLevelName" resultMap="BaseResultMap">
+    select * from tp_user_level where level_id = #{level}
+  </select>
 </mapper>

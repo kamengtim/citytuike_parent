@@ -9,6 +9,7 @@ import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.MD5Utils;
 import com.citytuike.util.Util;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -57,6 +58,10 @@ public class UserController {
     private TpUserAliAccountService tpUserAliAccountService;
 	@Autowired
 	private RedisTemplate redisTemplate;
+	@Autowired
+	private TpUserLevelService tpUserLevelService;
+	@Autowired
+	private TpCartGiftService tpCartGiftService;
 	/**
 	 * @param model
 	 * @param username
@@ -76,9 +81,11 @@ public class UserController {
 		if (null != tpUsers) {
 			String token = MD5Utils.md5(System.currentTimeMillis()+Util.generateString(16));
 			request.setAttribute("p-token",token);
-			redisTemplate.expire(RedisConstant.CURRENT_USER+token,30, TimeUnit.DAYS);
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
+			TpUsers tpUsers1 = tpUsersService.getToken(tpUsers.getToken());
+			redisTemplate.expire(RedisConstant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
+			redisTemplate.opsForValue().set(RedisConstant.CURRENT_USER+tpUsers1.getToken(),tpUsers1.getToken());
 			if (result > 0) {
 				jsonObj.put("status", "1");
 				jsonObj.put("msg", "登陆成功!");
@@ -186,7 +193,7 @@ public class UserController {
 		}else {
 			System.out.println("系统错误!");
 		}
-		
+
 		return jsonObj.toString();
 	}
 	/**
@@ -565,6 +572,10 @@ public class UserController {
 												 @RequestParam(required = false) String send,
 												 @RequestParam(required = false)String verify_code,
 												 @RequestParam(required = false)String unique_id){
+		String mobile_code = (String) redisTemplate.opsForValue().get(mobile);
+		if(mobile_code != null){
+			return "发送太频繁";
+		}
 		try{
 		sendMessageService.sendVerifyCode(type,scene,mobile,send,verify_code,unique_id);
 		return "发送成功";
@@ -1547,6 +1558,43 @@ public class UserController {
 		}
 		jsonObj.put("result", jsonArray);
 
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+	/**
+	 * @param token
+	 * @return
+	 * 用户话费券列表
+	 */
+	@RequestMapping(value = "cartGift",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String cartGift(@RequestParam(required = true)String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
+		JSONObject object = new JSONObject();
+		JSONObject data = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpUserLevel tpUserLevel = tpUserLevelService.getLevelName(tpUsers.getLevel());
+		int count = tpCartGiftService.getCount(tpUsers.getUser_id());
+		PageInfo pageInfo = tpCartGiftService.query(count,tpUsers.getUser_id());
+		List<TpCartGift> tpCartGifts = pageInfo.getList();
+		for (TpCartGift tpCartGift : tpCartGifts) {
+			jsonObject = tpCartGiftService.getJson(tpUsers,tpCartGift,tpUsers.getLevel(),tpUsers.getNickname());
+			jsonArray.add(jsonObject);
+		}
+		data.put("data",jsonArray);
+		object.put("page", pageInfo.getPageNum());
+		object.put("count", pageInfo.getEndRow());
+		object.put("per_page", pageInfo.getPrePage());
+		object.put("totalPages",pageInfo.getPages());
+		jsonObj.put("result",data);
+		jsonObj.put("page",object);
 		jsonObj.put("status", "1");
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();

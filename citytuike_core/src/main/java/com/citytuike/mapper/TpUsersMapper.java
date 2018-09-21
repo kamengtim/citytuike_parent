@@ -120,4 +120,10 @@ public interface TpUsersMapper {
     int getPaperNum(Integer user_id);
 
 	void update(TpUsers tpUsers);
+
+	TpUsers getToken(String token);
+
+	List<TpUsers> income();
+
+	List<TpUsers> sale();
 }

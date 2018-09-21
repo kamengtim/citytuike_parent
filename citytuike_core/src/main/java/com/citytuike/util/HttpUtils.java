@@ -1,5 +1,7 @@
 package com.citytuike.util;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -12,25 +14,33 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.*;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.hibernate.validator.internal.util.privilegedactions.GetMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpUtils {
+
+    private static Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
     /**
      * get
      *
@@ -158,6 +168,7 @@ public class HttpUtils {
 
     /**
      * Put String
+     *
      * @param host
      * @param path
      * @param method
@@ -188,6 +199,7 @@ public class HttpUtils {
 
     /**
      * Put stream
+     *
      * @param host
      * @param path
      * @param method
@@ -288,14 +300,16 @@ public class HttpUtils {
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;
                 }
+
                 public void checkClientTrusted(X509Certificate[] xcs, String str) {
 
                 }
+
                 public void checkServerTrusted(X509Certificate[] xcs, String str) {
 
                 }
             };
-            ctx.init(null, new TrustManager[] { tm }, null);
+            ctx.init(null, new TrustManager[]{tm}, null);
             SSLSocketFactory ssf = new SSLSocketFactory(ctx);
             ssf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             ClientConnectionManager ccm = httpClient.getConnectionManager();
@@ -306,5 +320,53 @@ public class HttpUtils {
         } catch (NoSuchAlgorithmException ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static JSONObject httpPost(String url, JSONObject jsonParam)
+    {
+        // post请求返回结果
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        JSONObject jsonResult = null;
+        HttpPost httpPost = new HttpPost(url);
+        // 设置请求和传输超时时间
+        httpPost.setConfig( RequestConfig.custom().setSocketTimeout(2000).setConnectTimeout(2000).build());
+        try
+        {
+            //设置参数解决中文乱码
+            if (null != jsonParam)
+            {
+                StringEntity entity = new StringEntity(jsonParam.toString(), "utf-8");
+                entity.setContentEncoding("UTF-8");
+                entity.setContentType("application/json");
+                httpPost.setEntity(entity);
+            }
+            //发送请求
+            CloseableHttpResponse result = httpClient.execute(httpPost);
+
+            if (result.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+            {
+                String str = "";
+                try
+                {
+                    // 读取服务器返回的json数据（然后解析）
+                    str = EntityUtils.toString(result.getEntity(), "utf-8");
+                    // 把json字符串转换成json对象
+                    jsonResult = JSONObject.parseObject(str);
+                }
+                catch (Exception e)
+                {
+                    logger.error("post请求提交失败:" + url, e);
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            logger.error("请求提交失败:" + url, e);
+        }
+        finally
+        {
+            httpPost.releaseConnection();
+        }
+        return jsonResult;
     }
 }

@@ -50,4 +50,6 @@ public interface ITpDeviceService {
     TpDevice getDeviceById(String device_id);
 
     void updateRunStatus(TpDevice tpDevice);
+
+    void updateVersion(String get_version, String imei);
 }

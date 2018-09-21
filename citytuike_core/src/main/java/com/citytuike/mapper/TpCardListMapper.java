@@ -19,4 +19,6 @@ public interface TpCardListMapper {
     int countCard();
 
     TpCardList selectUserBankById(String cardid);
+
+    TpCardList getCard(Integer card_list_id);
 }

@@ -1,6 +1,7 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpAppVersion;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface TpAppVersionMapper {
     int updateByPrimaryKey(TpAppVersion record);
 
     TpAppVersion getVersion();
+
+    TpAppVersion getNewVersion();
+
 }

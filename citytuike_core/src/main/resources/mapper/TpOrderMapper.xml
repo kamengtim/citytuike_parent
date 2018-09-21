@@ -304,5 +304,42 @@
 	<select id="getConsigneeByMobile" resultType="com.citytuike.model.TpOrder">
 		select consignee,add_time,order_sn from tp_order where user_id = #{user_id} and add_time is not null order by add_time desc limit 1;
 	</select>
-	
+	<insert id="save" parameterType="com.citytuike.model.TpFansOrder" >
+		insert into tp_fans_order (order_id, order_sn, user_id,
+		order_status, shipping_status, pay_status,
+		consignee, country, province,
+		city, district, twon,
+		address, zipcode, mobile,
+		email, shipping_code, shipping_name,
+		pay_code, pay_name, invoice_title,
+		taxpayer, goods_price, shipping_price,
+		user_money, coupon_price, integral,
+		integral_money, order_amount, total_amount,
+		add_time, shipping_time, confirm_time,
+		pay_time, transaction_id, prom_id,
+		prom_type, order_prom_id, order_prom_amount,
+		discount, user_note, admin_note,
+		parent_sn, is_distribut, paid_money,
+		deleted, settle_status, all_income,
+		invoice_email, invoice_contact, invoice_fee,
+		goods_id)
+		values (#{order_id,jdbcType=INTEGER}, #{order_sn,jdbcType=VARCHAR}, #{user_id,jdbcType=INTEGER},
+		#{order_status,jdbcType=BIT}, #{shipping_status,jdbcType=BIT}, #{pay_status,jdbcType=BIT},
+		#{consignee,jdbcType=VARCHAR}, #{country,jdbcType=INTEGER}, #{province,jdbcType=INTEGER},
+		#{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER}, #{twon,jdbcType=INTEGER},
+		#{address,jdbcType=VARCHAR}, #{zipcode,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{shipping_code,jdbcType=VARCHAR}, #{shipping_name,jdbcType=VARCHAR},
+		#{pay_code,jdbcType=VARCHAR}, #{pay_name,jdbcType=VARCHAR}, #{invoice_title,jdbcType=VARCHAR},
+		#{taxpayer,jdbcType=VARCHAR}, #{goods_price,jdbcType=DECIMAL}, #{shipping_price,jdbcType=DECIMAL},
+		#{user_money,jdbcType=DECIMAL}, #{coupon_price,jdbcType=DECIMAL}, #{integral,jdbcType=INTEGER},
+		#{integral_money,jdbcType=DECIMAL}, #{order_amount,jdbcType=DECIMAL}, #{total_amount,jdbcType=DECIMAL},
+		#{add_time,jdbcType=INTEGER}, #{shipping_time,jdbcType=INTEGER}, #{confirm_time,jdbcType=INTEGER},
+		#{pay_time,jdbcType=INTEGER}, #{transaction_id,jdbcType=VARCHAR}, #{prom_id,jdbcType=INTEGER},
+		#{prom_type,jdbcType=TINYINT}, #{order_prom_id,jdbcType=SMALLINT}, #{order_prom_amount,jdbcType=DECIMAL},
+		#{discount,jdbcType=DECIMAL}, #{user_note,jdbcType=VARCHAR}, #{admin_note,jdbcType=VARCHAR},
+		#{parent_sn,jdbcType=VARCHAR}, #{is_distribut,jdbcType=BIT}, #{paid_money,jdbcType=DECIMAL},
+		#{deleted,jdbcType=BIT}, #{settle_status,jdbcType=TINYINT}, #{all_income,jdbcType=DECIMAL},
+		#{invoice_email,jdbcType=VARCHAR}, #{invoice_contact,jdbcType=VARCHAR}, #{invoice_fee,jdbcType=DECIMAL},
+		#{goods_id,jdbcType=INTEGER})
+	</insert>
 </mapper>

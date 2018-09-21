@@ -230,5 +230,10 @@ public class TpOrderServiceImpl implements TpOrderService{
 		return tpOrderMapper.findAllOrderAndGoods(user_id);
 	}
 
+	@Override
+	public void save(TpFansOrder tpFansOrder) {
+		tpOrderMapper.save(tpFansOrder);
+	}
+
 
 }

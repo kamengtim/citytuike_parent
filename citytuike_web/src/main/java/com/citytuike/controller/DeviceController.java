@@ -547,12 +547,38 @@ public class DeviceController {
      * @return 版本检测
      */
     @RequestMapping(value = "version", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String version(){
+    public @ResponseBody String version(HttpServletRequest request){
         TpAppVersion tpAppVersion = tpAppVersionService.getVersion();
+        JSONObject jsonObj = new JSONObject();
+        JSONObject jsonObject =new JSONObject();
+        TpAppVersion version = new TpAppVersion();
         if(tpAppVersion == null){
             return "没有版本";
         }
         //Todo
-        return null;
+        String[]imeis = new String[]{};
+        String imei = request.getParameter("imei");
+        String get_version = request.getParameter("version");
+        String imei_test = (String) redisTemplate.opsForValue().get("imei_test");
+        if(imei_test != null){
+            String imei_str = imei_test.replace("\r\n","<br />");
+            imeis = imei_str.split("<br />");
+        }else{
+            imeis=null;
+        }
+        if(imei !=null && imeis != null){
+            version = tpAppVersionService.getVersion();
+            jsonObject = tpAppVersionService.getJson(version);
+        }else{
+            version = tpAppVersionService.getNewVersion();
+            jsonObject = tpAppVersionService.getJson(version);
+        }
+        if(imei != null && get_version != null){
+            tpDeviceService.updateVersion(get_version,imei);
+        }
+        jsonObj.put("",jsonObject);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok");
+        return jsonObj.toString();
     }
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpUserLogMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpUserLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="device_id" property="device_id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="message_id" property="message_id" jdbcType="VARCHAR" />
+    <result column="request_id" property="request_id" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="data" property="data" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_user_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpUserLog" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_user_log (user_id, device_id, title, 
+      add_time, message_id, request_id, 
+      status, data)
+    values (#{user_id,jdbcType=INTEGER}, #{device_id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+      #{add_time,jdbcType=INTEGER}, #{message_id,jdbcType=VARCHAR}, #{request_id,jdbcType=VARCHAR}, 
+      #{status,jdbcType=BIT}, #{data,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpUserLog" >
+    update tp_user_log
+    set user_id = #{user_id,jdbcType=INTEGER},
+      device_id = #{device_id,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      message_id = #{message_id,jdbcType=VARCHAR},
+      request_id = #{request_id,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      data = #{data,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, device_id, title, add_time, message_id, request_id, status, data
+    from tp_user_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, device_id, title, add_time, message_id, request_id, status, data
+    from tp_user_log
+  </select>
+  <select id="getPaper" resultMap="BaseResultMap">
+select * from tp_user_log GROUP by user_id ORDER by count(id) desc limit 30
+  </select>
+</mapper>
