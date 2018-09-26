@@ -5,24 +5,29 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.citytuike.mapper.TpDeviceMapper;
-import com.citytuike.mapper.TpUserLevelMapper;
+import com.alibaba.fastjson.JSONArray;
+import com.citytuike.mapper.*;
 import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.mapper.TpUsersMapper;
 
 @Service
-public class TpUsersServiceImpl implements TpUsersService{
+public class TpUsersServiceImpl implements TpUsersService {
 
 	@Autowired
 	private TpUsersMapper tpUsersMapper;
 	@Autowired
 	private TpDeviceMapper tpDeviceMapper;
 	@Autowired
-    private TpUserLevelMapper tpUserLevelMapper;
+	private TpUserLevelMapper tpUserLevelMapper;
+	@Autowired
+	private TpDynamicMapper tpDynamicMapper;
+	@Autowired
+	private TpReplayMapper tpReplayMapper;
+	@Autowired
+	private TpFabulousMapper tpFabulousMapper;
 
 
 	public TpUsers findOneByLogo(String username, String password) {
@@ -154,6 +159,7 @@ public class TpUsersServiceImpl implements TpUsersService{
 	public List<TpUsers> findAllByUserParentId(Integer parent_id) {
 		return tpUsersMapper.findAllByUserParentId(parent_id);
 	}
+
 	public BigDecimal selectCountMoney(Integer user_id) {
 		return tpUsersMapper.selectCountMoney(user_id);
 	}
@@ -172,23 +178,23 @@ public class TpUsersServiceImpl implements TpUsersService{
 		int totalCount = tpDeviceMapper.selectCountDevice(user_id);
 		List<TpUsers> stuList = new ArrayList<TpUsers>();
 		Page PageSize = null;
-		if(page != null){
-			PageSize=new Page(totalCount,Integer.valueOf(page));
+		if (page != null) {
+			PageSize = new Page(totalCount, Integer.valueOf(page));
 			PageSize.setPageSize(10);
-			stuList = tpUsersMapper.selectByPage(PageSize.getStartPos(),PageSize.getPageSize(),user_id);
-		}else{
-			PageSize = new Page(totalCount,1);
+			stuList = tpUsersMapper.selectByPage(PageSize.getStartPos(), PageSize.getPageSize(), user_id);
+		} else {
+			PageSize = new Page(totalCount, 1);
 			PageSize.setPageSize(10);
-			stuList = tpUsersMapper.selectByPage(PageSize.getStartPos(),PageSize.getPageSize(),user_id);
+			stuList = tpUsersMapper.selectByPage(PageSize.getStartPos(), PageSize.getPageSize(), user_id);
 		}
 		limitPageList.setPage(PageSize);
 		limitPageList.setList(stuList);
 		return limitPageList;
 	}
 
-    public int updateUserFrozenMoney(Integer user_id, double frozenMoney) {
-        return tpUsersMapper.updateUserFrozenMoney(user_id, frozenMoney);
-    }
+	public int updateUserFrozenMoney(Integer user_id, double frozenMoney) {
+		return tpUsersMapper.updateUserFrozenMoney(user_id, frozenMoney);
+	}
 
 	@Override
 	public TpUsers findOneByImId(String im_id) {
@@ -216,19 +222,19 @@ public class TpUsersServiceImpl implements TpUsersService{
 	}
 
 	@Override
-	public void updateUser(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat) {
-		tpUsersMapper.updateUserInfo(user_id,head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat);
+	public void updateUser(Integer user_id, String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat) {
+		tpUsersMapper.updateUserInfo(user_id, head_pic, nickname, qq, sex, birthday, province, city, district, email, scene, wechat_qrcode, wechat);
 	}
 
 
 	@Override
 	public void deleteAddress(Integer user_id, String id) {
-		tpUsersMapper.deleteAddress(user_id,id);
+		tpUsersMapper.deleteAddress(user_id, id);
 	}
 
 	@Override
-	public void updateUserAndMobile(Integer user_id,String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat, String mobile) {
-		tpUsersMapper.updateUserAndMobile(user_id,head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat,mobile);
+	public void updateUserAndMobile(Integer user_id, String head_pic, String nickname, String qq, String sex, String birthday, String province, String city, String district, String email, String scene, String wechat_qrcode, String wechat, String mobile) {
+		tpUsersMapper.updateUserAndMobile(user_id, head_pic, nickname, qq, sex, birthday, province, city, district, email, scene, wechat_qrcode, wechat, mobile);
 	}
 
 	@Override
@@ -236,66 +242,66 @@ public class TpUsersServiceImpl implements TpUsersService{
 		return tpUsersMapper.selectFrozen(user_id);
 	}
 
-    @Override
-    public JSONObject getInviteCodeUserInfo(String invite_code) {
-	   JSONObject data = new JSONObject();
-       TpUsers tpUsers =  tpUsersMapper.getInviteCodeUserInfo(invite_code);
-       String level_name = tpUserLevelMapper.selectLevelName(tpUsers.getLevel());
-       String province_name = tpUsersMapper.selectAddrass(tpUsers.getUser_id());
-       String city_name = tpUsersMapper.selectCity(tpUsers.getUser_id());
-       String district_name = tpUsersMapper.selectDistrict(tpUsers.getUser_id());
-        data.put("user_id", tpUsers.getUser_id());
-        data.put("email", tpUsers.getEmail());
-        data.put("password", tpUsers.getPassword());
-        data.put("paypwd", tpUsers.getPaypwd());
-        data.put("sex", tpUsers.getSex());
-        data.put("birthday", tpUsers.getBirthday());
-        data.put("user_money", tpUsers.getUser_money());
-        data.put("frozen_money", tpUsers.getFrozen_money());
-        data.put("distribut_money", tpUsers.getDistribut_money());
-        data.put("underling_number", tpUsers.getUnderling_number());
-        data.put("pay_points", tpUsers.getPay_points());
-        data.put("address_id", tpUsers.getAddress_id());
-        data.put("reg_time", tpUsers.getReg_time());
-        data.put("last_login", tpUsers.getLast_login());
-        data.put("last_ip", tpUsers.getLast_ip());
-        data.put("qq", tpUsers.getQq());
-        data.put("mobile", tpUsers.getMobile());
-        data.put("mobile_validated", tpUsers.getMobile_validated());
-        data.put("oauth", tpUsers.getOauth());
-        data.put("openid", tpUsers.getOpenid());
-        data.put("unionid", tpUsers.getUnionid());
-        data.put("head_pic", tpUsers.getHead_pic());
-        data.put("province", tpUsers.getProvince());
-        data.put("city", tpUsers.getCity());
-        data.put("district", tpUsers.getDistrict());
-        data.put("email_validated", tpUsers.getEmail_validated());
-        data.put("nickname", tpUsers.getNickname());
-        data.put("level", tpUsers.getLevel());
-        data.put("discount", tpUsers.getDiscount());
-        data.put("total_amount", tpUsers.getTotal_amount());
-        data.put("is_lock", tpUsers.getIs_lock());
-        data.put("is_distribut", tpUsers.getIs_distribut());
-        data.put("first_leader", tpUsers.getFirst_leader());
-        data.put("second_leader", tpUsers.getSecond_leader());
-        data.put("third_leader", tpUsers.getThird_leader());
-        data.put("token", tpUsers.getToken());
-        data.put("message_mask", tpUsers.getMessage_mask());
-        data.put("push_id", tpUsers.getPush_id());
-        data.put("distribut_level", tpUsers.getDistribut_level());
-        data.put("is_vip", tpUsers.getIs_vip());
-        data.put("invite_code", tpUsers.getInvite_code());
-        data.put("relation", tpUsers.getRelation());
-        data.put("sale_number", tpUsers.getSale_number());
-        data.put("parent_id", tpUsers.getParent_id());
-        data.put("wechat", tpUsers.getWechat());
-        data.put("wechat_qrcode", tpUsers.getWechat_qrcode());
-        data.put("level_name",level_name);
-        data.put("province_name",province_name);
-        data.put("city_name",city_name);
-        data.put("district_name",district_name);
-        return data;
-    }
+	@Override
+	public JSONObject getInviteCodeUserInfo(String invite_code) {
+		JSONObject data = new JSONObject();
+		TpUsers tpUsers = tpUsersMapper.getInviteCodeUserInfo(invite_code);
+		String level_name = tpUserLevelMapper.selectLevelName(tpUsers.getLevel());
+		String province_name = tpUsersMapper.selectAddrass(tpUsers.getUser_id());
+		String city_name = tpUsersMapper.selectCity(tpUsers.getUser_id());
+		String district_name = tpUsersMapper.selectDistrict(tpUsers.getUser_id());
+		data.put("user_id", tpUsers.getUser_id());
+		data.put("email", tpUsers.getEmail());
+		data.put("password", tpUsers.getPassword());
+		data.put("paypwd", tpUsers.getPaypwd());
+		data.put("sex", tpUsers.getSex());
+		data.put("birthday", tpUsers.getBirthday());
+		data.put("user_money", tpUsers.getUser_money());
+		data.put("frozen_money", tpUsers.getFrozen_money());
+		data.put("distribut_money", tpUsers.getDistribut_money());
+		data.put("underling_number", tpUsers.getUnderling_number());
+		data.put("pay_points", tpUsers.getPay_points());
+		data.put("address_id", tpUsers.getAddress_id());
+		data.put("reg_time", tpUsers.getReg_time());
+		data.put("last_login", tpUsers.getLast_login());
+		data.put("last_ip", tpUsers.getLast_ip());
+		data.put("qq", tpUsers.getQq());
+		data.put("mobile", tpUsers.getMobile());
+		data.put("mobile_validated", tpUsers.getMobile_validated());
+		data.put("oauth", tpUsers.getOauth());
+		data.put("openid", tpUsers.getOpenid());
+		data.put("unionid", tpUsers.getUnionid());
+		data.put("head_pic", tpUsers.getHead_pic());
+		data.put("province", tpUsers.getProvince());
+		data.put("city", tpUsers.getCity());
+		data.put("district", tpUsers.getDistrict());
+		data.put("email_validated", tpUsers.getEmail_validated());
+		data.put("nickname", tpUsers.getNickname());
+		data.put("level", tpUsers.getLevel());
+		data.put("discount", tpUsers.getDiscount());
+		data.put("total_amount", tpUsers.getTotal_amount());
+		data.put("is_lock", tpUsers.getIs_lock());
+		data.put("is_distribut", tpUsers.getIs_distribut());
+		data.put("first_leader", tpUsers.getFirst_leader());
+		data.put("second_leader", tpUsers.getSecond_leader());
+		data.put("third_leader", tpUsers.getThird_leader());
+		data.put("token", tpUsers.getToken());
+		data.put("message_mask", tpUsers.getMessage_mask());
+		data.put("push_id", tpUsers.getPush_id());
+		data.put("distribut_level", tpUsers.getDistribut_level());
+		data.put("is_vip", tpUsers.getIs_vip());
+		data.put("invite_code", tpUsers.getInvite_code());
+		data.put("relation", tpUsers.getRelation());
+		data.put("sale_number", tpUsers.getSale_number());
+		data.put("parent_id", tpUsers.getParent_id());
+		data.put("wechat", tpUsers.getWechat());
+		data.put("wechat_qrcode", tpUsers.getWechat_qrcode());
+		data.put("level_name", level_name);
+		data.put("province_name", province_name);
+		data.put("city_name", city_name);
+		data.put("district_name", district_name);
+		return data;
+	}
 
 	@Override
 	public TpPlateMsg findPlatMsgByFlagd(int flag) {
@@ -348,15 +354,14 @@ public class TpUsersServiceImpl implements TpUsersService{
 	}
 
 
-
 	@Override
 	public int selectMobile(Integer user_id) {
 		return tpUsersMapper.selectMobile(user_id);
 	}
 
 	@Override
-	public void updatePwd(Integer user_id,String new_password) {
-		tpUsersMapper.updatePwd(user_id,new_password);
+	public void updatePwd(Integer user_id, String new_password) {
+		tpUsersMapper.updatePwd(user_id, new_password);
 	}
 
 	@Override
@@ -371,27 +376,27 @@ public class TpUsersServiceImpl implements TpUsersService{
 		double UserMoney = tpUsers.getUser_money();
 		double FrozenMoney = tpUsers.getFrozen_money();
 		double balance = tpUsers.getDistribut_money();
-		jsonObj.put("balance",balance);
+		jsonObj.put("balance", balance);
 		return jsonObj;
 	}
 
 	@Override
 	public JSONObject incomeCount(Integer user_id) {
-	    JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = new JSONObject();
 		TpUsers tpUsers = tpUsersMapper.incomeCount(user_id);
 		int saleNumber = tpUsers.getSale_number();
 		double distribut_money = tpUsers.getDistribut_money();
-		int paper = 0 ;
-		int ad = 0 ;
-        jsonObject.put("sale",saleNumber*1450);
-        jsonObject.put("distribut_money",distribut_money);
-        jsonObject.put("paper",paper);
-        jsonObject.put("ad",ad);
+		int paper = 0;
+		int ad = 0;
+		jsonObject.put("sale", saleNumber * 1450);
+		jsonObject.put("distribut_money", distribut_money);
+		jsonObject.put("paper", paper);
+		jsonObject.put("ad", ad);
 		return jsonObject;
 	}
 
 	@Override
-	public  List<TpUsers> income() {
+	public List<TpUsers> income() {
 		List<TpUsers> tpUsers = tpUsersMapper.income();
 		return tpUsers;
 	}
@@ -400,6 +405,80 @@ public class TpUsersServiceImpl implements TpUsersService{
 	public List<TpUsers> sale() {
 		List<TpUsers> tpUsers = tpUsersMapper.sale();
 		return tpUsers;
+	}
+
+	@Override
+	public LimitPageList getLimitPageListByDynamic(Integer user_id, Integer page) {
+		LimitPageList limitPageList = new LimitPageList();
+		int totalCount = tpDynamicMapper.getCount(user_id);
+		List<TpDynamic> stuList = new ArrayList<TpDynamic>();
+		Page PageSize = null;
+		if (page != null) {
+			PageSize = new Page(totalCount, Integer.valueOf(page));
+			PageSize.setPageSize(10);
+			stuList = tpDynamicMapper.selectByPage(PageSize.getStartPos(), PageSize.getPageSize(), user_id);
+		} else {
+			PageSize = new Page(totalCount, 1);
+			PageSize.setPageSize(10);
+			stuList = tpDynamicMapper.selectByPage(PageSize.getStartPos(), PageSize.getPageSize(), user_id);
+		}
+		limitPageList.setPage(PageSize);
+		limitPageList.setList(stuList);
+		return limitPageList;
+	}
+
+	@Override
+	public JSONObject getTpDynamicJson(TpDynamic tpDynamic) {
+		JSONObject object = new JSONObject();
+		object.put("id", tpDynamic.getId());
+		object.put("user_id", tpDynamic.getUserId());
+		object.put("image", tpDynamic.getImage());
+		object.put("add_time", tpDynamic.getAddTime());
+		object.put("fabulous", tpDynamic.getFabulous());
+		object.put("nums", tpDynamic.getNums());
+		object.put("view_status", tpDynamic.getViewStatus());
+		object.put("is_delete", tpDynamic.getIsDelete());
+		object.put("content", tpDynamic.getContent());
+		object.put("times", "处理时间");
+		TpUsers tpUsers1 = tpUsersMapper.findOneByUserId(tpDynamic.getUserId());
+		if (null != tpUsers1) {
+			object.put("nickname", tpUsers1.getNickname());
+			object.put("head_pic", tpUsers1.getHead_pic());
+		}
+		List<TpReplay> tpReplayList = tpReplayMapper.findAllReplayByDynamicId(tpDynamic.getId());
+		JSONArray jsonArray = new JSONArray();
+		for (TpReplay tpReplay : tpReplayList) {
+			JSONObject object12 = new JSONObject();
+			object12.put("id", tpReplay.getId());
+			object12.put("d_id", tpReplay.getdId());
+			object12.put("add_time", tpReplay.getAddTime());
+			object12.put("replay_content", tpReplay.getReplayContent());
+			object12.put("user_id", tpReplay.getUserId());
+			TpUsers tpUsers12 = tpUsersMapper.findOneByUserId(tpReplay.getUserId());
+			if (null != tpUsers12) {
+				object12.put("nickname", tpUsers12.getNickname());
+				object12.put("head_pic", tpUsers12.getHead_pic());
+			}
+			jsonArray.add(object12);
+		}
+		object.put("replay", jsonArray);
+		List<TpFabulous> tpFabulousList = tpFabulousMapper.findAllFabulousByDynamicId(tpDynamic.getId());
+		JSONArray jsonArray1 = new JSONArray();
+		for (TpFabulous tpFabulous : tpFabulousList) {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("id", tpFabulous.getId());
+			jsonObject.put("user_id", tpFabulous.getUserId());
+			jsonObject.put("d_id", tpFabulous.getdId());
+			jsonObject.put("add_time", tpFabulous.getAddTime());
+			TpUsers tpUsers121 = tpUsersMapper.findOneByUserId(tpFabulous.getUserId());
+			if (null != tpUsers121) {
+				jsonObject.put("nickname", tpUsers121.getNickname());
+				jsonObject.put("head_pic", tpUsers121.getHead_pic());
+				jsonArray1.add(jsonObject);
+			}
+			object.put("fabulous", jsonArray1);
+		}
+		return object;
 	}
 
 	@Override
@@ -434,5 +513,35 @@ public class TpUsersServiceImpl implements TpUsersService{
 	@Override
 	public void updateSetPass(Integer user_id) {
 		tpUsersMapper.updateSetPass(user_id);
+	}
+
+	@Override
+	public int insertTpDynamic(TpDynamic tpDynamic) {
+		return tpDynamicMapper.insert(tpDynamic);
+	}
+
+	@Override
+	public int insertTpReplay(TpReplay tpReplay) {
+		return tpReplayMapper.insert(tpReplay);
+	}
+
+	@Override
+	public TpDynamic findOneTpDynamicById(Integer id) {
+		return tpDynamicMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public int updataDynamicByNums(TpDynamic tpDynamic1) {
+		return tpDynamicMapper.updateByPrimaryKeySelective(tpDynamic1);
+	}
+
+	@Override
+	public int insertTpFabulous(TpFabulous tpFabulous) {
+		return tpFabulousMapper.insert(tpFabulous);
+	}
+
+	@Override
+	public int updataUserByBackimg(TpUsers tpUsers1) {
+		return tpUsersMapper.updataUSerByBackimg(tpUsers1);
 	}
 }

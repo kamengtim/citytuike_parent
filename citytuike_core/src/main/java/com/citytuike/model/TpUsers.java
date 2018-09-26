@@ -212,9 +212,49 @@ public class TpUsers  implements Serializable{
 	 */
 	private String im_pwd;
 	/*
-	 *
+	 * 纸巾余量（可出纸数量）
 	 * */
 	private Integer paper_number_allowance;
+	/*
+	 * 标记是否为最高级
+	 * */
+	private Integer is_top;
+	/*
+	 * 是否开启声音提示
+	 * */
+	private Integer voice_notice;
+	/*
+	 * 动态背景图
+	 * */
+	private String backimg;
+
+	public void setSale_number(Integer sale_number) {
+		this.sale_number = sale_number;
+	}
+
+	public Integer getIs_top() {
+		return is_top;
+	}
+
+	public void setIs_top(Integer is_top) {
+		this.is_top = is_top;
+	}
+
+	public Integer getVoice_notice() {
+		return voice_notice;
+	}
+
+	public void setVoice_notice(Integer voice_notice) {
+		this.voice_notice = voice_notice;
+	}
+
+	public String getBackimg() {
+		return backimg;
+	}
+
+	public void setBackimg(String backimg) {
+		this.backimg = backimg;
+	}
 
 	public Integer getPaper_number_allowance() {
 		return paper_number_allowance;

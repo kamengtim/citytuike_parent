@@ -108,6 +108,10 @@ public interface TpUsersService {
 
 	List<TpUsers> sale();
 
+    LimitPageList getLimitPageListByDynamic(Integer user_id, Integer p);
+
+	JSONObject getTpDynamicJson(TpDynamic tpDynamic);
+
     TpUsers getInviteCode(String invite_code);
 
 	TpUsers getUserInfo(String user_id);
@@ -119,4 +123,16 @@ public interface TpUsersService {
 	int updatePassword(Integer user_id, String confirm_password);
 
 	void updateSetPass(Integer user_id);
+
+	int insertTpDynamic(TpDynamic tpDynamic);
+
+	int insertTpReplay(TpReplay tpReplay);
+
+	TpDynamic findOneTpDynamicById(Integer did);
+
+	int updataDynamicByNums(TpDynamic tpDynamic1);
+
+	int insertTpFabulous(TpFabulous tpFabulous);
+
+	int updataUserByBackimg(TpUsers tpUsers1);
 }

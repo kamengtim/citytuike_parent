@@ -1,30 +1,31 @@
 package com.citytuike.controller;
 
 
-import cn.emay.sdk.util.HttpUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.constant.Constant;
 import com.citytuike.exception.SendMessageException;
 import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
-import com.citytuike.util.*;
+import com.citytuike.util.MD5Utils;
+import com.citytuike.util.Util;
+import com.citytuike.util.mobileCheck;
 import com.github.pagehelper.PageInfo;
-import org.apache.http.client.HttpClient;
-import org.apache.http.protocol.HTTP;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -2059,5 +2060,264 @@ public class UserController {
 		}
 		return jsonObj.toString();
 	}
+
+	/**
+	 * @param token
+	 * @param p
+	 * @return
+	 * 获取动态
+	 */
+	@RequestMapping(value = "getDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getDynamic(@RequestParam(required = true) String token,
+												 @RequestParam(required = true) Integer p){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray data1 = new JSONArray();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "操作失败，请稍后再试");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		LimitPageList limitPageList = tpUsersService.getLimitPageListByDynamic(tpUsers.getUser_id(), p);
+		for (TpDynamic tpDynamic : (List<TpDynamic>)limitPageList.getList()) {
+			JSONObject jsonObject = tpUsersService.getTpDynamicJson(tpDynamic);
+			data1.add(jsonObject);
+		}
+		JSONObject object = new JSONObject();
+		object.put("count", limitPageList.getPage().getTotalCount());
+		object.put("page", limitPageList.getPage().getPageNow());
+		object.put("totalPages", limitPageList.getPage().getTotalPageCount());
+
+		data.put("page", object);
+		data.put("data", data1);
+		jsonObj.put("result", data);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "操作成功");
+		return jsonObj.toString();
+	}
+
+	/**
+	 * @param token
+	 * @param image
+	 * @param content
+	 * @return
+	 * 发布动态
+	 */
+	@RequestMapping(value = "setDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String setDynamic(@RequestParam(required = true) String token,
+										   @RequestParam(required = true) String image,
+										   @RequestParam(required = true) String content){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "操作失败，请稍后再试");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpDynamic tpDynamic = new TpDynamic();
+		tpDynamic.setContent(content);
+		tpDynamic.setUserId(tpUsers.getUser_id());
+		tpDynamic.setImage(image);
+		tpDynamic.setAddTime((int)Calendar.getInstance().getTimeInMillis());
+		tpDynamic.setFabulous(0);
+		tpDynamic.setNums(0);
+		tpDynamic.setViewStatus(1);
+		tpDynamic.setIsDelete(0);
+		int result = tpUsersService.insertTpDynamic(tpDynamic);
+		if (result > 0){
+			jsonObj.put("result", data);
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "发表成功");
+		}
+		return jsonObj.toString();
+	}
+
+	/**
+	 * @param token
+	 * @param did
+	 * @param replay_content
+	 * @return
+	 * 回复动态
+	 */
+	@RequestMapping(value = "setReplayMess",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String setReplayMess(@RequestParam(required = true) String token,
+										   @RequestParam(required = true) Integer did,
+										   @RequestParam(required = true) String replay_content){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "操作失败，请稍后再试");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpDynamic tpDynamic = tpUsersService.findOneTpDynamicById(did);
+		if (null != tpDynamic){
+			TpReplay tpReplay = new TpReplay();
+			tpReplay.setdId(did);
+			tpReplay.setAddTime((int)Calendar.getInstance().getTimeInMillis());
+			tpReplay.setUserId(tpUsers.getUser_id());
+			tpReplay.setReplayContent(replay_content);
+			int result = tpUsersService.insertTpReplay(tpReplay);
+			if (result > 0){
+				TpDynamic tpDynamic1 = new TpDynamic();
+				tpDynamic1.setId(tpDynamic.getId());
+				tpDynamic1.setNums(tpDynamic.getNums() + 1);
+				int updataresult = tpUsersService.updataDynamicByNums(tpDynamic1);
+				if (updataresult > 0){
+					jsonObj.put("result", data);
+					jsonObj.put("status", "1");
+					jsonObj.put("msg", "回复成功");
+				}
+			}
+		}
+		return jsonObj.toString();
+	}
+
+	/**
+	 * @param token
+	 * @param did
+	 * @return
+	 * 点赞
+	 */
+	@RequestMapping(value = "clickFabulous",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String clickFabulous(@RequestParam(required = true) String token,
+										   @RequestParam(required = true) Integer did){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "操作失败，请稍后再试");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpDynamic tpDynamic = tpUsersService.findOneTpDynamicById(did);
+		if (null != tpDynamic){
+			TpFabulous tpFabulous = new TpFabulous();
+			tpFabulous.setdId(did);
+			tpFabulous.setUserId(tpUsers.getUser_id());
+			tpFabulous.setAddTime((int)Calendar.getInstance().getTimeInMillis());
+			int result = tpUsersService.insertTpFabulous(tpFabulous);
+			if (result > 0){
+				TpDynamic tpDynamic1 = new TpDynamic();
+				tpDynamic1.setId(tpDynamic.getId());
+				tpDynamic1.setFabulous(tpDynamic.getFabulous() + 1);
+				int updataresult = tpUsersService.updataDynamicByNums(tpDynamic1);
+				if (updataresult > 0){
+					jsonObj.put("result", data);
+					jsonObj.put("status", "1");
+					jsonObj.put("msg", "点赞成功");
+				}
+			}
+		}
+		return jsonObj.toString();
+	}
+
+	/**
+	 * @param token
+	 * @param image
+	 * @return
+	 * 更改个人动态背景图
+	 */
+	@RequestMapping(value = "changeBackImg",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String changeBackImg(@RequestParam(required = true) String token,
+										   @RequestParam(required = true) String image){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "操作失败，请稍后再试");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpUsers tpUsers1 = new TpUsers();
+		tpUsers1.setUser_id(tpUsers.getUser_id());
+		tpUsers1.setBackimg(image);
+
+		int result =  tpUsersService.updataUserByBackimg(tpUsers1);
+		if(result > 0){
+			jsonObj.put("result", data);
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "成功");
+		}
+
+		return jsonObj.toString();
+	}
+
+	/**
+	 * @param token
+	 * @return
+	 * 展示个人动态头像背景图
+	 */
+	@RequestMapping(value = "headPicBack",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String headPicBack(@RequestParam(required = true) String token){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "操作失败，请稍后再试");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		data.put("backimg", tpUsers.getBackimg());
+		data.put("head_pic", tpUsers.getHead_pic());
+		data.put("nickname", tpUsers.getNickname());
+		jsonObj.put("result", data);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "成功");
+		return jsonObj.toString();
+	}
+
+	@RequestMapping(value = "getUserDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getUserDynamic(@RequestParam(required = true) String token,
+										   @RequestParam(required = true) Integer user_id,
+										   @RequestParam(required = true) Integer p){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONArray data1 = new JSONArray();
+		jsonObj.put("status", "0");
+		jsonObj.put("msg", "操作失败，请稍后再试");
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpUsers tpUsers1 = tpUsersService.findOneByUserId(user_id);
+		if (null == tpUsers1) {
+			return jsonObj.toString();
+		}
+		LimitPageList limitPageList = tpUsersService.getLimitPageListByDynamic(tpUsers1.getUser_id(), p);
+		for (TpDynamic tpDynamic : (List<TpDynamic>)limitPageList.getList()) {
+			JSONObject jsonObject = tpUsersService.getTpDynamicJson(tpDynamic);
+			data1.add(jsonObject);
+		}
+		JSONObject object = new JSONObject();
+		object.put("count", limitPageList.getPage().getTotalCount());
+		object.put("page", limitPageList.getPage().getPageNow());
+		object.put("totalPages", limitPageList.getPage().getTotalPageCount());
+
+		data.put("page", object);
+		data.put("data", data1);
+		jsonObj.put("result", data);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "操作成功");
+		return jsonObj.toString();
+	}
+
 
 }

@@ -67,6 +67,9 @@
 		<result column="set_pass" property="set_pass" />
 		<result column="im_id" property="im_id" />
 		<result column="im_pwd" property="im_pwd" />
+		<result column="is_top" property="is_top" />
+		<result column="voice_notice" property="voice_notice" />
+		<result column="backimg" property="backimg" />
 	</resultMap>
 	
 	<sql id="Base_Column_List">
@@ -118,7 +121,11 @@
 			t.wechat_qrcode,
 			t.set_pass,
 			t.im_id,
-			t.im_pwd
+			t.im_pwd,
+			t.paper_number_allowance,
+			t.is_top,
+			t.voice_notice,
+			t.backimg
 	</sql>
 	
 	<!--登陆查询 -->
@@ -664,5 +671,8 @@
 	</update>
 	<update id="updateSetPass">
 		update tp_users set set_pass = 1 where user_id = #{user_id}
+	</update>
+	<update id="updataUSerByBackimg">
+		update tp_users set backimg = #{backimg} where user_id = #{user_id}
 	</update>
 </mapper>

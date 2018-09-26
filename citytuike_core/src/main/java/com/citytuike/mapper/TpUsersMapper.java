@@ -140,4 +140,6 @@ public interface TpUsersMapper {
 	int updatePassword(Integer user_id, String confirm_password);
 
 	void updateSetPass(Integer user_id);
+
+    int updataUSerByBackimg(TpUsers tpUsers1);
 }
