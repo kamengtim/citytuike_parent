@@ -51,6 +51,8 @@ public class PayController {
     @Autowired
     private ITpAccountLogService iTpAccountLogService;
 
+
+    //商品支付回调 投放广告支付回调  优惠券支付回调
     @RequestMapping(value="/pay_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
     public @ResponseBody String payList(Model model,@RequestParam(required=false) String type){
         JSONObject jsonObj = new JSONObject();

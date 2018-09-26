@@ -121,6 +121,8 @@ public interface TpUsersMapper {
 
 	void update(TpUsers tpUsers);
 
+    TpRegion findRegionByName(@Param("launch_address") String launch_address);
+
 	TpUsers getToken(String token);
 
 	List<TpUsers> income();

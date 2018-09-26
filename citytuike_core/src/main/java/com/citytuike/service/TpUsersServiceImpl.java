@@ -338,6 +338,11 @@ public class TpUsersServiceImpl implements TpUsersService{
 	}
 
 	@Override
+	public TpRegion findRegionByName(String launch_address) {
+		return tpUsersMapper.findRegionByName(launch_address);
+	}
+
+	@Override
 	public TpUsers getToken(String token) {
 		return tpUsersMapper.getToken(token);
 	}

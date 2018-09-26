@@ -166,8 +166,11 @@
 	<select id="findAllByLevel" resultMap="TpRegion">
 		select * from tp_region as t where t.level=#{id}
 	</select>
-	<select id="findRegionById" resultMap="TpRegion">
+	<select id="findRegionById" resultMap="TpRegion">s
 		select * from tp_region as t where t.id=#{regions_id}
+	</select>
+	<select id="findRegionByName" resultMap="TpRegion">
+		select * from tp_region as t where t.name=#{launch_address}
 	</select>
 	<select id="findRegionByParentId" resultMap="TpRegion">
 		select * from tp_region as t where t.parent_id=#{id}

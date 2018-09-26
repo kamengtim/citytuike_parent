@@ -100,6 +100,8 @@ public interface TpUsersService {
 
 	int insertUserFinance(TpUserFinance tpUserFinance);
 
+    TpRegion findRegionByName(String launch_address);
+
 	TpUsers getToken(String token);
 
 	List<TpUsers> income();
