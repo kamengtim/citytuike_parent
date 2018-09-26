@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpFestivalsMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpFestivals" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="cate_id" property="cate_id" jdbcType="INTEGER" />
+    <result column="article_id" property="article_id" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_festivals
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpFestivals" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_festivals (cate_id, article_id, add_time, 
+      user_id)
+    values (#{cate_id,jdbcType=INTEGER}, #{article_id,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, 
+      #{user_id,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpFestivals" >
+    update tp_festivals
+    set cate_id = #{cate_id,jdbcType=INTEGER},
+      article_id = #{article_id,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=INTEGER},
+      user_id = #{user_id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, cate_id, article_id, add_time, user_id
+    from tp_festivals
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, cate_id, article_id, add_time, user_id
+    from tp_festivals
+  </select>
+  <select id="selectFestivals" resultMap="BaseResultMap">
+    SELECT id, cate_id, article_id, add_time, user_id
+    from tp_festivals where user_id = #{user_id} and id = #{ha_id}
+  </select>
+</mapper>

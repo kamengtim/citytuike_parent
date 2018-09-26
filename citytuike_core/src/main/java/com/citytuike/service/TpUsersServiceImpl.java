@@ -401,4 +401,38 @@ public class TpUsersServiceImpl implements TpUsersService{
 		List<TpUsers> tpUsers = tpUsersMapper.sale();
 		return tpUsers;
 	}
+
+	@Override
+	public TpUsers getInviteCode(String invite_code) {
+		TpUsers share_user_info = tpUsersMapper.getUserByInviteCode(invite_code);
+		return share_user_info;
+	}
+
+	@Override
+	public TpUsers getUserInfo(String user_id) {
+		TpUsers tpUsers = tpUsersMapper.getUserInfo(user_id);
+		return tpUsers;
+	}
+
+	@Override
+	public int updatePayPwd(String password,Integer user_id) {
+		int i = tpUsersMapper.updatePayPwd(password,user_id);
+		return i;
+	}
+
+	@Override
+	public TpUsers getMobile(String mobile) {
+		return tpUsersMapper.getMobile(mobile);
+	}
+
+	@Override
+	public int updatePassword(Integer user_id, String confirm_password) {
+
+		return tpUsersMapper.updatePassword(user_id,confirm_password);
+	}
+
+	@Override
+	public void updateSetPass(Integer user_id) {
+		tpUsersMapper.updateSetPass(user_id);
+	}
 }

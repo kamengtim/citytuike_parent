@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpTenSecondsActivityConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpTenSecondsActivityConfig" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="hour" property="hour" jdbcType="INTEGER" />
+    <result column="hour_num" property="hour_num" jdbcType="INTEGER" />
+    <result column="week" property="week" jdbcType="INTEGER" />
+    <result column="week_num" property="week_num" jdbcType="INTEGER" />
+    <result column="activity_num" property="activity_num" jdbcType="INTEGER" />
+    <result column="activity_title" property="activity_title" jdbcType="VARCHAR" />
+    <result column="activity_desc" property="activity_desc" jdbcType="VARCHAR" />
+    <result column="add_time" property="add_time" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="probability" property="probability" jdbcType="INTEGER" />
+    <result column="agent_config" property="agent_config" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_ten_seconds_activity_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpTenSecondsActivityConfig" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_ten_seconds_activity_config (hour, hour_num, week, 
+      week_num, activity_num, activity_title, 
+      activity_desc, add_time, status, 
+      probability, agent_config)
+    values (#{hour,jdbcType=INTEGER}, #{hour_num,jdbcType=INTEGER}, #{week,jdbcType=INTEGER}, 
+      #{week_num,jdbcType=INTEGER}, #{activity_num,jdbcType=INTEGER}, #{activity_title,jdbcType=VARCHAR}, 
+      #{activity_desc,jdbcType=VARCHAR}, #{add_time,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
+      #{probability,jdbcType=INTEGER}, #{agent_config,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpTenSecondsActivityConfig" >
+    update tp_ten_seconds_activity_config
+    set hour = #{hour,jdbcType=INTEGER},
+      hour_num = #{hour_num,jdbcType=INTEGER},
+      week = #{week,jdbcType=INTEGER},
+      week_num = #{week_num,jdbcType=INTEGER},
+      activity_num = #{activity_num,jdbcType=INTEGER},
+      activity_title = #{activity_title,jdbcType=VARCHAR},
+      activity_desc = #{activity_desc,jdbcType=VARCHAR},
+      add_time = #{add_time,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      probability = #{probability,jdbcType=INTEGER},
+      agent_config = #{agent_config,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, hour, hour_num, week, week_num, activity_num, activity_title, activity_desc, 
+    add_time, status, probability, agent_config
+    from tp_ten_seconds_activity_config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, hour, hour_num, week, week_num, activity_num, activity_title, activity_desc, 
+    add_time, status, probability, agent_config
+    from tp_ten_seconds_activity_config
+  </select>
+  <select id="getConfig" resultMap="BaseResultMap">
+    select * from tp_ten_seconds_activity_config where id = #{activity_id} and status = 1;
+  </select>
+</mapper>

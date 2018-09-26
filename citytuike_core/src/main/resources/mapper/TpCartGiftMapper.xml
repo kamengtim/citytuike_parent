@@ -65,10 +65,40 @@
     report_id, mess, orderid, mobile, taskid, obtain, user_time
     from tp_cart_gift
   </select>
-  <select id="getCount" resultMap="BaseResultMap">
+  <select id="getCount" resultType="int">
     select count(id) from tp_cart_gift where user_id = #{user_id}
   </select>
   <select id="selectByPage" resultMap="BaseResultMap">
     SELECT * from tp_cart_gift where user_id = #{user_id} and status = 2 and obtain = 2
+  </select>
+  <select id="getCartGift" resultMap="BaseResultMap">
+    select * from tp_cart_gift where id = #{id} and user_id = #{user_id}
+  </select>
+  <update id="update">
+   update tp_cart_gift
+    set
+      add_time = #{time,jdbcType=INTEGER},
+      status = 1,
+      orderid = #{orderid,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=CHAR},
+      taskid = #{taskid,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER} and user_id = #{user_id}
+  </update>
+    <select id="getCartGiftByUserId" resultMap="BaseResultMap">
+        select * from tp_cart_gift where  user_id = #{user_id} and obtain = 2 and status = 2 order by money desc
+    </select>
+    <update id="getGifts">
+        update tp_cart_gift
+    set gift_name = #{gift_name,jdbcType=VARCHAR},
+      gift_type = #{gift_type,jdbcType=BIT},
+      obtain = 1,
+      user_time = #{date,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER} AND user_id = #{user_id} and gift_type = #{gift_type}
+    </update>
+  <select id="queryList" resultMap="BaseResultMap">
+        SELECT * from tp_cart_gift where user_id = #{user_id} and status = 2 and obtain = 1
+  </select>
+  <select id="useGifts" resultMap="BaseResultMap">
+    select * from tp_cart_gift where user_id = #{user_id} and id = #{id} ORDER BY  money desc
   </select>
 </mapper>

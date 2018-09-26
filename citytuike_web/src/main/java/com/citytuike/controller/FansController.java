@@ -185,7 +185,7 @@ public class FansController {
         TpUsers tpUsers = tpUsersService.findOneByToken(token);
         JSONObject  jsonObj = new JSONObject();
         String fan_dev = "";
-        int code = tpSmsLogService.selectCode(String.valueOf(mobile_code));
+        int code = tpSmsLogService.selectvalidateCode(String.valueOf(mobile_code),mobile);
         if(code <= 0){
          return "验证码错误";
         }

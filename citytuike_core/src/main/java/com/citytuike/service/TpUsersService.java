@@ -107,4 +107,16 @@ public interface TpUsersService {
 	List<TpUsers> income();
 
 	List<TpUsers> sale();
+
+    TpUsers getInviteCode(String invite_code);
+
+	TpUsers getUserInfo(String user_id);
+
+    int updatePayPwd(String password,Integer user_id);
+
+	TpUsers getMobile(String mobile);
+
+	int updatePassword(Integer user_id, String confirm_password);
+
+	void updateSetPass(Integer user_id);
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpTenSecondsActivityLogMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpTenSecondsActivityLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="add_time" property="add_time" jdbcType="TIMESTAMP" />
+    <result column="text" property="text" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_ten_seconds_activity_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpTenSecondsActivityLog" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_ten_seconds_activity_log (user_id, add_time, text
+      )
+    values (#{user_id,jdbcType=INTEGER}, #{add_time,jdbcType=TIMESTAMP}, #{text,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpTenSecondsActivityLog" >
+    update tp_ten_seconds_activity_log
+    set user_id = #{user_id,jdbcType=INTEGER},
+      add_time = #{add_time,jdbcType=TIMESTAMP},
+      text = #{text,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, user_id, add_time, text
+    from tp_ten_seconds_activity_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, user_id, add_time, text
+    from tp_ten_seconds_activity_log
+  </select>
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpFestivalsContentMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpFestivalsContent" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="he_id" property="he_id" jdbcType="INTEGER" />
+    <result column="add_time" property="add_time" jdbcType="INTEGER" />
+    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_festivals_content
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpFestivalsContent" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_festivals_content (he_id, add_time, user_id, 
+      content)
+    values (#{he_id,jdbcType=INTEGER}, #{add_time,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, 
+      #{content,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpFestivalsContent" >
+    update tp_festivals_content
+    set he_id = #{he_id,jdbcType=INTEGER},
+      add_time = #{add_time,jdbcType=INTEGER},
+      user_id = #{user_id,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, he_id, add_time, user_id, content
+    from tp_festivals_content
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, he_id, add_time, user_id, content
+    from tp_festivals_content
+  </select>
+  <select id="midAutumn" resultMap="BaseResultMap">
+    select id, he_id, add_time, user_id, content
+    from tp_festivals_content where he_id = #{ha_id}
+  </select>
+</mapper>

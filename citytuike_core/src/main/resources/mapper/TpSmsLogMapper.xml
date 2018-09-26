@@ -79,4 +79,7 @@
 	<select id="selectCode" resultType="int">
 		select count(id) from tp_sms_log where  code = #{mobile_code} AND status = 1 and FROM_UNIXTIME(add_time) >= DATE_SUB(NOW(),INTERVAL 180 SECOND) order by code desc limit 1;
 	</select>
+	<select id="selectvalidateCode" resultType="int">
+		select count(id) from tp_sms_log where  code = #{mobile_code} and mobile = #{mobile} AND status = 1 and FROM_UNIXTIME(add_time) >= DATE_SUB(NOW(),INTERVAL 180 SECOND) order by code desc limit 1;
+	</select>
 </mapper>

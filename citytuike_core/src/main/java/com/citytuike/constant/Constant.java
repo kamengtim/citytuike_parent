@@ -27,4 +27,10 @@ public class Constant {
 	//七牛
 	public static String QINIU_ACCESSKEY = "你自己的AppCode";
 	public static String QINIU_SECRETKEY = "你自己的AppCode";
+
+	//話費充值
+	public static String MOBILE_APIKEY = "zra9I277yTKD6yimeV56";
+	public static String MOBILE_USERNAME = "23235795";
+
+	public static Boolean share_user_info=true;
 }

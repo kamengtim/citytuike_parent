@@ -31,5 +31,10 @@ public class TpSmsLogServiceImpl implements TpSmsLogService{
 
 	}
 
+	@Override
+	public int selectvalidateCode(String code, String mobile) {
+		return tpSmsLogMapper.selectvalidateCode(code,mobile);
+	}
+
 
 }

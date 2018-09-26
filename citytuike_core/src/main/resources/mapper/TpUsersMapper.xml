@@ -647,4 +647,22 @@
 	<select id="sale" resultType="TpUsers">
 		select * from tp_user ORDER BY sale_number desc limit 30
 	</select>
+	<select id="getUserByInviteCode" resultType="TpUsers">
+		select * from tp_users where invite_code = #{invite_code}
+	</select>
+	<select id="getUserInfo" resultType="TpUsers">
+		select * from tp_users where user_id = #{user_id}
+	</select>
+	<update id="updatePayPwd">
+		update tp_users set paypwd = #{password} where user_id = #{user_id}
+	</update>
+	<select id="getMobile" resultType="TpUsers">
+		select * from tp_users where mobile = #{mobile}
+	</select>
+	<update id="updatePassword">
+		update tp_users set password = #{confirm_password} where user_id = #{user_id}
+	</update>
+	<update id="updateSetPass">
+		update tp_users set set_pass = 1 where user_id = #{user_id}
+	</update>
 </mapper>

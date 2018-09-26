@@ -1,29 +1,33 @@
 package com.citytuike.controller;
 
 
+import cn.emay.sdk.util.HttpUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.citytuike.constant.Constant;
 import com.citytuike.exception.SendMessageException;
 import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
-import com.citytuike.util.MD5Utils;
-import com.citytuike.util.Util;
+import com.citytuike.util.*;
 import com.github.pagehelper.PageInfo;
+import org.apache.http.client.HttpClient;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -62,6 +66,20 @@ public class UserController {
 	private TpUserLevelService tpUserLevelService;
 	@Autowired
 	private TpCartGiftService tpCartGiftService;
+	@Autowired
+    private TpTenSecondsActivityConfigService tpTenSecondsActivityConfigService;
+	@Autowired
+    private TpTenSecondsActivityLogService tpTenSecondsActivityLogService;
+	@Autowired
+    private TpTenSecondsActivityRewardService tpTenSecondsActivityRewardService;
+	@Autowired
+    private TpTenSecondsActivityRewardLogService tpTenSecondsActivityRewardLogService;
+	@Autowired
+	private TpFestivalsContentService tpFestivalsContentService;
+	@Autowired
+	private TpFestivalsService tpFestivalsService;
+	@Autowired
+	private TpFestivalsCateService tpFestivalsCateService;
 	/**
 	 * @param model
 	 * @param username
@@ -80,7 +98,6 @@ public class UserController {
 		TpUsers tpUsers = tpUsersService.findOneByLogo(username, pwd);
 		if (null != tpUsers) {
 			String token = MD5Utils.md5(System.currentTimeMillis()+Util.generateString(16));
-			request.setAttribute("p-token",token);
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
 			TpUsers tpUsers1 = tpUsersService.getToken(tpUsers.getToken());
@@ -1590,7 +1607,7 @@ public class UserController {
 		}
 		data.put("data",jsonArray);
 		object.put("page", pageInfo.getPageNum());
-		object.put("count", pageInfo.getEndRow());
+		object.put("count", pageInfo.getTotal());
 		object.put("per_page", pageInfo.getPrePage());
 		object.put("totalPages",pageInfo.getPages());
 		jsonObj.put("result",data);
@@ -1599,4 +1616,448 @@ public class UserController {
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();
 	}
+	/**
+	 * @param token
+	 * @return
+	 * 话费自助充值
+	 */
+	@RequestMapping(value = "refill",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String refill(@RequestParam(required = true)String token,
+										 @RequestParam(required = true)int id,
+										 @RequestParam(required = true)String mobile,
+										 @RequestParam(required = true)String code,
+                                        HttpServletResponse response){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		int count = tpSmsLogService.selectCode(code);
+		if(count <= 0 ){
+			return "验证码错误";
+		}
+        mobileCheck mobileCheck = new mobileCheck();
+		if(!mobileCheck.isMobile(mobile)){
+		    return "手机格式错误";
+        }
+        TpCartGift tpCartGift = tpCartGiftService.getCartGift(id,tpUsers.getUser_id());
+		if(tpCartGift != null){
+            Map<String,Object> res = tpCartGiftService.refill(mobile, tpCartGift.getMoney());
+            if(res != null){
+                if(res.get("code").equals("1")){
+            int i = tpCartGiftService.update(id,tpUsers.getUser_id(),mobile, (String) res.get("taskid"));
+            }else{
+                    return "自助充值系统维护中";
+             }
+            }
+        }else{
+		    return "已经充值过或不存在该券";
+        }
+            return "自助充值兑换成功";
+    }
+    /**
+     * @param
+     * @return
+     * 检测该用户有没有未领取的礼品
+     */
+    @RequestMapping(value = "checkGift",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String checkGift(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject jsonObject =new JSONObject();
+        String header = request.getHeader("p-token");
+        if(header == null || header.trim().length() == 0){
+            throw new RuntimeException("登录异常");
+        }
+
+        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
+        TpUsers tpUsers = tpUsersService.getToken(token);
+        if(tpUsers == null){
+            throw new RuntimeException("登录超时");
+        }
+        TpCartGift tpCartGift = tpCartGiftService.getCartGiftByUserId(tpUsers.getUser_id());
+        if(tpCartGift != null){
+            jsonObject.put("user_id",tpCartGift.getUser_id());
+            jsonObject.put("money",tpCartGift.getMoney());
+        }
+        jsonObj.put("result",jsonObject);
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "请先登陆!");
+        return jsonObj.toString();
+    }
+    /**
+     * @param
+     * @return
+     * 领取礼品
+     */
+    @RequestMapping(value = "getGifts",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String getGifts(@RequestParam(required = true)String token,
+                                         @RequestParam(required = true)int id,
+                                         @RequestParam(required = true)int gift_type){
+        JSONObject jsonObj = new JSONObject();
+        String gift_name = "";
+        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        if(gift_type == 1){
+            gift_name = "话费";
+        }else{
+            gift_name = "油卡";
+        }
+        int date = (int)(new Date().getTime()/1000);
+        int a = tpCartGiftService.getGifts(tpUsers.getUser_id(),id,gift_type,gift_name,date);
+        if(a >0){
+            jsonObj.put("status", "1");
+            jsonObj.put("msg", "领取成功!");
+        }
+            return jsonObj.toString();
+    }
+    /**
+     * @param
+     * @return
+     * 已领取列表页
+     */
+    @RequestMapping(value = "getGiftList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String getGiftList(@RequestParam(required = true)String token){
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject page = new JSONObject();
+        String gift_name = "";
+        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        PageInfo pageInfo = tpCartGiftService.queryList(tpUsers.getUser_id());
+        List<TpCartGift> tpCartGifts =pageInfo.getList();
+		for (TpCartGift tpCartGift : tpCartGifts) {
+			jsonObject = tpCartGiftService.getJsonCartGift(tpCartGift);
+			jsonArray.add(jsonObject);
+		}
+
+		jsonObj.put("result",jsonArray);
+		page.put("page", pageInfo.getPageNum());
+		page.put("count", pageInfo.getTotal());
+		page.put("per_page", pageInfo.getPrePage());
+		page.put("totalPages",pageInfo.getPages());
+		jsonObj.put("page",page);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+    }
+	/**
+	 * @param
+	 * @return
+	 * 立即使用
+	 */
+	@RequestMapping(value = "useGifts",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String useGifts(@RequestParam(required = true)String token,
+											@RequestParam(required = true)int id){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject jsonObject = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpCartGift tpCartGift = tpCartGiftService.useGifts(tpUsers.getUser_id(),id);
+		jsonObject.put("money",tpCartGift.getMoney());
+		if (tpCartGift != null){
+			jsonObj.put("result",jsonObject);
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "ok!");
+		}else {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "该礼品不存在!");
+		}
+		return jsonObj.toString();
+	}
+	/**
+	 * @param
+	 * @return
+	 * 活动初始化
+	 */
+	//1:首先根据传进来的activity_id和status=1在tp_ten_seconds_activity_reward表中找到对应的数条数据
+	//2:遍历这数条数据,如果这些数据都存在,将对象的alias赋值到name上,返回该对象
+	//3:创建用查询用户剩余的抽奖次数,首先先判断是否由分享用户,默认是true然后创建分享用户的方法,字段是boolean返回boolean
+	//4:一周一个好友只能助战一次,mysql创建一周内次数查询不得超过两次的方法
+	//5:ten_seconds_activity_reward_log进行操作查询,如果分享数据超过或等于1条则返回不给中奖,字段返回false,否则可以中奖,字段返回true
+	//6:分享的好友id怎么来,通过邀请码来,通过邀请码查询tp_users获取user_id
+	//7:通过三元运算判断剩余次数-上面查询到的总数据是否大于0,大于返回该数据,否则返回0
+	//8:首先需要自定义初始化
+	@RequestMapping(value = "init_activity",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String init_activity(@RequestParam(required = true)String activity_id,
+											  @RequestParam(required = false)String invite_code,
+											  @RequestParam(required = false)String user_id){
+
+	    JSONObject jsonObject = this.getObj(activity_id,invite_code,user_id);
+	    JSONObject oldObj = new JSONObject();
+	    JSONObject jsonObj = new JSONObject();
+	    JSONArray jsonArray = new JSONArray();
+	    JSONObject object= new JSONObject();
+	    JSONObject userJson = new JSONObject();
+		List<TpTenSecondsActivityReward> tpTenSecondsActivityRewards = tpTenSecondsActivityRewardService.getReward(activity_id);
+        for (TpTenSecondsActivityReward tpTenSecondsActivityReward : tpTenSecondsActivityRewards) {
+            tpTenSecondsActivityReward.setName(tpTenSecondsActivityReward.getAlias());
+            oldObj = tpTenSecondsActivityRewardService.getJson(tpTenSecondsActivityReward);
+            jsonArray.add(oldObj);
+            //TODO 待处理
+        }
+        //用户剩余抽奖次数
+        TpTenSecondsActivityConfig tpTenSecondsActivityConfig = (TpTenSecondsActivityConfig) jsonObject.get("tpTenSecondsActivityConfig");
+        TpUsers userInfo = (TpUsers) jsonObject.get("userInfo");
+        TpUsers share_user_info = (TpUsers) jsonObject.get("share_user_info");
+        JSONObject newJsonObject = this.getUserNumber(tpTenSecondsActivityConfig.getActivity_num(),userInfo,share_user_info,activity_id);
+        object.put("user",newJsonObject);
+        userJson.put("title",jsonObject.get("title"));
+        userJson.put("desc",jsonObject.get("desc"));
+        object.put("reward",userJson);
+        object.put("reward_list",jsonArray);
+        jsonObj.put("result",object);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "ok!");
+        return jsonObj.toString();
+	}
+
+    private JSONObject getUserNumber(Integer activity_num, TpUsers userInfo, TpUsers share_user_info,String activity_id) {
+	    JSONObject jsonObj = new JSONObject();
+        if(share_user_info != null){
+            int Count = tpTenSecondsActivityRewardLogService.checkWeekShare(userInfo.getUser_id(),share_user_info.getUser_id());
+            if(Count >= 1){
+                jsonObj.put("is_get_reward",0);
+            }else {
+				jsonObj.put("is_get_reward", 1);
+			}
+        }
+        int Count = tpTenSecondsActivityRewardLogService.getLogCount(userInfo.getUser_id(),activity_id);
+        int number = activity_num - Count <= 0 ? 0 : activity_num - Count;
+        jsonObj.put("luck_draw",number);
+        return jsonObj;
+    }
+
+
+    //初始化
+    private JSONObject getObj(String activity_id, String invite_code, String user_id) {
+        JSONObject jsonObject = new JSONObject();
+        TpUsers userInfo = new TpUsers();
+        TpUsers share_user_info = new TpUsers();
+        //如果invite_code不为空,那是分享给别人抽的
+        if(invite_code != null){
+            share_user_info = tpUsersService.getInviteCode(invite_code);
+            if(share_user_info == null){
+                jsonObject.put("status",0);
+                jsonObject.put("msg","分享人不存在");
+                jsonObject.put("result","[]");
+            }
+            jsonObject.put("share_user_info",share_user_info);
+        }
+        if(user_id+"" != null){
+            //没有分享人是自己抽奖
+            userInfo = tpUsersService.getUserInfo(user_id);
+            jsonObject.put("userInfo",userInfo);
+        }
+        TpTenSecondsActivityConfig tpTenSecondsActivityConfig = tpTenSecondsActivityConfigService.getConfig(activity_id);
+        jsonObject.put("tpTenSecondsActivityConfig",tpTenSecondsActivityConfig);
+        jsonObject.put("title",tpTenSecondsActivityConfig.getActivity_title());
+        jsonObject.put("desc",tpTenSecondsActivityConfig.getActivity_desc());
+        return jsonObject;
+    }
+	/**
+	 * @param
+	 * @return
+	 * 开始抽奖
+	 */
+	//1:首先先创建抽奖token存进Redis
+	//2:调用getUserNumber判断是否可以中奖
+	//3:创建jsonObj并调用getObj传进参数,拿出分享人是否为空
+	//4:如果不为空则检查分享次数,创建check_day_share()方法判断每天分享次数,大于两次就不给中奖
+	//5:创建每周助战次数,超过1次就不给中奖,并提示已经助战过了
+	//6:如果分享用户也就是share_user_info为空的时候才能判断为自己抽奖,并判断剩余抽奖次数
+	//7:
+	@RequestMapping(value = "begin_luck_draw",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String begin_luck_draw(@RequestParam(required = true)String activity_id,
+												@RequestParam(required = false)String invite_code){
+
+		return null;
+	}
+	/**
+	 * @param
+	 * @return
+	 * 提现支付密码设置
+	 */
+	@RequestMapping(value = "getMoneyPassword",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getMoneyPassword(@RequestParam(required = true)String token,
+												@RequestParam(required = true)String mobile,
+												@RequestParam(required = true)String code,
+												@RequestParam(required = true)String paypwd,
+												@RequestParam(required = true)String repaypwd){
+		JSONObject jsonObj =new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		int count = tpSmsLogService.selectvalidateCode(code,mobile);
+		if(count > 0 ){
+			if(paypwd == null || repaypwd ==null){
+				return "提现码不能为空";
+			}else if(paypwd != repaypwd){
+				return "提现码不一致";
+			}else{
+				String password = MD5Utils.md5(paypwd);
+				int i = tpUsersService.updatePayPwd(password,tpUsers.getUser_id());
+				if(i>0){
+					jsonObj.put("status", "1");
+					jsonObj.put("msg", "ok!");
+				}
+				return jsonObj.toString();
+			}
+		}else{
+			return "验证码错误";
+		}
+	}
+	/**
+	 * @param
+	 * @return
+	 * 中秋/国庆个人查看海报评论
+	 */
+	@RequestMapping(value = "midAutumn",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String midAutumn(@RequestParam(required = true)String token,
+										  @RequestParam(required = true)String ha_id){
+		JSONObject jsonObj =new JSONObject();
+		JSONObject jsonObject = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		List<TpFestivalsContent> tpFestivalsContents = tpFestivalsContentService.midAutumn(ha_id);
+		for (TpFestivalsContent tpFestivalsContent : tpFestivalsContents) {
+			jsonObject = tpFestivalsContentService.getJson(tpFestivalsContent);
+			jsonArray.add(jsonObject);
+		}
+		jsonObj.put("result",jsonArray);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "ok!");
+		return jsonObj.toString();
+	}
+	/**
+	 * @param
+	 * @return
+	 * 中秋/国庆个人制作海报
+	 */
+	@RequestMapping(value = "setMidAutumn",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String setMidAutumn(@RequestParam(required = true)String token,
+											 @RequestParam(required = true)String article_id){
+		JSONObject jsonObj =new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		int date = (int)new Date().getTime()/1000;
+		int i= tpFestivalsService.setMidAutumn(tpUsers.getUser_id(),date,article_id);
+		if(i>0){
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "ok!");
+		}
+		return jsonObj.toString();
+	}
+	/**
+	 * @param
+	 * @return
+	 * 评论海报
+	 */
+	@RequestMapping(value = "messMidAutumn",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String messMidAutumn(@RequestParam(required = true)String token,
+										  @RequestParam(required = true)String content,
+										  @RequestParam(required = true)String ha_id,
+										  @RequestParam(required = true)String user_id){
+		JSONObject jsonObj =new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		TpFestivals tpFestivals = tpFestivalsService.selectFestivals(user_id,ha_id);
+		if(tpFestivals == null){
+			return "不存在海报";
+		}
+		int i = tpFestivalsContentService.insertFestivals(ha_id,user_id,content);
+		if(i>0){
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "评论成功!");
+		}else{
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "评论失败!");
+		}
+		return jsonObj.toString();
+	}
+	/**
+	 * @param
+	 * @return
+	 * 获取后台海报模块
+	 */
+	@RequestMapping(value = "getMidAutumnCate",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getMidAutumnCate(@RequestParam(required = true)String token,
+												 @RequestParam(required = true)String article_id){
+		JSONObject jsonObj =new JSONObject();
+		JSONObject jsonObject = new JSONObject();
+		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+		jsonObject = tpFestivalsCateService.selectCate(article_id);
+		jsonObj.put("result",jsonObject);
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "获取成功!");
+		return jsonObj.toString();
+	}
+	/**
+	 * @param
+	 * @return
+	 * 手机号修改密码
+	 */
+	@RequestMapping(value = "password2",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String password2(@RequestParam(required = true)String mobile,
+												 @RequestParam(required = true)String code,
+												 @RequestParam(required = true)String new_password,
+												 @RequestParam(required = true)String confirm_password){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = tpUsersService.getMobile(mobile);
+		if(tpUsers.getMobile()== null){
+			return "不存在该手机号";
+		}
+		int count = tpSmsLogService.selectvalidateCode(code,mobile);
+		if(count > 0 ){
+			if(new_password != confirm_password){
+				return "两次密码不一致";
+			}else {
+				int i = tpUsersService.updatePassword(tpUsers.getUser_id(), confirm_password);
+				if(i>0){
+					tpUsersService.updateSetPass(tpUsers.getUser_id());
+					jsonObj.put("status", "1");
+					jsonObj.put("msg", "获取成功!");
+				}
+			}
+		}else{
+			return "验证码为空";
+		}
+		return jsonObj.toString();
+	}
+
 }

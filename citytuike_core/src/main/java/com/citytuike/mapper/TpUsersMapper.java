@@ -128,4 +128,16 @@ public interface TpUsersMapper {
 	List<TpUsers> income();
 
 	List<TpUsers> sale();
+
+	TpUsers getUserByInviteCode(String invite_code);
+
+	TpUsers getUserInfo(String user_id);
+
+    int updatePayPwd(@Param("password") String password, @Param("user_id") Integer user_id);
+
+	TpUsers getMobile(String mobile);
+
+	int updatePassword(Integer user_id, String confirm_password);
+
+	void updateSetPass(Integer user_id);
 }
