@@ -13,6 +13,7 @@
     <result column="number" property="number" jdbcType="INTEGER" />
     <result column="get_number" property="get_number" jdbcType="INTEGER" />
     <result column="alias" property="alias" jdbcType="VARCHAR" />
+    <result column="goods_id" property="goods_id"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tp_ten_seconds_activity_reward
@@ -60,4 +61,7 @@
     number = number - 1
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getRewardById" resultMap="BaseResultMap">
+    SELECT * from tp_ten_seconds_activity_reward where id = #{reward_id}
+  </select>
 </mapper>

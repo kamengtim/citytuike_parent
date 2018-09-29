@@ -24,7 +24,17 @@ public class TpTenSecondsActivityReward implements Serializable{
 
     private Integer get_number;
 
+    public Integer getGoods_id() {
+        return goods_id;
+    }
+
+    public void setGoods_id(Integer goods_id) {
+        this.goods_id = goods_id;
+    }
+
     private String alias;
+
+    private Integer goods_id;
 
     public Integer getId() {
         return id;

@@ -24,9 +24,9 @@ public class IndexController {
      * @return ios APP 设置审核版本
      */
     @RequestMapping(value = "setIosVersionDo", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String setIosVersionDo(HttpServletRequest request){
+    public @ResponseBody String setIosVersionDo(HttpServletRequest request,
+                                                @RequestParam(required = true)String version){
         JSONObject jsonObject = new JSONObject();
-        String version = request.getParameter("version");
         jsonObject.put("app_version",version);
         jsonObject.toString();
         redisTemplate.opsForValue().set("ios",jsonObject.toString());

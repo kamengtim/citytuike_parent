@@ -406,7 +406,13 @@ public class TenSecondsActivityController {
         String city = tpRegionService.getCityName(cityName);
         String district = tpRegionService.getDistrict(districtName);
         String twon = tpRegionService.getTwon(twonName);
-        int i = tpTenSecondsActivityRewardLogService.update(tpUserAddress.getMobile(),tpUserAddress.getAddress(),province,city,district,twon,tpTenSecondsActivityRewardLog.getId());
+        tpTenSecondsActivityRewardLog.setProvince(province);
+        tpTenSecondsActivityRewardLog.setCity(city);
+        tpTenSecondsActivityRewardLog.setDistrict(district);
+        tpTenSecondsActivityRewardLog.setTwon(twon);
+        tpTenSecondsActivityRewardLog.setMobile(tpUserAddress.getMobile());
+        tpTenSecondsActivityRewardLog.setAddress(tpUserAddress.getAddress());
+        int i = tpTenSecondsActivityRewardLogService.update(tpTenSecondsActivityRewardLog);
         if(i>0){
             jsonObj.put("status", "1");
             jsonObj.put("msg", "領取成功!");
@@ -424,12 +430,13 @@ public class TenSecondsActivityController {
         JSONObject jsonObj = new JSONObject();
         JSONObject goods = new JSONObject();
         TpTenSecondsActivityRewardLog tpTenSecondsActivityRewardLog = tpTenSecondsActivityRewardLogService.getReward(log_id);
+        TpTenSecondsActivityReward tpTenSecondsActivityReward = tpTenSecondsActivityRewardService.getRewardById(tpTenSecondsActivityRewardLog.getReward_id());
         JSONObject json = tpTenSecondsActivityRewardLogService.getJson(tpTenSecondsActivityRewardLog);
         if(tpTenSecondsActivityRewardLog == null){
             jsonObj.put("status", "0");
             jsonObj.put("msg", "記錄不存在!");
         }
-        if(tpTenSecondsActivityRewardLog.getGoods_id() == 144){
+        if(tpTenSecondsActivityReward.getGoods_id() == 144){
             Integer id = 144;
             TpGoods tpGoods = tpGoodsService.getGoodsById(id);
             goods.put("image",tpGoods.getOriginal_img() == null ? image : tpGoods.getOriginal_img());
@@ -438,7 +445,7 @@ public class TenSecondsActivityController {
             goods.put("price",tpGoods.getShop_price());
             goods.put("org_price",tpGoods.getMarket_price());
             goods.put("number","1");
-        }else if(tpTenSecondsActivityRewardLog.getGoods_id() == 146){
+        }else if(tpTenSecondsActivityReward.getGoods_id() == 146){
             Integer id = 146;
             TpGoods tpGoods = tpGoodsService.getGoodsById(id);
             goods.put("image",tpGoods.getOriginal_img() == null ? image : tpGoods.getOriginal_img());
@@ -448,9 +455,10 @@ public class TenSecondsActivityController {
             goods.put("org_price","0");
             goods.put("number","1");
         }else{
-            Integer id = 0;
+            /*Integer id = 0;
             TpGoods tpGoods = tpGoodsService.getGoodsById(id);
-            goods.put("image",tpGoods.getOriginal_img() == null ? image : tpGoods.getOriginal_img());
+            goods.put("image",tpGoods.getOriginal_img() == null ? image : tpGoods.getOriginal_img());*/
+            goods.put("image",image);
             goods.put("goods_name",tpTenSecondsActivityRewardLog.getReward_name());
             goods.put("goods_desc","");
             goods.put("price","0");

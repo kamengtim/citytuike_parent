@@ -21,7 +21,6 @@
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="from_user_id" property="from_user_id" jdbcType="INTEGER" />
-    <result column="goods_id" property="goods_id" jdbcType="INTEGER" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tp_ten_seconds_activity_reward_log

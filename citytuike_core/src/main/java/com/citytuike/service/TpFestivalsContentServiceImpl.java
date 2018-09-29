@@ -35,7 +35,7 @@ public class TpFestivalsContentServiceImpl implements TpFestivalsContentService 
     @Override
     public int insertFestivals(String ha_id, String user_id, String content) {
         TpFestivalsContent tpFestivalsContent = new TpFestivalsContent();
-        tpFestivalsContent.setAdd_time((int)new Date().getTime()/1000);
+        tpFestivalsContent.setAdd_time((int)(new Date().getTime()/1000));
         tpFestivalsContent.setUser_id(Integer.valueOf(user_id));
         tpFestivalsContent.setContent(content);
         tpFestivalsContent.setHe_id(Integer.valueOf(ha_id));

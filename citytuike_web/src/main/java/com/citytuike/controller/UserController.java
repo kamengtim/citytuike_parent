@@ -576,16 +576,22 @@ public class UserController {
 												 @RequestParam(required = false) String send,
 												 @RequestParam(required = false)String verify_code,
 												 @RequestParam(required = false)String unique_id){
+		JSONObject jsonObject = new JSONObject();
 		String mobile_code = (String) redisTemplate.opsForValue().get(mobile);
 		if(mobile_code != null){
-			return "发送太频繁";
+			jsonObject.put("status","0");
+			jsonObject.put("msg","发送太频繁");
+			return jsonObject.toString();
 		}
 		try{
 		sendMessageService.sendVerifyCode(type,scene,mobile,send,verify_code,unique_id);
-		return "发送成功";
+			jsonObject.put("status","1");
+			jsonObject.put("msg","发送成功");
 		}catch (Exception e){
-		throw new SendMessageException("发送超时");
+			jsonObject.put("status","0");
+			jsonObject.put("msg","发送太频繁");
 		}
+		return jsonObject.toString();
 	}
 
     /**
@@ -674,13 +680,15 @@ public class UserController {
 			if(mobile_code != null || mobile != null){
 			tpUsersService.updateUserAndMobile(tpUsers.getUser_id(),head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat,mobile);
 			}else{
-				return "验证码不能为空";
+				jsonObj.put("status", "0");
+				jsonObj.put("msg", "验证码不能为空!");
+				return jsonObj.toString();
 			}
 		}
 		jsonObj.put("status", "1");
 		jsonObj.put("msg", "修改成功!");
 		jsonObj.put("result",jsonArray);
-		return "修改成功";
+		return jsonObj.toString();
 	}
 	/**
 	 * @param token
@@ -1285,7 +1293,9 @@ public class UserController {
 		if(count > 0 ){
 		tpCardListSevice.save(mobile_code,cardid,id);
 		}else{
-			return "验证码错误";
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "验证码错误!");
+			return jsonObj.toString();
 		}
 		jsonObj.put("status", "1");
 		jsonObj.put("msg", "ok!");
@@ -1318,13 +1328,19 @@ public class UserController {
 				tpUsersService.updatePwd(tpUsers.getUser_id(),newPwd);
 
 				}else{
-					return "请输入正确的验证码";
+					jsonObj.put("status", "0");
+					jsonObj.put("msg", "请输入正确的验证码!");
+					return jsonObj.toString();
 				}
 			}else{
-				return "两次密码输入不一致";
+				jsonObj.put("status", "0");
+				jsonObj.put("msg", "两次密码输入不一致!");
+				return jsonObj.toString();
 			}
 		}else{
-			return "请先绑定手机号";
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先绑定手机号!");
+			return jsonObj.toString();
 		}
 		jsonObj.put("status", "1");
 		jsonObj.put("msg", "ok!");
@@ -1404,7 +1420,9 @@ public class UserController {
         if(count > 0 ){
             tpUserAliAccountService.addAliAccount(real_name,mobile,account);
         }else{
-            return "验证码错误";
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "验证码错误!");
+			return jsonObj.toString();
         }
         jsonObj.put("status", "1");
         jsonObj.put("msg", "ok!");
@@ -1623,11 +1641,15 @@ public class UserController {
 		}
 		int count = tpSmsLogService.selectCode(code);
 		if(count <= 0 ){
-			return "验证码错误";
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "验证码错误!");
+			return jsonObj.toString();
 		}
         mobileCheck mobileCheck = new mobileCheck();
 		if(!mobileCheck.isMobile(mobile)){
-		    return "手机格式错误";
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "手机格式错误!");
+			return jsonObj.toString();
         }
         TpCartGift tpCartGift = tpCartGiftService.getCartGift(id,tpUsers.getUser_id());
 		if(tpCartGift != null){
@@ -1636,13 +1658,19 @@ public class UserController {
                 if(res.get("code").equals("1")){
             int i = tpCartGiftService.update(id,tpUsers.getUser_id(),mobile, (String) res.get("taskid"));
             }else{
-                    return "自助充值系统维护中";
+					jsonObj.put("status", "0");
+					jsonObj.put("msg", "自助充值系统维护中!");
+					return jsonObj.toString();
              }
             }
         }else{
-		    return "已经充值过或不存在该券";
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "已经充值过或不存在该券!");
+			return jsonObj.toString();
         }
-            return "自助充值兑换成功";
+		jsonObj.put("status", "1");
+		jsonObj.put("msg", "自助充值兑换成功!");
+		return jsonObj.toString();
     }
     /**
      * @param
@@ -1655,13 +1683,17 @@ public class UserController {
         JSONObject jsonObject =new JSONObject();
         String header = request.getHeader("p-token");
         if(header == null || header.trim().length() == 0){
-            throw new RuntimeException("登录异常");
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "登录异常!");
+			return jsonObj.toString();
         }
 
         String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
         TpUsers tpUsers = tpUsersService.getToken(token);
         if(tpUsers == null){
-            throw new RuntimeException("登录超时");
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "登录超时!");
+			return jsonObj.toString();
         }
         TpCartGift tpCartGift = tpCartGiftService.getCartGiftByUserId(tpUsers.getUser_id());
         if(tpCartGift != null){
@@ -1792,12 +1824,12 @@ public class UserController {
 				jsonObj.put("status", "0");
 				jsonObj.put("msg", "提现码不能为空!");
 				return jsonObj.toString();
-			}else if(paypwd != repaypwd){
+			}else if(!paypwd.equals(repaypwd)){
 				jsonObj.put("status", "0");
 				jsonObj.put("msg", "提现码不一致!");
 				return jsonObj.toString();
 			}else{
-				String password = MD5Utils.md5(paypwd);
+				String password = MD5Utils.md5("TPSHOP" + paypwd);
 				int i = tpUsersService.updatePayPwd(password,tpUsers.getUser_id());
 				if(i>0){
 					jsonObj.put("status", "1");
@@ -1853,7 +1885,7 @@ public class UserController {
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-		int date = (int)new Date().getTime()/1000;
+		int date = (int)(new Date().getTime()/1000);
 		int i= tpFestivalsService.setMidAutumn(tpUsers.getUser_id(),date,article_id);
 		if(i>0){
 			jsonObj.put("status", "1");

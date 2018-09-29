@@ -42,16 +42,6 @@ public class TpTenSecondsActivityRewardLog implements Serializable{
 
     private Integer from_user_id;
 
-    private Integer goods_id;
-
-    public Integer getGoods_id() {
-        return goods_id;
-    }
-
-    public void setGoods_id(Integer goods_id) {
-        this.goods_id = goods_id;
-    }
-
     public Integer getId() {
         return id;
     }

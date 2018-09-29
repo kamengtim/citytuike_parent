@@ -26,7 +26,7 @@ public interface TpTenSecondsActivityRewardLogService {
 
     TpTenSecondsActivityRewardLog getLogById(String reward_id,Integer user_id);
 
-    int update(String Mobile,String address,String province, String city, String district, String twon,Integer id);
+    int update(TpTenSecondsActivityRewardLog tpTenSecondsActivityRewardLog);
 
     TpTenSecondsActivityRewardLog getReward(String log_id);
 }

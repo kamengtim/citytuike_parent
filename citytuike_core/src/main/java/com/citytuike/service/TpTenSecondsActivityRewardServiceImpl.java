@@ -37,4 +37,10 @@ public class TpTenSecondsActivityRewardServiceImpl implements TpTenSecondsActivi
         TpTenSecondsActivityReward tpTenSecondsActivityReward = tpTenSecondsActivityRewardMapper.getRewardBySecond(second,activity_id);
         return tpTenSecondsActivityReward;
     }
+
+    @Override
+    public TpTenSecondsActivityReward getRewardById(Integer reward_id) {
+        TpTenSecondsActivityReward tpTenSecondsActivityReward = tpTenSecondsActivityRewardMapper.getRewardById(reward_id);
+        return tpTenSecondsActivityReward;
+    }
 }

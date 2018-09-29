@@ -160,8 +160,8 @@ public class TpTenSecondsActivityRewardLogServiceImpl implements TpTenSecondsAct
     }
 
     @Override
-    public int update(String Mobile,String address,String province, String city, String district, String twon,Integer id) {
-        int  i = tpTenSecondsActivityRewardLogMapper.update(Mobile,address,province,city,district,twon,id);
+    public int update(TpTenSecondsActivityRewardLog tpTenSecondsActivityRewardLog) {
+        int  i = tpTenSecondsActivityRewardLogMapper.updateByPrimaryKey(tpTenSecondsActivityRewardLog);
         return i;
     }
 

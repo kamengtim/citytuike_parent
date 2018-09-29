@@ -21,4 +21,6 @@ public interface TpTenSecondsActivityRewardMapper {
     TpTenSecondsActivityReward getRewardBySecond(@Param("second") String second, @Param("activity_id") String activity_id);
 
     int update(Integer id);
+
+    TpTenSecondsActivityReward getRewardById(Integer reward_id);
 }
