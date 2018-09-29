@@ -1,6 +1,8 @@
 package com.citytuike.model;
 
-public class TpFestivalsCate {
+import java.io.Serializable;
+
+public class TpFestivalsCate implements Serializable{
     private Integer id;
 
     private String catename;

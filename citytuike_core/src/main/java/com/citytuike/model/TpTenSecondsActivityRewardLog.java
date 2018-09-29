@@ -1,8 +1,9 @@
 package com.citytuike.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TpTenSecondsActivityRewardLog {
+public class TpTenSecondsActivityRewardLog implements Serializable{
     private Integer id;
 
     private Integer activity_id;
