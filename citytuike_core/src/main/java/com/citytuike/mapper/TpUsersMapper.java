@@ -137,7 +137,7 @@ public interface TpUsersMapper {
 
 	TpUsers getMobile(String mobile);
 
-	int updatePassword(Integer user_id, String confirm_password);
+	int updatePassword(@Param("user_id") Integer user_id, @Param("confirm_password") String confirm_password);
 
 	void updateSetPass(Integer user_id);
 }

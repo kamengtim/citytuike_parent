@@ -5,6 +5,8 @@ import com.citytuike.model.TpRegion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TpRegionServiceImpl implements TpRegionService {
     @Autowired
@@ -32,4 +34,11 @@ public class TpRegionServiceImpl implements TpRegionService {
         TpRegion tpRegion = tpRegionMapper.getNameByFanId(address);
         return tpRegion;
     }
+
+    @Override
+    public String getTwon(Integer twonName) {
+        String twon = tpRegionMapper.getTwon(twonName);
+        return twon;
+    }
+
 }

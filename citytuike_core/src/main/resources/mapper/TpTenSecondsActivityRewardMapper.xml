@@ -30,16 +30,9 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpTenSecondsActivityReward" >
     update tp_ten_seconds_activity_reward
-    set activity_id = #{activity_id,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
-      reward = #{reward,jdbcType=VARCHAR},
-      condition = #{condition,jdbcType=VARCHAR},
-      level = #{level,jdbcType=INTEGER},
-      add_time = #{add_time,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=TINYINT},
-      number = #{number,jdbcType=INTEGER},
-      get_number = #{get_number,jdbcType=INTEGER},
-      alias = #{alias,jdbcType=VARCHAR}
+    set
+      get_number = get_number+1
+
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -56,4 +49,15 @@
   <select id="getReward" resultMap="BaseResultMap">
     select * from tp_ten_seconds_activity_reward where activity_id =#{activity_id} and status = 1
   </select>
+    <select id="getRewardBySecond" resultType="tpTenSecondsActivityReward">
+      select t.id, t.activity_id, t.name, t.reward, t.condition, t.level, t.add_time, t.status, t.number,
+    t.get_number, t.alias
+    from tp_ten_seconds_activity_reward t WHERE  t.status = 1 AND  t.condition like concat(#{second},'%') AND  t.activity_id = 10
+    </select>
+  <update id="update" parameterType="com.citytuike.model.TpTenSecondsActivityReward" >
+    update tp_ten_seconds_activity_reward
+    set
+    number = number - 1
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -44,6 +44,8 @@
 				status=1
 		WHERE mobile = #{mobile}
 	</update>
-	
+	<select id="getGoodsById" resultType="TpGoods">
+		select * from tp_goods where goods_id = #{id}
+	</select>
 	
 </mapper>

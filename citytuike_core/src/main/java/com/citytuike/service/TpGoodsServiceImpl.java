@@ -103,6 +103,12 @@ public class TpGoodsServiceImpl implements TpGoodsService{
 		data.put("image_url", tpGoodsImages2.getImage_url());
 		return data;
 	}
-	
+
+	@Override
+	public TpGoods getGoodsById(Integer id) {
+		TpGoods tpGoods = tpGoodsMapper.getGoodsById(id);
+		return tpGoods;
+	}
+
 
 }

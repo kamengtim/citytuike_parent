@@ -33,4 +33,6 @@ public interface TpGoodsMapper {
     * 查询图片路劲
     * */
     String getGoodsUrl(Integer order_id);
+
+    TpGoods getGoodsById(Integer id);
 }

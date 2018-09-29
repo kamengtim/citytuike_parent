@@ -61,4 +61,7 @@
   <select id="getNameByFanId" resultMap="BaseResultMap">
     SELECT name from tp_region where id = #{address}
   </select>
+  <select id="getTwon" resultType="string">
+    SELECT name from tp_region where id = #{twonName}
+  </select>
 </mapper>
