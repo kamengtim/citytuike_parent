@@ -163,7 +163,6 @@ public class TenSecondsActivityController {
         List<TpTenSecondsActivityReward> tpTenSecondsActivityRewards = tpTenSecondsActivityRewardService.getReward(activity_id);
         for (TpTenSecondsActivityReward tpTenSecondsActivityReward : tpTenSecondsActivityRewards) {
             newjsonObject.put("stock",tpTenSecondsActivityRewardService.getJson(tpTenSecondsActivityReward));
-
             //TODO 待处理
         }
 

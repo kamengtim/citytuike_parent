@@ -259,11 +259,6 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
     }
 
     @Override
-    public void getConf(Integer user_id,String device_sn, String province, String city, String district, String landmark_picture) {
-        tpDeviceMapper.insertDevice(user_id,device_sn,province,province,city,district,landmark_picture);
-    }
-
-    @Override
     public List<TpDevice> getHaveDeviceCity() {
         List<TpDevice>tpDevices = tpDeviceMapper.getHaveDeviceCity();
         return tpDevices;
@@ -306,6 +301,25 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
     @Override
     public void updateVersion(String get_version, String imei) {
         tpDeviceMapper.updateVersion(get_version,imei);
+    }
+
+    @Override
+    public TpDevice selectDevice(Integer user_id, String device_sn) {
+        TpDevice tpDevice = tpDeviceMapper.selectDevice(user_id,device_sn);
+        return tpDevice;
+    }
+
+    @Override
+    public int update(Integer id, String province, String city, String district, String landmark_picture) {
+        int date = (int)(new Date().getTime()/1000);
+        int i= tpDeviceMapper.updateDevice(id,province,city,district,date,landmark_picture);
+        return i;
+    }
+
+    @Override
+    public TpDevice selectPaper(String device_sn, Integer user_id) {
+        TpDevice tpDevice = tpDeviceMapper.selectPaper(device_sn,user_id);
+        return tpDevice;
     }
 
 }

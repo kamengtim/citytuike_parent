@@ -1,10 +1,9 @@
 package com.citytuike.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.exception.SendMessageException;
+import com.citytuike.interceptor.LoginUtil;
 import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
@@ -16,11 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -1680,29 +1677,24 @@ public class UserController {
     @RequestMapping(value = "checkGift",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public @ResponseBody String checkGift(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = LoginUtil.login(request,redisTemplate,tpUsersService);
+		if(tpUsers == null){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请重新登录!");
+			return jsonObj.toString();
+		}
         JSONObject jsonObject =new JSONObject();
-        String header = request.getHeader("p-token");
-        if(header == null || header.trim().length() == 0){
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "登录异常!");
-			return jsonObj.toString();
-        }
-
-        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
-        TpUsers tpUsers = tpUsersService.getToken(token);
-        if(tpUsers == null){
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "登录超时!");
-			return jsonObj.toString();
-        }
         TpCartGift tpCartGift = tpCartGiftService.getCartGiftByUserId(tpUsers.getUser_id());
         if(tpCartGift != null){
             jsonObject.put("user_id",tpCartGift.getUser_id());
             jsonObject.put("money",tpCartGift.getMoney());
-        }
-        jsonObj.put("result",jsonObject);
-        jsonObj.put("status", "0");
-        jsonObj.put("msg", "请先登陆!");
+        	jsonObj.put("result",jsonObject);
+			jsonObj.put("status", "1");
+			jsonObj.put("msg", "ok!");
+        }else{
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "没有该礼品!");
+		}
         return jsonObj.toString();
     }
     /**

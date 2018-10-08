@@ -23,4 +23,6 @@ public interface TpGoodsService {
 	JSONObject getGoodsImagesJson(TpGoodsImages tpGoodsImages2);
 
     TpGoods getGoodsById(Integer id);
+
+    TpGoods selectPrice();
 }

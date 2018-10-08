@@ -342,4 +342,7 @@
 		#{invoice_email,jdbcType=VARCHAR}, #{invoice_contact,jdbcType=VARCHAR}, #{invoice_fee,jdbcType=DECIMAL},
 		#{goods_id,jdbcType=INTEGER})
 	</insert>
+	<update id="updateStatus">
+		update tp_order set settle_status = 2 where order_id = #{order_id}
+	</update>
 </mapper>

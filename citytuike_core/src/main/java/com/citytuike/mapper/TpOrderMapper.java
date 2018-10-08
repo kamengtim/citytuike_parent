@@ -44,4 +44,6 @@ public interface TpOrderMapper {
 	TpOrder getConsigneeByMobile(Integer user_id);
 
     void save(TpFansOrder tpFansOrder);
+
+    void updateStatus(Integer order_id);
 }

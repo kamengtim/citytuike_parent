@@ -35,4 +35,6 @@ public interface TpGoodsMapper {
     String getGoodsUrl(Integer order_id);
 
     TpGoods getGoodsById(Integer id);
+
+    TpGoods selectPrice();
 }

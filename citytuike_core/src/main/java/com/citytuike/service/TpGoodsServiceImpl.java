@@ -110,5 +110,11 @@ public class TpGoodsServiceImpl implements TpGoodsService{
 		return tpGoods;
 	}
 
+	@Override
+	public TpGoods selectPrice() {
+		TpGoods tpGoods = tpGoodsMapper.selectPrice();
+		return tpGoods;
+	}
+
 
 }

@@ -119,4 +119,10 @@ public interface TpUsersService {
 	int updatePassword(Integer user_id, String confirm_password);
 
 	void updateSetPass(Integer user_id);
+
+    TpUsers selectLevel(int level,String type);
+
+    TpUsers selectPaperCount(Integer user_id);
+
+	TpUsers selectToUser(String invite_code);
 }

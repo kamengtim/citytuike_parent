@@ -665,4 +665,23 @@
 	<update id="updateSetPass">
 		update tp_users set set_pass = 1 where user_id = #{user_id}
 	</update>
+	<select id="selectLevel" resultType="TpUsers">
+		SELECT * FROM  tp_users
+	</select>
+	<sql id="base_where">
+		<where>
+			<if test="type == 1">
+				and level > 1
+			</if>
+			<if test="type == 2" >
+				and level = 1
+			</if>
+		</where>
+	</sql>
+	<select id="selectPaperCount" resultType="TpUsers">
+		select mobile,paper_number_allowance,paper_number from tp_users where user_id = #{user_id}
+	</select>
+	<select id="selectToUser" resultType="TpUsers">
+	select * from tp_users where invite_code = #{invite_code}
+	</select>
 </mapper>

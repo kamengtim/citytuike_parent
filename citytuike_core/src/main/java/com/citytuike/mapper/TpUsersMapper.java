@@ -140,4 +140,10 @@ public interface TpUsersMapper {
 	int updatePassword(@Param("user_id") Integer user_id, @Param("confirm_password") String confirm_password);
 
 	void updateSetPass(Integer user_id);
+
+    TpUsers selectLevel(@Param("level") int level, @Param("type") String type);
+
+    TpUsers selectPaperCount(Integer user_id);
+
+	TpUsers selectToUser(String invite_code);
 }

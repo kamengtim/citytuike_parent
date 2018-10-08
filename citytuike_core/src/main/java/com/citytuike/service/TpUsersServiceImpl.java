@@ -435,4 +435,22 @@ public class TpUsersServiceImpl implements TpUsersService{
 	public void updateSetPass(Integer user_id) {
 		tpUsersMapper.updateSetPass(user_id);
 	}
+
+	@Override
+	public TpUsers selectLevel(int level,String type) {
+		TpUsers tpUsers = tpUsersMapper.selectLevel(level,type);
+		return tpUsers;
+	}
+
+	@Override
+	public TpUsers selectPaperCount(Integer user_id) {
+		TpUsers tpUsers = tpUsersMapper.selectPaperCount(user_id);
+		return tpUsers;
+	}
+
+	@Override
+	public TpUsers selectToUser(String invite_code) {
+		TpUsers tpUsers = tpUsersMapper.selectToUser(invite_code);
+		return tpUsers;
+	}
 }

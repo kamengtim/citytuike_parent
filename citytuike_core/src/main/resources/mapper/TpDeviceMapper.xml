@@ -156,15 +156,6 @@
   <select id="selectDeviceBySn" resultMap="BaseResultMap">
     select * from tp_device where device_sn = #{deviceSn}
   </select>
-  <update id="insertDevice">
-    update tp_device
-    set device_sn = #{device_sn,jdbcType=VARCHAR},
-      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
-      province = #{province,jdbcType=INTEGER},
-      city = #{city,jdbcType=INTEGER},
-      district = #{district,jdbcType=INTEGER},
-    where device_sn = #{device_sn,jdbcType=INTEGER}
-  </update>
   <select id="getHaveDeviceCity" resultMap="BaseResultMap">
     select DISTINCT(city) from tp_device where city is NOT  null;
   </select>
@@ -265,7 +256,7 @@
   <select id="getDeviceById" resultMap="BaseResultMap">
     SELECT * from tp_device where id= #{device_id}
   </select>
-  <select id="updateRunStatus" resultMap="BaseResultMap">
+  <update id="updateRunStatus">
      update tp_device
     set device_sn = #{device_sn,jdbcType=VARCHAR},
       ad_position_id = #{ad_position_id,jdbcType=INTEGER},
@@ -303,8 +294,25 @@
       today_num = #{today_num,jdbcType=INTEGER},
       today_time = #{today_time,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
-  </select>
+  </update>
   <update id="updateVersion">
     update tp_device set app_version = #{get_version} where device_sn = #{imei}
   </update>
+  <update id="updateDevice">
+    update tp_device
+    set
+      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      province = #{province,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      district = #{district,jdbcType=INTEGER},
+      is_active = 1,
+      active_time = #{date,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectDevice" resultMap="BaseResultMap">
+    select * from tp_device where user_id = #{user_id} and device_sn = #{device_sn}
+  </select>
+  <select id="selectPaper" resultMap="BaseResultMap">
+    select * from tp_device where device_sn = #{device_sn} and user_id = #{user_id}
+  </select>
 </mapper>

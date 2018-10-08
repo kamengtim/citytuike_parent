@@ -35,8 +35,6 @@ public interface ITpDeviceService {
 
     JSONObject selectDeviceBySn(String deviceSn);
 
-    void getConf(Integer user_id,String device_sn, String province, String city, String district, String landmark_picture);
-
     List<TpDevice> getHaveDeviceCity();
 
     TpDevice getUserDevice(String productKey, String deviceName, String lat, String lng);
@@ -52,4 +50,10 @@ public interface ITpDeviceService {
     void updateRunStatus(TpDevice tpDevice);
 
     void updateVersion(String get_version, String imei);
+
+    TpDevice selectDevice(Integer user_id, String device_sn);
+
+    int update(Integer id, String province, String city, String district, String landmark_picture);
+
+    TpDevice selectPaper(String device_sn, Integer user_id);
 }

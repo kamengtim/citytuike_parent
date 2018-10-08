@@ -2,16 +2,19 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.mapper.TpPaperLogMapper;
+import com.citytuike.interceptor.LoginUtil;
+import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +28,12 @@ public class PaperController {
     private TpUsersService tpUsersService;
     @Autowired
     private TpPaperLogService tpPaperLogService;
+    @Autowired
+    private TpGoodsService tpGoodsService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private TpSmsLogService tpSmsLogService;
     /**
      * @return
      * 机器订单首页-总收益部分
@@ -236,9 +245,68 @@ public class PaperController {
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
+        TpDevice tpDevice = tpDeviceService.selectPaper(device_sn,tpUsers.getUser_id());
+        if(tpDevice == null){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "错误的设备!");
+            return jsonObj.toString();
+        }
         tpPaperLogService.save(device_sn,number,tpUsers.getUser_id());
         jsonObj.put("status", "1");
         jsonObj.put("msg", "ok!");
         return jsonObj.toString();
+    }
+    /**
+     * @return
+     * 纸巾转赠
+     */
+    @RequestMapping(value = "paper_transfer", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    public @ResponseBody String paperTransfer(HttpServletRequest request,
+                                              @RequestParam(required = true) String money,
+                                              @RequestParam(required = true) String number,
+                                              @RequestParam(required = true) String invite_code,
+                                              @RequestParam(required = true) String code){
+        JSONObject jsonObj = new JSONObject();
+        String header = request.getHeader("p-token");
+        if(header == null || header.trim().length() == 0){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "登录异常!");
+            return jsonObj.toString();
+        }
+
+        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
+        TpUsers tpUsers = tpUsersService.getToken(token);
+        if(tpUsers == null){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "登录超时!");
+            return jsonObj.toString();
+        }
+        TpGoods tpGoods = tpGoodsService.selectPrice();
+        TpUsers fromUser = tpUsersService.selectPaperCount(tpUsers.getUser_id());
+        String shop_price = tpGoods.getShop_price() + "" != null ? tpGoods.getShop_price() + "" : "0";
+        if (Integer.parseInt(money) > Integer.parseInt(shop_price)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "转赠单价不能大于"+shop_price+"/包!");
+        }else if(number.equals("0")){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "转赠单价不能大于"+0+"包!");
+        }else if(fromUser == null || Integer.parseInt(number) > fromUser.getPaper_number_allowance()){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "纸巾数量不足，现库存为"+tpUsers.getPaper_number_allowance()+"!");
+        }
+
+        //转赠的人
+        TpUsers toUser = tpUsersService.selectToUser(invite_code);
+        if(toUser == null){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "转赠用户不存在!");
+        }
+        int i = tpSmsLogService.selectvalidateCode(code, tpUsers.getMobile());
+        if(i>0){
+
+        }
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "发送成功!");
+        return null;
     }
 }
