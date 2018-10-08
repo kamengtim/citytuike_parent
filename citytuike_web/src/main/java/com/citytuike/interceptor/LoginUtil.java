@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginUtil {
     public static JSONObject jsonObj = new JSONObject();
     public static TpUsers login(HttpServletRequest request,RedisTemplate redisTemplate,TpUsersService tpUsersService){
-        String token = request.getHeader("p-token");
-        //String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
+        String header = request.getHeader("p-token");
+        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
         if(token == null){
             token = "";
         }
