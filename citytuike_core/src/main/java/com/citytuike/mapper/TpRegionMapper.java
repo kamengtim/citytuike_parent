@@ -1,6 +1,7 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpRegion;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface TpRegionMapper {
     String getDistrict(Integer district);
 
     TpRegion getNameByFanId(Integer address);
+
+    String getTwon(Integer twonName);
 }

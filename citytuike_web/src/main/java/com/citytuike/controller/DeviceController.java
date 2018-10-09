@@ -56,6 +56,8 @@ public class DeviceController {
     private TpAppVersionService tpAppVersionService;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private TpOrderService tpOrderService;
 
     /**
      * @return 获取设备配置
@@ -74,8 +76,7 @@ public class DeviceController {
      * @return 激活设备
      */
     @RequestMapping(value = "active", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody
-    String getConf(@RequestParam(required = true) String token,
+    public @ResponseBody String active(@RequestParam(required = true) String token,
                    @RequestParam(required = true) String device_sn,
                    @RequestParam(required = true) String province,
                    @RequestParam(required = true) String city,
@@ -88,9 +89,33 @@ public class DeviceController {
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
-        tpDeviceService.getConf(tpUsers.getUser_id(), device_sn, province, city, district, landmark_picture);
-        jsonObj.put("status", "0");
-        jsonObj.put("msg", "请先登陆!");
+        TpDevice tpDevice = tpDeviceService.selectDevice(tpUsers.getUser_id(), device_sn);
+        if(tpDevice == null){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "错误的设备号!");
+            return jsonObj.toString();
+        }else if(tpDevice.getOrder_id() == null){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请求错误-未知订单，请联系客服处理!");
+            return jsonObj.toString();
+        }else if(tpDevice.getIs_active().equals(Byte.valueOf("1"))){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "设备号已激活，不能重复激活");
+            return jsonObj.toString();
+        }
+        Boolean check_active_code = true;
+        if(check_active_code){
+            int  i = tpDeviceService.update(tpDevice.getId(),province,city,district,landmark_picture);
+            if(i>0){
+                tpOrderService.updateOrder(tpDevice.getOrder_id());
+                redisTemplate.opsForValue().set("d_active_my_list",tpUsers.getUser_id());
+                jsonObj.put("status", "1");
+                jsonObj.put("msg", "设备激活成功!");
+            }
+        }else{
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "激活码错误!");
+        }
         return jsonObj.toString();
     }
 
@@ -98,9 +123,9 @@ public class DeviceController {
      * @return 团队机器
      */
     @RequestMapping(value = "team_device", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody
-    String TeamDevice(@RequestParam(required = true) String token,
-                      @RequestParam(required = true) String page) {
+    public @ResponseBody String TeamDevice(@RequestParam(required = true) String token,
+                                           @RequestParam(required = true) String page,
+                                           @RequestParam(required = true) String type) {
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject data = new JSONObject();
@@ -115,6 +140,12 @@ public class DeviceController {
         JSONObject jsonObject1 = new JSONObject();
         jsonObject1.put("device_num", tpDeviceService.selectCountDevice(tpUsers.getUser_id()));
         jsonObject1.put("income", tpUsersService.getSumMoneyDevice(tpUsers.getUser_id()));
+        Integer level = 1;
+        if(type.equals("1")){
+            tpUsers = tpUsersService.selectLevel(level,type);
+        }else if(type.equals("2")){
+            tpUsers = tpUsersService.selectLevel(level,type);
+        }
         int beginData = tpUsersService.selectRegTime(tpUsers.getUser_id());
         int i = ((int) new Date().getTime() - beginData) / 1000 / 60 / 60 / 24;
         jsonObject1.put("day_avg_income", tpUsersService.getSumMoneyDevice(tpUsers.getUser_id()).divide(BigDecimal.valueOf((int) i), 10, BigDecimal.ROUND_HALF_DOWN));
@@ -161,8 +192,7 @@ public class DeviceController {
      * @return 获取有设备的城市
      */
     @RequestMapping(value = "deviceCityList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody
-    String deviceCityList() {
+    public @ResponseBody String deviceCityList() {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj = new JSONObject();
         List<TpDevice> tpDevices = tpDeviceService.getHaveDeviceCity();
@@ -183,8 +213,8 @@ public class DeviceController {
      */
     @RequestMapping(value = "getQrCodeV2", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     public @ResponseBody
-    String getUserMpQr(@RequestParam(required = true) String ProductKey,
-                       @RequestParam(required = true) String DeviceName,
+    String getUserMpQr(@RequestParam(required = true,defaultValue = "a1njSyrGdTz") String ProductKey,
+                       @RequestParam(required = true,defaultValue = "device_lMWz") String DeviceName,
                        @RequestParam(required = true) String latitude,
                        @RequestParam(required = true) String longitude) {
         JSONObject jsonObj = new JSONObject();
@@ -203,6 +233,7 @@ public class DeviceController {
         jsonObject.put("device_id", tpDevice.getId());
         jsonObject.put("ticket", "");
         jsonObject.put("url", conent);
+
         Qrcode qrcode = new Qrcode();
         qrcode.setQrcodeErrorCorrect('M');//纠错等级（分为L、M、H三个等级）
         qrcode.setQrcodeEncodeMode('B');//N代表数字，A代表a-Z，B代表其它字符
@@ -262,7 +293,7 @@ public class DeviceController {
     String getMpList(@RequestParam(required = true) String scene_str_v2,
                      @RequestParam(required = true) String lat,
                      @RequestParam(required = true) String lng,
-                     @RequestParam(required = true) String token) throws WeixinApiException {
+                     @RequestParam(required = true) String token)  {
         JSONObject jsonObj = new JSONObject();
         JSONObject WXJsonObject = new JSONObject();
         JSONObject jsonObject = new JSONObject();
@@ -276,7 +307,9 @@ public class DeviceController {
         }
         int status = tpDeviceQrService.selectStatus(scene_str_v2);
         if (status == 1) {
-            throw new SenderException("该二维码已经被使用");
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "该二维码已经被使用!");
+            return jsonObj.toString();
         }
         if (status == 0) {
             double v = tpDeviceQrService.updateQR(scene_str_v2, lat, lng, status, tpUsers.getUser_id());
@@ -284,7 +317,12 @@ public class DeviceController {
                 List<TpWxUser> tpWxUsers = tpWxUserService.getWxUser();
                 for (TpWxUser tpWxUser : tpWxUsers) {
                     String str = UUID.randomUUID().toString().substring(0, 32);
-                    String ticket = WeixinAPI.getStrQRTicket(str);
+                    String ticket = null;
+                    try {
+                        ticket = WeixinAPI.getStrQRTicket(str);
+                    } catch (WeixinApiException e) {
+                        e.printStackTrace();
+                    }
                     String conent = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=" + ticket;
                     String name = tpWxUser.getWxname();
                     String headerpic = tpWxUser.getHeaderpic();
@@ -341,7 +379,9 @@ public class DeviceController {
                     }
                 }
             } else {
-                return "请在机器旁边进行扫码";
+                jsonObj.put("status", "0");
+                jsonObj.put("msg", "请在机器旁边进行扫码");
+                return jsonObj.toString();
             }
         }
         jsonObj.put("result", jsonObject);
@@ -359,7 +399,9 @@ public class DeviceController {
         JSONObject jsonObj = new JSONObject();
         String str = (String) redisTemplate.opsForValue().get(paper_token);
         if(str == null){
-            return "错误的场景码";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "错误的场景码");
+            return jsonObj.toString();
         }
         jsonObj.put("status", "1");
         jsonObj.put("msg", "成功");
@@ -377,9 +419,13 @@ public class DeviceController {
         List<TpScanLog> tpScanLogs = tpScanLogService.findAlltpScanLogService();
         String data = (String) redisTemplate.opsForValue().get(paper_token);
         if(data == null){
-            return "错误的场景码或者您已领取";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "错误的场景码或者您已领取");
+            return jsonObj.toString();
         }else if(data.length() == 0){
-            return "错误的场景码2";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "错误的场景码2");
+            return jsonObj.toString();
         }
         for(int i=0;i<tpScanLogs.size();i++){
 
@@ -390,7 +436,9 @@ public class DeviceController {
             if(tpScanLogs.get(i).getId() > 0 ){
                 TpScanLog tpScanLog = tpScanLogService.getStutas(tpScanLogs.get(i).getId());
                 if(tpScanLog.getStatus() == true){
-                    return "错误的场景码4";
+                    jsonObj.put("status", "0");
+                    jsonObj.put("msg", "错误的场景码4");
+                    return jsonObj.toString();
                 }
                 tpScanLogService.update(tpScanLogs.get(i).getId());
             }
@@ -412,7 +460,9 @@ public class DeviceController {
         JSONObject object = new JSONObject();
         TpDevice tpDevice = tpDeviceService.getDevice(ProductKey,DeviceName);
         if(tpDevice == null){
-            return "机器不存在";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "机器不存在");
+            return jsonObj.toString();
         }
         tpDevice.setLack_paper(Integer.parseInt(type));
         if(type.equals("1")){
@@ -443,11 +493,15 @@ public class DeviceController {
                                                   @RequestParam(required = true) String address){
         JSONObject jsonObj = new JSONObject();
         if(device_id != null){
-           return "请选择设备";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请选择设备");
+            return jsonObj.toString();
        }
        TpDevice tpDevice = tpDeviceService.getDeviceById(device_id);
        if(tpDevice.getUser_id() == 0){
-            return "请选择正确的设备";
+           jsonObj.put("status", "0");
+           jsonObj.put("msg", "请选择正确的设备");
+           return jsonObj.toString();
        }
         tpReplacementPartsService.insertReplacement(tpDevice,name,reason,files,address);
         jsonObj.put("status", "1");
@@ -489,7 +543,9 @@ public class DeviceController {
         JSONObject jsonObj = new JSONObject();
         TpDevice tpDevice  = tpDeviceService.getDeviceById(id);
         if(tpDevice != null){
-            return "错误的设备";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "错误的设备");
+            return jsonObj.toString();
         }
         tpDevice.setRun_status(Integer.parseInt(run_status));
         tpDeviceService.updateRunStatus(tpDevice);
@@ -507,7 +563,9 @@ public class DeviceController {
         TpDevice tpDevice = tpDeviceService.getDeviceById(id);
         String online_status = "";
         if(tpDevice == null){
-            return "错误的设备";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "错误的设备");
+            return jsonObj.toString();
         }
         AliyunIotApi aliyunIotApi = new AliyunIotApi();
         QueryDeviceDetailResponse pubResponse = aliyunIotApi.queryDeviceDetailRequest(tpDevice.getProduct_key(), tpDevice.getDevice_name());
@@ -553,7 +611,9 @@ public class DeviceController {
         JSONObject jsonObject =new JSONObject();
         TpAppVersion version = new TpAppVersion();
         if(tpAppVersion == null){
-            return "没有版本";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "没有版本");
+            return jsonObj.toString();
         }
         //Todo
         String[]imeis = new String[]{};
@@ -579,6 +639,22 @@ public class DeviceController {
         jsonObj.put("",jsonObject);
         jsonObj.put("status", "1");
         jsonObj.put("msg", "ok");
+        return jsonObj.toString();
+    }
+    /**
+     * @return 领完纸后，等待2到3秒，查询出纸情况
+     */
+    @RequestMapping(value = "queryResult", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    public @ResponseBody String queryResult(@RequestParam(required = true) String paper_token){
+        JSONObject jsonObj = new JSONObject();
+        String data = (String) redisTemplate.opsForValue().get("paper_token");
+        if(data == null){
+            jsonObj.put("status", "1");
+            jsonObj.put("msg", "ok");
+        }else{
+            jsonObj.put("status", "1");
+            jsonObj.put("msg", "ok");
+        }
         return jsonObj.toString();
     }
 }

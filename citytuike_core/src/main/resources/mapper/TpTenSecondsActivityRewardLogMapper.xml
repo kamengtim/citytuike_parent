@@ -87,4 +87,45 @@ YEARWEEK(date_format(add_time,'%Y-%m-%d')) = YEARWEEK(now())
         where user_id = #{user_id} and activity_id = #{activity_id} and
         YEARWEEK(date_format(add_time,'%Y-%m-%d')) = YEARWEEK(now())
     </select>
+  <select id="checkDayShare" resultType="int">
+    select count(id) from tp_ten_seconds_activity_reward_log
+    where user_id = #{user_id} and from_user_id = 0 and TO_DAYS( NOW( ) ) - TO_DAYS( add_time) &lt;= 1
+  </select>
+  <select id="selectCount" resultType="int">
+    select count(id) from tp_ten_seconds_activity_reward_log
+    where activity_id = #{activity_id} and status = 1
+    and add_time > DATE_SUB(NOW(), INTERVAL 60 MINUTE)
+    order by add_time asc
+  </select>
+  <select id="selectWeekCount" resultType="int">
+    select count(id) from tp_ten_seconds_activity_reward_log
+    where activity_id = #{activity_id} and status = 1 and user_id = #{user_id} and add_time > DATE_SUB(NOW(), INTERVAL 1 WEEK)
+    order by add_time asc
+  </select>
+  <select id="fansTypeList" resultMap="BaseResultMap">
+     select id, activity_id, reward_id, user_id, add_time, seconds, status, send_time,
+    logistics_number, logistics_name, reward_name, consignee, province, city, district,
+    twon, address, mobile, from_user_id
+    from tp_ten_seconds_activity_reward_log where status = 1
+  </select>
+    <select id="getLogById" resultMap="BaseResultMap">
+        select id, activity_id, reward_id, user_id, add_time, seconds, status, send_time,
+    logistics_number, logistics_name, reward_name, consignee, province, city, district,
+    twon, address, mobile, from_user_id
+    from tp_ten_seconds_activity_reward_log where reward_id = #{reward_id} and user_id = #{user_id}
+    </select>
+  <select id="update">
+    update tp_ten_seconds_activity_reward_log
+    set
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      twon = #{twon,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      mobile = #{Mobile,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getReward" resultMap="BaseResultMap">
+    SELECT * from tp_ten_seconds_activity_reward_log where id = #{log_id}
+  </select>
 </mapper>

@@ -2,6 +2,8 @@ package com.citytuike.service;
 
 import com.citytuike.model.TpRegion;
 
+import java.util.List;
+
 public interface TpRegionService {
     String getCityName(Integer city);
 
@@ -10,4 +12,7 @@ public interface TpRegionService {
     String getDistrict(Integer district);
 
     TpRegion getNameByFanId(Integer address);
+
+
+    String getTwon(Integer twonName);
 }

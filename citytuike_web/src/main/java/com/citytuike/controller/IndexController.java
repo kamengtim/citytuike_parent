@@ -24,13 +24,17 @@ public class IndexController {
      * @return ios APP 设置审核版本
      */
     @RequestMapping(value = "setIosVersionDo", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String setIosVersionDo(HttpServletRequest request){
+    public @ResponseBody String setIosVersionDo(HttpServletRequest request,
+                                                @RequestParam(required = true)String version){
+        JSONObject jsonObj = new JSONObject();
         JSONObject jsonObject = new JSONObject();
-        String version = request.getParameter("version");
         jsonObject.put("app_version",version);
         jsonObject.toString();
         redisTemplate.opsForValue().set("ios",jsonObject.toString());
-        return jsonObject.toString();
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "请求成功");
+        jsonObj.put("result",jsonObject);
+        return jsonObj.toString();
     }
     /**
      * @return ios 获取审核版本

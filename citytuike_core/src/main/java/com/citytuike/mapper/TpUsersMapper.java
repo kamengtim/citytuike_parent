@@ -137,9 +137,15 @@ public interface TpUsersMapper {
 
 	TpUsers getMobile(String mobile);
 
-	int updatePassword(Integer user_id, String confirm_password);
+	int updatePassword(@Param("user_id") Integer user_id, @Param("confirm_password") String confirm_password);
 
 	void updateSetPass(Integer user_id);
 
     int updataUSerByBackimg(TpUsers tpUsers1);
+
+    TpUsers selectLevel(@Param("level") int level, @Param("type") String type);
+
+    TpUsers selectPaperCount(Integer user_id);
+
+	TpUsers selectToUser(String invite_code);
 }

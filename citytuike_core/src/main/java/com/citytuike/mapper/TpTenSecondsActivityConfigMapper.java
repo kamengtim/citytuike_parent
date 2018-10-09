@@ -1,6 +1,8 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpTenSecondsActivityConfig;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface TpTenSecondsActivityConfigMapper {
@@ -15,4 +17,5 @@ public interface TpTenSecondsActivityConfigMapper {
     int updateByPrimaryKey(TpTenSecondsActivityConfig record);
 
     TpTenSecondsActivityConfig getConfig(String activity_id);
+
 }

@@ -35,8 +35,6 @@ public interface TpDeviceMapper {
 
     TpDevice selectDeviceBySn(String deviceSn);
 
-    void insertDevice(@Param("user_id") Integer user_id, @Param("device_sn") String device_sn, @Param("province") String province, @Param("province1") String province1, @Param("city") String city, @Param("district") String district, @Param("landmark_picture") String landmark_picture);
-
     List<TpDevice> getHaveDeviceCity();
 
     TpDevice getUserDevice(@Param("productKey") String productKey, @Param("deviceName") String deviceName);
@@ -58,4 +56,10 @@ public interface TpDeviceMapper {
     void updateRunStatus(TpDevice tpDevice);
 
     void updateVersion(@Param("get_version") String get_version, @Param("imei") String imei);
+
+    TpDevice selectDevice(@Param("user_id") Integer user_id, @Param("device_sn") String device_sn);
+
+    int updateDevice(@Param("id") Integer id, @Param("province") String province, @Param("city") String city, @Param("district") String district, @Param("date") int date, @Param("landmark_picture") String landmark_picture);
+
+    TpDevice selectPaper(@Param("device_sn") String device_sn, @Param("user_id") Integer user_id);
 }

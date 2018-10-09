@@ -135,4 +135,10 @@ public interface TpUsersService {
 	int insertTpFabulous(TpFabulous tpFabulous);
 
 	int updataUserByBackimg(TpUsers tpUsers1);
+
+    TpUsers selectLevel(int level,String type);
+
+    TpUsers selectPaperCount(Integer user_id);
+
+	TpUsers selectToUser(String invite_code);
 }

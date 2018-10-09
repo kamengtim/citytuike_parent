@@ -44,4 +44,6 @@ public interface TpOrderService {
     List<TpOrder> findAllOrderAndGoods(Integer user_id);
 
     void save(TpFansOrder tpFansOrder);
+
+    void updateOrder(Integer order_id);
 }

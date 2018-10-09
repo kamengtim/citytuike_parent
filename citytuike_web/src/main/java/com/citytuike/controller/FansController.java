@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("api/Fans")
@@ -152,7 +150,9 @@ public class FansController {
         if(code > 0){
             tpFansSaleService.fansSale(tpFansSale);
         }else{
-            return "验证码错误";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "验证码错误");
+            return jsonObj.toString();
         }
         jsonObj.put("status", "1");
         jsonObj.put("msg", "成功");
@@ -187,7 +187,9 @@ public class FansController {
         String fan_dev = "";
         int code = tpSmsLogService.selectvalidateCode(String.valueOf(mobile_code),mobile);
         if(code <= 0){
-         return "验证码错误";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "验证码错误");
+            return jsonObj.toString();
         }
         if (Integer.parseInt(scale_man) > Integer.parseInt(scale_women)){
             fan_dev =  "男粉丝多";
@@ -439,7 +441,9 @@ public class FansController {
             jsonArray.add(jsonObject);
             }
         }else {
-            return "没有订单";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "没有订单");
+            return jsonObj.toString();
         }
         jsonObj.put("result",jsonArray);
         jsonObj.put("status", "1");
@@ -471,7 +475,9 @@ public class FansController {
             JSONObject jsonObject = tpFansNeedService.getJson(tpFansNeed);
             jsonArray.add(jsonObject);
         }else{
-            return "不存在该订单";
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "不存在该订单");
+            return jsonObj.toString();
         }
         jsonObj.put("result",jsonArray);
         jsonObj.put("status", "1");

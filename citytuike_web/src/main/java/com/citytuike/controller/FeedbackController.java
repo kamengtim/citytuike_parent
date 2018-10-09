@@ -2,7 +2,6 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.interceptor.RedisConstant;
-import com.citytuike.model.TpArticle;
 import com.citytuike.model.TpUserFeedback;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpUserFeedbackService;
@@ -47,7 +46,9 @@ public class FeedbackController {
         String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
         TpUsers tpUsers = tpUsersService.getToken(token);
         if(tpUsers == null){
-            throw new RuntimeException("登录超时");
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "登录超时");
+            return jsonObj.toString();
         }
         TpUserFeedback tpUserFeedback = new TpUserFeedback();
         if(type.equals("image")){
@@ -80,13 +81,17 @@ public class FeedbackController {
         JSONObject jsonObject =new JSONObject();
         String header = request.getHeader("p-token");
         if(header == null || header.trim().length() == 0){
-            throw new RuntimeException("登录异常");
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "登录异常");
+            return jsonObj.toString();
         }
 
         String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
         TpUsers tpUsers = tpUsersService.getToken(token);
         if(tpUsers == null){
-            throw new RuntimeException("登录超时");
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "登录超时");
+            return jsonObj.toString();
         }
         PageInfo pageInfo = tpUserFeedbackService.query(tpUsers.getUser_id());
         List<TpUserFeedback> tpUserFeedbacks = pageInfo.getList();

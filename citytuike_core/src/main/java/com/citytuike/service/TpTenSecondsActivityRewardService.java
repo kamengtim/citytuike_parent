@@ -9,4 +9,8 @@ public interface TpTenSecondsActivityRewardService {
     List<TpTenSecondsActivityReward> getReward(String activity_id);
 
     JSONObject getJson(TpTenSecondsActivityReward tpTenSecondsActivityReward);
+
+    TpTenSecondsActivityReward getRewardBySecond(String second, String activity_id);
+
+    TpTenSecondsActivityReward getRewardById(Integer reward_id);
 }

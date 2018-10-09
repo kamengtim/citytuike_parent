@@ -544,4 +544,22 @@ public class TpUsersServiceImpl implements TpUsersService {
 	public int updataUserByBackimg(TpUsers tpUsers1) {
 		return tpUsersMapper.updataUSerByBackimg(tpUsers1);
 	}
+
+	@Override
+	public TpUsers selectLevel(int level,String type) {
+		TpUsers tpUsers = tpUsersMapper.selectLevel(level,type);
+		return tpUsers;
+	}
+
+	@Override
+	public TpUsers selectPaperCount(Integer user_id) {
+		TpUsers tpUsers = tpUsersMapper.selectPaperCount(user_id);
+		return tpUsers;
+	}
+
+	@Override
+	public TpUsers selectToUser(String invite_code) {
+		TpUsers tpUsers = tpUsersMapper.selectToUser(invite_code);
+		return tpUsers;
+	}
 }

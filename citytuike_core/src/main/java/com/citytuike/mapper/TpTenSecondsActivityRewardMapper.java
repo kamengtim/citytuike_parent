@@ -1,6 +1,8 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpTenSecondsActivityReward;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface TpTenSecondsActivityRewardMapper {
@@ -12,7 +14,13 @@ public interface TpTenSecondsActivityRewardMapper {
 
     List<TpTenSecondsActivityReward> selectAll();
 
-    int updateByPrimaryKey(TpTenSecondsActivityReward record);
+    int updateByPrimaryKey(Integer id);
 
     List<TpTenSecondsActivityReward> getReward(String activity_id);
+
+    TpTenSecondsActivityReward getRewardBySecond(@Param("second") String second, @Param("activity_id") String activity_id);
+
+    int update(Integer id);
+
+    TpTenSecondsActivityReward getRewardById(Integer reward_id);
 }

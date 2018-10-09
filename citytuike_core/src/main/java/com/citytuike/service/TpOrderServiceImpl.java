@@ -235,5 +235,10 @@ public class TpOrderServiceImpl implements TpOrderService{
 		tpOrderMapper.save(tpFansOrder);
 	}
 
+	@Override
+	public void updateOrder(Integer order_id) {
+		tpOrderMapper.updateStatus(order_id);
+	}
+
 
 }

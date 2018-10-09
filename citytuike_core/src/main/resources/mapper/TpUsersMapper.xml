@@ -121,11 +121,7 @@
 			t.wechat_qrcode,
 			t.set_pass,
 			t.im_id,
-			t.im_pwd,
-			t.paper_number_allowance,
-			t.is_top,
-			t.voice_notice,
-			t.backimg
+			t.im_pwd
 	</sql>
 	
 	<!--登陆查询 -->
@@ -675,4 +671,23 @@
 	<update id="updataUSerByBackimg">
 		update tp_users set backimg = #{backimg} where user_id = #{user_id}
 	</update>
+	<select id="selectLevel" resultType="TpUsers">
+		SELECT * FROM  tp_users
+	</select>
+	<sql id="base_where">
+		<where>
+			<if test="type == 1">
+				and level > 1
+			</if>
+			<if test="type == 2" >
+				and level = 1
+			</if>
+		</where>
+	</sql>
+	<select id="selectPaperCount" resultType="TpUsers">
+		select mobile,paper_number_allowance,paper_number from tp_users where user_id = #{user_id}
+	</select>
+	<select id="selectToUser" resultType="TpUsers">
+	select * from tp_users where invite_code = #{invite_code}
+	</select>
 </mapper>

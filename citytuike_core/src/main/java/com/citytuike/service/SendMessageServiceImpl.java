@@ -76,7 +76,7 @@ public class SendMessageServiceImpl implements SendMessageService {
     }
     /*发送单条短信
     * */
-    private void sendReadMsg(String OldContent, String OldMobile) {
+    private  void sendReadMsg(String OldContent, String OldMobile) {
         SmsSDKClient client = null;
         try {
             retrieveReport();
@@ -100,7 +100,7 @@ public class SendMessageServiceImpl implements SendMessageService {
     }
     /*批量发送短信
     * */
-    public static void sendBatchOnlySms() throws SDKParamsException {
+    public  void sendBatchOnlySms() throws SDKParamsException {
         SmsSDKClient client = new SmsSDKClient("http://shmtn.b2m.cn", 80, "EUCP-EMY-SMS1-03GEW", "4EAEC2AEAF5D1223");
         String[] mobiles = { "13800000000", "13800000001" };
         String content = "短信内容";
@@ -120,7 +120,7 @@ public class SendMessageServiceImpl implements SendMessageService {
     /*
     *状态码
     * */
-    public static void retrieveReport() throws SDKParamsException {
+    public  void retrieveReport() throws SDKParamsException {
         SmsSDKClient client = new SmsSDKClient("http://shmtn.b2m.cn", 80, "EUCP-EMY-SMS1-03GEW", "4EAEC2AEAF5D1223");
         String startTime = "20180120110000";
         String endTime = "20180120110500";

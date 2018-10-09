@@ -2,9 +2,10 @@ package com.citytuike.model;
 
 import com.citytuike.util.Type;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TpUserFeedback {
+public class TpUserFeedback implements Serializable{
     private Integer id;
 
     private Integer user_id;
