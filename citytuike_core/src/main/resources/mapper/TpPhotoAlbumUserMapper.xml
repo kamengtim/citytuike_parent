@@ -243,4 +243,18 @@
       delete_time = #{deleteTime,jdbcType=TIMESTAMP}
     where p_id = #{pId,jdbcType=INTEGER}
   </update>
+  <update id="updataPhotoAlbumUserPv" parameterType="com.citytuike.model.TpPhotoAlbumUser" >
+    update tp_photo_album_user
+    set
+      pv = pv+1,
+      update_time = now(),
+    where p_id = #{p_id}
+  </update>
+  <update id="updataPhotoAlbumUserShare" parameterType="com.citytuike.model.TpPhotoAlbumUser" >
+    update tp_photo_album_user
+    set
+      share = share+1,
+      update_time = now(),
+    where p_id = #{p_id}
+  </update>
 </mapper>

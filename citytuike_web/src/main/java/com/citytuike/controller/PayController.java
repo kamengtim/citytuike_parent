@@ -10,7 +10,9 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.citytuike.configs.PayConfig;
 import com.citytuike.constant.Constant;
-import com.citytuike.model.*;
+import com.citytuike.model.TpOrder;
+import com.citytuike.model.TpPlugin;
+import com.citytuike.model.TpUsers;
 import com.citytuike.service.ITpAccountLogService;
 import com.citytuike.service.TpOrderService;
 import com.citytuike.service.TpUsersService;
@@ -39,11 +41,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("api/Payment")
-public class PayController {
+public class PayController extends BaseController{
     @Autowired
     private TpUsersService tpUsersService;
     @Autowired
@@ -58,7 +63,7 @@ public class PayController {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "失败!");
+        jsonObj.put("msg", "请求失败，请稍后再试");
 
         List<TpPlugin> tpPluginList = tpOrderService.findAllPlugin();
         JSONArray jsonArray = new JSONArray();
@@ -72,7 +77,7 @@ public class PayController {
         data.put("list", jsonArray);
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
     @RequestMapping(value = "/yop_payback", method = RequestMethod.GET)
@@ -170,15 +175,15 @@ public class PayController {
     }
 
     @RequestMapping(value="/getCode",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String yopTaketoken(HttpServletResponse resp, Model model, @RequestParam(required=true) String order_sn,
+    public @ResponseBody String yopTaketoken(HttpServletResponse resp, HttpServletRequest request,
+                                             @RequestParam(required=true) String order_sn,
                                              @RequestParam(required=false) String openid,
-                                             @RequestParam(required=true) String token,
-                                        @RequestParam(required=true) String pay_code) throws IOException {
+                                             @RequestParam(required=true) String pay_code) throws IOException {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "请求失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");

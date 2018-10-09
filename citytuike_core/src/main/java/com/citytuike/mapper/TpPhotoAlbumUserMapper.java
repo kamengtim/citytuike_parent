@@ -58,4 +58,8 @@ public interface TpPhotoAlbumUserMapper {
     int getCount(@Param("user_id") Integer user_id);
 
     List<TpUserFriendApply> selectByPage(@Param("user_id")Integer user_id, @Param("startPos")int startPos, @Param("pageSize")int pageSize);
+
+    int updataPhotoAlbumUserPv(@Param("p_id") String p_id);
+
+    int updataPhotoAlbumUserShare(@Param("p_id")String p_id);
 }

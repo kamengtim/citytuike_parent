@@ -5,12 +5,17 @@ import com.citytuike.constant.Constant;
 import com.citytuike.exception.WeixinApiException;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpUsersService;
-import com.citytuike.util.*;
+import com.citytuike.util.SHA1;
+import com.citytuike.util.WeixinAPI;
+import com.citytuike.util.XmlUtil;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -102,7 +107,7 @@ public class WeixinToolsController {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
+        jsonObj.put("msg", "请求失败，请稍后再试");
 
         //已经授权用户直接通过。
         if(request.getSession().getAttribute(Constant.WEIXIN_USER)!=null) {

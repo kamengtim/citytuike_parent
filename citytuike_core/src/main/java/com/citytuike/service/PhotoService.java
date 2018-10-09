@@ -29,4 +29,16 @@ public interface PhotoService {
     LimitPageList getlimitListPhotoAlbumUser(Integer page, Integer user_id);
 
     List<TpPhotoAlbumUserImage> findAllPhotoAlbumUserImageByPid(Integer pId);
+
+    TpPhotoAlbumTmp findOneAlbumTmpById(Integer tmpId);
+
+    int deletePhotoAlbumUser(String p_id);
+
+    int updataPhotoAlbumUserPv(String p_id);
+
+    int updataPhotoAlbumUserShare(String p_id);
+
+    int insertPhotoAlbumComment(TpPhotoAlbumComment tpPhotoAlbumComment);
+
+    List<TpPhotoAlbumComment> findAllPhotoAlbumComment(String p_id);
 }

@@ -21,6 +21,8 @@ public class PhotoServiceImpl implements PhotoService {
     private TpPhotoAlbumUserMapper tpPhotoAlbumUserMapper;
     @Autowired
     private TpPhotoAlbumUserImageMapper tpPhotoAlbumUserImageMapper;
+    @Autowired
+    private TpPhotoAlbumCommentMapper tpPhotoAlbumCommentMapper;
 
 
     @Override
@@ -116,5 +118,35 @@ public class PhotoServiceImpl implements PhotoService {
     @Override
     public List<TpPhotoAlbumUserImage> findAllPhotoAlbumUserImageByPid(Integer pId) {
         return tpPhotoAlbumUserImageMapper.findAllPhotoAlbumUserImageByPid(pId);
+    }
+
+    @Override
+    public TpPhotoAlbumTmp findOneAlbumTmpById(Integer tmpId) {
+        return tpPhotoAlbumTmpMapper.selectByPrimaryKey(tmpId);
+    }
+
+    @Override
+    public int deletePhotoAlbumUser(String p_id) {
+        return tpPhotoAlbumUserMapper.deleteByPrimaryKey(Integer.parseInt(p_id));
+    }
+
+    @Override
+    public int updataPhotoAlbumUserPv(String p_id) {
+        return tpPhotoAlbumUserMapper.updataPhotoAlbumUserPv(p_id);
+    }
+
+    @Override
+    public int updataPhotoAlbumUserShare(String p_id) {
+        return tpPhotoAlbumUserMapper.updataPhotoAlbumUserShare(p_id);
+    }
+
+    @Override
+    public int insertPhotoAlbumComment(TpPhotoAlbumComment tpPhotoAlbumComment) {
+        return tpPhotoAlbumCommentMapper.insert(tpPhotoAlbumComment);
+    }
+
+    @Override
+    public List<TpPhotoAlbumComment> findAllPhotoAlbumComment(String p_id) {
+        return tpPhotoAlbumCommentMapper.findAllPhotoAlbumComment(p_id);
     }
 }

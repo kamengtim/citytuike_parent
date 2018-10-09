@@ -1,51 +1,44 @@
 package com.citytuike.controller;
 
 
-import java.util.Date;
-import java.util.List;
-
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.citytuike.model.*;
+import com.citytuike.service.TpGoodsService;
+import com.citytuike.service.TpUsersService;
 import com.citytuike.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.citytuike.model.LimitPageList;
-import com.citytuike.model.TpGoods;
-import com.citytuike.model.TpGoodsCollect;
-import com.citytuike.model.TpGoodsImages;
-import com.citytuike.model.TpUsers;
-import com.citytuike.service.TpGoodsService;
-import com.citytuike.service.TpUsersService;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("api/Goods")
-public class GoodsController {
+public class GoodsController extends BaseController{
 	
 	@Autowired
 	private TpGoodsService tpGoodsService;
 	@Autowired
 	private TpUsersService tpUsersService;
 	/**
-	 * @param model
 	 * @param id
 	 * @param p
 	 * @return
 	 * 商品列表
 	 */
 	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String ajaxGoodsList(Model model,@RequestParam(required=true) Integer id,
+	public @ResponseBody String ajaxGoodsList(@RequestParam(required=true) Integer id,
 			@RequestParam(required=true) Integer p){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
+		jsonObj.put("msg", "请求失败，请稍后再试");
 		
 		LimitPageList limitPageList = tpGoodsService.getLimitPageList(id, p);
 		data.put("return", limitPageList.getList());
@@ -58,43 +51,39 @@ public class GoodsController {
 		data.put("count", limitPageList.getPage().getTotalCount());
 		jsonObj.put("return", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "OK!");
+		jsonObj.put("msg", "请求成功!");
 		System.out.println("结果:" + jsonObj.toString());
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @param id
 	 * @return
 	 * 商品详情
 	 */
 	@RequestMapping(value="/goodsInfo",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String goodsInfo(Model model,@RequestParam(required=true) Integer id){
+	public @ResponseBody String goodsInfo(@RequestParam(required=true) Integer id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
+		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpGoods tpGoods = tpGoodsService.findById(id);
 		data = tpGoodsService.getGoodsJson(tpGoods);
 		jsonObj.put("return", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "OK!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param id
 	 * @return
 	 * 收藏商品
 	 */
-	@RequestMapping(value="/collect_goods",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String collectGoods(Model model, @RequestParam(required=true) String goods_id,
-			@RequestParam(required=true) String token){
+	@RequestMapping(value="/collect_goods",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public @ResponseBody String collectGoods(@RequestParam(required=true) String goods_id,
+											 HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "收藏失败!");
-		
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -116,20 +105,18 @@ public class GoodsController {
 	}
 	
 	/**
-	 * @param model
-	 * @param token
 	 * @return
 	 * 商品轮播
 	 */
 	@RequestMapping(value="/carousel",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String carousel(Model model,@RequestParam(required=true) String token){
+	public @ResponseBody String carousel(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObj2 = new JSONObject();
 		JSONArray data = new JSONArray();
 		
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -159,7 +146,7 @@ public class GoodsController {
 		jsonObj2.put("list", data);
 		jsonObj.put("return", jsonObj2);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "OK!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	

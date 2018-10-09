@@ -15,20 +15,18 @@ import com.yeepay.shade.org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @RequestMapping("api")
-public class PubliclController {
+public class PubliclController extends BaseController{
 
     @Autowired
     private TpUsersService tpUsersService;
@@ -36,18 +34,16 @@ public class PubliclController {
     private RedisTemplate redisTemplate;
 
     /**
-     * @param model
-     * @param token
      * @return
      * @throws WeixinApiException
      */
     @RequestMapping(value="/Wechat/share",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody  String share(Model model, @RequestParam(required=true) String token) throws WeixinApiException {
+    public @ResponseBody  String share(HttpServletRequest request) throws WeixinApiException {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -64,84 +60,78 @@ public class PubliclController {
 
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
      * @param request
-     * @param model
-     * @param token
      * @param content
      * @return
      * 内容生成二维码
      */
     @RequestMapping(value="/Index/make_qrcode",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody  String make_qrcode(HttpServletRequest request, Model model, @RequestParam(required=false) String token,
+    public @ResponseBody  String make_qrcode(HttpServletRequest request,
                                              @RequestParam(required=true) String content) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        /*TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
-        }*/
+        }
         String base64url = UtilConfig.generalQRCode(content);
         jsonObj.put("result", "data:image/png;base64,"+base64url);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
      * @param request
-     * @param model
-     * @param token
      * @param url
      * @return
      * url 转图片
      */
     @RequestMapping(value="/Index/url_to_images",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody  String url_to_images(HttpServletRequest request, Model model, @RequestParam(required=false) String token,
+    public @ResponseBody  String url_to_images(HttpServletRequest request,
                                              @RequestParam(required=true) String url) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        /*TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
-        }*/
+        }
         String base64url = Base64Img.GetImageStrFromUrl(url);
         jsonObj.put("result", "data:image/png;base64,"+base64url);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param pic
      * @return
      * 识别营业执照
      */
     @RequestMapping(value="/index/business_license_recognition",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody  String business_license_recognition(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody  String business_license_recognition(HttpServletRequest request,
                                              @RequestParam(required=true) String pic) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -177,14 +167,12 @@ public class PubliclController {
 
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param longitude
      * @param latitude
      * @param ip
@@ -192,15 +180,15 @@ public class PubliclController {
      * 天气预报-阿里
      */
     @RequestMapping(value="/index/getWeatherAli",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody  String getWeatherAli(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody  String getWeatherAli(HttpServletRequest request,
                                                @RequestParam(required=false) String longitude,
                                                @RequestParam(required=false) String latitude,
                                                @RequestParam(required=false) String ip) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -237,47 +225,43 @@ public class PubliclController {
 
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
     @RequestMapping(value="/index/im_status",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody  String imStatus(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody  String imStatus(HttpServletRequest request,
                                                @RequestParam(required=false) String ids) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
-
-
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param domain
      * 七牛上传token
      * @return
      */
     @RequestMapping(value="/Upload/qiniu_token",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody  String qiniuToken(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody  String qiniuToken(HttpServletRequest request,
                                                @RequestParam(required=true) String domain) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -290,7 +274,7 @@ public class PubliclController {
         data.put("token", tokenqiniu);
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }

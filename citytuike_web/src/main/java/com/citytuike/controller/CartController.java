@@ -1,34 +1,26 @@
 package com.citytuike.controller;
 
 
-import java.util.Date;
-
+import com.alibaba.fastjson.JSONObject;
+import com.citytuike.constant.Constant;
+import com.citytuike.model.*;
+import com.citytuike.service.TpGoodsService;
+import com.citytuike.service.TpOrderService;
+import com.citytuike.service.TpUsersService;
+import com.citytuike.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
-import com.citytuike.constant.Constant;
-import com.citytuike.model.TpFreightConfig;
-import com.citytuike.model.TpGoods;
-import com.citytuike.model.TpInvoice;
-import com.citytuike.model.TpOrder;
-import com.citytuike.model.TpOrderAction;
-import com.citytuike.model.TpOrderGoods;
-import com.citytuike.model.TpUserAddress;
-import com.citytuike.model.TpUsers;
-import com.citytuike.service.TpGoodsService;
-import com.citytuike.service.TpOrderService;
-import com.citytuike.service.TpUsersService;
-import com.citytuike.util.Util;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @Controller
 @RequestMapping("api/Cart")
-public class CartController {
+public class CartController extends  BaseController{
 	
 	@Autowired
 	private TpUsersService tpUsersService;
@@ -37,37 +29,34 @@ public class CartController {
 	@Autowired
 	private TpOrderService tpOrderService;
 	/**
-	 * @param model
-	 * @param id
-	 * @param p
 	 * @return
 	 * 商品列表
 	 */
 	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String ajaxGoodsList(Model model,@RequestParam(required=true) String token,
-			@RequestParam(required=true) String address_id,
-			@RequestParam(required=false) String invoice_title,
-			@RequestParam(required=false) String taxpayer,
-			@RequestParam(required=false) String coupon_id,
-			@RequestParam(required=false) String pay_points,
-			@RequestParam(required=false) String user_money,
-			@RequestParam(required=false) String user_note,
-			@RequestParam(required=true) String goods_id,
-			@RequestParam(required=true) String goods_num,
-			@RequestParam(required=false) String item_id,
-			@RequestParam(required=false) String action,
-			@RequestParam(required=false) String payPwd,
-			@RequestParam(required=false) String act,
-			@RequestParam(required=false) String invoice_email,
-			@RequestParam(required=false) String invoice_contact,
-			@RequestParam(required=false) String is_invoice,
-			@RequestParam(required=false) String shipping_id,
-			@RequestParam(required=false) String type){
+	public @ResponseBody String ajaxGoodsList(HttpServletRequest request,
+											  @RequestParam(required=true) String address_id,
+											  @RequestParam(required=false) String invoice_title,
+											  @RequestParam(required=false) String taxpayer,
+											  @RequestParam(required=false) String coupon_id,
+											  @RequestParam(required=false) String pay_points,
+											  @RequestParam(required=false) String user_money,
+											  @RequestParam(required=false) String user_note,
+											  @RequestParam(required=true) String goods_id,
+											  @RequestParam(required=true) String goods_num,
+											  @RequestParam(required=false) String item_id,
+											  @RequestParam(required=false) String action,
+											  @RequestParam(required=false) String payPwd,
+											  @RequestParam(required=false) String act,
+											  @RequestParam(required=false) String invoice_email,
+											  @RequestParam(required=false) String invoice_contact,
+											  @RequestParam(required=false) String is_invoice,
+											  @RequestParam(required=false) String shipping_id,
+											  @RequestParam(required=false) String type){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -159,7 +148,6 @@ public class CartController {
 						return jsonObj.toString();
 					}
 				}
-				
 				//发票
 				if (null != is_invoice && "1".equals(is_invoice)) {
 					TpInvoice invoice = new TpInvoice();
@@ -180,7 +168,7 @@ public class CartController {
 		}
 		jsonObj.put("return", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "OK!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	

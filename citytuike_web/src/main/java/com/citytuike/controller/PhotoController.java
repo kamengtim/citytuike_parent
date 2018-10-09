@@ -10,19 +10,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("api/Photo")
 @Api(value = "相册")
-public class PhotoController {
+public class PhotoController extends BaseController{
 
     @Autowired
     private TpUsersService tpUsersService;
@@ -30,22 +30,20 @@ public class PhotoController {
     private PhotoService photoService;
 
     /**
-     * @param model
-     * @param token
      * @return
      * 分类模板列表
      */
     @RequestMapping(value="/tmp_list",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "分类模板列表", notes = "分类模板列表")
-    public @ResponseBody String tmpList(Model model, @RequestParam(required=true) String token,
-                                        @RequestParam(required=true) Integer page,
-                                        @RequestParam(required=true) String c_id) {
+    public @ResponseBody String tmpList(@RequestParam(required=true) Integer page,
+                                        @RequestParam(required=true) String c_id,
+                                        HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
         JSONArray data = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -53,32 +51,30 @@ public class PhotoController {
         }
         LimitPageList limitPageList = photoService.getLimitListByCid(c_id, page);
         for (TpPhotoAlbumTmp tpPhotoAlbumTmp : (List<TpPhotoAlbumTmp>)limitPageList.getList()) {
-              JSONObject object = new JSONObject();
-              object.put("id", tpPhotoAlbumTmp.getTmpId());
-              object.put("image_url", tpPhotoAlbumTmp.getImageUrl());
-              object.put("status", tpPhotoAlbumTmp.getStatus());
-              object.put("sort", tpPhotoAlbumTmp.getSort());
-              object.put("add_time", tpPhotoAlbumTmp.getAddTime());
-              object.put("route_url", tpPhotoAlbumTmp.getRouteUrl());
-              object.put("classify_id", tpPhotoAlbumTmp.getClassifyId());
-            data.add(object);
+           JSONObject object = new JSONObject();
+           object.put("id", tpPhotoAlbumTmp.getTmpId());
+           object.put("image_url", tpPhotoAlbumTmp.getImageUrl());
+           object.put("status", tpPhotoAlbumTmp.getStatus());
+           object.put("sort", tpPhotoAlbumTmp.getSort());
+           object.put("add_time", tpPhotoAlbumTmp.getAddTime());
+           object.put("route_url", tpPhotoAlbumTmp.getRouteUrl());
+           object.put("classify_id", tpPhotoAlbumTmp.getClassifyId());
+           data.add(object);
         }
         jsonObj.put("result",data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param page
      * @return
      * 分类列表
      */
     @RequestMapping(value="/tmp_classify",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "分类列表", notes = "分类列表")
-    public @ResponseBody String tmpClassify(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String tmpClassify(HttpServletRequest request,
                                             @RequestParam(required=true) Integer page) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
@@ -86,7 +82,7 @@ public class PhotoController {
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -130,13 +126,13 @@ public class PhotoController {
         }
         jsonObj.put("result",jsonObj1);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     @RequestMapping(value="/create_ad",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "添加广告", notes = "添加广告")
-    public @ResponseBody String createAd(@RequestParam(required=true) String token,
+    public @ResponseBody String createAd(HttpServletRequest request,
                                         @RequestParam(required=true) String desc,
                                         @RequestParam(required=true) String image,
                                         @RequestParam(required=true) String model,
@@ -149,7 +145,7 @@ public class PhotoController {
         JSONArray data = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -186,25 +182,24 @@ public class PhotoController {
         jsonObj1.put("ad_id", tpPhotoAlbumAd.getAdId());
         jsonObj.put("result",jsonObj1);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param token
      * @param ad_id
      * @return
      * 获取广告
      */
     @RequestMapping(value="/get_ad",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "获取广告", notes = "获取广告")
-    public @ResponseBody String getAd(@RequestParam(required=true) String token,
-                                        @RequestParam(required=false) String ad_id) {
+    public @ResponseBody String getAd(HttpServletRequest request,
+                                        @RequestParam(required=true) String ad_id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -226,12 +221,11 @@ public class PhotoController {
 
         jsonObj.put("result",jsonObj1);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param token
      * @param ad_id
      * @param music_url
      * @param tmp_id
@@ -243,18 +237,19 @@ public class PhotoController {
      */
     @RequestMapping(value="/save_photo",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "保存相册", notes = "保存相册")
-    public @ResponseBody String savePhoto(@RequestParam(required=true) String token,
+    public @ResponseBody String savePhoto(HttpServletRequest request,
+                                          @RequestParam(required=false) String desc,
                                           @RequestParam(required=false) String ad_id,
-                                          @RequestParam(required=false) String music_url,
-                                          @RequestParam(required=false) String tmp_id,
+                                          @RequestParam(required=true) String music_url,
+                                          @RequestParam(required=true) String tmp_id,
                                           @RequestParam(required=false) String image_list,
-                                          @RequestParam(required=false) String extend_str,
+                                          @RequestParam(required=true) String extend_str,
                                           @RequestParam(required=false) String p_id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -271,10 +266,7 @@ public class PhotoController {
         tpPhotoAlbumUser.setSort(0);
         tpPhotoAlbumUser.setStatus(0);
         tpPhotoAlbumUser.setPv(0);
-        TpPhotoAlbumAd tpPhotoAlbumAd = photoService.findOneAlbumAdById(ad_id);
-        if (null != tpPhotoAlbumAd){
-            tpPhotoAlbumUser.setDesc(tpPhotoAlbumAd.getDesc());
-        }
+        tpPhotoAlbumUser.setDesc(desc);
         if (null != p_id && !"".equals(p_id)){
             TpPhotoAlbumUser tpPhotoAlbumUser1 = photoService.findOneAlbumUserById(p_id);
             if (null != tpPhotoAlbumUser1){
@@ -315,26 +307,25 @@ public class PhotoController {
         }
         jsonObj.put("result",jsonObj1);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param token
      * @param page
      * @return
      * 相册列表
      */
     @RequestMapping(value="/photo_list",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "相册列表", notes = "相册列表")
-    public @ResponseBody String photoList(@RequestParam(required=true) String token,
-                                      @RequestParam(required=false) String page) {
+    public @ResponseBody String photoList(HttpServletRequest request,
+                                      @RequestParam(required=true) String page) {
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj1 = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -370,7 +361,256 @@ public class PhotoController {
         jsonObj1.put("last_page",limitPageList.getPage().getTotalPageCount());
         jsonObj.put("result",jsonObj1);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
+
+    /**
+     * @param p_id
+     * @param request
+     * @return
+     * 相册详情
+     */
+    @RequestMapping(value="/photo_detail",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "相册详情", notes = "相册详情")
+    public @ResponseBody String photoDetail(@RequestParam(required=true) String p_id, HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
+        JSONObject jsonObj1 = new JSONObject();
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
+        if (null != tpPhotoAlbumUser){
+            JSONObject jsonObj2 = new JSONObject();
+            jsonObj2.put("p_id", tpPhotoAlbumUser.getpId());
+            jsonObj2.put("desc", tpPhotoAlbumUser.getDesc());
+            jsonObj2.put("ad_id", tpPhotoAlbumUser.getAdId());
+            jsonObj2.put("music_url", tpPhotoAlbumUser.getMusicUrl());
+            jsonObj2.put("add_time", tpPhotoAlbumUser.getAddTime());
+            jsonObj2.put("status", tpPhotoAlbumUser.getStatus());
+            jsonObj2.put("pv", tpPhotoAlbumUser.getPv());
+            jsonObj2.put("sort", tpPhotoAlbumUser.getSort());
+            jsonObj2.put("user_id", tpPhotoAlbumUser.getUserId());
+            jsonObj2.put("tmp_id", tpPhotoAlbumUser.getTmpId());
+            jsonObj2.put("update_time", tpPhotoAlbumUser.getUpdateTime());
+            jsonObj2.put("share", tpPhotoAlbumUser.getShare());
+            jsonObj2.put("delete_time", tpPhotoAlbumUser.getDeleteTime());
+            jsonObj2.put("extend", tpPhotoAlbumUser.getExtend());
+            jsonObj1.put("photo", jsonObj2);
+            if (null != tpPhotoAlbumUser.getAdId()){
+                TpPhotoAlbumAd tpPhotoAlbumAd = photoService.findOneAlbumAdById(tpPhotoAlbumUser.getAdId());
+                if (null != tpPhotoAlbumAd){
+                    JSONObject jsonObject3 = new JSONObject();
+                    jsonObject3.put("ad_id", tpPhotoAlbumAd.getAdId());
+                    jsonObject3.put("desc", tpPhotoAlbumAd.getDesc());
+                    jsonObject3.put("model", tpPhotoAlbumAd.getModel());
+                    jsonObject3.put("price", tpPhotoAlbumAd.getPrice());
+                    jsonObject3.put("link", tpPhotoAlbumAd.getLink());
+                    jsonObject3.put("ori_price", tpPhotoAlbumAd.getOriPrice());
+                    jsonObject3.put("text_2", tpPhotoAlbumAd.getText2());
+                    jsonObject3.put("text_3", tpPhotoAlbumAd.getText3());
+                    jsonObj1.put("ad_info", jsonObject3);
+                }
+            }
+            if (null != tpPhotoAlbumUser.getTmpId()){
+                TpPhotoAlbumTmp tpPhotoAlbumTmp = photoService.findOneAlbumTmpById(tpPhotoAlbumUser.getTmpId());
+                if (null != tpPhotoAlbumTmp){
+                    JSONObject jsonObject4 = new JSONObject();
+                    jsonObject4.put("id", tpPhotoAlbumTmp.getTmpId());
+                    jsonObject4.put("image_url", tpPhotoAlbumTmp.getImageUrl());
+                    jsonObject4.put("status", tpPhotoAlbumTmp.getStatus());
+                    jsonObject4.put("sort", tpPhotoAlbumTmp.getSort());
+                    jsonObject4.put("add_time", tpPhotoAlbumTmp.getAddTime());
+                    jsonObject4.put("route_url", tpPhotoAlbumTmp.getRouteUrl());
+                    jsonObject4.put("classify_id", tpPhotoAlbumTmp.getClassifyId());
+                    jsonObj1.put("tmp_info", jsonObject4);
+                }
+            }
+            List<TpPhotoAlbumUserImage> tpPhotoAlbumUserImages = photoService.findAllPhotoAlbumUserImageByPid(tpPhotoAlbumUser.getpId());
+            JSONArray jsonArray = new JSONArray();
+            for (TpPhotoAlbumUserImage tpPhotoAlbumUserImage : tpPhotoAlbumUserImages) {
+                JSONObject jsonObject5 = new JSONObject();
+                jsonObject5.put("image", tpPhotoAlbumUserImage.getImage());
+                jsonObject5.put("desc", tpPhotoAlbumUserImage.getDesc());
+                jsonArray.add(jsonObject5);
+            }
+            jsonObj1.put("image_list", jsonArray);
+        }
+        jsonObj.put("result",jsonObj1);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
+
+    /**
+     * @param p_id
+     * @param request
+     * @return
+     * 删除相册
+     */
+    @RequestMapping(value="/photo_delete",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "删除相册", notes = "删除相册")
+    public @ResponseBody String photoDelete(@RequestParam(required=true) String p_id, HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
+        if (null != tpPhotoAlbumUser){
+            int deleteResult =  photoService.deletePhotoAlbumUser(p_id);
+            if (deleteResult > 0){
+                int deleteResultImage = photoService.deleteUserImageByPid(p_id);
+                if (deleteResultImage <= 0){
+                    jsonObj.put("status", "0");
+                    jsonObj.put("msg", "删除失败，请稍后再试");
+                    return jsonObj.toString();
+                }
+            }
+        }
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
+
+    /**
+     * @param p_id
+     * @param action
+     * @param request
+     * @return
+     * 添加浏览\分享数
+     */
+    @RequestMapping(value="/add_pv_share",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "添加浏览\\分享数", notes = "添加浏览\\分享数")
+    public @ResponseBody String addPvOrShare(@RequestParam(required=true) String p_id,
+            @RequestParam(required=true) String action,
+            HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
+        if (null != tpPhotoAlbumUser){
+            if (action.equals("pv")){
+                int updataPVResult = photoService.updataPhotoAlbumUserPv(p_id);
+                if (updataPVResult <= 0){
+                    jsonObj.put("status", "0");
+                    jsonObj.put("msg", "请求失败，请稍后再试");
+                    return jsonObj.toString();
+                }
+            }else if (action.equals("share")){
+                int updataShareResult = photoService.updataPhotoAlbumUserShare(p_id);
+                if (updataShareResult <= 0){
+                    jsonObj.put("status", "0");
+                    jsonObj.put("msg", "请求失败，请稍后再试");
+                    return jsonObj.toString();
+                }
+            }
+        }
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
+
+    /**
+     * @param p_id
+     * @param content
+     * @param request
+     * @return
+     * 相册评论
+     */
+    @RequestMapping(value="/photo_comment",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "相册评论", notes = "相册评论")
+    public @ResponseBody String photoComment(@RequestParam(required=true) String p_id,
+            @RequestParam(required=true) String content,
+            HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
+        if (null != tpPhotoAlbumUser){
+            TpPhotoAlbumComment tpPhotoAlbumComment = new TpPhotoAlbumComment();
+            tpPhotoAlbumComment.setAddTime(new Date());
+            tpPhotoAlbumComment.setContent(content);
+            tpPhotoAlbumComment.setpId(Integer.parseInt(p_id));
+            tpPhotoAlbumComment.setStatus(1);
+            tpPhotoAlbumComment.setUserId(tpUsers.getUser_id());
+            int insertComment = photoService.insertPhotoAlbumComment(tpPhotoAlbumComment);
+            if(insertComment <= 0){
+                jsonObj.put("status", "0");
+                jsonObj.put("msg", "请求失败，请稍后再试");
+                return jsonObj.toString();
+            }
+        }
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
+
+    /**
+     * @param p_id
+     * @param request
+     * @return
+     * 评论列表
+     */
+    @RequestMapping(value="/photo_comment_list",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "评论列表", notes = "评论列表")
+    public @ResponseBody String photoCommentList(@RequestParam(required=true) String p_id,
+            HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
+        if (null != tpPhotoAlbumUser){
+            List<TpPhotoAlbumComment> tpPhotoAlbumCommentList = photoService.findAllPhotoAlbumComment(p_id);
+            for (TpPhotoAlbumComment tpPhotoAlbumComment : tpPhotoAlbumCommentList) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", tpPhotoAlbumComment.getId());
+                jsonObject.put("p_id", tpPhotoAlbumComment.getpId());
+                jsonObject.put("user_id", tpPhotoAlbumComment.getUserId());
+                jsonObject.put("add_time", tpPhotoAlbumComment.getAddTime());
+                jsonObject.put("content", tpPhotoAlbumComment.getContent());
+                jsonObject.put("status", tpPhotoAlbumComment.getStatus());
+                if (null != tpPhotoAlbumComment.getUserId() && !"".equals(tpPhotoAlbumComment.getUserId())){
+                    TpUsers tpUsers1 = tpUsersService.findOneByUserId(tpPhotoAlbumComment.getUserId());
+                    if (null != tpUsers1){
+                        jsonObject.put("nickname", tpUsers1.getNickname());
+                        jsonObject.put("head_pic", tpUsers1.getHead_pic());
+                    }
+                }
+                jsonArray.add(jsonObject);
+            }
+        }
+        jsonObj.put("result", jsonArray);
+        jsonObj.put("status", "1");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 

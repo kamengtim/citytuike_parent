@@ -2,8 +2,10 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.model.*;
-import com.citytuike.service.ChatService;
+import com.citytuike.model.LimitPageList;
+import com.citytuike.model.TpUserFriendApply;
+import com.citytuike.model.TpUserFriends;
+import com.citytuike.model.TpUsers;
 import com.citytuike.service.FriendService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.PingYinUtil;
@@ -11,12 +13,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
 @Controller
 @RequestMapping("api/Friend")
 @Api(value = "好友")
-public class FriendController {
+public class FriendController extends BaseController{
 
     @Autowired
     private TpUsersService tpUsersService;
@@ -39,15 +41,15 @@ public class FriendController {
      */
     @RequestMapping(value="/apply",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "好友申请", notes = "好友申请")
-    public @ResponseBody String apply(Model model, @RequestParam(required=true) String token,
-                                        @RequestParam(required=true) Integer friend_uid,
-                                        @RequestParam(required=true) String msg) {
+    public @ResponseBody String apply(HttpServletRequest request,
+                                      @RequestParam(required=true) Integer friend_uid,
+                                      @RequestParam(required=true) String msg) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "申请失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -83,7 +85,7 @@ public class FriendController {
     }
     @RequestMapping(value="/myHandleApplies",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "我的申请处理列表", notes = "我的申请处理列表")
-    public @ResponseBody String myHandleApplies(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String myHandleApplies(HttpServletRequest request,
                                         @RequestParam(required=true) Integer p,
                                         @RequestParam(required=true) Integer size) {
         JSONObject jsonObj = new JSONObject();
@@ -91,7 +93,7 @@ public class FriendController {
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -116,27 +118,25 @@ public class FriendController {
         data.put("list", data1);
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param id
      * @return
      * 通过好友申请
      */
     @RequestMapping(value="/accept",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "通过好友申请", notes = "通过好友申请")
-    public @ResponseBody String accept(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String accept(HttpServletRequest request,
                                       @RequestParam(required=true) Integer id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "操作失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -179,14 +179,14 @@ public class FriendController {
     }
     @RequestMapping(value="/refuse",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "拒绝好友申请", notes = "拒绝好友申请")
-    public @ResponseBody String refuse(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String refuse(HttpServletRequest request,
                                       @RequestParam(required=true) Integer id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "操作失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -211,7 +211,7 @@ public class FriendController {
     }
     @RequestMapping(value="/myFriends",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "我的好友接口", notes = "我的好友接口")
-    public @ResponseBody String myFriends(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String myFriends(HttpServletRequest request,
                                                 @RequestParam(required=false) String keyword,
                                                 @RequestParam(required=true) Integer p,
                                                 @RequestParam(required=true) Integer size) {
@@ -221,7 +221,7 @@ public class FriendController {
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -249,7 +249,7 @@ public class FriendController {
         data.put("list", data1);
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 }

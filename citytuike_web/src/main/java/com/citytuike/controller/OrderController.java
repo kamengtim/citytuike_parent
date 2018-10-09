@@ -1,17 +1,6 @@
 package com.citytuike.controller;
 
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.LimitPageList;
@@ -20,33 +9,40 @@ import com.citytuike.model.TpOrderAction;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpOrderService;
 import com.citytuike.service.TpUsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("api/Order")
-public class OrderController {
+public class OrderController extends BaseController{
 	
 	@Autowired
 	private TpOrderService tpOrderService;
 	@Autowired
 	private TpUsersService tpUsersService;
 	/**
-	 * @param model
-	 * @param token
 	 * @param type
 	 * @param p
 	 * @return
 	 * 订单列表
 	 */
 	@RequestMapping(value="/order_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String orderList(Model model,@RequestParam(required=true) String token,
-			@RequestParam(required=true) String type,
-			@RequestParam(required=true, defaultValue="1") Integer p){
+	public @ResponseBody String orderList(HttpServletRequest request,
+										  @RequestParam(required=true) String type,
+										  @RequestParam(required=true, defaultValue="1") Integer p){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -96,27 +92,25 @@ public class OrderController {
 		data.put("lists", jsonArray1);
 		jsonObj.put("result", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok");
+		jsonObj.put("msg", "请求成功");
 		System.out.println("结果:" + jsonObj.toString());
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @param id
 	 * @param orderSn
 	 * @return
 	 * 订单详情
 	 */
 	@RequestMapping(value="/order_detail",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String orderDetail(Model model,@RequestParam(required=true) String token,
+	public @ResponseBody String orderDetail(HttpServletRequest request,
 			@RequestParam(required=true) String id,
 			@RequestParam(required=false) String orderSn){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -127,24 +121,22 @@ public class OrderController {
 			data = tpOrderService.getOrderJson(tpOrder);
 			jsonObj.put("result", data);
 			jsonObj.put("status", "1");
-			jsonObj.put("msg", "ok");
+			jsonObj.put("msg", "请求成功!");
 			System.out.println("结果:" + jsonObj.toString());
 		}
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @return
 	 * 申请取消订单
 	 */
 	@RequestMapping(value="/record_refund_order",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String recordRefundOrder(Model model,@RequestParam(required=true) String token,
+	public @ResponseBody String recordRefundOrder(HttpServletRequest request,
 			@RequestParam(required=true) String order_id){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -158,7 +150,7 @@ public class OrderController {
 				int goodsResult1 =tpOrderService.insertOrderAction(tpOrderAction);
 				if (goodsResult1 > 0) {
 					jsonObj.put("status", "1");
-					jsonObj.put("msg", "ok");
+					jsonObj.put("msg", "请求成功!");
 					System.out.println("结果:" + jsonObj.toString());
 				}
 			}
@@ -167,19 +159,17 @@ public class OrderController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @param id
 	 * @return
 	 * 确认收货
 	 */
 	@RequestMapping(value="/order_confirm",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String orderConfirm(Model model,@RequestParam(required=true) String token,
+	public @ResponseBody String orderConfirm(HttpServletRequest request,
 			@RequestParam(required=true) String id){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -193,7 +183,7 @@ public class OrderController {
 				int goodsResult1 =tpOrderService.insertOrderAction(tpOrderAction);
 				if (goodsResult1 > 0) {
 					jsonObj.put("status", "1");
-					jsonObj.put("msg", "ok");
+					jsonObj.put("msg", "请求成功!");
 					System.out.println("结果:" + jsonObj.toString());
 				}
 			}
@@ -202,8 +192,6 @@ public class OrderController {
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @param order_id
 	 * @param province
 	 * @param city
@@ -213,7 +201,7 @@ public class OrderController {
 	 * 修改订单收货地址
 	 */
 	@RequestMapping(value="/edit_order_address",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String editOrderAddress(Model model,@RequestParam(required=true) String token,
+	public @ResponseBody String editOrderAddress(HttpServletRequest request,
 			@RequestParam(required=true) String order_id,
 			@RequestParam(required=true) String province,
 			@RequestParam(required=true) String city,
@@ -221,8 +209,8 @@ public class OrderController {
 			@RequestParam(required=true) String address){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -237,7 +225,7 @@ public class OrderController {
 			int result = tpOrderService.updateOrderAddress(tpOrder);
 			if (result > 0) {
 				jsonObj.put("status", "1");
-				jsonObj.put("msg", "ok");
+				jsonObj.put("msg", "请求成功!");
 				System.out.println("结果:" + jsonObj.toString());
 			}
 			

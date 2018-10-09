@@ -3,7 +3,6 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.interceptor.LoginUtil;
 import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
@@ -14,7 +13,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,20 +71,19 @@ public class UserController extends BaseController{
 	@Autowired
 	private TpFestivalsCateService tpFestivalsCateService;
 	/**
-	 * @param model
 	 * @param username
 	 * @param password
 	 * @return
 	 * 登陆
 	 */
-	@RequestMapping(value="/do_login",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String doLogin(HttpServletRequest request,Model model, @RequestParam(required=true) String username,
+	@RequestMapping(value="/do_login",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public @ResponseBody String doLogin(HttpServletRequest request, @RequestParam(required=true) String username,
 										@RequestParam(required=true) String password){
 		String pwd = MD5Utils.md5("TPSHOP" + password);
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "登陆失败!");
+		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = tpUsersService.findOneByLogo(username, pwd);
 		if (null != tpUsers) {
 			String token = MD5Utils.md5(System.currentTimeMillis()+Util.generateString(16));
@@ -112,7 +109,6 @@ public class UserController extends BaseController{
 	}
 
 	/**
-	 * @param model
 	 * @param nickname
 	 * @param username
 	 * @param password
@@ -123,8 +119,8 @@ public class UserController extends BaseController{
 	 * @return
 	 * 注册 
 	 */
-	@RequestMapping(value="/reg",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String reg(Model model,@RequestParam(required=false) String nickname,
+	@RequestMapping(value="/reg",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public @ResponseBody String reg(@RequestParam(required=false) String nickname,
 			@RequestParam(required=true) String username,
 			@RequestParam(required=true) String password,
 			@RequestParam(required=true) String password2,
@@ -135,7 +131,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "注册失败!");
+		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers1 = tpUsersService.findOneByMobile(username);
 		if (null != tpUsers1){
 			jsonObj.put("status", "5");
@@ -206,15 +202,14 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @return
 	 * 退出登陆 
 	 */
 	@RequestMapping(value="/logout",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String logout(Model model, HttpServletRequest request){
+	public @ResponseBody String logout(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "退出登陆失败!");
+		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null != tpUsers) {
 			tpUsers.setToken("");
@@ -230,16 +225,15 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
 	 * @return
 	 * 用户地址列表
 	 */
 	@RequestMapping(value="/address_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String addressList(Model model, HttpServletRequest request){
+	public @ResponseBody String addressList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
+		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -266,13 +260,11 @@ public class UserController extends BaseController{
 			jsonArray.add(jsonObj1);
 		}
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "OK!");
+		jsonObj.put("msg", "请求成功!");
 		jsonObj.put("return", jsonArray);
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @param province
 	 * @param address
 	 * @param consignee
@@ -283,8 +275,8 @@ public class UserController extends BaseController{
 	 * @return
 	 * 添加地址
 	 */
-	@RequestMapping(value="/add_address",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String addAddress(Model model,@RequestParam(required=true) String token,
+	@RequestMapping(value="/add_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public @ResponseBody String addAddress(HttpServletRequest request,
 			@RequestParam(required=true)Integer province,
 			@RequestParam(required=true)String address,
 			@RequestParam(required=true)String consignee,
@@ -294,8 +286,8 @@ public class UserController extends BaseController{
 			@RequestParam(required=true)Integer is_default){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -312,14 +304,12 @@ public class UserController extends BaseController{
 		int returns = tpUsersService.insertUserAddress(tpUserAddress);
 		if (returns > 0) {
 			jsonObj.put("status", "1");
-			jsonObj.put("msg", "成功!");
+			jsonObj.put("msg", "请求成功!");
 		}
 		
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @param id
 	 * @param province
 	 * @param address
@@ -331,8 +321,8 @@ public class UserController extends BaseController{
 	 * @return
 	 * 修改地址
 	 */
-	@RequestMapping(value="/edit_address",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String editAddress(Model model,@RequestParam(required=true) String token,
+	@RequestMapping(value="/edit_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public @ResponseBody String editAddress(HttpServletRequest request,
 			@RequestParam(required=true)Integer id,
 			@RequestParam(required=true)Integer province,
 			@RequestParam(required=true)String address,
@@ -343,8 +333,8 @@ public class UserController extends BaseController{
 			@RequestParam(required=true)Integer is_default){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -364,28 +354,26 @@ public class UserController extends BaseController{
 			int returns = tpUsersService.updateUserAddress(tpUserAddress);
 			if (returns > 0) {
 				jsonObj.put("status", "1");
-				jsonObj.put("msg", "成功!");
+				jsonObj.put("msg", "请求成功!");
 			}
 		}
 		
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @param id
 	 * @return
 	 * 获取城县区
 	 */
 	@RequestMapping(value="/get_region",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getRegion(Model model,@RequestParam(required=true) String token,
+	public @ResponseBody String getRegion(HttpServletRequest request,
 			@RequestParam(required=true)Integer id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArry = new JSONArray();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -408,23 +396,21 @@ public class UserController extends BaseController{
 		data.put("region_list", jsonArry);
 		jsonObj.put("return", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "成功!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	/**
-	 * @param model
-	 * @param token
 	 * @param id
 	 * @return
 	 * 设置默认值
 	 */
-	@RequestMapping(value="/set_default",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String setDefault(Model model,@RequestParam(required=true) String token,
+	@RequestMapping(value="/set_default",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	public @ResponseBody String setDefault(HttpServletRequest request,
 			@RequestParam(required=true)Integer id){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -440,30 +426,29 @@ public class UserController extends BaseController{
 				int num = tpUsersService.updateAddressToDefault(tpUserAddress.getAddress_id(), 0);
 				if (num <= 0) {
 					jsonObj.put("status", "0");
-					jsonObj.put("msg", "失败!");
+					jsonObj.put("msg", "请求失败，请稍后再试");
 					return jsonObj.toString();
 				}
 			}
 			int num = tpUsersService.updateAddressToDefault(id, 1);
 			if (num > 0) {
 				jsonObj.put("status", "1");
-				jsonObj.put("msg", "成功!");
+				jsonObj.put("msg", "请求成功!");
 			}
 		}
 		
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 账户管理
 	 */
 	@RequestMapping(value="/account",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public  @ResponseBody String account(@RequestParam(required = true)String token){
+	public  @ResponseBody String account(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -473,18 +458,17 @@ public class UserController extends BaseController{
 		return jsonObject.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 收益明细列表
 	 */
 	@RequestMapping(value="/account_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String AccountList(@RequestParam(required = true)String token,
+	public @ResponseBody String AccountList(HttpServletRequest request,
 											@RequestParam(required = true)String type,
 											@RequestParam(required = false,defaultValue = "1")String page){
 		JSONObject data = new JSONObject();
 		JSONObject jsonObj = new JSONObject();
 		JSONArray  jsonArray = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -505,21 +489,20 @@ public class UserController extends BaseController{
 		data.put("last_page",limitPageList.getPage().getTotalPageCount());
 		data.put("data",jsonArray);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		jsonObj.put("result",data);
 
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 银行卡列表
 	 */
 	@RequestMapping(value = "bank_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String BankList(@RequestParam(required = true)String token){
+	public @ResponseBody String BankList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -534,21 +517,20 @@ public class UserController extends BaseController{
 			jsonObject1.put("bank",jsonObject);
 		}
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 提现申请列表
 	 */
 	@RequestMapping(value = "withdrawals_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String WithdrawalsList(@RequestParam(required = true)String token,
+	public @ResponseBody String WithdrawalsList(HttpServletRequest request,
 												@RequestParam(required = false,defaultValue = "1")String page){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -572,7 +554,7 @@ public class UserController extends BaseController{
 	 * @return
 	 * 短信发送
 	 */
-	@RequestMapping(value = "send_validate_code",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "send_validate_code",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	public @ResponseBody String SendValidateCode(@RequestParam(required = false)String type,
 												 @RequestParam(required = false,defaultValue = "6")String scene,
 												 @RequestParam(required = true)String mobile,
@@ -603,11 +585,11 @@ public class UserController extends BaseController{
      * 根据用户ID 获取信息
      */
 	@RequestMapping(value = "user_info_by_id",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String userInfoById(@RequestParam(required = true)String user_id, @RequestParam(required = true)String token){
+	public @ResponseBody String userInfoById(@RequestParam(required = true)String user_id, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -628,16 +610,15 @@ public class UserController extends BaseController{
 
     /**
      * @param invite_code
-     * @param token
      * @return
      * 根据invite_code 获取用户信息
      */
 	@RequestMapping(value = "get_invite_code_user_info",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getInviteCodeUerInfo(@RequestParam(required = true)String invite_code, @RequestParam(required = true)String token){
+	public @ResponseBody String getInviteCodeUerInfo(@RequestParam(required = true)String invite_code, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
             TpUsers tpUsers = tpUsersService.findOneByInvite(invite_code);
             if (null != tpUsers) {
@@ -649,12 +630,11 @@ public class UserController extends BaseController{
         return jsonObj.toString();
     }
 	/**
-	 * @param token
 	 * @return
 	 * 更新用户信息
 	 */
-	@RequestMapping(value = "userinfo",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String UserInfo(@RequestParam(required = true)String token,
+	@RequestMapping(value = "userinfo",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String UserInfo(HttpServletRequest request,
 										 @RequestParam(required = false)String head_pic,
 										 @RequestParam(required = false)String nickname,
 										 @RequestParam(required = false)String qq,
@@ -671,7 +651,7 @@ public class UserController extends BaseController{
 										 @RequestParam(required = false)String mobile_code){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -694,15 +674,14 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 发卡行列表
 	 */
 	@RequestMapping(value = "bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String Bank(@RequestParam(required = true)String token){
+	public @ResponseBody String Bank(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray bankList = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -719,18 +698,17 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 投诉
 	 */
-	@RequestMapping(value = "send_report",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String sendReport(@RequestParam(required = true)String token,
+	@RequestMapping(value = "send_report",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String sendReport(HttpServletRequest request,
 										   @RequestParam(required = true)String address,
 										   @RequestParam(required = true)String report_mess,
 										   @RequestParam(required = true)String image,
 										   @RequestParam(required = true)String area){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -757,15 +735,14 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-     * @param token
      * @return
      * 投诉记录
      */
     @RequestMapping(value = "report_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String ReportList(@RequestParam(required = true)String token){
+    public @ResponseBody String ReportList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -778,7 +755,7 @@ public class UserController extends BaseController{
         }
         jsonObj.put("result",jsonArray);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
     /**
@@ -786,11 +763,11 @@ public class UserController extends BaseController{
      * 根据im_id 获取用户信息
      */
 	@RequestMapping(value = "user_info_by_im_id",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String userInfoByImId(@RequestParam(required = true)String im_id, @RequestParam(required = true)String token){
+	public @ResponseBody String userInfoByImId(@RequestParam(required = true)String im_id, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -814,12 +791,12 @@ public class UserController extends BaseController{
      * @return
      * 加入团队
      */
-	@RequestMapping(value = "join",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String join(@RequestParam(required = true)String invite_code, @RequestParam(required = true)String token){
+	@RequestMapping(value = "join",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String join(@RequestParam(required = true)String invite_code, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -834,7 +811,7 @@ public class UserController extends BaseController{
 		    int result = tpUsersService.updateUserParent(tpUsers2);
 		    if (result > 0){
                 jsonObj.put("status", "1");
-                jsonObj.put("msg", "ok!");
+                jsonObj.put("msg", "请求成功!");
             }
 		}
 		jsonObj.put("result",data);
@@ -842,15 +819,14 @@ public class UserController extends BaseController{
 	}
 
     /**
-     * @param token
      * @return
      * 意向代理人数统计
      */
 	@RequestMapping(value = "team_device_count",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String teamDeviceCount(@RequestParam(required = true)String token){
+	public @ResponseBody String teamDeviceCount(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers1 = initUser(request);
         String startTime = String.valueOf(Util.getStartTime());
         String endTime = String.valueOf(Util.getnowEndTime());
         if (null == tpUsers1) {
@@ -865,21 +841,20 @@ public class UserController extends BaseController{
         data.put("today", dayNum);
 
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 		jsonObj.put("result",data);
 		return jsonObj.toString();
 	}
 
     /**
-     * @param token
      * @return
      * 机器顶部统计
      */
 	@RequestMapping(value = "device_number",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String deviceNumber(@RequestParam(required = true)String token){
+	public @ResponseBody String deviceNumber(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-        TpUsers tpUsers1 = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -906,19 +881,18 @@ public class UserController extends BaseController{
         data.put("today", team);
         jsonObj.put("result",data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
     /**
-     * @param token
      * @return
      * 热门城市
      */
 	@RequestMapping(value = "get_hot_city",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getHotCity(@RequestParam(required = true)String token){
+	public @ResponseBody String getHotCity(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -966,16 +940,15 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @param id
 	 * @return
 	 * 删除银行卡
 	 */
-	@RequestMapping(value = "del_bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String delBank(@RequestParam(required = true)String token,
+	@RequestMapping(value = "del_bank",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String delBank(HttpServletRequest request,
 										@RequestParam(required = true)String id){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -993,12 +966,11 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 添加银行卡(未测试)
 	 */
-	@RequestMapping(value = "add_bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String addBank(@RequestParam(required = true)String token,
+	@RequestMapping(value = "add_bank",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String addBank(HttpServletRequest request,
 										@RequestParam(required = true)String real_name,
 										@RequestParam(required = true)String mobile,
 										@RequestParam(required = true)String bank_card,
@@ -1007,7 +979,7 @@ public class UserController extends BaseController{
 										@RequestParam(required = true)String branch,
 										@RequestParam(required = true)String mobile_code){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1029,7 +1001,7 @@ public class UserController extends BaseController{
 			tpUserBank.setUser_id(tpUsers.getUser_id());
 			tpUserBankService.save(tpUserBank);
 			jsonObj.put("status", "1");
-			jsonObj.put("msg", "ok");
+			jsonObj.put("msg", "请求成功!");
 			jsonObj.put("result","");
 			return jsonObj.toString();
 		}else{
@@ -1040,16 +1012,15 @@ public class UserController extends BaseController{
 		}
 	}
 	/**
-	 * @param token
 	 * @param id
 	 * @return
 	 * 删除地址
 	 */
-	@RequestMapping(value = "del_address",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String delAddress(@RequestParam(required = true)String token,
+	@RequestMapping(value = "del_address",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String delAddress(HttpServletRequest request,
 										   @RequestParam(required = true)String id){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1066,15 +1037,14 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
     /**
-     * @param token
      * @return
      * 个人中心 总收益、广告收益、已提现
      */
 	@RequestMapping(value = "user_account_statistics",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String userAccountStatistics(@RequestParam(required = true)String token){
+	public @ResponseBody String userAccountStatistics(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObject = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1088,21 +1058,20 @@ public class UserController extends BaseController{
         jsonObject.put("draw",draw);
         jsonObj.put("result",jsonObject);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
 	}
     /**
-     * @param token
      * @param id
      * @return
      * 用户提现
      */
-    @RequestMapping(value = "get_money",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String getMoney(@RequestParam(required = true)String token,
+    @RequestMapping(value = "get_money",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String getMoney(HttpServletRequest request,
                                          @RequestParam(required = true)int id,
                                          @RequestParam(required = true)float money){
         JSONObject jsonObj = new JSONObject();
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -1119,15 +1088,14 @@ public class UserController extends BaseController{
         return jsonObj.toString();
     }
     /**
-     * @param token
      * @return
      * 信用卡列表
      */
     @RequestMapping(value = "creditCard",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String creditCard(@RequestParam(required = true)String token){
+    public @ResponseBody String creditCard(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject object = new JSONObject();
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -1142,17 +1110,16 @@ public class UserController extends BaseController{
         object.put("count",count);
         object.put("showpage","");
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         jsonObj.put("result",object);
         return jsonObj.toString();
     }
     /**
-     * @param token
      * @return
      * 新添申请人信息
      */
-    @RequestMapping(value = "addApplyPeople",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String addApplyPeople(@RequestParam(required = true)String token,
+    @RequestMapping(value = "addApplyPeople",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String addApplyPeople(HttpServletRequest request,
                                                @RequestParam(required = true)String cardid,
                                                @RequestParam(required = true)String name,
                                                @RequestParam(required = true)String idcard,
@@ -1161,7 +1128,7 @@ public class UserController extends BaseController{
                                                @RequestParam(required = true)String area){
         JSONObject jsonObj = new JSONObject();
         JSONObject object = new JSONObject();
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -1178,17 +1145,16 @@ public class UserController extends BaseController{
         return jsonObj.toString();
     }
     /**
-     * @param token
      * @param id
      * @return
      * 删除信用卡申请人
      */
-    @RequestMapping(value = "delApplyPeople",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String delApplyPeople(@RequestParam(required = true)String token,
+    @RequestMapping(value = "delApplyPeople",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    public @ResponseBody String delApplyPeople(HttpServletRequest request,
                                                @RequestParam(required = true)int id){
         JSONObject jsonObj = new JSONObject();
         JSONObject object = new JSONObject();
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -1205,13 +1171,12 @@ public class UserController extends BaseController{
         return jsonObj.toString();
     }
     /**
-     * @param token
      * @return
      * 申请商务合作
      */
-	@RequestMapping(value = "application_for_business_cooperation",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "application_for_business_cooperation",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	public @ResponseBody String applicationForBusinessCooperation(@RequestParam(required = true)String code,
-                                                                  @RequestParam(required = true)String token,
+                                                                  HttpServletRequest request,
                                                                   @RequestParam(required = true)String name,
                                                                   @RequestParam(required = true)String email,
                                                                   @RequestParam(required = true)String province,
@@ -1227,7 +1192,7 @@ public class UserController extends BaseController{
                                                                   @RequestParam(required = true)String reason){
             JSONObject jsonObj = new JSONObject();
             JSONObject data = new JSONObject();
-            TpUsers tpUsers = tpUsersService.findOneByToken(token);
+			TpUsers tpUsers = initUser(request);
             if (null == tpUsers) {
                 jsonObj.put("status", "0");
                 jsonObj.put("msg", "请先登陆!");
@@ -1270,23 +1235,22 @@ public class UserController extends BaseController{
         }
         jsonObj.put("result",data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 	/**
-	 * @param token
 	 * @param id
 	 * @return
 	 * 提交信用卡申请
 	 */
-	@RequestMapping(value = "applyCard",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String applyCard(@RequestParam(required = true)String token,
+	@RequestMapping(value = "applyCard",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String applyCard(HttpServletRequest request,
 										  @RequestParam(required = true)String mobile_code	,
 										  @RequestParam(required = true)String cardid,
 										  @RequestParam(required = true)String id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject object = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1305,17 +1269,16 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 修改密码
 	 */
-	@RequestMapping(value = "password",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "password",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	public @ResponseBody String Password(@RequestParam(required = true)String new_password,
 										 @RequestParam(required = true)String confirm_password,
 										 @RequestParam(required = true)String code,
-										 @RequestParam(required = true)String token){
+										 HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1350,14 +1313,13 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 收益明细中的收益统计
 	 */
 	@RequestMapping(value = "income_count",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String incomeCount(@RequestParam(required = true)String token){
+	public @ResponseBody String incomeCount(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1370,16 +1332,15 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @param id
 	 * @return
 	 * 交易申请中心图
 	 */
-	@RequestMapping(value = "cardDetail",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String cardDetail(@RequestParam(required = true)String token,
+	@RequestMapping(value = "cardDetail",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String cardDetail(HttpServletRequest request,
 										   @RequestParam(required = true)int id){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1387,7 +1348,7 @@ public class UserController extends BaseController{
 		}
 		JSONObject jsonObject = tpCardListSevice.cardDetail(id);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		jsonObj.put("result",jsonObject);
 		return jsonObj.toString();
 	}
@@ -1413,7 +1374,7 @@ public class UserController extends BaseController{
      * @return
      * 添加支付宝账号
      */
-    @RequestMapping(value = "add_ali_account",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "add_ali_account",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     public @ResponseBody String addAliAccount(@RequestParam(required = true)String real_name,
                                               @RequestParam(required = true)String mobile,
                                               @RequestParam(required = true)String account,
@@ -1428,7 +1389,7 @@ public class UserController extends BaseController{
 			return jsonObj.toString();
         }
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!!");
         return jsonObj.toString();
     }
     /**
@@ -1453,7 +1414,7 @@ public class UserController extends BaseController{
         data.put("data",jsonArray);
         jsonObj.put("result",data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
     /**
@@ -1461,14 +1422,14 @@ public class UserController extends BaseController{
      * @return
      * 支付宝提现
      */
-    @RequestMapping(value = "get_money_ali",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "get_money_ali",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     public @ResponseBody String getMoneyAli(@RequestParam(required = true)String id,
                                             @RequestParam(required = true)String money){
         JSONObject jsonObj= new JSONObject();
         try{
             tpUserAliAccountService.getMoneyAli(id,money);
             jsonObj.put("status", "1");
-            jsonObj.put("msg", "ok!");
+            jsonObj.put("msg", "请求成功!");
         }catch (Exception e){
             jsonObj.put("status", "0");
             jsonObj.put("msg", "提现失败!");
@@ -1477,17 +1438,16 @@ public class UserController extends BaseController{
     }
 
 	/**
-	 * @param token
 	 * @param flag
 	 *  1为首页2为个人中心3为订单4为消息
 	 * @return
 	 */
 	@RequestMapping(value = "plateMsg",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String plateMsg(@RequestParam(required = true)String token,
+	public @ResponseBody String plateMsg(HttpServletRequest request,
 											   @RequestParam(required = true)int flag){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1504,21 +1464,20 @@ public class UserController extends BaseController{
 			jsonObj.put("result", data);
 
 			jsonObj.put("status", "1");
-			jsonObj.put("msg", "ok!");
+			jsonObj.put("msg", "请求成功!");
 		}
 		return jsonObj.toString();
 	}
 
 	/**
-	 * @param token
 	 * @return
 	 * 系统通知
 	 */
-	@RequestMapping(value = "sysMessage",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String sysMessage(@RequestParam(required = true)String token){
+	@RequestMapping(value = "sysMessage",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String sysMessage(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1547,20 +1506,19 @@ public class UserController extends BaseController{
 		jsonObj.put("result", jsonArray);
 
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 
 	/**
-	 * @param token
 	 * @return
 	 * 系统通知判断
 	 */
-	@RequestMapping(value = "getSysList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getSysList(@RequestParam(required = true)String token){
+	@RequestMapping(value = "getSysList",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getSysList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1584,22 +1542,21 @@ public class UserController extends BaseController{
 		jsonObj.put("result", jsonArray);
 
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 用户话费券列表
 	 */
 	@RequestMapping(value = "cartGift",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String cartGift(@RequestParam(required = true)String token){
+	public @ResponseBody String cartGift(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
 		JSONObject object = new JSONObject();
 		JSONObject data = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1621,22 +1578,21 @@ public class UserController extends BaseController{
 		jsonObj.put("result",data);
 		jsonObj.put("page",object);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	/**
-	 * @param token
 	 * @return
 	 * 话费自助充值
 	 */
-	@RequestMapping(value = "refill",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String refill(@RequestParam(required = true)String token,
+	@RequestMapping(value = "refill",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String refillH(HttpServletRequest request,
 										 @RequestParam(required = true)int id,
 										 @RequestParam(required = true)String mobile,
 										 @RequestParam(required = true)String code,
                                         HttpServletResponse response){
 		JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1683,7 +1639,7 @@ public class UserController extends BaseController{
     @RequestMapping(value = "checkGift",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
     public @ResponseBody String checkGift(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
-		TpUsers tpUsers = LoginUtil.login(request,redisTemplate,tpUsersService);
+		TpUsers tpUsers = initUser(request);
 		if(tpUsers == null){
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请重新登录!");
@@ -1696,7 +1652,7 @@ public class UserController extends BaseController{
             jsonObject.put("money",tpCartGift.getMoney());
         	jsonObj.put("result",jsonObject);
 			jsonObj.put("status", "1");
-			jsonObj.put("msg", "ok!");
+			jsonObj.put("msg", "请求成功!");
         }else{
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "没有该礼品!");
@@ -1709,12 +1665,12 @@ public class UserController extends BaseController{
      * 领取礼品
      */
     @RequestMapping(value = "getGifts",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String getGifts(@RequestParam(required = true)String token,
+    public @ResponseBody String getGifts(HttpServletRequest request,
                                          @RequestParam(required = true)int id,
                                          @RequestParam(required = true)int gift_type){
         JSONObject jsonObj = new JSONObject();
         String gift_name = "";
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -1739,13 +1695,13 @@ public class UserController extends BaseController{
      * 已领取列表页
      */
     @RequestMapping(value = "getGiftList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String getGiftList(@RequestParam(required = true)String token){
+    public @ResponseBody String getGiftList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         JSONObject page = new JSONObject();
         String gift_name = "";
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -1765,7 +1721,7 @@ public class UserController extends BaseController{
 		page.put("totalPages",pageInfo.getPages());
 		jsonObj.put("page",page);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
     }
 	/**
@@ -1773,12 +1729,12 @@ public class UserController extends BaseController{
 	 * @return
 	 * 立即使用
 	 */
-	@RequestMapping(value = "useGifts",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String useGifts(@RequestParam(required = true)String token,
+	@RequestMapping(value = "useGifts",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String useGifts(HttpServletRequest request,
 											@RequestParam(required = true)int id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObject = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1803,14 +1759,14 @@ public class UserController extends BaseController{
 	 * @return
 	 * 提现支付密码设置
 	 */
-	@RequestMapping(value = "getMoneyPassword",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getMoneyPassword(@RequestParam(required = true)String token,
+	@RequestMapping(value = "getMoneyPassword",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String getMoneyPassword(HttpServletRequest request,
 												@RequestParam(required = true)String mobile,
 												@RequestParam(required = true)String code,
 												@RequestParam(required = true)String paypwd,
 												@RequestParam(required = true)String repaypwd){
 		JSONObject jsonObj =new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1831,7 +1787,7 @@ public class UserController extends BaseController{
 				int i = tpUsersService.updatePayPwd(password,tpUsers.getUser_id());
 				if(i>0){
 					jsonObj.put("status", "1");
-					jsonObj.put("msg", "ok!");
+					jsonObj.put("msg", "请求成功!");
 				}
 				return jsonObj.toString();
 			}
@@ -1847,12 +1803,12 @@ public class UserController extends BaseController{
 	 * 中秋/国庆个人查看海报评论
 	 */
 	@RequestMapping(value = "midAutumn",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String midAutumn(@RequestParam(required = true)String token,
+	public @ResponseBody String midAutumn(HttpServletRequest request,
 										  @RequestParam(required = true)String ha_id){
 		JSONObject jsonObj =new JSONObject();
 		JSONObject jsonObject = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1865,7 +1821,7 @@ public class UserController extends BaseController{
 		}
 		jsonObj.put("result",jsonArray);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "ok!");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	/**
@@ -1873,11 +1829,11 @@ public class UserController extends BaseController{
 	 * @return
 	 * 中秋/国庆个人制作海报
 	 */
-	@RequestMapping(value = "setMidAutumn",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String setMidAutumn(@RequestParam(required = true)String token,
+	@RequestMapping(value = "setMidAutumn",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String setMidAutumn(HttpServletRequest request,
 											 @RequestParam(required = true)String article_id){
 		JSONObject jsonObj =new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1887,7 +1843,7 @@ public class UserController extends BaseController{
 		int i= tpFestivalsService.setMidAutumn(tpUsers.getUser_id(),date,article_id);
 		if(i>0){
 			jsonObj.put("status", "1");
-			jsonObj.put("msg", "ok!");
+			jsonObj.put("msg", "请求成功!");
 		}
 		return jsonObj.toString();
 	}
@@ -1896,13 +1852,13 @@ public class UserController extends BaseController{
 	 * @return
 	 * 评论海报
 	 */
-	@RequestMapping(value = "messMidAutumn",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String messMidAutumn(@RequestParam(required = true)String token,
+	@RequestMapping(value = "messMidAutumn",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String messMidAutumn(HttpServletRequest request,
 										  @RequestParam(required = true)String content,
 										  @RequestParam(required = true)String ha_id,
 										  @RequestParam(required = true)String user_id){
 		JSONObject jsonObj =new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1930,11 +1886,11 @@ public class UserController extends BaseController{
 	 * 获取后台海报模块
 	 */
 	@RequestMapping(value = "getMidAutumnCate",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getMidAutumnCate(@RequestParam(required = true)String token,
+	public @ResponseBody String getMidAutumnCate(HttpServletRequest request,
 												 @RequestParam(required = true)String article_id){
 		JSONObject jsonObj =new JSONObject();
 		JSONObject jsonObject = new JSONObject();
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1951,7 +1907,7 @@ public class UserController extends BaseController{
 	 * @return
 	 * 手机号修改密码
 	 */
-	@RequestMapping(value = "password2",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "password2",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	public @ResponseBody String password2(@RequestParam(required = true)String mobile,
 												 @RequestParam(required = true)String code,
 												 @RequestParam(required = true)String new_password,
@@ -1985,20 +1941,19 @@ public class UserController extends BaseController{
 
 
 	/**
-	 * @param token
 	 * @param p
 	 * @return
 	 * 获取动态
 	 */
 	@RequestMapping(value = "getDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getDynamic(@RequestParam(required = true) String token,
+	public @ResponseBody String getDynamic(HttpServletRequest request,
 												 @RequestParam(required = true) Integer p){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray data1 = new JSONArray();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "操作失败，请稍后再试");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -2018,26 +1973,25 @@ public class UserController extends BaseController{
 		data.put("data", data1);
 		jsonObj.put("result", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "操作成功");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 
 	/**
-	 * @param token
 	 * @param image
 	 * @param content
 	 * @return
 	 * 发布动态
 	 */
-	@RequestMapping(value = "setDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String setDynamic(@RequestParam(required = true) String token,
+	@RequestMapping(value = "setDynamic",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String setDynamic(HttpServletRequest request,
 										   @RequestParam(required = true) String image,
 										   @RequestParam(required = true) String content){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "操作失败，请稍后再试");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -2062,21 +2016,20 @@ public class UserController extends BaseController{
 	}
 
 	/**
-	 * @param token
 	 * @param did
 	 * @param replay_content
 	 * @return
 	 * 回复动态
 	 */
-	@RequestMapping(value = "setReplayMess",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String setReplayMess(@RequestParam(required = true) String token,
+	@RequestMapping(value = "setReplayMess",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String setReplayMess(HttpServletRequest request,
 										   @RequestParam(required = true) Integer did,
 										   @RequestParam(required = true) String replay_content){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "操作失败，请稍后再试");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -2106,19 +2059,18 @@ public class UserController extends BaseController{
 	}
 
 	/**
-	 * @param token
 	 * @param did
 	 * @return
 	 * 点赞
 	 */
-	@RequestMapping(value = "clickFabulous",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String clickFabulous(@RequestParam(required = true) String token,
+	@RequestMapping(value = "clickFabulous",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String clickFabulous(HttpServletRequest request,
 										   @RequestParam(required = true) Integer did){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "操作失败，请稍后再试");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -2147,19 +2099,18 @@ public class UserController extends BaseController{
 	}
 
 	/**
-	 * @param token
 	 * @param image
 	 * @return
 	 * 更改个人动态背景图
 	 */
-	@RequestMapping(value = "changeBackImg",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String changeBackImg(@RequestParam(required = true) String token,
+	@RequestMapping(value = "changeBackImg",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	public @ResponseBody String changeBackImg(HttpServletRequest request,
 										   @RequestParam(required = true) String image){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "操作失败，请稍后再试");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -2173,24 +2124,23 @@ public class UserController extends BaseController{
 		if(result > 0){
 			jsonObj.put("result", data);
 			jsonObj.put("status", "1");
-			jsonObj.put("msg", "成功");
+			jsonObj.put("msg", "请求成功!");
 		}
 
 		return jsonObj.toString();
 	}
 
 	/**
-	 * @param token
 	 * @return
 	 * 展示个人动态头像背景图
 	 */
 	@RequestMapping(value = "headPicBack",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String headPicBack(@RequestParam(required = true) String token){
+	public @ResponseBody String headPicBack(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "操作失败，请稍后再试");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -2201,20 +2151,20 @@ public class UserController extends BaseController{
 		data.put("nickname", tpUsers.getNickname());
 		jsonObj.put("result", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "成功");
+		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 
 	@RequestMapping(value = "getUserDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	public @ResponseBody String getUserDynamic(@RequestParam(required = true) String token,
+	public @ResponseBody String getUserDynamic(HttpServletRequest request,
 										   @RequestParam(required = true) Integer user_id,
 										   @RequestParam(required = true) Integer p){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray data1 = new JSONArray();
 		jsonObj.put("status", "0");
-		jsonObj.put("msg", "操作失败，请稍后再试");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -2238,7 +2188,7 @@ public class UserController extends BaseController{
 		data.put("data", data1);
 		jsonObj.put("result", data);
 		jsonObj.put("status", "1");
-		jsonObj.put("msg", "操作成功");
+		jsonObj.put("msg", "请求成功");
 		return jsonObj.toString();
 	}
 

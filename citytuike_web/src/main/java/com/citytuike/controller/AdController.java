@@ -9,19 +9,19 @@ import com.citytuike.service.TpUsersService;
 import com.citytuike.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Controller
 @RequestMapping("api/Ad")
-public class AdController {
+public class AdController extends BaseController{
 
     @Autowired
     private TpUsersService tpUsersService;
@@ -32,20 +32,18 @@ public class AdController {
 
 
     /**
-     * @param model
-     * @param token
      * @param regions_id
      * @return
      * 获取广告的地区和设备数
      */
     @RequestMapping(value="/regionData",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String uploadMaterial(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String uploadMaterial(HttpServletRequest request,
                                                @RequestParam(required=true) String regions_id){
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -80,23 +78,21 @@ public class AdController {
 
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @return
      * 热门城市
      */
     @RequestMapping(value="/getHotCities",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String getHotCities(Model model, @RequestParam(required=true) String token){
+    public @ResponseBody String getHotCities(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -129,13 +125,11 @@ public class AdController {
         }
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param type
      * @param trade
      * @param days
@@ -148,8 +142,8 @@ public class AdController {
      * @return
      * 广告申请接口
      */
-    @RequestMapping(value="/apply",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String apply(Model model, @RequestParam(required=true) String token,
+    @RequestMapping(value="/apply",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    public @ResponseBody String apply(HttpServletRequest request,
                                       @RequestParam(required=true) Integer type,
                                       @RequestParam(required=true) Integer trade,
                                       @RequestParam(required=true) Integer days,
@@ -162,8 +156,8 @@ public class AdController {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -212,12 +206,12 @@ public class AdController {
                         int resultRegion = tpAdService.insertAdApplyRegion(tpAdApplyRegion);
                         if (resultRegion <= 0){
                             jsonObj.put("status", "0");
-                            jsonObj.put("msg", "失败!");
+                            jsonObj.put("msg", "请求失败，请稍后再试");
                             return jsonObj.toString();
                         }
                     }else{
                         jsonObj.put("status", "0");
-                        jsonObj.put("msg", "失败!");
+                        jsonObj.put("msg", "请求失败，请稍后再试");
                         return jsonObj.toString();
                     }
                 }
@@ -230,30 +224,28 @@ public class AdController {
                     int resultMaterial = tpAdService.insertAdApplyMaterial(tpAdApplyMaterial);
                     if (resultMaterial <= 0){
                         jsonObj.put("status", "0");
-                        jsonObj.put("msg", "失败!");
+                        jsonObj.put("msg", "请求失败，请稍后再试");
                         return jsonObj.toString();
                     }
                 }
             }
             jsonObj.put("status", "1");
-            jsonObj.put("msg", "ok!");
+            jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @return
      * 广告行业数据接口
      */
     @RequestMapping(value="/trade",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String trade(Model model, @RequestParam(required=true) String token){
+    public @ResponseBody String trade(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -287,25 +279,23 @@ public class AdController {
         }
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param amount
      * @return
      * 广告余额充值
      */
-    @RequestMapping(value="/topUp",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String topUp(Model model, @RequestParam(required=true) String token,
+    @RequestMapping(value="/topUp",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    public @ResponseBody String topUp(HttpServletRequest request,
                                       @RequestParam(required=true) float amount){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -323,19 +313,19 @@ public class AdController {
             data.put("order_sn", tpAdTopUp.getOrder_sn());
             jsonObj.put("result", data);
             jsonObj.put("status", "1");
-            jsonObj.put("msg", "ok!");
+            jsonObj.put("msg", "请求成功!");
         }
 
         return jsonObj.toString();
     }
     @RequestMapping(value="/topUpList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String topUpList(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String topUpList(HttpServletRequest request,
                                       @RequestParam(required=true) int page,@RequestParam(required=true) int size){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -355,27 +345,25 @@ public class AdController {
         data.put("cur", page);
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param page
      * @param size
      * @return
      * 广告申请订单列表（消费列表）
      */
     @RequestMapping(value="/applyList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String applyList(Model model, @RequestParam(required=true) String token,
+    public @ResponseBody String applyList(HttpServletRequest request,
                                       @RequestParam(required=true) int page,@RequestParam(required=true) int size){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -410,24 +398,22 @@ public class AdController {
         data.put("cur", page);
         jsonObj.put("result", data);
         jsonObj.put("status", "1");
-        jsonObj.put("msg", "ok!");
+        jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @return
      * 广告用户可用余额
      */
     @RequestMapping(value="/userBalance",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String userBalance(Model model, @RequestParam(required=true) String token){
+    public @ResponseBody String userBalance(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -438,24 +424,22 @@ public class AdController {
             data.put("balance", tpUserWallet.getBalance());
             jsonObj.put("result", data);
             jsonObj.put("status", "1");
-            jsonObj.put("msg", "ok!");
+            jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param order_sn
      * @return
      */
     @RequestMapping(value="/applyDetail",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String applyDetail(Model model, @RequestParam(required=true) String token, @RequestParam(required=true) String order_sn){
+    public @ResponseBody String applyDetail(HttpServletRequest request, @RequestParam(required=true) String order_sn){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -516,30 +500,28 @@ public class AdController {
             data.put("regions",jsonArray);
             jsonObj.put("result", data);
             jsonObj.put("status", "1");
-            jsonObj.put("msg", "ok!");
+            jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
     }
 
     /**
-     * @param model
-     * @param token
      * @param order_sn
      * @param launch_date
      * @param verify_code
      * @return
      * 广告申请订单结算
      */
-    @RequestMapping(value="/applySettle",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String applySettle(Model model, @RequestParam(required=true) String token,
+    @RequestMapping(value="/applySettle",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    public @ResponseBody String applySettle(HttpServletRequest request,
                                             @RequestParam(required=true) String order_sn,
                                             @RequestParam(required=true) String launch_date,
                                             @RequestParam(required=true) String verify_code){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
-        jsonObj.put("msg", "登陆失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
             jsonObj.put("msg", "请先登陆!");
@@ -580,7 +562,7 @@ public class AdController {
                     int resultFinance = tpUsersService.insertUserFinance(tpUserFinance);
                     if (resultFinance <= 0){
                         jsonObj.put("status", "0");
-                        jsonObj.put("msg", "登陆失败!");
+                        jsonObj.put("msg", "请求失败，请稍后再试");
                         return jsonObj.toString();
                     }
                 }
@@ -595,7 +577,7 @@ public class AdController {
             int updateAdApply = tpAdService.updateAdApply(tpAdApply1);
             if (updateAdApply > 0){
                 jsonObj.put("status", "1");
-                jsonObj.put("msg", "ok!");
+                jsonObj.put("msg", "请求成功!");
                 return jsonObj.toString();
             }
         }
