@@ -6,6 +6,7 @@ import com.citytuike.model.*;
 import com.citytuike.service.ChatService;
 import com.citytuike.service.FriendService;
 import com.citytuike.service.TpUsersService;
+import com.citytuike.util.PingYinUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,6 +215,7 @@ public class FriendController {
                                                 @RequestParam(required=false) String keyword,
                                                 @RequestParam(required=true) Integer p,
                                                 @RequestParam(required=true) Integer size) {
+        System.out.println("线程12:" + Thread.currentThread().getName() +"线程12ID:" + Thread.currentThread().getId());
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
@@ -235,7 +237,12 @@ public class FriendController {
                 object.put("nickname", tpUsers1.getNickname());
                 object.put("head_pic", tpUsers1.getHead_pic());
                 object.put("im_id", tpUsers1.getIm_id());
-                object.put("letter", "");
+                String [] names =  PingYinUtil.getHeadByString(tpUsers1.getNickname().toUpperCase());
+                if (names.length > 0){
+                    object.put("letter", names[0]);
+                }else{
+                    object.put("letter", "");
+                }
             }
             data1.add(object);
         }

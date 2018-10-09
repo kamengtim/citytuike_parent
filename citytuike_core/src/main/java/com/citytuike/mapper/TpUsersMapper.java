@@ -1,6 +1,5 @@
 package com.citytuike.mapper;
 
-import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.*;
 import org.apache.ibatis.annotations.Param;
 

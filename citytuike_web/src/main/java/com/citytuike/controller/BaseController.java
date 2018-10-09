@@ -1,15 +1,27 @@
 package com.citytuike.controller;
 
+import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.TpUsers;
+import com.citytuike.service.TpUsersService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 public class BaseController {
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private TpUsersService tpUsersService;
 
-    public TpUsers getUser(HttpServletRequest request, HttpServletResponse response){
+    public TpUsers initUser(HttpServletRequest request){
+        String header = request.getHeader("p-token");
+        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
         TpUsers tpUsers = null;
-        return  tpUsers;
+        if(token != null && !"".equals(token)){
+            tpUsers = tpUsersService.getToken(token);
+        }
+        return tpUsers;
     }
 	
 	

@@ -3,7 +3,6 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.exception.SendMessageException;
 import com.citytuike.interceptor.LoginUtil;
 import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
@@ -12,7 +11,6 @@ import com.citytuike.util.MD5Utils;
 import com.citytuike.util.Util;
 import com.citytuike.util.mobileCheck;
 import com.github.pagehelper.PageInfo;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -30,12 +28,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("api/User")
-public class UserController {
+public class UserController extends BaseController{
 	@Autowired
 	private TpUsersService tpUsersService;
 	@Autowired
@@ -210,16 +207,15 @@ public class UserController {
 	}
 	/**
 	 * @param model
-	 * @param token
 	 * @return
 	 * 退出登陆 
 	 */
 	@RequestMapping(value="/logout",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String logout(Model model,@RequestParam(required=true) String token){
+	public @ResponseBody String logout(Model model, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "退出登陆失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null != tpUsers) {
 			tpUsers.setToken("");
 			int result = tpUsersService.updateBytokenOut(tpUsers);
@@ -235,17 +231,16 @@ public class UserController {
 	}
 	/**
 	 * @param model
-	 * @param token
 	 * @return
 	 * 用户地址列表
 	 */
 	@RequestMapping(value="/address_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	public @ResponseBody String addressList(Model model,@RequestParam(required=true) String token){
+	public @ResponseBody String addressList(Model model, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "失败!");
-		TpUsers tpUsers = tpUsersService.findOneByToken(token);
+		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");

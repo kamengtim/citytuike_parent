@@ -157,7 +157,7 @@
 		select * from tp_user as t where t.parent_id=#{parent_id} and t.level > 0
 	</select>
 	<select id="findAddressByUserId" resultMap="TpUserAddress">
-		select * from tp_user_address as t where t.address_id=#{id}
+		select * from tp_user_address as t where t.user_id=#{user_id}
 	</select>
 	<select id="findIsDefaultAll" resultMap="TpUserAddress">
 		select * from tp_user_address as t where t.user_id=#{user_id} and t.is_default=1
