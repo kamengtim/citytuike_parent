@@ -15,7 +15,7 @@ public class BaseController {
     private TpUsersService tpUsersService;
 
     public TpUsers initUser(HttpServletRequest request){
-        String header = request.getHeader("p-token");
+        String header = request.getHeader("P-Token");
         String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
         TpUsers tpUsers = null;
         if(token != null && !"".equals(token)){
@@ -23,7 +23,7 @@ public class BaseController {
         }
         return tpUsers;
     }
-	
-	
-	
+
+
+
 }

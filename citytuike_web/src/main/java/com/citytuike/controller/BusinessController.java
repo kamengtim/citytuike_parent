@@ -7,6 +7,7 @@ import com.citytuike.service.BusinessService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.GeoHashUtil;
 import com.citytuike.util.Util;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,7 @@ public class BusinessController extends BaseController{
      * 添加商家
      */
     @RequestMapping(value="/businessUp",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "添加商家", notes = "添加商家")
     public @ResponseBody String businessUp(HttpServletRequest request,
                                            @RequestParam(required=true) int business_type,
                                            @RequestParam(required=true) String business_name,
@@ -113,6 +115,7 @@ public class BusinessController extends BaseController{
      * 获取商家类型
      */
     @RequestMapping(value="/getBusinessType",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "获取商家类型", notes = "获取商家类型")
     public @ResponseBody String getBusinessType(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
@@ -147,6 +150,7 @@ public class BusinessController extends BaseController{
      * 评论
      */
     @RequestMapping(value="/businessEva",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "评论", notes = "评论")
     public @ResponseBody String businessEva(HttpServletRequest request,
                                             @RequestParam(required=true) int business_id,
                                             @RequestParam(required=true) int stars,
@@ -189,6 +193,7 @@ public class BusinessController extends BaseController{
      * 附近共享列表
      */
     @RequestMapping(value="/nearByBusiness",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "附近共享列表", notes = "附近共享列表")
     public @ResponseBody String nearByBusiness(HttpServletRequest request,
                                             @RequestParam(required=true) int xpoint,
                                             @RequestParam(required=true) int ypoint,
@@ -226,6 +231,7 @@ public class BusinessController extends BaseController{
      * 详情页
      */
     @RequestMapping(value="/businessDetails",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "详情页", notes = "详情页")
     public @ResponseBody String businessDetails(HttpServletRequest request,
                                             @RequestParam(required=true) int xpoint,
                                             @RequestParam(required=true) int ypoint,
@@ -283,6 +289,7 @@ public class BusinessController extends BaseController{
      * 评论标签列表接口
      */
     @RequestMapping(value="/commentTag",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "评论标签列表接口", notes = "评论标签列表接口")
     public @ResponseBody String commentTag(HttpServletRequest request,
                                             @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();
@@ -323,6 +330,7 @@ public class BusinessController extends BaseController{
      * 支付返回订单
      */
     @RequestMapping(value="/paymentBusiness",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "支付返回订单", notes = "支付返回订单")
     public @ResponseBody String paymentBusiness(HttpServletRequest request,
                                             @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();
@@ -379,6 +387,7 @@ public class BusinessController extends BaseController{
      * 制作现金券
      */
     @RequestMapping(value="/setBusinessCash",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "制作现金券", notes = "制作现金券")
     public @ResponseBody String setBusinessCash(HttpServletRequest request,
                                                 @RequestParam(required=true) String skin,
                                                 @RequestParam(required=true) int price,
@@ -434,6 +443,7 @@ public class BusinessController extends BaseController{
      * 商户能否制作现金券
      */
     @RequestMapping(value="/grantCash",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "商户能否制作现金券", notes = "商户能否制作现金券")
     public @ResponseBody String grantCash(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -458,6 +468,7 @@ public class BusinessController extends BaseController{
      * 商家名
      */
     @RequestMapping(value="/getBusinessName",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "商家名", notes = "商家名")
     public @ResponseBody String getBusinessName(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -485,6 +496,7 @@ public class BusinessController extends BaseController{
      * 面值现金券列表
      */
     @RequestMapping(value="/cashFaceLish",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "面值现金券列表", notes = "面值现金券列表")
     public @ResponseBody String cashFaceLish(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
@@ -517,6 +529,7 @@ public class BusinessController extends BaseController{
      * 现金券金额说明
      */
     @RequestMapping(value="/businessTips",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "现金券金额说明", notes = "现金券金额说明")
     public @ResponseBody String businessTips(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -556,6 +569,7 @@ public class BusinessController extends BaseController{
      * 我的商铺
      */
     @RequestMapping(value="/myStore",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "我的商铺", notes = "我的商铺")
     public @ResponseBody String myStore(HttpServletRequest request,
                                                @RequestParam(required=true) int flag,
                                                @RequestParam(required=true) int p,
@@ -616,6 +630,7 @@ public class BusinessController extends BaseController{
      * 申请解冻
      */
     @RequestMapping(value="/cashThaw",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "申请解冻", notes = "申请解冻")
     public @ResponseBody String cashThaw(HttpServletRequest request,
                                                @RequestParam(required=true) int cash_id,
                                                @RequestParam(required=true) String thaw_mess) {
@@ -644,6 +659,7 @@ public class BusinessController extends BaseController{
         return jsonObj.toString();
     }
     @RequestMapping(value="/getUseCash",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "用户优惠券详情页", notes = "用户优惠券详情页")
     public @ResponseBody String getUseCash(HttpServletRequest request,
                                                @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();
@@ -673,6 +689,7 @@ public class BusinessController extends BaseController{
      * 商家优惠券详情页
      */
     @RequestMapping(value="/getStoreUseCash",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "商家优惠券详情页", notes = "商家优惠券详情页")
     public @ResponseBody String getStoreUseCash(HttpServletRequest request,
                                                @RequestParam(required=true) String number) {
         JSONObject jsonObj = new JSONObject();
@@ -706,6 +723,7 @@ public class BusinessController extends BaseController{
      *
      */
     @RequestMapping(value="/useUserCashList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = " 使用优惠券", notes = " 使用优惠券")
     public @ResponseBody String useUserCashList(HttpServletRequest request,
                                                @RequestParam(required=true) String status) {
         JSONObject jsonObj = new JSONObject();
@@ -749,6 +767,7 @@ public class BusinessController extends BaseController{
      * 商城上传判断
      */
     @RequestMapping(value="/upStoreFlag",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = " 商城上传判断", notes = " 商城上传判断")
     public @ResponseBody String upStoreFlag(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();

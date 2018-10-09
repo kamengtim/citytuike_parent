@@ -26,7 +26,7 @@ public class SwaggerConfig {
         ParameterBuilder ticketPar = new ParameterBuilder();
         ParameterBuilder NewTicketPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
-        ticketPar.name("p-token").description("令牌")
+        ticketPar.name("P-Token").description("令牌")
                 .modelRef(new ModelRef("string")).parameterType("header")
                 .required(false).build();//header中的ticket参数非必填，传空也可以
         NewTicketPar.name("version").description("版本")

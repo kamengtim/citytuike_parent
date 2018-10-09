@@ -8,6 +8,7 @@ import com.citytuike.service.TpUsersService;
 import com.citytuike.util.SHA1;
 import com.citytuike.util.WeixinAPI;
 import com.citytuike.util.XmlUtil;
+import io.swagger.annotations.ApiOperation;
 import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -102,6 +103,7 @@ public class WeixinToolsController {
         return "";
     }
     @RequestMapping(value="/wx_login",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "微信登录", notes = "微信登录")
     public void wxLogin(HttpServletRequest request, HttpServletResponse response, Model model, @RequestParam(required=false) String invite_code,
                                         @RequestParam(required=true) String back_url) throws IOException {
         JSONObject jsonObj = new JSONObject();

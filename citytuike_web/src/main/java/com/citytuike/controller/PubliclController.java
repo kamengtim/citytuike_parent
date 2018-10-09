@@ -12,6 +12,7 @@ import com.citytuike.util.HttpUtils;
 import com.citytuike.util.WeixinAPI;
 import com.yeepay.shade.org.apache.http.HttpResponse;
 import com.yeepay.shade.org.apache.http.util.EntityUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -38,6 +39,7 @@ public class PubliclController extends BaseController{
      * @throws WeixinApiException
      */
     @RequestMapping(value="/Wechat/share",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "微信分享SDK", notes = "微信分享SDK")
     public @ResponseBody  String share(HttpServletRequest request) throws WeixinApiException {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -72,6 +74,7 @@ public class PubliclController extends BaseController{
      * 内容生成二维码
      */
     @RequestMapping(value="/Index/make_qrcode",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "内容生成二维码", notes = "内容生成二维码")
     public @ResponseBody  String make_qrcode(HttpServletRequest request,
                                              @RequestParam(required=true) String content) {
         JSONObject jsonObj = new JSONObject();
@@ -99,6 +102,7 @@ public class PubliclController extends BaseController{
      * url 转图片
      */
     @RequestMapping(value="/Index/url_to_images",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "url 转图片", notes = "url 转图片")
     public @ResponseBody  String url_to_images(HttpServletRequest request,
                                              @RequestParam(required=true) String url) {
         JSONObject jsonObj = new JSONObject();
@@ -125,6 +129,7 @@ public class PubliclController extends BaseController{
      * 识别营业执照
      */
     @RequestMapping(value="/index/business_license_recognition",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "识别营业执照", notes = "识别营业执照")
     public @ResponseBody  String business_license_recognition(HttpServletRequest request,
                                              @RequestParam(required=true) String pic) {
         JSONObject jsonObj = new JSONObject();
@@ -180,6 +185,7 @@ public class PubliclController extends BaseController{
      * 天气预报-阿里
      */
     @RequestMapping(value="/index/getWeatherAli",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "天气预报-阿里", notes = "天气预报-阿里")
     public @ResponseBody  String getWeatherAli(HttpServletRequest request,
                                                @RequestParam(required=false) String longitude,
                                                @RequestParam(required=false) String latitude,
@@ -230,6 +236,7 @@ public class PubliclController extends BaseController{
         return jsonObj.toString();
     }
     @RequestMapping(value="/index/im_status",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "检查用户是否环信在线", notes = "检查用户是否环信在线")
     public @ResponseBody  String imStatus(HttpServletRequest request,
                                                @RequestParam(required=false) String ids) {
         JSONObject jsonObj = new JSONObject();
@@ -255,6 +262,7 @@ public class PubliclController extends BaseController{
      * @return
      */
     @RequestMapping(value="/Upload/qiniu_token",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "七牛上传token", notes = "七牛上传token")
     public @ResponseBody  String qiniuToken(HttpServletRequest request,
                                                @RequestParam(required=true) String domain) {
         JSONObject jsonObj = new JSONObject();

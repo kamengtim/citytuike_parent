@@ -8,6 +8,7 @@ import com.citytuike.service.TpGoodsService;
 import com.citytuike.service.TpOrderService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.Util;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class CartController extends  BaseController{
 	 * 商品列表
 	 */
 	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "商品列表", notes = "商品列表")
 	public @ResponseBody String ajaxGoodsList(HttpServletRequest request,
 											  @RequestParam(required=true) String address_id,
 											  @RequestParam(required=false) String invoice_title,

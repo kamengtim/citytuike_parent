@@ -10,6 +10,7 @@ import com.citytuike.util.MD5Utils;
 import com.citytuike.util.Util;
 import com.citytuike.util.mobileCheck;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -77,6 +78,7 @@ public class UserController extends BaseController{
 	 * 登陆
 	 */
 	@RequestMapping(value="/do_login",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "登陆", notes = "登陆")
 	public @ResponseBody String doLogin(HttpServletRequest request, @RequestParam(required=true) String username,
 										@RequestParam(required=true) String password){
 		String pwd = MD5Utils.md5("TPSHOP" + password);
@@ -90,8 +92,8 @@ public class UserController extends BaseController{
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
 			TpUsers tpUsers1 = tpUsersService.getToken(tpUsers.getToken());
-			redisTemplate.expire(RedisConstant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
 			redisTemplate.opsForValue().set(RedisConstant.CURRENT_USER+tpUsers1.getToken(),tpUsers1.getToken());
+			redisTemplate.expire(RedisConstant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
 			if (result > 0) {
 				jsonObj.put("status", "1");
 				jsonObj.put("msg", "登陆成功!");
@@ -120,6 +122,7 @@ public class UserController extends BaseController{
 	 * 注册 
 	 */
 	@RequestMapping(value="/reg",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "注册", notes = "注册")
 	public @ResponseBody String reg(@RequestParam(required=false) String nickname,
 			@RequestParam(required=true) String username,
 			@RequestParam(required=true) String password,
@@ -206,6 +209,7 @@ public class UserController extends BaseController{
 	 * 退出登陆 
 	 */
 	@RequestMapping(value="/logout",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "退出登陆", notes = "退出登陆")
 	public @ResponseBody String logout(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
@@ -229,6 +233,7 @@ public class UserController extends BaseController{
 	 * 用户地址列表
 	 */
 	@RequestMapping(value="/address_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "用户地址列表", notes = "用户地址列表")
 	public @ResponseBody String addressList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
@@ -276,6 +281,7 @@ public class UserController extends BaseController{
 	 * 添加地址
 	 */
 	@RequestMapping(value="/add_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "添加地址", notes = "添加地址")
 	public @ResponseBody String addAddress(HttpServletRequest request,
 			@RequestParam(required=true)Integer province,
 			@RequestParam(required=true)String address,
@@ -322,6 +328,7 @@ public class UserController extends BaseController{
 	 * 修改地址
 	 */
 	@RequestMapping(value="/edit_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "修改地址", notes = "修改地址")
 	public @ResponseBody String editAddress(HttpServletRequest request,
 			@RequestParam(required=true)Integer id,
 			@RequestParam(required=true)Integer province,
@@ -366,6 +373,7 @@ public class UserController extends BaseController{
 	 * 获取城县区
 	 */
 	@RequestMapping(value="/get_region",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "获取城县区", notes = "获取城县区")
 	public @ResponseBody String getRegion(HttpServletRequest request,
 			@RequestParam(required=true)Integer id){
 		JSONObject jsonObj = new JSONObject();
@@ -405,6 +413,7 @@ public class UserController extends BaseController{
 	 * 设置默认值
 	 */
 	@RequestMapping(value="/set_default",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "设置默认值", notes = "设置默认值")
 	public @ResponseBody String setDefault(HttpServletRequest request,
 			@RequestParam(required=true)Integer id){
 		JSONObject jsonObj = new JSONObject();
@@ -444,6 +453,7 @@ public class UserController extends BaseController{
 	 * 账户管理
 	 */
 	@RequestMapping(value="/account",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "账户管理", notes = "账户管理")
 	public  @ResponseBody String account(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
@@ -462,6 +472,7 @@ public class UserController extends BaseController{
 	 * 收益明细列表
 	 */
 	@RequestMapping(value="/account_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "收益明细列表", notes = "收益明细列表")
 	public @ResponseBody String AccountList(HttpServletRequest request,
 											@RequestParam(required = true)String type,
 											@RequestParam(required = false,defaultValue = "1")String page){
@@ -499,6 +510,7 @@ public class UserController extends BaseController{
 	 * 银行卡列表
 	 */
 	@RequestMapping(value = "bank_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "银行卡列表", notes = "银行卡列表")
 	public @ResponseBody String BankList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -525,6 +537,7 @@ public class UserController extends BaseController{
 	 * 提现申请列表
 	 */
 	@RequestMapping(value = "withdrawals_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "提现申请列表", notes = "提现申请列表")
 	public @ResponseBody String WithdrawalsList(HttpServletRequest request,
 												@RequestParam(required = false,defaultValue = "1")String page){
 		JSONObject jsonObj = new JSONObject();
@@ -555,6 +568,7 @@ public class UserController extends BaseController{
 	 * 短信发送
 	 */
 	@RequestMapping(value = "send_validate_code",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "短信发送", notes = "短信发送")
 	public @ResponseBody String SendValidateCode(@RequestParam(required = false)String type,
 												 @RequestParam(required = false,defaultValue = "6")String scene,
 												 @RequestParam(required = true)String mobile,
@@ -585,6 +599,7 @@ public class UserController extends BaseController{
      * 根据用户ID 获取信息
      */
 	@RequestMapping(value = "user_info_by_id",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "根据用户ID 获取信息", notes = "根据用户ID 获取信息")
 	public @ResponseBody String userInfoById(@RequestParam(required = true)String user_id, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -614,6 +629,7 @@ public class UserController extends BaseController{
      * 根据invite_code 获取用户信息
      */
 	@RequestMapping(value = "get_invite_code_user_info",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "根据invite_code 获取用户信息", notes = "根据invite_code 获取用户信息")
 	public @ResponseBody String getInviteCodeUerInfo(@RequestParam(required = true)String invite_code, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -634,6 +650,7 @@ public class UserController extends BaseController{
 	 * 更新用户信息
 	 */
 	@RequestMapping(value = "userinfo",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "更新用户信息", notes = "更新用户信息")
 	public @ResponseBody String UserInfo(HttpServletRequest request,
 										 @RequestParam(required = false)String head_pic,
 										 @RequestParam(required = false)String nickname,
@@ -678,6 +695,7 @@ public class UserController extends BaseController{
 	 * 发卡行列表
 	 */
 	@RequestMapping(value = "bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "发卡行列表", notes = "发卡行列表")
 	public @ResponseBody String Bank(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray bankList = new JSONArray();
@@ -702,6 +720,7 @@ public class UserController extends BaseController{
 	 * 投诉
 	 */
 	@RequestMapping(value = "send_report",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "投诉", notes = "投诉")
 	public @ResponseBody String sendReport(HttpServletRequest request,
 										   @RequestParam(required = true)String address,
 										   @RequestParam(required = true)String report_mess,
@@ -739,6 +758,7 @@ public class UserController extends BaseController{
      * 投诉记录
      */
     @RequestMapping(value = "report_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "投诉记录", notes = "投诉记录")
     public @ResponseBody String ReportList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -763,6 +783,7 @@ public class UserController extends BaseController{
      * 根据im_id 获取用户信息
      */
 	@RequestMapping(value = "user_info_by_im_id",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "根据im_id 获取用户信息", notes = "根据im_id 获取用户信息")
 	public @ResponseBody String userInfoByImId(@RequestParam(required = true)String im_id, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -792,6 +813,7 @@ public class UserController extends BaseController{
      * 加入团队
      */
 	@RequestMapping(value = "join",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "加入团队", notes = "加入团队")
 	public @ResponseBody String join(@RequestParam(required = true)String invite_code, HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -823,6 +845,7 @@ public class UserController extends BaseController{
      * 意向代理人数统计
      */
 	@RequestMapping(value = "team_device_count",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "意向代理人数统计", notes = "意向代理人数统计")
 	public @ResponseBody String teamDeviceCount(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -851,6 +874,7 @@ public class UserController extends BaseController{
      * 机器顶部统计
      */
 	@RequestMapping(value = "device_number",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "机器顶部统计", notes = "机器顶部统计")
 	public @ResponseBody String deviceNumber(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -889,6 +913,7 @@ public class UserController extends BaseController{
      * 热门城市
      */
 	@RequestMapping(value = "get_hot_city",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "热门城市", notes = "热门城市")
 	public @ResponseBody String getHotCity(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
@@ -945,6 +970,7 @@ public class UserController extends BaseController{
 	 * 删除银行卡
 	 */
 	@RequestMapping(value = "del_bank",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "删除银行卡", notes = "删除银行卡")
 	public @ResponseBody String delBank(HttpServletRequest request,
 										@RequestParam(required = true)String id){
 		JSONObject jsonObj = new JSONObject();
@@ -970,6 +996,7 @@ public class UserController extends BaseController{
 	 * 添加银行卡(未测试)
 	 */
 	@RequestMapping(value = "add_bank",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "添加银行卡", notes = "添加银行卡")
 	public @ResponseBody String addBank(HttpServletRequest request,
 										@RequestParam(required = true)String real_name,
 										@RequestParam(required = true)String mobile,
@@ -1017,6 +1044,7 @@ public class UserController extends BaseController{
 	 * 删除地址
 	 */
 	@RequestMapping(value = "del_address",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "删除地址", notes = "删除地址")
 	public @ResponseBody String delAddress(HttpServletRequest request,
 										   @RequestParam(required = true)String id){
 		JSONObject jsonObj = new JSONObject();
@@ -1041,6 +1069,7 @@ public class UserController extends BaseController{
      * 个人中心 总收益、广告收益、已提现
      */
 	@RequestMapping(value = "user_account_statistics",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "个人中心 总收益、广告收益、已提现", notes = "个人中心 总收益、广告收益、已提现")
 	public @ResponseBody String userAccountStatistics(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObject = new JSONObject();
@@ -1067,6 +1096,7 @@ public class UserController extends BaseController{
      * 用户提现
      */
     @RequestMapping(value = "get_money",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "用户提现", notes = "用户提现")
     public @ResponseBody String getMoney(HttpServletRequest request,
                                          @RequestParam(required = true)int id,
                                          @RequestParam(required = true)float money){
@@ -1092,6 +1122,7 @@ public class UserController extends BaseController{
      * 信用卡列表
      */
     @RequestMapping(value = "creditCard",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "信用卡列表", notes = "信用卡列表")
     public @ResponseBody String creditCard(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject object = new JSONObject();
@@ -1119,6 +1150,7 @@ public class UserController extends BaseController{
      * 新添申请人信息
      */
     @RequestMapping(value = "addApplyPeople",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "新添申请人信息", notes = "新添申请人信息")
     public @ResponseBody String addApplyPeople(HttpServletRequest request,
                                                @RequestParam(required = true)String cardid,
                                                @RequestParam(required = true)String name,
@@ -1150,6 +1182,7 @@ public class UserController extends BaseController{
      * 删除信用卡申请人
      */
     @RequestMapping(value = "delApplyPeople",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "删除信用卡申请人", notes = "删除信用卡申请人")
     public @ResponseBody String delApplyPeople(HttpServletRequest request,
                                                @RequestParam(required = true)int id){
         JSONObject jsonObj = new JSONObject();
@@ -1175,6 +1208,7 @@ public class UserController extends BaseController{
      * 申请商务合作
      */
 	@RequestMapping(value = "application_for_business_cooperation",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "申请商务合作", notes = "申请商务合作")
 	public @ResponseBody String applicationForBusinessCooperation(@RequestParam(required = true)String code,
                                                                   HttpServletRequest request,
                                                                   @RequestParam(required = true)String name,
@@ -1244,6 +1278,7 @@ public class UserController extends BaseController{
 	 * 提交信用卡申请
 	 */
 	@RequestMapping(value = "applyCard",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "提交信用卡申请", notes = "提交信用卡申请")
 	public @ResponseBody String applyCard(HttpServletRequest request,
 										  @RequestParam(required = true)String mobile_code	,
 										  @RequestParam(required = true)String cardid,
@@ -1273,6 +1308,7 @@ public class UserController extends BaseController{
 	 * 修改密码
 	 */
 	@RequestMapping(value = "password",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "修改密码", notes = "修改密码")
 	public @ResponseBody String Password(@RequestParam(required = true)String new_password,
 										 @RequestParam(required = true)String confirm_password,
 										 @RequestParam(required = true)String code,
@@ -1317,6 +1353,7 @@ public class UserController extends BaseController{
 	 * 收益明细中的收益统计
 	 */
 	@RequestMapping(value = "income_count",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "收益明细中的收益统计", notes = "收益明细中的收益统计")
 	public @ResponseBody String incomeCount(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
@@ -1337,6 +1374,7 @@ public class UserController extends BaseController{
 	 * 交易申请中心图
 	 */
 	@RequestMapping(value = "cardDetail",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "交易申请中心图", notes = "交易申请中心图")
 	public @ResponseBody String cardDetail(HttpServletRequest request,
 										   @RequestParam(required = true)int id){
 		JSONObject jsonObj = new JSONObject();
@@ -1357,6 +1395,7 @@ public class UserController extends BaseController{
 	 * 信用卡申请列表
 	 */
 	@RequestMapping(value = "getCardList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "信用卡申请列表", notes = "信用卡申请列表")
 	public @ResponseBody String getCardList(){
 	    JSONObject jsonObj = new JSONObject();
 	    JSONObject object = new JSONObject();
@@ -1375,6 +1414,7 @@ public class UserController extends BaseController{
      * 添加支付宝账号
      */
     @RequestMapping(value = "add_ali_account",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "添加支付宝账号", notes = "添加支付宝账号")
     public @ResponseBody String addAliAccount(@RequestParam(required = true)String real_name,
                                               @RequestParam(required = true)String mobile,
                                               @RequestParam(required = true)String account,
@@ -1397,6 +1437,7 @@ public class UserController extends BaseController{
      * 支付账号列表
      */
     @RequestMapping(value = "ali_account",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "支付账号列表", notes = "支付账号列表")
     public @ResponseBody String AliAccount(@RequestParam(required = false,defaultValue = "1")String page){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -1423,6 +1464,7 @@ public class UserController extends BaseController{
      * 支付宝提现
      */
     @RequestMapping(value = "get_money_ali",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "支付宝提现", notes = "支付宝提现")
     public @ResponseBody String getMoneyAli(@RequestParam(required = true)String id,
                                             @RequestParam(required = true)String money){
         JSONObject jsonObj= new JSONObject();
@@ -1443,6 +1485,7 @@ public class UserController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "plateMsg",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "1为首页2为个人中心3为订单4为消息", notes = "1为首页2为个人中心3为订单4为消息")
 	public @ResponseBody String plateMsg(HttpServletRequest request,
 											   @RequestParam(required = true)int flag){
 		JSONObject jsonObj = new JSONObject();
@@ -1474,6 +1517,7 @@ public class UserController extends BaseController{
 	 * 系统通知
 	 */
 	@RequestMapping(value = "sysMessage",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "系统通知", notes = "系统通知")
 	public @ResponseBody String sysMessage(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
@@ -1515,6 +1559,7 @@ public class UserController extends BaseController{
 	 * 系统通知判断
 	 */
 	@RequestMapping(value = "getSysList",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "系统通知判断", notes = "系统通知判断")
 	public @ResponseBody String getSysList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
@@ -1550,6 +1595,7 @@ public class UserController extends BaseController{
 	 * 用户话费券列表
 	 */
 	@RequestMapping(value = "cartGift",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "用户话费券列表", notes = "用户话费券列表")
 	public @ResponseBody String cartGift(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
@@ -1586,6 +1632,7 @@ public class UserController extends BaseController{
 	 * 话费自助充值
 	 */
 	@RequestMapping(value = "refill",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "话费自助充值", notes = "话费自助充值")
 	public @ResponseBody String refillH(HttpServletRequest request,
 										 @RequestParam(required = true)int id,
 										 @RequestParam(required = true)String mobile,
@@ -1637,6 +1684,7 @@ public class UserController extends BaseController{
      * 检测该用户有没有未领取的礼品
      */
     @RequestMapping(value = "checkGift",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "检测该用户有没有未领取的礼品", notes = "检测该用户有没有未领取的礼品")
     public @ResponseBody String checkGift(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
@@ -1664,7 +1712,8 @@ public class UserController extends BaseController{
      * @return
      * 领取礼品
      */
-    @RequestMapping(value = "getGifts",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "getGifts",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "领取礼品", notes = "领取礼品")
     public @ResponseBody String getGifts(HttpServletRequest request,
                                          @RequestParam(required = true)int id,
                                          @RequestParam(required = true)int gift_type){
@@ -1695,6 +1744,7 @@ public class UserController extends BaseController{
      * 已领取列表页
      */
     @RequestMapping(value = "getGiftList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "已领取列表页", notes = "已领取列表页")
     public @ResponseBody String getGiftList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -1730,6 +1780,7 @@ public class UserController extends BaseController{
 	 * 立即使用
 	 */
 	@RequestMapping(value = "useGifts",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "立即使用", notes = "立即使用")
 	public @ResponseBody String useGifts(HttpServletRequest request,
 											@RequestParam(required = true)int id){
 		JSONObject jsonObj = new JSONObject();
@@ -1760,6 +1811,7 @@ public class UserController extends BaseController{
 	 * 提现支付密码设置
 	 */
 	@RequestMapping(value = "getMoneyPassword",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "提现支付密码设置", notes = "提现支付密码设置")
 	public @ResponseBody String getMoneyPassword(HttpServletRequest request,
 												@RequestParam(required = true)String mobile,
 												@RequestParam(required = true)String code,
@@ -1803,6 +1855,7 @@ public class UserController extends BaseController{
 	 * 中秋/国庆个人查看海报评论
 	 */
 	@RequestMapping(value = "midAutumn",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "中秋/国庆个人查看海报评论", notes = "中秋/国庆个人查看海报评论")
 	public @ResponseBody String midAutumn(HttpServletRequest request,
 										  @RequestParam(required = true)String ha_id){
 		JSONObject jsonObj =new JSONObject();
@@ -1830,6 +1883,7 @@ public class UserController extends BaseController{
 	 * 中秋/国庆个人制作海报
 	 */
 	@RequestMapping(value = "setMidAutumn",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "中秋/国庆个人制作海报", notes = "中秋/国庆个人制作海报")
 	public @ResponseBody String setMidAutumn(HttpServletRequest request,
 											 @RequestParam(required = true)String article_id){
 		JSONObject jsonObj =new JSONObject();
@@ -1853,6 +1907,7 @@ public class UserController extends BaseController{
 	 * 评论海报
 	 */
 	@RequestMapping(value = "messMidAutumn",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "评论海报", notes = "评论海报")
 	public @ResponseBody String messMidAutumn(HttpServletRequest request,
 										  @RequestParam(required = true)String content,
 										  @RequestParam(required = true)String ha_id,
@@ -1886,6 +1941,7 @@ public class UserController extends BaseController{
 	 * 获取后台海报模块
 	 */
 	@RequestMapping(value = "getMidAutumnCate",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "获取后台海报模块", notes = "获取后台海报模块")
 	public @ResponseBody String getMidAutumnCate(HttpServletRequest request,
 												 @RequestParam(required = true)String article_id){
 		JSONObject jsonObj =new JSONObject();
@@ -1908,6 +1964,7 @@ public class UserController extends BaseController{
 	 * 手机号修改密码
 	 */
 	@RequestMapping(value = "password2",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "手机号修改密码", notes = "手机号修改密码")
 	public @ResponseBody String password2(@RequestParam(required = true)String mobile,
 												 @RequestParam(required = true)String code,
 												 @RequestParam(required = true)String new_password,
@@ -1946,6 +2003,7 @@ public class UserController extends BaseController{
 	 * 获取动态
 	 */
 	@RequestMapping(value = "getDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "获取动态", notes = "获取动态")
 	public @ResponseBody String getDynamic(HttpServletRequest request,
 												 @RequestParam(required = true) Integer p){
 		JSONObject jsonObj = new JSONObject();
@@ -1984,6 +2042,7 @@ public class UserController extends BaseController{
 	 * 发布动态
 	 */
 	@RequestMapping(value = "setDynamic",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "发布动态", notes = "发布动态")
 	public @ResponseBody String setDynamic(HttpServletRequest request,
 										   @RequestParam(required = true) String image,
 										   @RequestParam(required = true) String content){
@@ -2022,6 +2081,7 @@ public class UserController extends BaseController{
 	 * 回复动态
 	 */
 	@RequestMapping(value = "setReplayMess",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "回复动态", notes = "回复动态")
 	public @ResponseBody String setReplayMess(HttpServletRequest request,
 										   @RequestParam(required = true) Integer did,
 										   @RequestParam(required = true) String replay_content){
@@ -2064,6 +2124,7 @@ public class UserController extends BaseController{
 	 * 点赞
 	 */
 	@RequestMapping(value = "clickFabulous",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "点赞", notes = "点赞")
 	public @ResponseBody String clickFabulous(HttpServletRequest request,
 										   @RequestParam(required = true) Integer did){
 		JSONObject jsonObj = new JSONObject();
@@ -2104,6 +2165,7 @@ public class UserController extends BaseController{
 	 * 更改个人动态背景图
 	 */
 	@RequestMapping(value = "changeBackImg",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "更改个人动态背景图", notes = "更改个人动态背景图")
 	public @ResponseBody String changeBackImg(HttpServletRequest request,
 										   @RequestParam(required = true) String image){
 		JSONObject jsonObj = new JSONObject();
@@ -2135,6 +2197,7 @@ public class UserController extends BaseController{
 	 * 展示个人动态头像背景图
 	 */
 	@RequestMapping(value = "headPicBack",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "展示个人动态头像背景图", notes = "展示个人动态头像背景图")
 	public @ResponseBody String headPicBack(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -2156,6 +2219,7 @@ public class UserController extends BaseController{
 	}
 
 	@RequestMapping(value = "getUserDynamic",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "获取用户动态", notes = "获取用户动态")
 	public @ResponseBody String getUserDynamic(HttpServletRequest request,
 										   @RequestParam(required = true) Integer user_id,
 										   @RequestParam(required = true) Integer p){

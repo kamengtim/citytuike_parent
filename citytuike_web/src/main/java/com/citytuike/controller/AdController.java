@@ -7,6 +7,7 @@ import com.citytuike.service.TpAdService;
 import com.citytuike.service.TpSmsLogService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.Util;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,7 @@ public class AdController extends BaseController{
      * 获取广告的地区和设备数
      */
     @RequestMapping(value="/regionData",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "获取广告的地区和设备数", notes = "获取广告的地区和设备数")
     public @ResponseBody String uploadMaterial(HttpServletRequest request,
                                                @RequestParam(required=true) String regions_id){
         JSONObject jsonObj = new JSONObject();
@@ -87,6 +89,7 @@ public class AdController extends BaseController{
      * 热门城市
      */
     @RequestMapping(value="/getHotCities",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "热门城市", notes = "热门城市")
     public @ResponseBody String getHotCities(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -143,6 +146,7 @@ public class AdController extends BaseController{
      * 广告申请接口
      */
     @RequestMapping(value="/apply",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告申请接口", notes = "广告申请接口")
     public @ResponseBody String apply(HttpServletRequest request,
                                       @RequestParam(required=true) Integer type,
                                       @RequestParam(required=true) Integer trade,
@@ -240,6 +244,7 @@ public class AdController extends BaseController{
      * 广告行业数据接口
      */
     @RequestMapping(value="/trade",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告行业数据接口", notes = "广告行业数据接口")
     public @ResponseBody String trade(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
@@ -289,6 +294,7 @@ public class AdController extends BaseController{
      * 广告余额充值
      */
     @RequestMapping(value="/topUp",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告余额充值", notes = "广告余额充值")
     public @ResponseBody String topUp(HttpServletRequest request,
                                       @RequestParam(required=true) float amount){
         JSONObject jsonObj = new JSONObject();
@@ -319,6 +325,7 @@ public class AdController extends BaseController{
         return jsonObj.toString();
     }
     @RequestMapping(value="/topUpList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告充值订单列表", notes = "广告充值订单列表")
     public @ResponseBody String topUpList(HttpServletRequest request,
                                       @RequestParam(required=true) int page,@RequestParam(required=true) int size){
         JSONObject jsonObj = new JSONObject();
@@ -357,6 +364,7 @@ public class AdController extends BaseController{
      * 广告申请订单列表（消费列表）
      */
     @RequestMapping(value="/applyList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告申请订单列表（消费列表）", notes = "广告申请订单列表（消费列表）")
     public @ResponseBody String applyList(HttpServletRequest request,
                                       @RequestParam(required=true) int page,@RequestParam(required=true) int size){
         JSONObject jsonObj = new JSONObject();
@@ -408,6 +416,7 @@ public class AdController extends BaseController{
      * 广告用户可用余额
      */
     @RequestMapping(value="/userBalance",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告用户可用余额", notes = "广告用户可用余额")
     public @ResponseBody String userBalance(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -434,6 +443,7 @@ public class AdController extends BaseController{
      * @return
      */
     @RequestMapping(value="/applyDetail",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告申请详情", notes = "广告申请详情")
     public @ResponseBody String applyDetail(HttpServletRequest request, @RequestParam(required=true) String order_sn){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -513,6 +523,7 @@ public class AdController extends BaseController{
      * 广告申请订单结算
      */
     @RequestMapping(value="/applySettle",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告申请订单结算", notes = "广告申请订单结算")
     public @ResponseBody String applySettle(HttpServletRequest request,
                                             @RequestParam(required=true) String order_sn,
                                             @RequestParam(required=true) String launch_date,

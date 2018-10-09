@@ -27,6 +27,7 @@ import com.yeepay.g3.sdk.yop.encrypt.CertTypeEnum;
 import com.yeepay.g3.sdk.yop.encrypt.DigitalEnvelopeDTO;
 import com.yeepay.g3.sdk.yop.utils.DigitalEnvelopeUtils;
 import com.yeepay.g3.sdk.yop.utils.InternalConfig;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,6 +60,7 @@ public class PayController extends BaseController{
 
     //商品支付回调 投放广告支付回调  优惠券支付回调
     @RequestMapping(value="/pay_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "支付方式", notes = "支付方式")
     public @ResponseBody String payList(Model model,@RequestParam(required=false) String type){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -175,6 +177,7 @@ public class PayController extends BaseController{
     }
 
     @RequestMapping(value="/getCode",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "支付签名", notes = "支付签名")
     public @ResponseBody String yopTaketoken(HttpServletResponse resp, HttpServletRequest request,
                                              @RequestParam(required=true) String order_sn,
                                              @RequestParam(required=false) String openid,

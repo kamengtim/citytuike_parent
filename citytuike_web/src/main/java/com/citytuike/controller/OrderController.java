@@ -9,6 +9,7 @@ import com.citytuike.model.TpOrderAction;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpOrderService;
 import com.citytuike.service.TpUsersService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class OrderController extends BaseController{
 	 * 订单列表
 	 */
 	@RequestMapping(value="/order_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "订单列表", notes = "订单列表")
 	public @ResponseBody String orderList(HttpServletRequest request,
 										  @RequestParam(required=true) String type,
 										  @RequestParam(required=true, defaultValue="1") Integer p){
@@ -103,6 +105,7 @@ public class OrderController extends BaseController{
 	 * 订单详情
 	 */
 	@RequestMapping(value="/order_detail",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "订单详情", notes = "订单详情")
 	public @ResponseBody String orderDetail(HttpServletRequest request,
 			@RequestParam(required=true) String id,
 			@RequestParam(required=false) String orderSn){
@@ -130,7 +133,8 @@ public class OrderController extends BaseController{
 	 * @return
 	 * 申请取消订单
 	 */
-	@RequestMapping(value="/record_refund_order",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/record_refund_order",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "申请取消订单", notes = "申请取消订单")
 	public @ResponseBody String recordRefundOrder(HttpServletRequest request,
 			@RequestParam(required=true) String order_id){
 		JSONObject jsonObj = new JSONObject();
@@ -163,7 +167,8 @@ public class OrderController extends BaseController{
 	 * @return
 	 * 确认收货
 	 */
-	@RequestMapping(value="/order_confirm",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/order_confirm",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "确认收货", notes = "确认收货")
 	public @ResponseBody String orderConfirm(HttpServletRequest request,
 			@RequestParam(required=true) String id){
 		JSONObject jsonObj = new JSONObject();
@@ -200,7 +205,8 @@ public class OrderController extends BaseController{
 	 * @return
 	 * 修改订单收货地址
 	 */
-	@RequestMapping(value="/edit_order_address",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/edit_order_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "修改订单收货地址", notes = "修改订单收货地址")
 	public @ResponseBody String editOrderAddress(HttpServletRequest request,
 			@RequestParam(required=true) String order_id,
 			@RequestParam(required=true) String province,

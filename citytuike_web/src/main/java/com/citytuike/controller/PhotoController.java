@@ -33,7 +33,7 @@ public class PhotoController extends BaseController{
      * @return
      * 分类模板列表
      */
-    @RequestMapping(value="/tmp_list",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/tmp_list",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "分类模板列表", notes = "分类模板列表")
     public @ResponseBody String tmpList(@RequestParam(required=true) Integer page,
                                         @RequestParam(required=true) String c_id,
@@ -72,7 +72,7 @@ public class PhotoController extends BaseController{
      * @return
      * 分类列表
      */
-    @RequestMapping(value="/tmp_classify",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/tmp_classify",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "分类列表", notes = "分类列表")
     public @ResponseBody String tmpClassify(HttpServletRequest request,
                                             @RequestParam(required=true) Integer page) {
@@ -191,7 +191,7 @@ public class PhotoController extends BaseController{
      * @return
      * 获取广告
      */
-    @RequestMapping(value="/get_ad",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/get_ad",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "获取广告", notes = "获取广告")
     public @ResponseBody String getAd(HttpServletRequest request,
                                         @RequestParam(required=true) String ad_id) {
@@ -316,7 +316,7 @@ public class PhotoController extends BaseController{
      * @return
      * 相册列表
      */
-    @RequestMapping(value="/photo_list",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/photo_list",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "相册列表", notes = "相册列表")
     public @ResponseBody String photoList(HttpServletRequest request,
                                       @RequestParam(required=true) String page) {
@@ -371,7 +371,7 @@ public class PhotoController extends BaseController{
      * @return
      * 相册详情
      */
-    @RequestMapping(value="/photo_detail",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/photo_detail",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "相册详情", notes = "相册详情")
     public @ResponseBody String photoDetail(@RequestParam(required=true) String p_id, HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
@@ -573,7 +573,7 @@ public class PhotoController extends BaseController{
      * @return
      * 评论列表
      */
-    @RequestMapping(value="/photo_comment_list",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/photo_comment_list",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "评论列表", notes = "评论列表")
     public @ResponseBody String photoCommentList(@RequestParam(required=true) String p_id,
             HttpServletRequest request) {

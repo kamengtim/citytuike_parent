@@ -7,6 +7,7 @@ import com.citytuike.model.*;
 import com.citytuike.service.TpGoodsService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.Util;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ public class GoodsController extends BaseController{
 	 * 商品列表
 	 */
 	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "商品列表", notes = "商品列表")
 	public @ResponseBody String ajaxGoodsList(@RequestParam(required=true) Integer id,
 			@RequestParam(required=true) Integer p){
 		JSONObject jsonObj = new JSONObject();
@@ -61,6 +63,7 @@ public class GoodsController extends BaseController{
 	 * 商品详情
 	 */
 	@RequestMapping(value="/goodsInfo",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "商品详情", notes = "商品详情")
 	public @ResponseBody String goodsInfo(@RequestParam(required=true) Integer id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -78,6 +81,7 @@ public class GoodsController extends BaseController{
 	 * 收藏商品
 	 */
 	@RequestMapping(value="/collect_goods",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "收藏商品", notes = "收藏商品")
 	public @ResponseBody String collectGoods(@RequestParam(required=true) String goods_id,
 											 HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -109,6 +113,7 @@ public class GoodsController extends BaseController{
 	 * 商品轮播
 	 */
 	@RequestMapping(value="/carousel",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "商品轮播", notes = "商品轮播")
 	public @ResponseBody String carousel(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObj2 = new JSONObject();
