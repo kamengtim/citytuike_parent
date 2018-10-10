@@ -35,15 +35,20 @@ public class GoodsController extends BaseController{
 	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "商品列表", notes = "商品列表")
 	public @ResponseBody String ajaxGoodsList(HttpServletRequest request){
-		JSONObject jsonObject = getRequestJson(request);
-		Integer id = jsonObject.getInteger("id");
-		Integer page = jsonObject.getInteger("page");
+
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
-		
+		JSONObject jsonO = getRequestJson(request);
+		Integer id = jsonO.getInteger("id");
+		Integer page = jsonO.getInteger("page");
+		if (null == id || "".equals(id) || null == page || "".equals(page)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		LimitPageList limitPageList = tpGoodsService.getLimitPageList(id, page);
 		data.put("return", limitPageList.getList());
 		List<TpGoods> tpGoods = (List<TpGoods>) limitPageList.getList();
@@ -84,18 +89,24 @@ public class GoodsController extends BaseController{
 	 */
 	@RequestMapping(value="/collect_goods",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "收藏商品", notes = "收藏商品")
-	public @ResponseBody String collectGoods(@RequestParam(required=true) String goods_id,
-											 HttpServletRequest request){
+	public @ResponseBody String collectGoods(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		Integer goods_id = jsonO.getInteger("goods_id");
+		if (null == goods_id || "".equals(goods_id)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-		TpGoods tpGoods = tpGoodsService.findById(Integer.valueOf(goods_id).intValue());
+		TpGoods tpGoods = tpGoodsService.findById(goods_id);
 		if (null != tpGoods) {
 			TpGoodsCollect tpGoodsCollect = new TpGoodsCollect();
 			tpGoodsCollect.setGoods_id(tpGoods.getGoods_id());
@@ -114,7 +125,7 @@ public class GoodsController extends BaseController{
 	 * @return
 	 * 商品轮播
 	 */
-	@RequestMapping(value="/carousel",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/carousel",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "商品轮播", notes = "商品轮播")
 	public @ResponseBody String carousel(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();

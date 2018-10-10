@@ -33,21 +33,26 @@ public class AdController extends BaseController{
 
 
     /**
-     * @param regions_id
      * @return
      * 获取广告的地区和设备数
      */
-    @RequestMapping(value="/regionData",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/regionData",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "获取广告的地区和设备数", notes = "获取广告的地区和设备数")
-    public @ResponseBody String uploadMaterial(HttpServletRequest request,
-                                               @RequestParam(required=true) String regions_id){
+    public @ResponseBody String uploadMaterial(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
         jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
+        JSONObject jsonO = getRequestJson(request);
+        String regions_id = jsonO.getString("regions_id");
+        if (null == regions_id || "".equals(regions_id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         if (null == tpUsers) {
-            jsonObj.put("status", -2);
+            jsonObj.put("status", -2   );
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -133,34 +138,33 @@ public class AdController extends BaseController{
     }
 
     /**
-     * @param type
-     * @param trade
-     * @param days
-     * @param url
-     * @param desc
-     * @param regions
-     * @param materials
-     * @param side
-     * @param launch_num
      * @return
      * 广告申请接口
      */
     @RequestMapping(value="/apply",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告申请接口", notes = "广告申请接口")
-    public @ResponseBody String apply(HttpServletRequest request,
-                                      @RequestParam(required=true) Integer type,
-                                      @RequestParam(required=true) Integer trade,
-                                      @RequestParam(required=true) Integer days,
-                                      @RequestParam(required=true) String url,
-                                      @RequestParam(required=true) String desc,
-                                      @RequestParam(required=true) String regions,
-                                      @RequestParam(required=true) String materials,
-                                      @RequestParam(required=true) Integer side,
-                                      @RequestParam(required=false) Integer launch_num){
+    public @ResponseBody String apply(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        Integer type = jsonO.getInteger("type");
+        Integer trade = jsonO.getInteger("trade");
+        Integer days = jsonO.getInteger("days");
+        String url = jsonO.getString("url");
+        String desc = jsonO.getString("desc");
+        String regions = jsonO.getString("regions");
+        String materials = jsonO.getString("materials");
+        Integer side = jsonO.getInteger("side");
+        Integer launch_num = jsonO.getInteger("launch_num");
+        String launch_date = jsonO.getString("launch_date");
+        if (null == type || "".equals(type) || null == days || "".equals(days)
+                || null == regions || "".equals(regions)|| null == materials || "".equals(materials)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -172,6 +176,7 @@ public class AdController extends BaseController{
         tpAdApply.setUser_id(tpUsers.getUser_id());
         tpAdApply.setCate(type);
         tpAdApply.setTrade_id(trade);
+        tpAdApply.setLaunch_at(Util.strToDateLong(launch_date));
         tpAdApply.setDays(days);
         tpAdApply.setUrl(url);
         tpAdApply.setDescribe(desc);
@@ -238,12 +243,12 @@ public class AdController extends BaseController{
         }
         return jsonObj.toString();
     }
-
+    //TODO 取消广告申请
     /**
      * @return
      * 广告行业数据接口
      */
-    @RequestMapping(value="/trade",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/trade",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告行业数据接口", notes = "广告行业数据接口")
     public @ResponseBody String trade(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
@@ -289,18 +294,23 @@ public class AdController extends BaseController{
     }
 
     /**
-     * @param amount
      * @return
      * 广告余额充值
      */
     @RequestMapping(value="/topUp",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告余额充值", notes = "广告余额充值")
-    public @ResponseBody String topUp(HttpServletRequest request,
-                                      @RequestParam(required=true) float amount){
+    public @ResponseBody String topUp(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        float amount = jsonO.getFloat("amount");
+        if (amount > 0.0 || "".equals(amount)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -324,14 +334,21 @@ public class AdController extends BaseController{
 
         return jsonObj.toString();
     }
-    @RequestMapping(value="/topUpList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/topUpList",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告充值订单列表", notes = "广告充值订单列表")
-    public @ResponseBody String topUpList(HttpServletRequest request,
-                                      @RequestParam(required=true) int page,@RequestParam(required=true) int size){
+    public @ResponseBody String topUpList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        Integer page = jsonO.getInteger("page");
+        Integer size = jsonO.getInteger("size");
+        if (null == page|| "".equals(page) || null == size|| "".equals(size)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -358,19 +375,24 @@ public class AdController extends BaseController{
     }
 
     /**
-     * @param page
-     * @param size
      * @return
      * 广告申请订单列表（消费列表）
      */
-    @RequestMapping(value="/applyList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/applyList",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告申请订单列表（消费列表）", notes = "广告申请订单列表（消费列表）")
-    public @ResponseBody String applyList(HttpServletRequest request,
-                                      @RequestParam(required=true) int page,@RequestParam(required=true) int size){
+    public @ResponseBody String applyList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        Integer page = jsonO.getInteger("page");
+        Integer size = jsonO.getInteger("size");
+        if (null == page|| "".equals(page) || null == size|| "".equals(size)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -439,16 +461,22 @@ public class AdController extends BaseController{
     }
 
     /**
-     * @param order_sn
      * @return
      */
-    @RequestMapping(value="/applyDetail",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/applyDetail",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告申请详情", notes = "广告申请详情")
-    public @ResponseBody String applyDetail(HttpServletRequest request, @RequestParam(required=true) String order_sn){
+    public @ResponseBody String applyDetail(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        String order_sn = jsonO.getString("order_sn");
+        if (null == order_sn || "".equals(order_sn)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -516,22 +544,24 @@ public class AdController extends BaseController{
     }
 
     /**
-     * @param order_sn
-     * @param launch_date
-     * @param verify_code
      * @return
      * 广告申请订单结算
      */
     @RequestMapping(value="/applySettle",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告申请订单结算", notes = "广告申请订单结算")
-    public @ResponseBody String applySettle(HttpServletRequest request,
-                                            @RequestParam(required=true) String order_sn,
-                                            @RequestParam(required=true) String launch_date,
-                                            @RequestParam(required=true) String verify_code){
+    public @ResponseBody String applySettle(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        String order_sn = jsonO.getString("order_sn");
+        String verify_code = jsonO.getString("verify_code");
+        if (null == order_sn || "".equals(order_sn) || null == verify_code || "".equals(verify_code)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -581,7 +611,6 @@ public class AdController extends BaseController{
             //更新订单
             TpAdApply tpAdApply1 = new TpAdApply();
             tpAdApply1.setOrder_sn(tpAdApply.getOrder_sn());
-            tpAdApply1.setLaunch_at(Util.strToDateLong(launch_date));
             tpAdApply1.setPay_status(1);
             tpAdApply1.setPaid_at(new Date());
             tpAdApply1.setUpdated_at(new Date());
@@ -594,5 +623,7 @@ public class AdController extends BaseController{
         }
         return jsonObj.toString();
     }
+    //TODO 设备广告列表（新）
+    //TODO 广告钱包提现
 
 }
