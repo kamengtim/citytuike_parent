@@ -384,7 +384,7 @@ public class UserController extends BaseController{
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		if (id ==0) {

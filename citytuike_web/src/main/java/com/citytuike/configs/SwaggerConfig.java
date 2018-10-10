@@ -25,6 +25,7 @@ public class SwaggerConfig {
     public Docket customDocket(){
         ParameterBuilder ticketPar = new ParameterBuilder();
         ParameterBuilder NewTicketPar = new ParameterBuilder();
+        ParameterBuilder DeviceTicketPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<Parameter>();
         ticketPar.name("P-Token").description("令牌")
                 .modelRef(new ModelRef("string")).parameterType("header")
@@ -32,8 +33,12 @@ public class SwaggerConfig {
         NewTicketPar.name("version").description("版本")
                 .modelRef(new ModelRef("string")).parameterType("header")
                 .required(false).build();
+        DeviceTicketPar.name("P-Device-Type").description("访问来源")
+                .modelRef(new ModelRef("string")).parameterType("header")
+                .required(false).build();
         pars.add(ticketPar.build());    //根据每个方法名也知道当前方法在设置什么参数
         pars.add(NewTicketPar.build());
+        pars.add(DeviceTicketPar.build());
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()

@@ -35,9 +35,10 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
-  <!--编码过滤器 -->
   <filter>
-    <filter-name>characterEncodingFilter</filter-name>
+    <filter-name>cors</filter-name>
+    <filter-class>com.citytuike.interceptor.SimpleCORSFilter</filter-class>
+   <!-- <filter-name>characterEncodingFilter</filter-name>
     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
     <init-param>
       <param-name>encoding</param-name>
@@ -46,11 +47,15 @@
     <init-param>
       <param-name>forceEncoding</param-name>
       <param-value>true</param-value>
-    </init-param>
+    </init-param>-->
   </filter>
-  <!-- 路径映射 -->
   <filter-mapping>
-    <filter-name>characterEncodingFilter</filter-name>
+    <filter-name>cors</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+  <!-- 路径映射 -->
+  <!--<filter-mapping>
+    <filter-name>characterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>-->
 </web-app>

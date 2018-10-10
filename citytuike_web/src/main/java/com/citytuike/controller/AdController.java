@@ -43,11 +43,11 @@ public class AdController extends BaseController{
                                                @RequestParam(required=true) String regions_id){
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", -2);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }

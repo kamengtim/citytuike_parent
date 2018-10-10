@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
 
 @Controller
@@ -27,22 +29,22 @@ public class GoodsController extends BaseController{
 	@Autowired
 	private TpUsersService tpUsersService;
 	/**
-	 * @param id
-	 * @param p
 	 * @return
 	 * 商品列表
 	 */
-	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "商品列表", notes = "商品列表")
-	public @ResponseBody String ajaxGoodsList(@RequestParam(required=true) Integer id,
-			@RequestParam(required=true) Integer p){
+	public @ResponseBody String ajaxGoodsList(HttpServletRequest request){
+		JSONObject jsonObject = getRequestJson(request);
+		Integer id = jsonObject.getInteger("id");
+		Integer page = jsonObject.getInteger("page");
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		
-		LimitPageList limitPageList = tpGoodsService.getLimitPageList(id, p);
+		LimitPageList limitPageList = tpGoodsService.getLimitPageList(id, page);
 		data.put("return", limitPageList.getList());
 		List<TpGoods> tpGoods = (List<TpGoods>) limitPageList.getList();
 		for (TpGoods tpGoods2 : tpGoods) {
