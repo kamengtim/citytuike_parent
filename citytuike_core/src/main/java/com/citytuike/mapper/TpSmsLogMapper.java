@@ -17,5 +17,5 @@ public interface TpSmsLogMapper {
 
     int selectCode(String mobile_code);
 
-    int selectvalidateCode(@Param("code") String code, @Param("mobile") String mobile);
+    TpSmsLog selectvalidateCode(@Param("code") String code, @Param("mobile") String mobile);
 }
