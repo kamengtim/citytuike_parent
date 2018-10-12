@@ -31,4 +31,10 @@ public class Constant {
 	//話費充值
 	public static String MOBILE_APIKEY = "zra9I277yTKD6yimeV56";
 	public static String MOBILE_USERNAME = "23235795";
+
+	//登录令牌
+	public static final String CURRENT_USER = "user:";
+
+	//推送类型
+	public static final Integer SYSTEMTYYE = 0;
 }

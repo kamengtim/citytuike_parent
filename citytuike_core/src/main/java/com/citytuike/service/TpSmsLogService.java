@@ -13,5 +13,5 @@ public interface TpSmsLogService {
 
     int selectCode(String mobile_code);
 
-    int selectvalidateCode(String code, String mobile);
+    TpSmsLog selectvalidateCode(String code, String mobile);
 }
