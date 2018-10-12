@@ -46,29 +46,29 @@ public class FriendController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer friend_uid = jsonO.getInteger("friend_uid");
         String msg = jsonO.getString("msg");
         if (null == friend_uid || "".equals(friend_uid)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         if (tpUsers.getUser_id().equals(friend_uid)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "不能添加自己为好友");
             return jsonObj.toString();
         }
@@ -84,12 +84,12 @@ public class FriendController extends BaseController{
             int resultFriend = friendService.insertUserFriendsApply(tpUserFriendApply);
             if (resultFriend > 0){
                 jsonObj.put("result", data);
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "申请成功");
             }
 
         }else {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "找不到该用户");
             return jsonObj.toString();
         }
@@ -102,25 +102,25 @@ public class FriendController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer p = jsonO.getInteger("p");
         Integer size = jsonO.getInteger("size");
         if (null == p || "".equals(p)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         LimitPageList limitPageList = friendService.getLimitListByApply(p, size, tpUsers.getUser_id());
@@ -141,7 +141,7 @@ public class FriendController extends BaseController{
         }
         data.put("list", data1);
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -157,24 +157,24 @@ public class FriendController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "操作失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer id = jsonO.getInteger("id");
         if (null == id || "".equals(id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpUserFriendApply tpUserFriendApply = friendService.findOneUserFriendApplyById(id);
@@ -203,7 +203,7 @@ public class FriendController extends BaseController{
                         int insertFriendsResult1 = friendService.insertUserFriends(tpUserFriends1);
                         if (insertFriendsResult1 > 0){
                             jsonObj.put("result", data);
-                            jsonObj.put("status", "1");
+                            jsonObj.put("status", 1);
                             jsonObj.put("msg", "操作成功");
                         }
                     }
@@ -219,24 +219,24 @@ public class FriendController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "操作失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer id = jsonO.getInteger("id");
         if (null == id || "".equals(id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpUserFriendApply tpUserFriendApply = friendService.findOneUserFriendApplyById(id);
@@ -249,7 +249,7 @@ public class FriendController extends BaseController{
                 int updataResultApply = friendService.updataApplyFriends(tpUserFriendApply1);
                 if (updataResultApply > 0){
                     jsonObj.put("result", data);
-                    jsonObj.put("status", "1");
+                    jsonObj.put("status", 1);
                     jsonObj.put("msg", "操作成功");
                 }
             }
@@ -263,11 +263,11 @@ public class FriendController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -275,14 +275,14 @@ public class FriendController extends BaseController{
         Integer size = jsonO.getInteger("size");
         String keyword = jsonO.getString("keyword");
         if (null == p || "".equals(p)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         LimitPageList limitPageList = friendService.getLimitListByUserFriends(p, size, tpUsers.getUser_id(), keyword);
@@ -306,7 +306,7 @@ public class FriendController extends BaseController{
         }
         data.put("list", data1);
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }

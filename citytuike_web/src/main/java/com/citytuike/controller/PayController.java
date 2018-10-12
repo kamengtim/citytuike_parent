@@ -66,7 +66,7 @@ public class PayController extends BaseController{
     public @ResponseBody String payList(Model model,@RequestParam(required=false) String type){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
 
         List<TpPlugin> tpPluginList = tpOrderService.findAllPlugin();
@@ -80,7 +80,7 @@ public class PayController extends BaseController{
         }
         data.put("list", jsonArray);
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -184,11 +184,11 @@ public class PayController extends BaseController{
     public @ResponseBody String yopTaketoken(HttpServletResponse resp, HttpServletRequest request) throws IOException {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -196,14 +196,14 @@ public class PayController extends BaseController{
         String pay_code = jsonO.getString("pay_code");
         String openid = jsonO.getString("openid");
         if (null == order_sn || "".equals(order_sn) || null == pay_code || "".equals(pay_code)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpOrder tpOrder = tpOrderService.findOrderByOrderSn(order_sn);

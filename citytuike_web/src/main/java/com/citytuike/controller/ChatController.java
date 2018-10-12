@@ -44,12 +44,12 @@ public class ChatController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpUsers tpUsers1 = tpUsersService.findOneByImId(im_id);
@@ -74,7 +74,7 @@ public class ChatController extends BaseController{
             data.put("data", data1);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -90,12 +90,12 @@ public class ChatController extends BaseController{
                                         @RequestParam(required=true) Integer page) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         LimitPageList limitPageList = chatService.getLimitPageListByChatList(tpUsers.getIm_id(), page);
@@ -104,7 +104,7 @@ public class ChatController extends BaseController{
             data.add(object);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }

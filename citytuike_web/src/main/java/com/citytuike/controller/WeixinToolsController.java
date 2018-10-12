@@ -108,7 +108,7 @@ public class WeixinToolsController {
                                         @RequestParam(required=true) String back_url) throws IOException {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
 
         //已经授权用户直接通过。
