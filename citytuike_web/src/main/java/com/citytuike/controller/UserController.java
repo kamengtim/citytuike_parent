@@ -3,7 +3,7 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.interceptor.RedisConstant;
+import com.citytuike.constant.Constant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.MD5Utils;
@@ -85,18 +85,18 @@ public class UserController extends BaseController{
 
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String username = jsonO.getString("username");
         String password = jsonO.getString("password");
         if (null == username || "".equals(username) || null == password || "".equals(password)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -107,10 +107,10 @@ public class UserController extends BaseController{
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
 			TpUsers tpUsers1 = tpUsersService.getToken(tpUsers.getToken());
-			redisTemplate.opsForValue().set(RedisConstant.CURRENT_USER+tpUsers1.getToken(),tpUsers1.getToken());
-			redisTemplate.expire(RedisConstant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
+			redisTemplate.opsForValue().set(Constant.CURRENT_USER+tpUsers1.getToken(),tpUsers1.getToken());
+			redisTemplate.expire(Constant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
 			if (result > 0) {
-				jsonObj.put("status", "1");
+				jsonObj.put("status", 1);
 				jsonObj.put("msg", "登陆成功!");
 				data = tpUsersService.getUserlJson(tpUsers);
 				jsonObj.put("return", data);
@@ -136,11 +136,11 @@ public class UserController extends BaseController{
 		
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -153,7 +153,7 @@ public class UserController extends BaseController{
         String invite = jsonO.getString("invite");
         if (null == password2 || "".equals(password2) || null == username || "".equals(username)
                 || null == password || "".equals(password) || null == mobile_code || "".equals(mobile_code)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -216,7 +216,7 @@ public class UserController extends BaseController{
 		//更新验证码
 //		result = tpSmsLogService.updateByStatus(tpSmsLog);
 		if (result > 0) {
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "注册成功!");
 			data = tpUsersService.getUserlJson(tpUsers);
 			jsonObj.put("return", data);
@@ -234,14 +234,14 @@ public class UserController extends BaseController{
 	@ApiOperation(value = "退出登陆", notes = "退出登陆")
 	public @ResponseBody String logout(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null != tpUsers) {
 			tpUsers.setToken("");
 			int result = tpUsersService.updateBytokenOut(tpUsers);
 			if (result > 0) {
-				jsonObj.put("status", "1");
+				jsonObj.put("status", 1);
 				jsonObj.put("msg", "退出登陆成功!");
 			}else {
 				System.out.println("系统错误!");
@@ -260,11 +260,11 @@ public class UserController extends BaseController{
 	public @ResponseBody String addressList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -287,7 +287,7 @@ public class UserController extends BaseController{
 			jsonObj1.put("is_pickup", tpUserAddress.getIs_pickup());
 			jsonArray.add(jsonObj1);
 		}
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		jsonObj.put("return", jsonArray);
 		return jsonObj.toString();
@@ -301,11 +301,11 @@ public class UserController extends BaseController{
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String addAddress(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -319,13 +319,13 @@ public class UserController extends BaseController{
         if (null == province || "".equals(province) || null == address || "".equals(address)
                 || null == consignee || "".equals(consignee) || null == city || "".equals(city)
                 || null == district || "".equals(district) || null == mobile || "".equals(mobile)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -339,7 +339,7 @@ public class UserController extends BaseController{
 		tpUserAddress.setIs_default(is_default);
 		int returns = tpUsersService.insertUserAddress(tpUserAddress);
 		if (returns > 0) {
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "请求成功!");
 		}
 		
@@ -359,7 +359,8 @@ public class UserController extends BaseController{
 	 */
 	//TODO 地址编辑
 	@RequestMapping(value="/edit_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "修改地址", notes = "修改地址")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "修改地址", notes = "修改地址")
 	public @ResponseBody String editAddress(HttpServletRequest request,
 			@RequestParam(required=true)Integer id,
 			@RequestParam(required=true)Integer province,
@@ -370,11 +371,11 @@ public class UserController extends BaseController{
 			@RequestParam(required=true)String mobile,
 			@RequestParam(required=true)Integer is_default){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -391,7 +392,7 @@ public class UserController extends BaseController{
 			tpUserAddress.setIs_default(is_default);
 			int returns = tpUsersService.updateUserAddress(tpUserAddress);
 			if (returns > 0) {
-				jsonObj.put("status", "1");
+				jsonObj.put("status", 1);
 				jsonObj.put("msg", "请求成功!");
 			}
 		}
@@ -409,23 +410,23 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArry = new JSONArray();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer id = jsonO.getInteger("id");
         if (null == id || "".equals(id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
@@ -445,7 +446,7 @@ public class UserController extends BaseController{
 		}
 		data.put("region_list", jsonArry);
 		jsonObj.put("return", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -458,23 +459,23 @@ public class UserController extends BaseController{
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String setDefault(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer id = jsonO.getInteger("id");
         if (null == id || "".equals(id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -487,14 +488,14 @@ public class UserController extends BaseController{
 			for (TpUserAddress tpUserAddress : addresses) {
 				int num = tpUsersService.updateAddressToDefault(tpUserAddress.getAddress_id(), 0);
 				if (num <= 0) {
-					jsonObj.put("status", "0");
+					jsonObj.put("status", 0);
 					jsonObj.put("msg", "请求失败，请稍后再试");
 					return jsonObj.toString();
 				}
 			}
 			int num = tpUsersService.updateAddressToDefault(id, 1);
 			if (num > 0) {
-				jsonObj.put("status", "1");
+				jsonObj.put("status", 1);
 				jsonObj.put("msg", "请求成功!");
 			}
 		}
@@ -509,11 +510,11 @@ public class UserController extends BaseController{
 	@ApiOperation(value = "账户管理", notes = "账户管理")
 	public  @ResponseBody String account(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -533,20 +534,20 @@ public class UserController extends BaseController{
 		JSONArray  jsonArray = new JSONArray();
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String type = jsonO.getString("type");
         String page = jsonO.getString("page");
         if (null == type || "".equals(type) || null == page || "".equals(page)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -564,7 +565,7 @@ public class UserController extends BaseController{
 		data.put("per_page", limitPageList.getPage().getPageSize());
 		data.put("last_page",limitPageList.getPage().getTotalPageCount());
 		data.put("data",jsonArray);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		jsonObj.put("result",data);
 
@@ -575,11 +576,11 @@ public class UserController extends BaseController{
     @ApiOperation(value = "会员信息", notes = "会员信息")
     public  @ResponseBody String accountInfo(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -596,7 +597,7 @@ public class UserController extends BaseController{
 		JSONObject data = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -608,7 +609,7 @@ public class UserController extends BaseController{
 			jsonObj.put("result",jsonObject1);
 			jsonObject1.put("bank",jsonObject);
 		}
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 }
@@ -625,19 +626,19 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String page = jsonO.getString("page");
         if (null == page || "".equals(page)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -711,7 +712,7 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -763,7 +764,7 @@ public class UserController extends BaseController{
 		TpUsers tpUsers = initUser(request);
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -783,7 +784,7 @@ public class UserController extends BaseController{
         String mobile_code = jsonO.getString("mobile_code");
         String voice_notice = jsonO.getString("voice_notice");
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -793,12 +794,12 @@ public class UserController extends BaseController{
 			if(mobile_code != null || mobile != null){
 			tpUsersService.updateUserAndMobile(tpUsers.getUser_id(),head_pic,nickname,qq,sex,birthday,province,city,district,email,scene,wechat_qrcode,wechat,mobile);
 			}else{
-				jsonObj.put("status", "0");
+				jsonObj.put("status", 0);
 				jsonObj.put("msg", "验证码不能为空!");
 				return jsonObj.toString();
 			}
 		}
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "修改成功!");
 		jsonObj.put("result",jsonArray);
 		return jsonObj.toString();
@@ -814,7 +815,7 @@ public class UserController extends BaseController{
 		JSONArray bankList = new JSONArray();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -823,7 +824,7 @@ public class UserController extends BaseController{
 			JSONObject bank = tpBankService.getBank(tpBank);
 			bankList.add(bank);
 		}
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "ok!");
 		jsonObj.put("result",bankList);
 		return jsonObj.toString();
@@ -839,7 +840,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -849,13 +850,13 @@ public class UserController extends BaseController{
 		String image = jsonO.getString("image");
 		if (null == address || "".equals(address) || null == report_mess || "".equals(report_mess)
 		 || null == area || "".equals(area) || null == image || "".equals(image)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -871,7 +872,7 @@ public class UserController extends BaseController{
 		tpReportList.setHan_time(null);
 		try{
 		tpReportListService.save(tpReportList);
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "投诉处理中!");
 		        }catch (Exception e){
 			jsonObj.put("status", "2");
@@ -890,7 +891,7 @@ public class UserController extends BaseController{
         JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -900,7 +901,7 @@ public class UserController extends BaseController{
           jsonArray.add(jsonObject);
         }
         jsonObj.put("result",jsonArray);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -916,7 +917,7 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -946,7 +947,7 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -958,7 +959,7 @@ public class UserController extends BaseController{
             tpUsers2.setRelation(tpUsers.getRelation()+","+tpUsers.getUser_id());
 		    int result = tpUsersService.updateUserParent(tpUsers2);
 		    if (result > 0){
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
             }
 		}
@@ -979,7 +980,7 @@ public class UserController extends BaseController{
         String startTime = String.valueOf(Util.getStartTime());
         String endTime = String.valueOf(Util.getnowEndTime());
         if (null == tpUsers1) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -989,7 +990,7 @@ public class UserController extends BaseController{
         data.put("count", allNum);
         data.put("today", dayNum);
 
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 		jsonObj.put("result",data);
 		return jsonObj.toString();
@@ -1006,7 +1007,7 @@ public class UserController extends BaseController{
 		JSONObject data = new JSONObject();
 		TpUsers tpUsers1 = initUser(request);
         if (null == tpUsers1) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -1030,7 +1031,7 @@ public class UserController extends BaseController{
         data.put("count", self);
         data.put("today", team);
         jsonObj.put("result",data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -1045,7 +1046,7 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1086,7 +1087,7 @@ public class UserController extends BaseController{
 		jsonObject5.put("parent_id","0");
 		jsonArray.add(jsonObject5);
 		jsonObj.put("region_list",jsonArray);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();
 	}
@@ -1101,29 +1102,29 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String id = jsonO.getString("id");
         if (null == id || "".equals(id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		try{
 			tpUserBankService.deleteBank(tpUsers.getUser_id(),id);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "删除成功!");
 
 		}catch (Exception e){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "删除失败!");
 		}
 		return jsonObj.toString();
@@ -1140,7 +1141,7 @@ public class UserController extends BaseController{
 		TpUsers tpUsers = initUser(request);
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -1155,13 +1156,13 @@ public class UserController extends BaseController{
                 || null == bank_card || "".equals(bank_card) || null == bank_id || "".equals(bank_id)
                 || null == bank_name || "".equals(bank_name) || null == branch || "".equals(branch)
                 || null == mobile_code || "".equals(mobile_code)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1180,12 +1181,12 @@ public class UserController extends BaseController{
 			tpUserBank.setReal_name(real_name);
 			tpUserBank.setUser_id(tpUsers.getUser_id());
 			tpUserBankService.save(tpUserBank);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "请求成功!");
 			jsonObj.put("result","");
 			return jsonObj.toString();
 		}else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "验证码不正确");
 			jsonObj.put("result","");
 			return jsonObj.toString();
@@ -1202,28 +1203,28 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String id = jsonO.getString("id");
         if (null == id || "".equals(id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		try{
 		tpUsersService.deleteAddress(tpUsers.getUser_id(),id);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "删除成功!");
 		        }catch (Exception e){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "删除失败!");
 		}
 		return jsonObj.toString();
@@ -1239,7 +1240,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObject = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1250,7 +1251,7 @@ public class UserController extends BaseController{
         jsonObject.put("ad_income",ad_income);
         jsonObject.put("draw",draw);
         jsonObj.put("result",jsonObject);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
 	}
@@ -1265,29 +1266,29 @@ public class UserController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer id = jsonO.getInteger("id");
         float money = jsonO.getFloat("money");
         if (null == id || "".equals(id) || money > 0.00 || "".equals(money)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
         try{
         tpWithdrawalsService.ApplyForWithdrawals(tpUsers.getUser_id(),id,money);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok!");
                 }catch (Exception e){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "提现失败!");
         }
         return jsonObj.toString();
@@ -1303,7 +1304,7 @@ public class UserController extends BaseController{
         JSONObject object = new JSONObject();
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -1315,7 +1316,7 @@ public class UserController extends BaseController{
         }
         object.put("count",count);
         object.put("showpage","");
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         jsonObj.put("result",object);
         return jsonObj.toString();
@@ -1331,7 +1332,7 @@ public class UserController extends BaseController{
         JSONObject jsonObj = new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -1344,22 +1345,22 @@ public class UserController extends BaseController{
 		if (null == cardid || "".equals(cardid) || null == name || "".equals(name)
 		 || null == idcard || "".equals(idcard) || null == mobile || "".equals(mobile)
 		 || null == mobile_code || "".equals(mobile_code)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
         try{
         tpApplyCardService.save(tpUsers.getUser_id(),cardid,name,idcard,mobile,mobile_code,area);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok!");
                 }catch (Exception e){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "新增失败!");
         }
         return jsonObj.toString();
@@ -1377,16 +1378,16 @@ public class UserController extends BaseController{
         JSONObject object = new JSONObject();
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
         try{
         tpApplyCardService.deleteApplyPeople(tpUsers.getUser_id(),id);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "ok!");
                 }catch (Exception e){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "删除失败!");
         }
         return jsonObj.toString();
@@ -1403,7 +1404,7 @@ public class UserController extends BaseController{
 		JSONObject data = new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -1426,13 +1427,13 @@ public class UserController extends BaseController{
 				|| null == city || "".equals(city) || null == district || "".equals(district)
 				|| null == type || "".equals(type) || null == company || "".equals(company)
 				|| null == files || "".equals(files)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1468,11 +1469,11 @@ public class UserController extends BaseController{
         tpApplication.setReply_mess("");
         int result = tpUsersService.insertApplicationforBusinessCooperation(tpApplication);
         if (result > 0){
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "ok!");
         }
         jsonObj.put("result",data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -1487,7 +1488,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -1496,13 +1497,13 @@ public class UserController extends BaseController{
 		String id = jsonO.getString("id");
 		if (null == mobile_code || "".equals(mobile_code) || null == cardid || "".equals(cardid)
 		 || null == id || "".equals(id)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1510,11 +1511,11 @@ public class UserController extends BaseController{
 		if(count > 0 ){
 		tpCardListSevice.save(mobile_code,cardid,id);
 		}else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "验证码错误!");
 			return jsonObj.toString();
 		}
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();
 	}
@@ -1529,7 +1530,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -1538,13 +1539,13 @@ public class UserController extends BaseController{
 		String code = jsonO.getString("code");
 		if (null == new_password || "".equals(new_password) || null == confirm_password || "".equals(confirm_password)
 		 || null == code || "".equals(code)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1558,21 +1559,21 @@ public class UserController extends BaseController{
 				tpUsersService.updatePwd(tpUsers.getUser_id(),newPwd);
 
 				}else{
-					jsonObj.put("status", "0");
+					jsonObj.put("status", 0);
 					jsonObj.put("msg", "请输入正确的验证码!");
 					return jsonObj.toString();
 				}
 			}else{
-				jsonObj.put("status", "0");
+				jsonObj.put("status", 0);
 				jsonObj.put("msg", "两次密码输入不一致!");
 				return jsonObj.toString();
 			}
 		}else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先绑定手机号!");
 			return jsonObj.toString();
 		}
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();
 	}
@@ -1586,12 +1587,12 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		JSONObject jsonObject = tpUsersService.incomeCount(tpUsers.getUser_id());
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "ok!");
 		jsonObj.put("result",jsonObject);
 		return jsonObj.toString();
@@ -1608,12 +1609,12 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		JSONObject jsonObject = tpCardListSevice.cardDetail(id);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		jsonObj.put("result",jsonObject);
 		return jsonObj.toString();
@@ -1632,7 +1633,7 @@ public class UserController extends BaseController{
 			JSONObject jsonObject = tpApplyReportService.getJsonApplyReport(tpApplyReport);
 			object.put("0",jsonObject);
 		}
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok!");
 		jsonObj.put("result",object);
 		return jsonObj.toJSONString();
@@ -1648,7 +1649,7 @@ public class UserController extends BaseController{
         JSONObject jsonObj = new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -1658,7 +1659,7 @@ public class UserController extends BaseController{
 		String mobile_code = jsonO.getString("mobile_code");
 		if (null == real_name || "".equals(real_name) || null == mobile || "".equals(mobile)
 		 || null == account || "".equals(account) || null == mobile_code || "".equals(mobile_code)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -1666,11 +1667,11 @@ public class UserController extends BaseController{
         if(count > 0 ){
             tpUserAliAccountService.addAliAccount(real_name,mobile,account);
         }else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "验证码错误!");
 			return jsonObj.toString();
         }
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!!");
         return jsonObj.toString();
     }
@@ -1696,7 +1697,7 @@ public class UserController extends BaseController{
         data.put("last_page",limitPageList.getPage().getTotalPageCount());
         data.put("data",jsonArray);
         jsonObj.put("result",data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -1712,10 +1713,10 @@ public class UserController extends BaseController{
         JSONObject jsonObj= new JSONObject();
         try{
             tpUserAliAccountService.getMoneyAli(id,money);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }catch (Exception e){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "提现失败!");
         }
         return jsonObj.toString();
@@ -1734,7 +1735,7 @@ public class UserController extends BaseController{
 		JSONObject data = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1748,7 +1749,7 @@ public class UserController extends BaseController{
 			data.put("flag", tpPlateMsg.getFlag());
 			jsonObj.put("result", data);
 
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "请求成功!");
 		}
 		return jsonObj.toString();
@@ -1765,7 +1766,7 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1791,7 +1792,7 @@ public class UserController extends BaseController{
 		}
 		jsonObj.put("result", jsonArray);
 
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -1807,7 +1808,7 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1828,7 +1829,7 @@ public class UserController extends BaseController{
 		}
 		jsonObj.put("result", jsonArray);
 
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -1846,7 +1847,7 @@ public class UserController extends BaseController{
 		JSONObject data = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -1865,7 +1866,7 @@ public class UserController extends BaseController{
 		object.put("totalPages",pageInfo.getPages());
 		jsonObj.put("result",data);
 		jsonObj.put("page",object);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -1883,19 +1884,19 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		int count = tpSmsLogService.selectCode(code);
 		if(count <= 0 ){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "验证码错误!");
 			return jsonObj.toString();
 		}
         mobileCheck mobileCheck = new mobileCheck();
 		if(!mobileCheck.isMobile(mobile)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "手机格式错误!");
 			return jsonObj.toString();
         }
@@ -1906,17 +1907,17 @@ public class UserController extends BaseController{
                 if(res.get("code").equals("1")){
             int i = tpCartGiftService.update(id,tpUsers.getUser_id(),mobile, (String) res.get("taskid"));
             }else{
-					jsonObj.put("status", "0");
+					jsonObj.put("status", 0);
 					jsonObj.put("msg", "自助充值系统维护中!");
 					return jsonObj.toString();
              }
             }
         }else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "已经充值过或不存在该券!");
 			return jsonObj.toString();
         }
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "自助充值兑换成功!");
 		return jsonObj.toString();
     }
@@ -1931,7 +1932,7 @@ public class UserController extends BaseController{
         JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if(tpUsers == null){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请重新登录!");
 			return jsonObj.toString();
 		}
@@ -1941,10 +1942,10 @@ public class UserController extends BaseController{
             jsonObject.put("user_id",tpCartGift.getUser_id());
             jsonObject.put("money",tpCartGift.getMoney());
         	jsonObj.put("result",jsonObject);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "请求成功!");
         }else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "没有该礼品!");
 		}
         return jsonObj.toString();
@@ -1963,7 +1964,7 @@ public class UserController extends BaseController{
         String gift_name = "";
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -1975,7 +1976,7 @@ public class UserController extends BaseController{
         int date = (int)(new Date().getTime()/1000);
         int a = tpCartGiftService.getGifts(tpUsers.getUser_id(),id,gift_type,gift_name,date);
         if(a >0){
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "领取成功!");
         }
             return jsonObj.toString();
@@ -1995,7 +1996,7 @@ public class UserController extends BaseController{
         String gift_name = "";
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请先登陆!");
             return jsonObj.toString();
         }
@@ -2012,7 +2013,7 @@ public class UserController extends BaseController{
 		page.put("per_page", pageInfo.getPrePage());
 		page.put("totalPages",pageInfo.getPages());
 		jsonObj.put("page",page);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
     }
@@ -2029,7 +2030,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObject = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2037,10 +2038,10 @@ public class UserController extends BaseController{
 		jsonObject.put("money",tpCartGift.getMoney());
 		if (tpCartGift != null){
 			jsonObj.put("result",jsonObject);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "ok!");
 		}else {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "该礼品不存在!");
 		}
 		return jsonObj.toString();
@@ -2059,7 +2060,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObj =new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -2069,37 +2070,37 @@ public class UserController extends BaseController{
 		String repaypwd = jsonO.getString("repaypwd");
 		if (null == mobile || "".equals(mobile) || null == code || "".equals(code)
 		 || null == paypwd || "".equals(paypwd) || null == repaypwd || "".equals(repaypwd)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
-		int count = tpSmsLogService.selectvalidateCode(code,mobile);
-		if(count > 0 ){
+		TpSmsLog tpSmsLog = tpSmsLogService.selectvalidateCode(code, mobile);
+		if(tpSmsLog != null && tpSmsLog.getStatus() == 1 ){
 			if(paypwd == null || repaypwd ==null){
-				jsonObj.put("status", "0");
+				jsonObj.put("status", 0);
 				jsonObj.put("msg", "提现码不能为空!");
 				return jsonObj.toString();
 			}else if(!paypwd.equals(repaypwd)){
-				jsonObj.put("status", "0");
+				jsonObj.put("status", 0);
 				jsonObj.put("msg", "提现码不一致!");
 				return jsonObj.toString();
 			}else{
 				String password = MD5Utils.md5("TPSHOP" + paypwd);
 				int i = tpUsersService.updatePayPwd(password,tpUsers.getUser_id());
 				if(i>0){
-					jsonObj.put("status", "1");
+					jsonObj.put("status", 1);
 					jsonObj.put("msg", "请求成功!");
 				}
 				return jsonObj.toString();
 			}
 		}else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "验证码错误!");
 			return jsonObj.toString();
 		}
@@ -2118,7 +2119,7 @@ public class UserController extends BaseController{
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2128,7 +2129,7 @@ public class UserController extends BaseController{
 			jsonArray.add(jsonObject);
 		}
 		jsonObj.put("result",jsonArray);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -2144,14 +2145,14 @@ public class UserController extends BaseController{
 		JSONObject jsonObj =new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		int date = (int)(new Date().getTime()/1000);
 		int i= tpFestivalsService.setMidAutumn(tpUsers.getUser_id(),date,article_id);
 		if(i>0){
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "请求成功!");
 		}
 		return jsonObj.toString();
@@ -2168,7 +2169,7 @@ public class UserController extends BaseController{
 		JSONObject jsonObj =new JSONObject();
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -2177,28 +2178,28 @@ public class UserController extends BaseController{
 		String user_id = jsonO.getString("user_id");
 		if (null == content || "".equals(content) || null == ha_id || "".equals(ha_id)
 		 || null == user_id || "".equals(user_id)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		TpFestivals tpFestivals = tpFestivalsService.selectFestivals(user_id,ha_id);
 		if(tpFestivals == null){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "不存在海报!");
 			return jsonObj.toString();
 		}
 		int i = tpFestivalsContentService.insertFestivals(ha_id,user_id,content);
 		if(i>0){
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "评论成功!");
 		}else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "评论失败!");
 		}
 		return jsonObj.toString();
@@ -2216,13 +2217,13 @@ public class UserController extends BaseController{
 		JSONObject jsonObject = new JSONObject();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
 		jsonObject = tpFestivalsCateService.selectCate(article_id);
 		jsonObj.put("result",jsonObject);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "获取成功!");
 		return jsonObj.toString();
 	}
@@ -2240,25 +2241,25 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = tpUsersService.getMobile(mobile);
 		if(tpUsers.getMobile()== null){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "两次密码不一致!");
 			return jsonObj.toString();
 		}
-		int count = tpSmsLogService.selectvalidateCode(code,mobile);
-		if(count > 0 ){
+		TpSmsLog tpSmsLog = tpSmsLogService.selectvalidateCode(code, mobile);
+		if(tpSmsLog != null && tpSmsLog.getStatus() ==1 ){
 			if(!new_password.equals(confirm_password)){
-				jsonObj.put("status", "0");
+				jsonObj.put("status", 0);
 				jsonObj.put("msg", "两次密码不一致!");
 			}else {
 				int i = tpUsersService.updatePassword(tpUsers.getUser_id(), MD5Utils.md5("TPSHOP" + confirm_password));
 				if(i>0){
 					tpUsersService.updateSetPass(tpUsers.getUser_id());
-					jsonObj.put("status", "1");
+					jsonObj.put("status", 1);
 					jsonObj.put("msg", "修改成功!");
 				}
 			}
 		}else{
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "验证码为空!");
 		}
 		return jsonObj.toString();
@@ -2266,7 +2267,6 @@ public class UserController extends BaseController{
 
 
 	/**
-	 * @param p
 	 * @return
 	 * 获取动态
 	 */
@@ -2277,11 +2277,11 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray data1 = new JSONArray();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2298,7 +2298,7 @@ public class UserController extends BaseController{
 		data.put("page", object);
 		data.put("data", data1);
 		jsonObj.put("result", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -2313,24 +2313,24 @@ public class UserController extends BaseController{
 	public @ResponseBody String setDynamic(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		String image = jsonO.getString("image");
 		String content = jsonO.getString("content");
 		if (null == image || "".equals(image) || null == content || "".equals(content)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2346,7 +2346,7 @@ public class UserController extends BaseController{
 		int result = tpUsersService.insertTpDynamic(tpDynamic);
 		if (result > 0){
 			jsonObj.put("result", data);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "发表成功");
 		}
 		return jsonObj.toString();
@@ -2362,24 +2362,24 @@ public class UserController extends BaseController{
 	public @ResponseBody String setReplayMess(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		Integer did = jsonO.getInteger("did");
 		String replay_content = jsonO.getString("replay_content");
 		if (null == did || "".equals(did) || null == replay_content || "".equals(replay_content)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2398,7 +2398,7 @@ public class UserController extends BaseController{
 				int updataresult = tpUsersService.updataDynamicByNums(tpDynamic1);
 				if (updataresult > 0){
 					jsonObj.put("result", data);
-					jsonObj.put("status", "1");
+					jsonObj.put("status", 1);
 					jsonObj.put("msg", "回复成功");
 				}
 			}
@@ -2417,11 +2417,11 @@ public class UserController extends BaseController{
 										   @RequestParam(required = true) Integer did){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2439,7 +2439,7 @@ public class UserController extends BaseController{
 				int updataresult = tpUsersService.updataDynamicByNums(tpDynamic1);
 				if (updataresult > 0){
 					jsonObj.put("result", data);
-					jsonObj.put("status", "1");
+					jsonObj.put("status", 1);
 					jsonObj.put("msg", "点赞成功");
 				}
 			}
@@ -2458,11 +2458,11 @@ public class UserController extends BaseController{
 										   @RequestParam(required = true) String image){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2473,7 +2473,7 @@ public class UserController extends BaseController{
 		int result =  tpUsersService.updataUserByBackimg(tpUsers1);
 		if(result > 0){
 			jsonObj.put("result", data);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "请求成功!");
 		}
 
@@ -2489,11 +2489,11 @@ public class UserController extends BaseController{
 	public @ResponseBody String headPicBack(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2501,7 +2501,7 @@ public class UserController extends BaseController{
 		data.put("head_pic", tpUsers.getHead_pic());
 		data.put("nickname", tpUsers.getNickname());
 		jsonObj.put("result", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -2514,11 +2514,11 @@ public class UserController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray data1 = new JSONArray();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
 		}
@@ -2539,10 +2539,40 @@ public class UserController extends BaseController{
 		data.put("page", object);
 		data.put("data", data1);
 		jsonObj.put("result", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功");
 		return jsonObj.toString();
 	}
+    /**
+     * @return
+     * 抽奖接口
+     */
+    @RequestMapping(value = "applyPrize",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "抽奖接口", notes = "抽奖接口")
+    public @ResponseBody String applyPrize(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        String key = "apply_prize_count_"+Util.transferLongToDate("yyyyMMdd",new Date().getTime()/1000)+"_"+tpUsers.getUser_id();
+        String o = (String) redisTemplate.opsForValue().get(key);
+        org.json.JSONObject object = new org.json.JSONObject(o);
+        if(Integer.parseInt((String)object.get("count"))>=6){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "已经超过今日领奖次数!");
+            return jsonObj.toString();
+        }
+        if(Integer.parseInt((String)object.get("bonus_count"))>=1){
+
+        }
+        return null;
+    }
 //TODO 我要加盟
 //TODO 首字母排序获取地址列表接口
 //TODO H5--信息收集
