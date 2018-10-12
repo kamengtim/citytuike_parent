@@ -10,7 +10,7 @@ public class TpFansSaleServiceImpl implements TpFansSaleService {
     @Autowired
     private TpFansSaleMapper tpFansSaleMapper;
     @Override
-    public void fansSale(TpFansSale tpFansSale) {
-        tpFansSaleMapper.save(tpFansSale);
+    public int fansSale(TpFansSale tpFansSale) {
+      return  tpFansSaleMapper.save(tpFansSale);
     }
 }

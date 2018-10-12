@@ -2,11 +2,11 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.interceptor.RedisConstant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.MD5Utils;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("api/TenSecondsActivity")
-public class TenSecondsActivityController {
+public class TenSecondsActivityController extends BaseController{
     @Autowired
     private TpUsersService tpUsersService;
     @Autowired
@@ -48,24 +48,21 @@ public class TenSecondsActivityController {
      * 活动初始化
      */
     @RequestMapping(value = "init_activity",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "活动初始化", notes = "活动初始化")
     public @ResponseBody String init_activity(HttpServletRequest request,
                                               @RequestParam(required = true)String activity_id,
-                                              @RequestParam(required = false)String invite_code,
-                                              @RequestParam(required = false)String user_id){
-        String header = request.getHeader("p-token");
-        if(header == null || header.trim().length() == 0){
-            throw new RuntimeException("登录异常");
+                                              @RequestParam(required = false)String invite_code){
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "失败!");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
         }
-
-        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
-        TpUsers tpUsers = tpUsersService.getToken(token);
-        if(tpUsers == null){
-            throw new RuntimeException("登录超时");
-        }
-
         JSONObject jsonObject = this.getObj(activity_id,invite_code, String.valueOf(tpUsers.getUser_id()));
         JSONObject oldObj = new JSONObject();
-        JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject object= new JSONObject();
         JSONObject userJson = new JSONObject();
@@ -87,7 +84,7 @@ public class TenSecondsActivityController {
         object.put("reward",userJson);
         object.put("reward_list",jsonArray);
         jsonObj.put("result",object);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok!");
         return jsonObj.toString();
     }
@@ -143,23 +140,21 @@ public class TenSecondsActivityController {
      * 开始抽奖
      */
     @RequestMapping(value = "begin_luck_draw",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "开始抽奖", notes = "开始抽奖")
     public @ResponseBody String begin_luck_draw(HttpServletRequest request,
                                                 @RequestParam(required = true)String activity_id,
                                                 @RequestParam(required = false)String invite_code){
         JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "失败!");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject newjsonObject = new JSONObject();
         String is_get_reward = "";
-        String header = request.getHeader("p-token");
-        if(header == null || header.trim().length() == 0){
-            throw new RuntimeException("登录异常");
-        }
-
-        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
-        TpUsers tpUsers = tpUsersService.getToken(token);
-        if(tpUsers == null){
-            throw new RuntimeException("登录超时");
-        }
-
         List<TpTenSecondsActivityReward> tpTenSecondsActivityRewards = tpTenSecondsActivityRewardService.getReward(activity_id);
         for (TpTenSecondsActivityReward tpTenSecondsActivityReward : tpTenSecondsActivityRewards) {
             newjsonObject.put("stock",tpTenSecondsActivityRewardService.getJson(tpTenSecondsActivityReward));
@@ -178,7 +173,7 @@ public class TenSecondsActivityController {
             //检查本周是否助战过
             Boolean week_share = this.check_week_share(tpUsers.getUser_id(),share_user_info);
             if(!week_share){
-                jsonObj.put("status","0");
+                jsonObj.put("status", 0);
                 jsonObj.put("msg","本周你已帮助过"+share_user_info.getNickname()+"咯!,下周再试试吧");
                 return jsonObj.toString();
             }
@@ -201,7 +196,7 @@ public class TenSecondsActivityController {
         newjsonObject.put("csrf_token", MD5Utils.md5("123"));
         redisTemplate.opsForValue().set("csrf_token",MD5Utils.md5("123"));
         jsonObj.put("result",newjsonObject);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok!");
         return jsonObj.toString();
     }
@@ -290,22 +285,21 @@ public class TenSecondsActivityController {
      * 领取奖励
      */
     @RequestMapping(value = "draw_reward",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "领取奖励", notes = "领取奖励")
     public @ResponseBody String draw_reward(HttpServletRequest request,
                                             @RequestParam(required = true)String second,
                                             @RequestParam(required = true)String activity_id,
                                             @RequestParam(required = false)String invite_code){
         JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "失败!");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject newjsonObject = new JSONObject();
-        String header = request.getHeader("p-token");
-        if(header == null || header.trim().length() == 0){
-            throw new RuntimeException("登录异常");
-        }
-
-        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
-        TpUsers tpUsers = tpUsersService.getToken(token);
-        if(tpUsers == null){
-            throw new RuntimeException("登录超时");
-        }
         JSONObject jsonObject = this.getObj(activity_id,invite_code, String.valueOf(tpUsers.getUser_id()));
         TpUsers userInfo = (TpUsers) jsonObject.get("userInfo");
         TpUsers share_user_info = (TpUsers) jsonObject.get("share_user_info");
@@ -341,8 +335,17 @@ public class TenSecondsActivityController {
      * 中奖记录列表
      */
     @RequestMapping(value = "reward_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String reward_list(){
+    @ApiOperation(value = "中奖记录列表", notes = "中奖记录列表")
+    public @ResponseBody String reward_list(HttpServletRequest request){
         JSONObject jsonObj= new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "失败!");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject object = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -358,7 +361,7 @@ public class TenSecondsActivityController {
         object.put("current_page",pageInfo.getPageNum());
         object.put("last_page",pageInfo.getLastPage());
         jsonObj.put("result",object);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok!");
         return jsonObj.toString();
     }
@@ -368,33 +371,31 @@ public class TenSecondsActivityController {
      * 填写地址(领奖)
      */
     @RequestMapping(value = "add_address",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "填写地址", notes = "填写地址")
     public @ResponseBody
     String add_address(HttpServletRequest request,
                        @RequestParam(required = true)String reward_id,
                        @RequestParam(required = true)String address_id){
         JSONObject jsonObj = new JSONObject();
-        String header = request.getHeader("p-token");
-        if(header == null || header.trim().length() == 0){
-            throw new RuntimeException("登录异常");
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "失败!");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
         }
-
-        String token = (String) redisTemplate.opsForValue().get(RedisConstant.CURRENT_USER+ header);
-        TpUsers tpUsers = tpUsersService.getToken(token);
-        if(tpUsers == null){
-            throw new RuntimeException("登录超时");
-        }
-
         TpTenSecondsActivityRewardLog tpTenSecondsActivityRewardLog = tpTenSecondsActivityRewardLogService.getLogById(reward_id,tpUsers.getUser_id());
         if(tpTenSecondsActivityRewardLog == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "记录不存在!");
         }else if(tpTenSecondsActivityRewardLog.getAddress() != null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "该奖励已领取!");
         }
         TpUserAddress tpUserAddress = tpUserAddressService.getAddress(address_id,tpUsers.getUser_id());
         if(tpUserAddress == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "地址不存在!");
         }
         Integer provinceName = tpUserAddress.getProvince();
@@ -413,7 +414,7 @@ public class TenSecondsActivityController {
         tpTenSecondsActivityRewardLog.setAddress(tpUserAddress.getAddress());
         int i = tpTenSecondsActivityRewardLogService.update(tpTenSecondsActivityRewardLog);
         if(i>0){
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "領取成功!");
         }
         return jsonObj.toString();
@@ -424,15 +425,25 @@ public class TenSecondsActivityController {
      * 中奖记录详情
      */
     @RequestMapping(value = "reward_detail",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-    public @ResponseBody String reward_detail(@RequestParam(required = true)String log_id){
+    @ApiOperation(value = "中奖记录详情", notes = "中奖记录详情")
+    public @ResponseBody String reward_detail(HttpServletRequest request,
+                                              @RequestParam(required = true)String log_id){
         String image = "https://citycdn.citytuike.cn/assets/images/logo.ce2a6d9c.png";
         JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "失败!");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject goods = new JSONObject();
         TpTenSecondsActivityRewardLog tpTenSecondsActivityRewardLog = tpTenSecondsActivityRewardLogService.getReward(log_id);
         TpTenSecondsActivityReward tpTenSecondsActivityReward = tpTenSecondsActivityRewardService.getRewardById(tpTenSecondsActivityRewardLog.getReward_id());
         JSONObject json = tpTenSecondsActivityRewardLogService.getJson(tpTenSecondsActivityRewardLog);
         if(tpTenSecondsActivityRewardLog == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "記錄不存在!");
         }
         if(tpTenSecondsActivityReward.getGoods_id() == 144){
@@ -466,7 +477,7 @@ public class TenSecondsActivityController {
         }
         json.put("goods",goods);
         jsonObj.put("result",json);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok!");
         return jsonObj.toString();
     }

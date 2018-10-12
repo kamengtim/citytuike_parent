@@ -19,7 +19,7 @@ public interface TpFansMapper {
 
     int getCount(@Param("area_id") String area_id, @Param("industry") String industry);
 
-    List<TpFans> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize);
+    List<TpFans> selectByPage();
 
     TpFans fansDetails(String id);
 

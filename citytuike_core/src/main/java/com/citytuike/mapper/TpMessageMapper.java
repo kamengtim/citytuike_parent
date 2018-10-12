@@ -26,4 +26,6 @@ public interface TpMessageMapper {
     List<TpMessage> selectByPage(@Param("startPos") int startPos, @Param("pageSize") int pageSize, @Param("message_id") Integer message_id, @Param("cate") String cate, @Param("user_id") Integer user_id);
 
     List<TpMessage> selectMessage(@Param("category") int category, @Param("user_id") Integer user_id);
+
+    void save(TpMessage tpMessage);
 }

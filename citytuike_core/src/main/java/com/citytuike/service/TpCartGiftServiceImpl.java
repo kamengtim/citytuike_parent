@@ -43,7 +43,7 @@ public class TpCartGiftServiceImpl implements TpCartGiftService {
     public PageInfo query(int count, Integer user_id) {
         Page page = new Page();
         page.setTotalCount(count);
-        PageHelper.startPage(page.getPageNow(), page.getPageSize());
+        PageHelper.startPage(page.getPageNow()+1, page.getPageSize());
         List<TpCartGift> list = tpCartGiftMapper.selectByPage(page.getPageNow(), 10, user_id);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
@@ -125,7 +125,7 @@ public class TpCartGiftServiceImpl implements TpCartGiftService {
     @Override
     public PageInfo queryList(Integer user_id) {
         Page page = new Page();
-        PageHelper.startPage(page.getPageNow(), page.getPageSize());
+        PageHelper.startPage(page.getPageNow()+1, page.getPageSize());
         List<TpCartGift> list = tpCartGiftMapper.queryList(user_id);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;

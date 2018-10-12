@@ -690,4 +690,25 @@
 	<select id="selectToUser" resultType="TpUsers">
 	select * from tp_users where invite_code = #{invite_code}
 	</select>
+	<update id="updateNumber">
+		update tp_users set paper_number_allowance = paper_number_allowance - #{number} where user_id = #{user_id}
+	</update>
+	<select id="getToUser" resultType="TpUsers">
+		SELECT * from tp_users where user_id = #{to_user_id}
+	</select>
+	<select id="getFriendsName" resultType="TpUsers">
+		SELECT * from tp_users where user_id = #{from_user_id}
+	</select>
+	<select id="selectFromUser" resultType="TpUsers">
+		SELECT * from tp_users where user_id = #{from_user_id}
+	</select>
+	<update id="addNumber">
+	  update tp_users set paper_number_allowance = paper_number_allowance + #{number} where user_id = #{from_user_id}
+	</update>
+	<select id="selectToUsers" resultType="TpUsers">
+		SELECT * from tp_users where user_id = #{user_id}
+	</select>
+	<update id="addNumberToUser">
+		update tp_users set paper_number_allowance = paper_number_allowance + #{number} ,paper_number = paper_number + #{number} where user_id = #{user_id}
+	</update>
 </mapper>

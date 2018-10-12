@@ -136,7 +136,7 @@ public class TpTenSecondsActivityRewardLogServiceImpl implements TpTenSecondsAct
     @Override
     public PageInfo reward_list() {
         Page page = new Page();
-        PageHelper.startPage(page.getPageNow(),page.getPageSize());
+        PageHelper.startPage(page.getPageNow()+1,page.getPageSize());
         List list = tpTenSecondsActivityRewardLogMapper.fansTypeList();
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;

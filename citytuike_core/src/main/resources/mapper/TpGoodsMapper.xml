@@ -50,5 +50,4 @@
 	<select id="selectPrice" resultType="TpGoods">
 		select * from tp_goods where goods_id = 146
 	</select>
-	
 </mapper>

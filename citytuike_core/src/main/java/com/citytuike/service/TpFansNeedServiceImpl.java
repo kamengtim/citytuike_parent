@@ -187,7 +187,7 @@ public class TpFansNeedServiceImpl implements TpFansNeedService {
         jsonObject.put("appsecret",tpFansNeed.getAppsecret());
         jsonObject.put("is_flag",tpFansNeed.getIs_flag());
         jsonObject.put("ip_flag",tpFansNeed.getIp_flag());
-        return null;
+        return jsonObject;
     }
 
     @Override

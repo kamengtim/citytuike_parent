@@ -61,16 +61,24 @@
             <artifactId>aliyun-java-sdk-core</artifactId>
             <version>3.5.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.5</version>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.2</version>
         </dependency>
+
         <!-- 配置gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.2.4</version>
+        </dependency>
+        <!-- 序列化与反序列化 -->
+        <dependency>
+            <groupId>com.xk72</groupId>
+            <artifactId>pherialize</artifactId>
+            <version>1.2.4</version>
         </dependency>
     </dependencies>
 

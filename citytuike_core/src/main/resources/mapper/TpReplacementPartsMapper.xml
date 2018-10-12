@@ -23,6 +23,47 @@
     <result column="confirm_time" property="confirm_time" jdbcType="INTEGER" />
     <result column="files" property="files" jdbcType="LONGVARCHAR" />
     <result column="shipping_files" property="shipping_files" jdbcType="LONGVARCHAR" />
+    <association property="tpDevice" javaType="TpDevice">
+      <id column="id" property="id" jdbcType="INTEGER"/>
+      <result column="device_sn" property="device_sn" jdbcType="VARCHAR" />
+      <result column="ad_position_id" property="ad_position_id" jdbcType="INTEGER" />
+      <result column="qrscene" property="qrscene" jdbcType="VARCHAR" />
+      <result column="iot_id" property="iot_id" jdbcType="VARCHAR" />
+      <result column="product_key" property="product_key" jdbcType="VARCHAR" />
+      <result column="device_name" property="device_name" jdbcType="VARCHAR" />
+      <result column="device_secret" property="device_secret" jdbcType="VARCHAR" />
+      <result column="add_time" property="add_time" jdbcType="INTEGER" />
+      <result column="user_id" property="user_id" jdbcType="INTEGER" />
+      <result column="paper_number" property="paper_number" jdbcType="INTEGER" />
+      <result column="paper_send" property="paper_send" jdbcType="INTEGER" />
+      <result column="paper_inventory" property="paper_inventory" jdbcType="INTEGER" />
+      <result column="income" property="income" jdbcType="DECIMAL" />
+      <result column="one_income" property="one_income" jdbcType="DECIMAL" />
+      <result column="capacity" property="capacity" jdbcType="INTEGER" />
+      <result column="active_time" property="active_time" jdbcType="INTEGER" />
+      <result column="no_send" property="no_send" jdbcType="BIT" />
+      <result column="open_status" property="open_status" jdbcType="BIT" />
+      <result column="online" property="online" jdbcType="BIT" />
+      <result column="landmark_picture" property="landmark_picture" jdbcType="VARCHAR" />
+      <result column="province" property="province" jdbcType="INTEGER" />
+      <result column="city" property="city" jdbcType="INTEGER" />
+      <result column="district" property="district" jdbcType="INTEGER" />
+      <result column="is_active" property="is_active" jdbcType="TINYINT" />
+      <result column="order_id" property="order_id" jdbcType="INTEGER" />
+      <result column="goods_id" property="goods_id" jdbcType="INTEGER" />
+      <result column="distribution_time" property="distribution_time" jdbcType="INTEGER" />
+      <result column="address" property="address" jdbcType="VARCHAR" />
+      <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+      <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+      <result column="active_code" property="active_code" jdbcType="VARCHAR" />
+      <result column="shipping_sn" property="shipping_sn" jdbcType="VARCHAR" />
+      <result column="shipping_name" property="shipping_name" jdbcType="VARCHAR" />
+      <result column="today_num" property="today_num" jdbcType="INTEGER" />
+      <result column="today_time" property="today_time" jdbcType="INTEGER" />
+      <result column="app_version" property="app_version"/>
+      <result column="lack_paper" property="lack_paper"/>
+      <result column="run_status" property="run_status"/>
+    </association>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tp_replacement_parts
@@ -103,16 +144,16 @@
   </select>
   <select id="selectByPage" resultMap="BaseResultMap">
     <!-- 分页SQL语句 -->
-    select *  from tp_replacement_parts
+    select r.*,d.order_id,d.device_name,d.device_sn,d.id as new_device_id  from tp_replacement_parts r left join tp_device d on r.device_id = d.id
     <include refid="base_where"/>
     limit #{i},#{i1}
   </select>
   <sql id="base_where">
     <where>
-    <if test="status != null">
+    <if test='status != null or status != "0"'>
       and status = #{status}
     </if>
-    <if test="status == null">
+    <if test='status == null or status == "0"'>
       and 1 = 1
     </if>
     </where>

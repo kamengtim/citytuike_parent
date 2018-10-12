@@ -8,4 +8,6 @@ public interface TpMessageService {
     LimitPageList getLimitPageList(Integer user_id, String page, String cate);
 
     JSONObject getJson(TpMessage tpMessage,Integer user_id);
+
+    void save(JSONObject jsonObj);
 }

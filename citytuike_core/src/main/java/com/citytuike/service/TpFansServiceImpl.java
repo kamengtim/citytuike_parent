@@ -19,8 +19,8 @@ public class TpFansServiceImpl implements TpFansService {
     @Override
     public PageInfo getLimtPageList(String area_id, String industry) {
         Page page = new Page();
-        PageHelper.startPage(page.getPageNow(),page.getPageSize());
-        List<TpFans> list = tpFansMapper.selectByPage(page.getPageNow(),page.getPageSize());
+        PageHelper.startPage(page.getPageNow()+1,page.getPageSize());
+        List<TpFans> list = tpFansMapper.selectByPage();
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;
     }
@@ -74,7 +74,7 @@ public class TpFansServiceImpl implements TpFansService {
     @Override
     public PageInfo fansTypeList() {
         Page page = new Page();
-        PageHelper.startPage(page.getPageNow(),page.getPageSize());
+        PageHelper.startPage(page.getPageNow()+1,page.getPageSize());
         List list = tpFansMapper.fansTypeList();
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;

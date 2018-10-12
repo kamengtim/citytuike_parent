@@ -23,7 +23,7 @@ public class TpUserFeedbackServiceImpl implements TpUserFeedbackService {
     @Override
     public PageInfo query(Integer user_id) {
         Page page = new Page();
-        PageHelper.startPage(page.getPageNow(),page.getPageSize());
+        PageHelper.startPage(page.getPageNow()+1,page.getPageSize());
         List list = tpUserFeedbackMapper.fansTypeList(user_id);
         PageInfo pageInfo = new PageInfo(list);
         return pageInfo;

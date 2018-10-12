@@ -4,12 +4,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.iot.model.v20180120.QueryDeviceDetailResponse;
 import com.citytuike.exception.WeixinApiException;
+import com.citytuike.interceptor.JpushClientUtil;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.AliyunIotApi;
 import com.citytuike.util.WeixinAPI;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.sun.xml.internal.ws.client.SenderException;
 import com.swetake.util.Qrcode;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -28,14 +33,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("api/Iot")
-public class DeviceController {
+public class DeviceController extends BaseController{
     @Autowired
     private ITpDeviceService tpDeviceService;
     @Autowired
@@ -58,15 +61,34 @@ public class DeviceController {
     private RedisTemplate redisTemplate;
     @Autowired
     private TpOrderService tpOrderService;
+    @Autowired
+    private TpMessageService tpMessageService;
 
     /**
      * @return 获取设备配置
      */
-    @RequestMapping(value = "getConf", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String getConf(@RequestParam(required = true) String deviceSn) {
+    @RequestMapping(value = "getConf", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "获取设备配置", notes = "获取设备配置")
+    public @ResponseBody String getConf(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String deviceSn = jsonRequest.getString("deviceSn");
+        if(deviceSn == null || deviceSn.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject jsonObject = tpDeviceService.selectDeviceBySn(deviceSn);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "成功!");
         jsonObj.put("result", jsonObject);
         return jsonObj.toString();
@@ -75,45 +97,56 @@ public class DeviceController {
     /**
      * @return 激活设备
      */
-    @RequestMapping(value = "active", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String active(@RequestParam(required = true) String token,
-                   @RequestParam(required = true) String device_sn,
-                   @RequestParam(required = true) String province,
-                   @RequestParam(required = true) String city,
-                   @RequestParam(required = true) String district,
-                   @RequestParam(required = true) String landmark_picture) {
+    @RequestMapping(value = "active", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "激活设备", notes = "激活设备")
+    public @ResponseBody String active  (HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        JSONObject jsonRequest = getRequestJson(request);
+        String device_sn = jsonRequest.getString("device_sn");
+        Integer province = jsonRequest.getInteger("province");
+        String city = jsonRequest.getString("city");
+        String district = jsonRequest.getString("district");
+        String landmark_picture = jsonRequest.getString("landmark_picture");
+        if(device_sn == null || device_sn.equals("") || province == null || city == null || city.equals("") || district == null ||
+           district.equals("") || landmark_picture == null || landmark_picture.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
             return jsonObj.toString();
         }
         TpDevice tpDevice = tpDeviceService.selectDevice(tpUsers.getUser_id(), device_sn);
         if(tpDevice == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "错误的设备号!");
             return jsonObj.toString();
         }else if(tpDevice.getOrder_id() == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请求错误-未知订单，请联系客服处理!");
             return jsonObj.toString();
         }else if(tpDevice.getIs_active().equals(Byte.valueOf("1"))){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "设备号已激活，不能重复激活");
             return jsonObj.toString();
         }
         Boolean check_active_code = true;
         if(check_active_code){
-            int  i = tpDeviceService.update(tpDevice.getId(),province,city,district,landmark_picture);
+            int  i = tpDeviceService.update(tpDevice.getId(), String.valueOf(province),city,district,landmark_picture);
             if(i>0){
                 tpOrderService.updateOrder(tpDevice.getOrder_id());
                 redisTemplate.opsForValue().set("d_active_my_list",tpUsers.getUser_id());
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "设备激活成功!");
             }
         }else{
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "激活码错误!");
         }
         return jsonObj.toString();
@@ -122,19 +155,27 @@ public class DeviceController {
     /**
      * @return 团队机器
      */
-    @RequestMapping(value = "team_device", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String TeamDevice(@RequestParam(required = true) String token,
-                                           @RequestParam(required = true) String page,
-                                           @RequestParam(required = true) String type) {
+    @RequestMapping(value = "team_device", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "团队机器", notes = "团队机器")
+    public @ResponseBody String TeamDevice(HttpServletRequest request) {
+        JSONObject jsonRequest = getRequestJson(request);
+        String page = jsonRequest.getString("page");
+        String type = jsonRequest.getString("type");
         JSONObject jsonObj = new JSONObject();
+        if(page == null || page.equals("") || type == null || type.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
         JSONArray jsonArray = new JSONArray();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
-        jsonObj.put("msg", "失败!");
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
             return jsonObj.toString();
         }
         JSONObject jsonObject1 = new JSONObject();
@@ -162,7 +203,7 @@ public class DeviceController {
         data.put("per_page", limitPageList.getPage().getPageSize());
         data.put("last_page", limitPageList.getPage().getTotalPageCount());
         data.put("data", jsonArray);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功");
         jsonObj.put("result", data);
         return jsonObj.toString();
@@ -171,19 +212,22 @@ public class DeviceController {
     /**
      * @return 新增机器栏目数据
      */
-    @RequestMapping(value = "new_device_number", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody
-    String NewDeviceNumber(@RequestParam(required = true) String token) {
+    @RequestMapping(value = "new_device_number", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "新增机器栏目数据", notes = "新增机器栏目数据")
+    public @ResponseBody String NewDeviceNumber(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
             return jsonObj.toString();
         }
         JSONObject jsonObject = deviceLogService.getTodayDevice(tpUsers.getUser_id());
         jsonObj.put("result", jsonObject);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok");
         return jsonObj.toString();
     }
@@ -192,16 +236,25 @@ public class DeviceController {
      * @return 获取有设备的城市
      */
     @RequestMapping(value = "deviceCityList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String deviceCityList() {
-        JSONArray jsonArray = new JSONArray();
+    @ApiOperation(value = "获取有设备的城市", notes = "获取有设备的城市")
+    public @ResponseBody String deviceCityList(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        JSONArray jsonArray = new JSONArray();
         List<TpDevice> tpDevices = tpDeviceService.getHaveDeviceCity();
         for (TpDevice tpDevice : tpDevices) {
             String cityName = tpRegionService.getCityName(tpDevice.getCity());
             jsonArray.add(cityName);
         }
         jsonObj.put("result", jsonArray);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok");
         return jsonObj.toString();
     }
@@ -212,16 +265,32 @@ public class DeviceController {
      * @return 获取机器二维码-v2
      */
     @RequestMapping(value = "getQrCodeV2", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "获取机器二维码", notes = "获取机器二维码")
     public @ResponseBody
-    String getUserMpQr(@RequestParam(required = true,defaultValue = "a1njSyrGdTz") String ProductKey,
+    String getUserMpQr(HttpServletRequest  request,
+                       @RequestParam(required = true,defaultValue = "a1njSyrGdTz") String ProductKey,
                        @RequestParam(required = true,defaultValue = "device_lMWz") String DeviceName,
                        @RequestParam(required = true) String latitude,
                        @RequestParam(required = true) String longitude) {
         JSONObject jsonObj = new JSONObject();
+        if(ProductKey == null || ProductKey.equals("") || DeviceName == null || DeviceName.equals("")
+           || latitude ==null || latitude.equals("") || longitude == null || longitude.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject jsonObject = new JSONObject();
         TpDevice tpDevice = tpDeviceService.getUserDevice(ProductKey, DeviceName, latitude, longitude);
         if (tpDevice == null) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "没有该设备");
             return jsonObj.toString();
         } else if (tpDevice.getActive_time() == 0) {
@@ -280,7 +349,7 @@ public class DeviceController {
             e.printStackTrace();
         }
         jsonObj.put("result", jsonObject);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
@@ -288,26 +357,37 @@ public class DeviceController {
     /**
      * @return 获取公众号列表
      */
-    @RequestMapping(value = "getMpList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "getMpList", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "获取公众号列表", notes = "获取公众号列表")
     public @ResponseBody
-    String getMpList(@RequestParam(required = true) String scene_str_v2,
-                     @RequestParam(required = true) String lat,
-                     @RequestParam(required = true) String lng,
-                     @RequestParam(required = true) String token)  {
+    String getMpList(HttpServletRequest request)  {
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String scene_str_v2 = jsonRequest.getString("scene_str_v2");
+        String lat = jsonRequest.getString("lat");
+        String lng = jsonRequest.getString("lng");
+        if(scene_str_v2 == null || scene_str_v2.equals("") || lat == null || lat.equals("0")
+           || lng == null || lng.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject WXJsonObject = new JSONObject();
         JSONObject jsonObject = new JSONObject();
         TpDeviceQr tpDeviceQr = tpDeviceQrService.getLatAndLng(scene_str_v2);
         TpDevice tpDevice = tpDeviceService.getDeviceId(tpDeviceQr.getLng(), tpDeviceQr.getLat());
-        TpUsers tpUsers = tpUsersService.findOneByToken(token);
-        if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
-            return jsonObj.toString();
-        }
         int status = tpDeviceQrService.selectStatus(scene_str_v2);
         if (status == 1) {
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "该二维码已经被使用!");
             return jsonObj.toString();
         }
@@ -379,13 +459,13 @@ public class DeviceController {
                     }
                 }
             } else {
-                jsonObj.put("status", "0");
+                jsonObj.put("status", 0);
                 jsonObj.put("msg", "请在机器旁边进行扫码");
                 return jsonObj.toString();
             }
         }
         jsonObj.put("result", jsonObject);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
@@ -393,17 +473,33 @@ public class DeviceController {
     /**
      * @return 关注公众号后回到前端页面--检查paper_token是否有效
      */
-    @RequestMapping(value = "checkPaperToken", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String checkPaperToken(@RequestParam(required = true) String paper_token) {
-        //待完善,此处应该根据redisTemple取值判断值
+    @RequestMapping(value = "checkPaperToken", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "关注公众号后回到前端页面", notes = "关注公众号后回到前端页面")
+    public @ResponseBody String checkPaperToken(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String paper_token = jsonRequest.getString("paper_token");
+        if(paper_token == null || paper_token.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         String str = (String) redisTemplate.opsForValue().get(paper_token);
         if(str == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "错误的场景码");
             return jsonObj.toString();
         }
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
@@ -411,19 +507,34 @@ public class DeviceController {
     /**
      * 使用paper_token领取纸巾
      */
-    @RequestMapping(value = "getPaperWx", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String getPaperWx(@RequestParam(required = true) String paper_token) {
-        //待完善,此处应该根据redisTemple取值判断值
+    @RequestMapping(value = "getPaperWx", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "使用paper_token领取纸巾", notes = "使用paper_token领取纸巾")
+    public @ResponseBody String getPaperWx(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
-        //这里下面是对的
+        JSONObject jsonRequest = getRequestJson(request);
+        String paper_token = jsonRequest.getString("paper_token");
+        if(paper_token == null || paper_token.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         List<TpScanLog> tpScanLogs = tpScanLogService.findAlltpScanLogService();
         String data = (String) redisTemplate.opsForValue().get(paper_token);
         if(data == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "错误的场景码或者您已领取");
             return jsonObj.toString();
         }else if(data.length() == 0){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "错误的场景码2");
             return jsonObj.toString();
         }
@@ -436,7 +547,7 @@ public class DeviceController {
             if(tpScanLogs.get(i).getId() > 0 ){
                 TpScanLog tpScanLog = tpScanLogService.getStutas(tpScanLogs.get(i).getId());
                 if(tpScanLog.getStatus() == true){
-                    jsonObj.put("status", "0");
+                    jsonObj.put("status", 0);
                     jsonObj.put("msg", "错误的场景码4");
                     return jsonObj.toString();
                 }
@@ -451,21 +562,40 @@ public class DeviceController {
     /**
      * @return 机器纸巾情况上报
      */
-    @RequestMapping(value = "lack_paper", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String lack_paper(@RequestParam(required = true,defaultValue = "0") String type,
-                                           @RequestParam(required = true) String ProductKey,
-                                           @RequestParam(required = true) String DeviceName) {
+    @RequestMapping(value = "lack_paper", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "机器纸巾情况上报", notes = "机器纸巾情况上报")
+    public @ResponseBody String lack_paper(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String type = jsonRequest.getString("type");
+        String ProductKey = jsonRequest.getString("ProductKey");
+        String DeviceName = jsonRequest.getString("DeviceName");
+        if(ProductKey == null || ProductKey.equals("") || DeviceName == null || DeviceName.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject jsonObject = new JSONObject();
         JSONObject object = new JSONObject();
         TpDevice tpDevice = tpDeviceService.getDevice(ProductKey,DeviceName);
         if(tpDevice == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "机器不存在");
             return jsonObj.toString();
         }
         tpDevice.setLack_paper(Integer.parseInt(type));
+        tpDeviceService.updateType(tpDevice);
         if(type.equals("1")){
+            Map<String, String> parm =new HashMap<String, String>();
             jsonObject.put("title","缺纸消息");
             jsonObject.put("discription","当前设备缺纸，请尽快补充");
             jsonObject.put("device_sn",tpDevice.getDevice_sn());
@@ -473,38 +603,59 @@ public class DeviceController {
             jsonObject.put("address",tpDevice.getAddress());
             jsonObject.put("longitude",tpDevice.getLatitude());
             jsonObject.put("latitude",tpDevice.getLatitude());
+            parm.put("RegId", String.valueOf(tpDevice.getUser_id()));
+            parm.put("msg",jsonObject.toString());
             object.put("category",12);
             object.put("type",0);
-            //TOdo 这里应该有推送业务
+            jsonObj.put("table",object.toString());
+            jsonObj.put("msg",jsonObject);
+            JpushClientUtil.testSendPush(parm);
+            tpMessageService.save(jsonObj);
+            jsonObj.put("status", 1);
+            jsonObj.put("msg", "成功");
         }
-        tpDeviceService.updateType(tpDevice);
-        jsonObj.put("status", "1");
-        jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
     /**
      * @return 申请更换配件
      */
-    @RequestMapping(value = "replacement_parts", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String replacement_parts(@RequestParam(required = true) String device_id,
-                                                  @RequestParam(required = true) String name,
-                                                  @RequestParam(required = true) String reason,
-                                                  @RequestParam(required = true) String files,
-                                                  @RequestParam(required = true) String address){
+    @RequestMapping(value = "replacement_parts", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "申请更换配件", notes = "申请更换配件")
+    public @ResponseBody String replacement_parts(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String device_id = jsonRequest.getString("device_id");
+        String name = jsonRequest.getString("name");
+        String reason = jsonRequest.getString("reason");
+        String files = jsonRequest.getString("files");
+        String address = jsonRequest.getString("address");
+        if(device_id == null || device_id.equals("") || name == null || name.equals("") || reason == null || reason.equals("") || files == null || files.equals("") || address == null || address.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         if(device_id != null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "请选择设备");
             return jsonObj.toString();
        }
        TpDevice tpDevice = tpDeviceService.getDeviceById(device_id);
        if(tpDevice.getUser_id() == 0){
-           jsonObj.put("status", "0");
+           jsonObj.put("status", 0);
            jsonObj.put("msg", "请选择正确的设备");
            return jsonObj.toString();
        }
         tpReplacementPartsService.insertReplacement(tpDevice,name,reason,files,address);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
@@ -512,10 +663,25 @@ public class DeviceController {
          * @return 更换配件列表-v2
          */
     @RequestMapping(value = "replacement_parts_list_v2", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String replacement_parts_list_v2(@RequestParam(required = true) Integer type,
-                                                          @RequestParam(required = true) String pageNo,
-                                                          @RequestParam(required = true) String pageSize){
+    @ApiOperation(value = "更换配件列表", notes = "更换配件列表")
+    public @ResponseBody String replacement_parts_list_v2(HttpServletRequest request,
+                                                          @RequestParam(required = true)Integer type,
+                                                          @RequestParam(required = true)String pageNo,
+                                                          @RequestParam(required = true)String pageSize){
         JSONObject jsonObj = new JSONObject();
+        if(type == null || pageNo ==null || pageNo.equals("") || pageSize ==null || pageSize.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONArray jsonArray = new JSONArray();
         JSONObject data = new JSONObject();
         LimitPageList limitPageList = tpReplacementPartsService.getLimitPageList(type,pageNo,pageSize);
@@ -530,26 +696,43 @@ public class DeviceController {
         data.put("last_page", limitPageList.getPage().getTotalPageCount());
         data.put("data",jsonArray);
         jsonObj.put("result",data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
     /**
      * @return 设备进入测试环境
      */
-    @RequestMapping(value = "change_run_status", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String change_run_status(@RequestParam(required = true) String id,
-                                                  @RequestParam(required = true) String run_status){
+    @RequestMapping(value = "change_run_status", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "设备进入测试环境", notes = "设备进入测试环境")
+    public @ResponseBody String change_run_status(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String id = jsonRequest.getString("id");
+        String run_status = jsonRequest.getString("run_status");
+        if(id == null || id.equals("") || run_status==null || run_status.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         TpDevice tpDevice  = tpDeviceService.getDeviceById(id);
         if(tpDevice != null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "错误的设备");
             return jsonObj.toString();
         }
         tpDevice.setRun_status(Integer.parseInt(run_status));
         tpDeviceService.updateRunStatus(tpDevice);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
@@ -557,13 +740,28 @@ public class DeviceController {
      * @return 设备详情
      */
     @RequestMapping(value = "device_info", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String device_info(@RequestParam(required = true) String id){
+    @ApiOperation(value = "设备详情", notes = "设备详情")
+    public @ResponseBody String device_info(HttpServletRequest request,
+                                            @RequestParam(required = true) String id){
         JSONObject jsonObj = new JSONObject();
+        if(id == null || id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
         JSONObject jsonObject = new JSONObject();
         TpDevice tpDevice = tpDeviceService.getDeviceById(id);
         String online_status = "";
         if(tpDevice == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "错误的设备");
             return jsonObj.toString();
         }
@@ -592,12 +790,12 @@ public class DeviceController {
             jsonObject.put("online_time",pubResponse.getData().getGmtOnline());
             jsonObject.put("status",online_status);
             jsonObject.put("imei",tpDevice.getDevice_sn());
-            TpUsers tpUsers = tpUsersService.findOneByUserId(tpDevice.getUser_id());
-            jsonObject.put("name",tpUsers.getNickname());
+            TpUsers tpUser = tpUsersService.findOneByUserId(tpDevice.getUser_id());
+            jsonObject.put("name",tpUser.getNickname());
             jsonObject.put("region",province+cityName+district);
             jsonObject.put("paper","正常");
         jsonObj.put("result",jsonObject);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok");
         return jsonObj.toString();
     }
@@ -605,13 +803,22 @@ public class DeviceController {
      * @return 版本检测
      */
     @RequestMapping(value = "version", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "版本检测", notes = "版本检测")
     public @ResponseBody String version(HttpServletRequest request){
-        TpAppVersion tpAppVersion = tpAppVersionService.getVersion();
         JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        TpAppVersion tpAppVersion = tpAppVersionService.getVersion();
         JSONObject jsonObject =new JSONObject();
         TpAppVersion version = new TpAppVersion();
         if(tpAppVersion == null){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "没有版本");
             return jsonObj.toString();
         }
@@ -637,23 +844,50 @@ public class DeviceController {
             tpDeviceService.updateVersion(get_version,imei);
         }
         jsonObj.put("",jsonObject);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "ok");
         return jsonObj.toString();
     }
     /**
      * @return 领完纸后，等待2到3秒，查询出纸情况
      */
-    @RequestMapping(value = "queryResult", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    public @ResponseBody String queryResult(@RequestParam(required = true) String paper_token){
+    @RequestMapping(value = "queryResult", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "领完纸后，等待2到3秒，查询出纸情况", notes = "领完纸后，等待2到3秒，查询出纸情况")
+    public @ResponseBody String queryResult(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
-        String data = (String) redisTemplate.opsForValue().get("paper_token");
+        JSONObject jsonRequest = getRequestJson(request);
+        String paper_token = jsonRequest.getString("paper_token");
+        if(paper_token == null || paper_token.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        String data = (String) redisTemplate.opsForValue().get(paper_token);
+        org.json.JSONObject object = new org.json.JSONObject(data);
         if(data == null){
-            jsonObj.put("status", "1");
-            jsonObj.put("msg", "ok");
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "错误场景码");
         }else{
-            jsonObj.put("status", "1");
-            jsonObj.put("msg", "ok");
+            String status = (String) object.get("status");
+            if (status.equals("1") ){
+                jsonObj.put("status", 1);
+                jsonObj.put("msg", "ok");
+            }else if(status.equals("2")){
+                jsonObj.put("status", 2);
+                jsonObj.put("msg", "出纸失败");
+            }else if(status.equals("3")){
+                jsonObj.put("status", 3);
+                jsonObj.put("msg", "等待回调");
+            }
         }
         return jsonObj.toString();
     }

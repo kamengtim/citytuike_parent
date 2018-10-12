@@ -46,4 +46,6 @@ public interface TpOrderMapper {
     void save(TpFansOrder tpFansOrder);
 
     void updateStatus(Integer order_id);
+
+    TpOrder selectOrder(String order_id);
 }

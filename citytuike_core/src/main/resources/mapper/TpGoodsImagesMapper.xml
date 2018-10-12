@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpGoodsImagesMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpGoodsImages" >
+    <id column="img_id" property="img_id" jdbcType="INTEGER" />
+    <result column="goods_id" property="goods_id" jdbcType="INTEGER" />
+    <result column="image_url" property="image_url" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_goods_images
+    where img_id = #{img_id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpGoodsImages" >
+    insert into tp_goods_images (img_id, goods_id, image_url
+      )
+    values (#{img_id,jdbcType=INTEGER}, #{goods_id,jdbcType=INTEGER}, #{image_url,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpGoodsImages" >
+    update tp_goods_images
+    set goods_id = #{goods_id,jdbcType=INTEGER},
+      image_url = #{image_url,jdbcType=VARCHAR}
+    where img_id = #{img_id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select img_id, goods_id, image_url
+    from tp_goods_images
+    where img_id = #{img_id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select img_id, goods_id, image_url
+    from tp_goods_images
+  </select>
+  <select id="selectURL" resultMap="BaseResultMap">
+    select * from tp_goods_images where goods_id = #{goods_id} limit 1
+  </select>
+</mapper>

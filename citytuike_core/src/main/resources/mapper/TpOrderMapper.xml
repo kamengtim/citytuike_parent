@@ -345,4 +345,7 @@
 	<update id="updateStatus">
 		update tp_order set settle_status = 2 where order_id = #{order_id}
 	</update>
+	<select id="selectOrder" resultType="com.citytuike.model.TpOrder">
+		select order_sn,add_time as order_shipping_time from tp_order where order_id = #{order_id}
+	</select>
 </mapper>

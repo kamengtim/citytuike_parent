@@ -7,6 +7,10 @@
     <result column="type" property="type" jdbcType="BIT" />
     <result column="category" property="category" jdbcType="INTEGER" />
     <result column="send_time" property="send_time" jdbcType="INTEGER" />
+    <result column="send_status" property="send_status" jdbcType="TINYINT" />
+    <result column="error_msg" property="error_msg" jdbcType="VARCHAR" />
+    <result column="error_num" property="error_num" jdbcType="INTEGER" />
+    <result column="create_time" property="create_time" jdbcType="INTEGER" />
     <result column="message" property="message" jdbcType="LONGVARCHAR" />
     <result column="data" property="data" jdbcType="LONGVARCHAR" />
   </resultMap>
@@ -15,12 +19,14 @@
     where message_id = #{message_id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.citytuike.model.TpMessage" >
-    insert into tp_message (message_id, admin_id, type, 
-      category, send_time, message, 
-      data)
-    values (#{message_id,jdbcType=INTEGER}, #{admin_id,jdbcType=SMALLINT}, #{type,jdbcType=BIT}, 
-      #{category,jdbcType=INTEGER}, #{send_time,jdbcType=INTEGER}, #{message,jdbcType=LONGVARCHAR}, 
-      #{data,jdbcType=LONGVARCHAR})
+    insert into tp_message (message_id, admin_id, type,
+      category, send_time, send_status,
+      error_msg, error_num, create_time,
+      message, data)
+    values (#{message_id,jdbcType=INTEGER}, #{admin_id,jdbcType=SMALLINT}, #{type,jdbcType=BIT},
+      #{category,jdbcType=INTEGER}, #{send_time,jdbcType=INTEGER}, #{send_status,jdbcType=TINYINT},
+      #{error_msg,jdbcType=VARCHAR}, #{error_num,jdbcType=INTEGER}, #{create_time,jdbcType=INTEGER},
+      #{message,jdbcType=LONGVARCHAR}, #{data,jdbcType=LONGVARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpMessage" >
     update tp_message
@@ -70,4 +76,14 @@ SELECT m.category,m.message_id,um.status,m.send_time,m.type,m.data,m.message FRO
 										WHERE m.type = 1 AND m.category = #{category} )
                     ORDER BY send_time DESC LIMIT 1,10
   </select>
+  <insert id="save" parameterType="com.citytuike.model.TpMessage">
+    insert into tp_message (message_id, admin_id, type,
+      category, send_time, send_status,
+      error_msg, error_num, create_time,
+      message, data)
+    values (#{message_id,jdbcType=INTEGER}, #{admin_id,jdbcType=SMALLINT}, #{type,jdbcType=BIT},
+      #{category,jdbcType=INTEGER}, #{send_time,jdbcType=INTEGER}, #{send_status,jdbcType=TINYINT},
+      #{error_msg,jdbcType=VARCHAR}, #{error_num,jdbcType=INTEGER}, #{create_time,jdbcType=INTEGER},
+      #{message,jdbcType=LONGVARCHAR}, #{data,jdbcType=LONGVARCHAR})
+  </insert>
 </mapper>

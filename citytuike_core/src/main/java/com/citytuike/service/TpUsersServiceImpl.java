@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.citytuike.mapper.TpUsersMapper;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
-public class TpUsersServiceImpl implements TpUsersService {
+@Service@Transactional
+public class TpUsersServiceImpl implements TpUsersService{
 
 	@Autowired
 	private TpUsersMapper tpUsersMapper;
@@ -561,5 +563,39 @@ public class TpUsersServiceImpl implements TpUsersService {
 	public TpUsers selectToUser(String invite_code) {
 		TpUsers tpUsers = tpUsersMapper.selectToUser(invite_code);
 		return tpUsers;
+	}
+
+	@Override
+	public int updateNumber(Integer user_id, String number) {
+		int i= tpUsersMapper.updateNumber(user_id,number);
+		return i;
+	}
+
+	@Override
+	public TpUsers getToUser(Integer to_user_id) {
+		TpUsers tpUsers = tpUsersMapper.getToUser(to_user_id);
+		return tpUsers;
+	}
+
+	@Override
+	public TpUsers selectFromUser(Integer from_user_id) {
+		TpUsers fromUser = tpUsersMapper.selectFromUser(from_user_id);
+		return fromUser;
+	}
+
+	@Override
+	public void addNumber(Integer from_user_id,Integer number) {
+		tpUsersMapper.addNumber(from_user_id,number);
+	}
+
+	@Override
+	public TpUsers selectToUsers(Integer user_id) {
+		TpUsers toUsers =tpUsersMapper.selectToUsers(user_id);
+		return toUsers;
+	}
+
+	@Override
+	public void addNumberToUser(Integer user_id, Integer number) {
+		tpUsersMapper.addNumberToUser(user_id,number);
 	}
 }

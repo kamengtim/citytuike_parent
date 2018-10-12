@@ -17,4 +17,6 @@ public interface TpOrderGoodsMapper {
     int updateByPrimaryKey(TpOrderGoods record);
 
     String getGoodsUrl(@Param("order_id") Integer order_id, @Param("goods_id") Integer goods_id);
+
+    TpOrderGoods selectGoodsAndOrder(String order_id);
 }

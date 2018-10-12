@@ -147,4 +147,18 @@ public interface TpUsersMapper {
     TpUsers selectPaperCount(Integer user_id);
 
 	TpUsers selectToUser(String invite_code);
+
+    int updateNumber(@Param("user_id") Integer user_id, @Param("number") String number);
+
+    TpUsers getToUser(Integer to_user_id);
+
+    TpUsers getFriendsName(Integer from_user_id);
+
+	TpUsers selectFromUser(Integer from_user_id);
+
+	void addNumber(@Param("from_user_id") Integer from_user_id, @Param("number") Integer number);
+
+	TpUsers selectToUsers(Integer user_id);
+
+	void addNumberToUser(@Param("user_id") Integer user_id, @Param("number") Integer number);
 }

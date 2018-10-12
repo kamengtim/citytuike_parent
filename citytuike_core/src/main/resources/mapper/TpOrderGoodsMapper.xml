@@ -92,4 +92,7 @@
   <select id="getGoodsUrl" resultType="string">
     select tp.image_url from tp_order_goods t LEFT join tp_goods_images tp on t.goods_id = tp.goods_id where t.order_id = #{order_id} and t.goods_id = #{goods_id} order by tp.image_url  desc limit 1
   </select>
+  <select id="selectGoodsAndOrder" resultMap="BaseResultMap">
+    select goods_id from tp_order_goods where order_id =#{order_id}
+  </select>
 </mapper>

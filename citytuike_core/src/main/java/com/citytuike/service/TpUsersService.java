@@ -141,4 +141,16 @@ public interface TpUsersService {
     TpUsers selectPaperCount(Integer user_id);
 
 	TpUsers selectToUser(String invite_code);
+
+    int updateNumber(Integer user_id, String number);
+
+    TpUsers getToUser(Integer to_user_id);
+
+    TpUsers selectFromUser(Integer from_user_id);
+
+	void addNumber(Integer from_user_id,Integer number);
+
+	TpUsers selectToUsers(Integer user_id);
+
+	void addNumberToUser(Integer user_id, Integer number);
 }

@@ -11,6 +11,14 @@ public class TpReplacementParts implements Serializable{
 
     private String reason;
 
+    public TpDevice getTpDevice() {
+        return tpDevice;
+    }
+
+    public void setTpDevice(TpDevice tpDevice) {
+        this.tpDevice = tpDevice;
+    }
+
     private Integer add_time;
 
     private Integer device_id;
@@ -44,6 +52,8 @@ public class TpReplacementParts implements Serializable{
     private String files;
 
     private String shipping_files;
+
+    private TpDevice tpDevice;
 
     public Integer getId() {
         return id;

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpPaperTransferMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpPaperTransfer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="from_user_id" property="from_user_id" jdbcType="INTEGER" />
+    <result column="to_user_id" property="to_user_id" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="DECIMAL" />
+    <result column="all_money" property="all_money" jdbcType="DECIMAL" />
+    <result column="add_time" property="add_time" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="from_before_number" property="from_before_number" jdbcType="INTEGER" />
+    <result column="from_after_number" property="from_after_number" jdbcType="INTEGER" />
+    <result column="to_before_number" property="to_before_number" jdbcType="INTEGER" />
+    <result column="to_after_number" property="to_after_number" jdbcType="INTEGER" />
+    <result column="refuse_before_number" property="refuse_before_number" jdbcType="INTEGER" />
+    <result column="refuse_after_number" property="refuse_after_number" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="operate_time" property="operate_time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_paper_transfer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpPaperTransfer" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_paper_transfer (from_user_id, to_user_id, number, 
+      money, all_money, add_time, 
+      status, from_before_number, from_after_number, 
+      to_before_number, to_after_number, refuse_before_number, 
+      refuse_after_number, remark, operate_time
+      )
+    values (#{from_user_id,jdbcType=INTEGER}, #{to_user_id,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, 
+      #{money,jdbcType=DECIMAL}, #{all_money,jdbcType=DECIMAL}, #{add_time,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{from_before_number,jdbcType=INTEGER}, #{from_after_number,jdbcType=INTEGER}, 
+      #{to_before_number,jdbcType=INTEGER}, #{to_after_number,jdbcType=INTEGER}, #{refuse_before_number,jdbcType=INTEGER}, 
+      #{refuse_after_number,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{operate_time,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpPaperTransfer" >
+    update tp_paper_transfer
+    set from_user_id = #{from_user_id,jdbcType=INTEGER},
+      to_user_id = #{to_user_id,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      money = #{money,jdbcType=DECIMAL},
+      all_money = #{all_money,jdbcType=DECIMAL},
+      add_time = #{add_time,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=TINYINT},
+      from_before_number = #{from_before_number,jdbcType=INTEGER},
+      from_after_number = #{from_after_number,jdbcType=INTEGER},
+      to_before_number = #{to_before_number,jdbcType=INTEGER},
+      to_after_number = #{to_after_number,jdbcType=INTEGER},
+      refuse_before_number = #{refuse_before_number,jdbcType=INTEGER},
+      refuse_after_number = #{refuse_after_number,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      operate_time = #{operate_time,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, from_user_id, to_user_id, number, money, all_money, add_time, status,
+    from_before_number, from_after_number, to_before_number, to_after_number, refuse_before_number,
+    refuse_after_number, remark, operate_time
+    from tp_paper_transfer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, from_user_id, to_user_id, number, money, all_money, add_time, status,
+    from_before_number, from_after_number, to_before_number, to_after_number, refuse_before_number,
+    refuse_after_number, remark, operate_time
+    from tp_paper_transfer where to_user_id = #{user_id} and status = 1
+  </select>
+  <insert id="save" parameterType="com.citytuike.model.TpPaperTransfer" useGeneratedKeys="true" keyProperty="id">
+    insert into tp_paper_transfer (from_user_id, to_user_id, number,
+      money, all_money, add_time,
+      status, from_before_number, from_after_number,
+      to_before_number, to_after_number, refuse_before_number,
+      refuse_after_number, remark, operate_time
+      )
+    values (#{from_user_id,jdbcType=INTEGER}, #{to_user_id,jdbcType=INTEGER}, #{number,jdbcType=INTEGER},
+      #{money,jdbcType=DECIMAL}, #{all_money,jdbcType=DECIMAL}, now(),
+      #{status,jdbcType=TINYINT}, #{from_before_number,jdbcType=INTEGER}, #{from_after_number,jdbcType=INTEGER},
+      #{to_before_number,jdbcType=INTEGER}, #{to_after_number,jdbcType=INTEGER}, #{refuse_before_number,jdbcType=INTEGER},
+      #{refuse_after_number,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, now()
+      )
+  </insert>
+  <select id="selectList" resultMap="BaseResultMap">
+    select * from tp_paper_transfer where status = #{bigStatus} and (from_user_id = #{user_id} or to_user_id = #{user_id})
+  </select>
+  <select id="selectArr" resultMap="BaseResultMap">
+    select * from tp_paper_transfer where id = #{id}
+  </select>
+  <select id="selectToUser" resultMap="BaseResultMap">
+    select * from tp_paper_transfer where to_user_id = #{user_id} and id = #{log_id}
+  </select>
+  <update id="updateStatus">
+    update tp_paper_transfer
+    set
+      status = 3,
+      refuse_before_number = #{paper_number_allowance,jdbcType=INTEGER},
+      refuse_after_number = #{paper_number_allowance,jdbcType=INTEGER} - #{number},
+      operate_time = now()
+    where id = #{log_id,jdbcType=INTEGER} and from_user_id = #{from_user_id}
+  </update>
+    <update id="addPaper">
+      update tp_paper_transfer
+    set
+      status = #{status},
+      to_before_number = #{paper_number_allowance,jdbcType=INTEGER},
+      to_after_number = #{paper_number_allowance,jdbcType=INTEGER} + #{number},
+      operate_time = now()
+    where id = #{log_id,jdbcType=INTEGER} and from_user_id = #{toUser}
+    </update>
+</mapper>

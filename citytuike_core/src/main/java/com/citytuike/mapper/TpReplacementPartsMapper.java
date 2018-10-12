@@ -1,5 +1,6 @@
 package com.citytuike.mapper;
 
+import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.TpReplacementParts;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,5 +22,5 @@ public interface TpReplacementPartsMapper {
 
     int getCount(@Param("status") Integer status);
 
-    List<TpReplacementParts> selectByPage(@Param("i") int i, @Param("i1") int i1, @Param("status") Integer status);
+    List<JSONObject> selectByPage(@Param("i") int i, @Param("i1") int i1, @Param("status") Integer status);
 }

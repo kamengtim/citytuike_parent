@@ -16,5 +16,5 @@ public interface TpFansSaleMapper {
 
     int updateByPrimaryKey(TpFansSale record);
 
-    void save(TpFansSale tpFansSale);
+    int save(TpFansSale tpFansSale);
 }

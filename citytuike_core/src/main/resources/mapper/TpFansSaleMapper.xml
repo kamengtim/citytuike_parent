@@ -1,54 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.citytuike.mapper.TpFansSaleMapper" >
-  <resultMap id="BaseResultMap" type="com.citytuike.model.TpFansSale" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="industry" property="industry" jdbcType="VARCHAR" />
-    <result column="createtime" property="createtime" jdbcType="INTEGER" />
-    <result column="account" property="account" jdbcType="VARCHAR" />
-    <result column="mobile" property="mobile" jdbcType="CHAR" />
-    <result column="wechat" property="wechat" jdbcType="VARCHAR" />
-    <result column="verify" property="verify" jdbcType="BIT" />
-    <result column="user_id" property="user_id" jdbcType="INTEGER" />
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpFansSale">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="user_id" />
+    <result column="sel_class" jdbcType="BIT" property="sel_class" />
+    <result column="tag" jdbcType="BIT" property="tag" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="fan_num" jdbcType="VARCHAR" property="fan_num" />
+    <result column="fan_dev" jdbcType="VARCHAR" property="fan_dev" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="address" jdbcType="INTEGER" property="address" />
+    <result column="catename" jdbcType="VARCHAR" property="catename" />
+    <result column="auth" jdbcType="BIT" property="auth" />
+    <result column="auth_body" jdbcType="VARCHAR" property="auth_body" />
+    <result column="original" jdbcType="BIT" property="original" />
+    <result column="read_num" jdbcType="VARCHAR" property="read_num" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="type" jdbcType="BIT" property="type" />
+    <result column="scale_man" jdbcType="VARCHAR" property="scale_man" />
+    <result column="scale_women" jdbcType="VARCHAR" property="scale_women" />
+    <result column="liu" jdbcType="BIT" property="liu" />
+    <result column="auth_bodys" jdbcType="BIT" property="auth_bodys" />
+    <result column="auth_body_change" jdbcType="BIT" property="auth_body_change" />
+    <result column="used_existx" jdbcType="BIT" property="used_existx" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="mon_money" jdbcType="DECIMAL" property="mon_money" />
+    <result column="ad_money" jdbcType="DECIMAL" property="ad_money" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
+    <result column="created_at" jdbcType="TIMESTAMP" property="created_at" />
+    <result column="updated_at" jdbcType="TIMESTAMP" property="updated_at" />
   </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tp_fans_sale
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.citytuike.model.TpFansSale" useGeneratedKeys="true" keyProperty="id" >
-    insert into tp_fans_sale (industry, createtime, account, 
-      mobile, wechat, verify, user_id
-      )
-    values (#{industry,jdbcType=VARCHAR}, #{createtime,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, 
-      #{mobile,jdbcType=CHAR}, #{wechat,jdbcType=VARCHAR}, #{verify,jdbcType=BIT}, #{user_id,jdbcType=INTEGER}
-      )
+  <insert id="insert" keyProperty="id" parameterType="com.citytuike.model.TpFansSale" useGeneratedKeys="true">
+    insert into tp_fans_sale (user_id, sel_class, tag,
+    logo, title, fan_num,
+    fan_dev, price, address,
+    catename, auth, auth_body,
+    original, read_num, industry,
+    type, scale_man, scale_women,
+    liu, auth_bodys, auth_body_change,
+    used_existx, account, mon_money,
+    ad_money, mobile, wechat,
+    created_at, updated_at)
+    values (#{user_id,jdbcType=INTEGER}, #{sel_class,jdbcType=BIT}, #{tag,jdbcType=BIT},
+    #{logo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{fan_num,jdbcType=VARCHAR},
+    #{fan_dev,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{address,jdbcType=INTEGER},
+    #{catename,jdbcType=VARCHAR}, #{auth,jdbcType=BIT}, #{auth_body,jdbcType=VARCHAR},
+    #{original,jdbcType=BIT}, #{read_num,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR},
+    #{type,jdbcType=BIT}, #{scale_man,jdbcType=VARCHAR}, #{scale_women,jdbcType=VARCHAR},
+    #{liu,jdbcType=BIT}, #{auth_bodys,jdbcType=BIT}, #{auth_body_change,jdbcType=BIT},
+    #{used_existx,jdbcType=BIT}, #{account,jdbcType=VARCHAR}, #{mon_money,jdbcType=DECIMAL},
+    #{ad_money,jdbcType=DECIMAL}, #{mobile,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR},
+    #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpFansSale" >
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpFansSale">
     update tp_fans_sale
-    set industry = #{industry,jdbcType=VARCHAR},
-      createtime = #{createtime,jdbcType=INTEGER},
-      account = #{account,jdbcType=VARCHAR},
-      mobile = #{mobile,jdbcType=CHAR},
-      wechat = #{wechat,jdbcType=VARCHAR},
-      verify = #{verify,jdbcType=BIT},
-      user_id = #{user_id,jdbcType=INTEGER}
+    set user_id = #{user_id,jdbcType=INTEGER},
+    sel_class = #{sel_class,jdbcType=BIT},
+    tag = #{tag,jdbcType=BIT},
+    logo = #{logo,jdbcType=VARCHAR},
+    title = #{title,jdbcType=VARCHAR},
+    fan_num = #{fan_num,jdbcType=VARCHAR},
+    fan_dev = #{fan_dev,jdbcType=VARCHAR},
+    price = #{price,jdbcType=DECIMAL},
+    address = #{address,jdbcType=INTEGER},
+    catename = #{catename,jdbcType=VARCHAR},
+    auth = #{auth,jdbcType=BIT},
+    auth_body = #{auth_body,jdbcType=VARCHAR},
+    original = #{original,jdbcType=BIT},
+    read_num = #{read_num,jdbcType=VARCHAR},
+    industry = #{industry,jdbcType=VARCHAR},
+    type = #{type,jdbcType=BIT},
+    scale_man = #{scale_man,jdbcType=VARCHAR},
+    scale_women = #{scale_women,jdbcType=VARCHAR},
+    liu = #{liu,jdbcType=BIT},
+    auth_bodys = #{auth_bodys,jdbcType=BIT},
+    auth_body_change = #{auth_body_change,jdbcType=BIT},
+    used_existx = #{used_existx,jdbcType=BIT},
+    account = #{account,jdbcType=VARCHAR},
+    mon_money = #{mon_money,jdbcType=DECIMAL},
+    ad_money = #{ad_money,jdbcType=DECIMAL},
+    mobile = #{mobile,jdbcType=VARCHAR},
+    wechat = #{wechat,jdbcType=VARCHAR},
+    created_at = #{created_at,jdbcType=TIMESTAMP},
+    updated_at = #{updated_at,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, industry, createtime, account, mobile, wechat, verify, user_id
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, user_id, sel_class, tag, logo, title, fan_num, fan_dev, price, address,
+    catename, auth, auth_body, original, read_num, industry, type, scale_man, scale_women,
+    liu, auth_bodys, auth_body_change, used_existx, account, mon_money, ad_money, mobile,
+    wechat, created_at, updated_at
     from tp_fans_sale
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap" >
-    select id, industry, createtime, account, mobile, wechat, verify, user_id
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_id, sel_class, tag, logo, title, fan_num, fan_dev, price, address,
+    catename, auth, auth_body, original, read_num, industry, type, scale_man, scale_women,
+    liu, auth_bodys, auth_body_change, used_existx, account, mon_money, ad_money, mobile,
+    wechat, created_at, updated_at
     from tp_fans_sale
   </select>
   <insert id="save" parameterType="com.citytuike.model.TpFansSale" useGeneratedKeys="true" keyProperty="id">
-    insert into tp_fans_sale (industry, createtime, account,
-      mobile, wechat, verify, user_id
-      )
-    values (#{industry,jdbcType=NUMERIC}, #{createtime,jdbcType=NUMERIC}, #{account,jdbcType=NUMERIC},
-      #{mobile,jdbcType=NUMERIC}, #{wechat,jdbcType=NUMERIC}, 0, #{user_id,jdbcType=NUMERIC}
-      )
+    insert into tp_fans_sale (user_id, sel_class, tag,
+    logo, title, fan_num,
+    fan_dev, price, address,
+    catename, auth, auth_body,
+    original, read_num, industry,
+    type, scale_man, scale_women,
+    liu, auth_bodys, auth_body_change,
+    used_existx, account, mon_money,
+    ad_money, mobile, wechat,
+    created_at, updated_at)
+    values (#{user_id,jdbcType=INTEGER}, #{sel_class,jdbcType=BIT}, #{tag,jdbcType=BIT},
+    #{logo,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{fan_num,jdbcType=VARCHAR},
+    #{fan_dev,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{address,jdbcType=INTEGER},
+    #{catename,jdbcType=VARCHAR}, #{auth,jdbcType=BIT}, #{auth_body,jdbcType=VARCHAR},
+    #{original,jdbcType=BIT}, #{read_num,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR},
+    #{type,jdbcType=BIT}, #{scale_man,jdbcType=VARCHAR}, #{scale_women,jdbcType=VARCHAR},
+    #{liu,jdbcType=BIT}, #{auth_bodys,jdbcType=BIT}, #{auth_body_change,jdbcType=BIT},
+    #{used_existx,jdbcType=BIT}, #{account,jdbcType=VARCHAR}, #{mon_money,jdbcType=DECIMAL},
+    #{ad_money,jdbcType=DECIMAL}, #{mobile,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR},
+    #{created_at,jdbcType=TIMESTAMP}, #{updated_at,jdbcType=TIMESTAMP})
   </insert>
 </mapper>

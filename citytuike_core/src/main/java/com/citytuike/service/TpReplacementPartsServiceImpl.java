@@ -1,9 +1,7 @@
 package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.mapper.TpGoodsMapper;
-import com.citytuike.mapper.TpOrderGoodsMapper;
-import com.citytuike.mapper.TpReplacementPartsMapper;
+import com.citytuike.mapper.*;
 import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,12 @@ public class TpReplacementPartsServiceImpl implements TpReplacementPartsService 
     private ITpDeviceService tpDeviceService;
     @Autowired
     private TpOrderGoodsMapper tpOrderGoodsMapper;
+    @Autowired
+    private TpOrderMapper tpOrderMapper;
+    @Autowired
+    private TpGoodsMapper tpGoodsMapper;
+    @Autowired
+    private TpGoodsImagesMapper tpGoodsImagesMapper;
 
     @Override
     public void insertReplacement(TpDevice tpDevice, String name, String reason, String files, String address) {
@@ -41,7 +45,7 @@ public class TpReplacementPartsServiceImpl implements TpReplacementPartsService 
     public LimitPageList getLimitPageList(Integer type, String pageNo, String pageSize) {
         LimitPageList LimitPageStuList = new LimitPageList();
         int count = tpReplacementPartsMapper.getCount(type);
-        List<TpReplacementParts> stuList=new ArrayList<TpReplacementParts>();
+        List<JSONObject> stuList=new ArrayList<JSONObject>();
         Page page=null;
         if(pageNo != null){
             page=new Page(count, Integer.parseInt(pageNo));
@@ -82,17 +86,20 @@ public class TpReplacementPartsServiceImpl implements TpReplacementPartsService 
         jsonObject.put("refute_time",tpReplacementPart.getRefute_time());
         jsonObject.put("refute_imgs",tpReplacementPart.getRefute_imgs());
         jsonObject.put("confirm_time",tpReplacementPart.getConfirm_time());
-        TpDevice tpDevice = tpDeviceService.getDeviceById(String.valueOf(tpReplacementPart.getDevice_id()));
-        String url = tpOrderGoodsMapper.getGoodsUrl(tpDevice.getOrder_id(),tpDevice.getGoods_id());
-        jsonObject.put("shop_img",url);
-        jsonObject.put("order_id",tpDevice.getOrder_id());
-        jsonObject.put("device_name",tpDevice.getDevice_name());
+        TpOrder tpOrder = tpOrderMapper.selectOrder(String.valueOf(tpReplacementPart.getTpDevice().getOrder_id()));
+        TpOrderGoods tpOrderGoods = tpOrderGoodsMapper.selectGoodsAndOrder(String.valueOf(tpReplacementPart.getTpDevice().getOrder_id()));
+        TpGoodsImages tpGoodsImages = tpGoodsImagesMapper.selectURL(tpOrderGoods.getGoods_id());
+        //TpDevice tpDevice = tpDeviceService.getDeviceById((String)tpReplacementPart.get("order_id"));
+        //String url = tpOrderGoodsMapper.getGoodsUrl(tpDevice.getOrder_id(),tpDevice.getGoods_id());
+        jsonObject.put("shop_img",tpGoodsImages.getImage_url()==null?"":tpGoodsImages.getImage_url());
+        jsonObject.put("order_id",tpOrder.getOrder_id());
+        jsonObject.put("device_name",tpReplacementPart.getTpDevice().getDevice_name());
         if(type == 1){
             jsonObject.put("status_str",tpReplacementPart.getInspect_status());
         }else if(type == 0){
             jsonObject.put("status_str","申请中");
         }else{
-            jsonObject.put("status_str",tpReplacementPart.getStatus());
+            jsonObject.put("status_str",tpReplacementPart.getInspect_status());
         }
         return jsonObject;
     }

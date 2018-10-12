@@ -9,11 +9,14 @@ import com.citytuike.model.Page;
 import com.citytuike.model.TpMessage;
 import com.citytuike.model.TpUserMessage;
 import com.sun.org.apache.bcel.internal.generic.NEW;
+import de.ailis.pherialize.Pherialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service@Transactional
@@ -60,5 +63,25 @@ public class TpMessageServiceImpl implements TpMessageService {
         jsonObject.put("status",tpUserMessage.getStatus());
         }
         return jsonObject;
+    }
+
+    @Override
+    public void save(JSONObject jsonObj) {
+        TpMessage tpMessage = new TpMessage();
+        tpMessage.setAdmin_id(Short.valueOf("0"));
+        JSONObject table = (JSONObject) jsonObj.get("table");
+        String category = table.getString("category");
+        tpMessage.setCategory(Integer.valueOf(category));
+        tpMessage.setType(false);
+        JSONObject msg = (JSONObject) jsonObj.get("msg");
+        tpMessage.setMessage(msg.get("discription").toString());
+        tpMessage.setSend_time((int)(new Date().getTime()/1000));
+        String serialize = Pherialize.serialize(msg);
+        tpMessage.setData(serialize);
+        tpMessage.setSend_status(Byte.valueOf("0"));
+        tpMessage.setError_msg("0");
+        tpMessage.setError_num(0);
+        tpMessage.setCreate_time((int)(new Date().getTime()/1000));
+        tpMessageMapper.save(tpMessage);
     }
 }

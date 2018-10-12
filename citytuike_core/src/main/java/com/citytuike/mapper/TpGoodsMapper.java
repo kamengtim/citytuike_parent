@@ -37,4 +37,5 @@ public interface TpGoodsMapper {
     TpGoods getGoodsById(Integer id);
 
     TpGoods selectPrice();
+
 }
