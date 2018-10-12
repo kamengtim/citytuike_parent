@@ -7,6 +7,8 @@ import com.citytuike.model.*;
 import com.citytuike.service.TpGoodsService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.Util;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,7 @@ public class GoodsController extends BaseController{
 	 * 商品列表
 	 */
 	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	@ApiOperation(value = "商品列表", notes = "商品列表")
 	public @ResponseBody String ajaxGoodsList(HttpServletRequest request){
 
@@ -42,6 +45,11 @@ public class GoodsController extends BaseController{
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
+		if (null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		Integer id = jsonO.getInteger("id");
 		Integer page = jsonO.getInteger("page");
 		if (null == id || "".equals(id) || null == page || "".equals(page)){
@@ -89,11 +97,17 @@ public class GoodsController extends BaseController{
 	 */
 	@RequestMapping(value="/collect_goods",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "收藏商品", notes = "收藏商品")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String collectGoods(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		Integer goods_id = jsonO.getInteger("goods_id");
 		if (null == goods_id || "".equals(goods_id)){
 			jsonObj.put("status", "0");
@@ -131,7 +145,6 @@ public class GoodsController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObj2 = new JSONObject();
 		JSONArray data = new JSONArray();
-		
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);

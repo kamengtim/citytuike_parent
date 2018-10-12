@@ -7,6 +7,8 @@ import com.citytuike.service.BusinessService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.GeoHashUtil;
 import com.citytuike.util.Util;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,40 +30,45 @@ public class BusinessController extends BaseController{
     private BusinessService businessService;
 
     /**
-     * @param business_type
-     * @param business_name
-     * @param cus_nums
-     * @param business_start_time
-     * @param business_end_time
-     * @param name
-     * @param mobile
-     * @param location_area
-     * @param address
-     * @param xpoint
-     * @param ypoint
-     * @param image
      * @return
      * 添加商家
      */
     @RequestMapping(value="/businessUp",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "添加商家", notes = "添加商家")
-    public @ResponseBody String businessUp(HttpServletRequest request,
-                                           @RequestParam(required=true) int business_type,
-                                           @RequestParam(required=true) String business_name,
-                                           @RequestParam(required=true) float cus_nums,
-                                           @RequestParam(required=true) String business_start_time,
-                                           @RequestParam(required=true) String business_end_time,
-                                           @RequestParam(required=true) String name,
-                                           @RequestParam(required=true) String mobile,
-                                           @RequestParam(required=true) String location_area,
-                                           @RequestParam(required=true) String address,
-                                           @RequestParam(required=true) String xpoint,
-                                           @RequestParam(required=true) String ypoint,
-                                           @RequestParam(required=true) String[] image) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String businessUp(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if (null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer business_type = jsonO.getInteger("business_type");
+        String business_name = jsonO.getString("business_name");
+        float cus_nums = jsonO.getFloat("cus_nums");
+        String business_start_time = jsonO.getString("business_start_time");
+        String business_end_time = jsonO.getString("business_end_time");
+        String name = jsonO.getString("name");
+        String mobile = jsonO.getString("mobile");
+        String location_area = jsonO.getString("location_area");
+        String address = jsonO.getString("address");
+        String xpoint = jsonO.getString("xpoint");
+        String ypoint = jsonO.getString("ypoint");
+        String images = jsonO.getString("image");
+        if (null == business_type || "".equals(business_type) || null == business_name || "".equals(business_name)
+                || cus_nums > 0.00 || "".equals(cus_nums) || null == business_start_time || "".equals(business_start_time)
+                || null == business_end_time || "".equals(business_end_time) || null == name || "".equals(name)
+                || null == mobile || "".equals(mobile) || null == location_area || "".equals(location_area)
+                || null == address || "".equals(address) || null == xpoint || "".equals(xpoint)
+                || null == ypoint || "".equals(ypoint) || null == images || "".equals(images)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -90,6 +97,8 @@ public class BusinessController extends BaseController{
         tpBusinessShare.setUserId(tpUsers.getUser_id());
         int result = businessService.insertBusinessShare(tpBusinessShare);
         if (result > 0){
+            //TODO image
+            String[] image = null;
             for (int i = 0; i< image.length; i++){
                 TpBusinessImages tpBusinessImages = new TpBusinessImages();
                 tpBusinessImages.setBusinessId(tpBusinessShare.getId());
@@ -142,24 +151,33 @@ public class BusinessController extends BaseController{
     }
 
     /**
-     * @param business_id  	商家id
-     * @param stars 1星2星....
-     * @param message 内容
-     * @param tag  	逗号分割传id
      * @return
      * 评论
      */
     @RequestMapping(value="/businessEva",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "评论", notes = "评论")
-    public @ResponseBody String businessEva(HttpServletRequest request,
-                                            @RequestParam(required=true) int business_id,
-                                            @RequestParam(required=true) int stars,
-                                            @RequestParam(required=true) String message,
-                                            @RequestParam(required=true) String tag) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String businessEva(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if (null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer business_id = jsonO.getInteger("business_id");
+        Integer stars = jsonO.getInteger("stars");
+        String message = jsonO.getString("message");
+        String tag = jsonO.getString("tag");
+        if (null == business_id || "".equals(business_id) || null == stars || "".equals(stars)
+            || null == message || "".equals(message) || null == tag || "".equals(tag)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -329,7 +347,7 @@ public class BusinessController extends BaseController{
      * @return
      * 支付返回订单
      */
-    @RequestMapping(value="/paymentBusiness",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/paymentBusiness",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "支付返回订单", notes = "支付返回订单")
     public @ResponseBody String paymentBusiness(HttpServletRequest request,
                                             @RequestParam(required=true) int id) {
@@ -386,7 +404,7 @@ public class BusinessController extends BaseController{
      * @return
      * 制作现金券
      */
-    @RequestMapping(value="/setBusinessCash",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/setBusinessCash",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "制作现金券", notes = "制作现金券")
     public @ResponseBody String setBusinessCash(HttpServletRequest request,
                                                 @RequestParam(required=true) String skin,
@@ -629,7 +647,7 @@ public class BusinessController extends BaseController{
      * @return
      * 申请解冻
      */
-    @RequestMapping(value="/cashThaw",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/cashThaw",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "申请解冻", notes = "申请解冻")
     public @ResponseBody String cashThaw(HttpServletRequest request,
                                                @RequestParam(required=true) int cash_id,
@@ -786,5 +804,8 @@ public class BusinessController extends BaseController{
         }
         return jsonObj.toString();
     }
+    //TODO 商家资金冻结详细
+    //TODO 制作折扣图
+    //TODO 折扣图列表
 }
 

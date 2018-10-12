@@ -10,6 +10,8 @@ import com.citytuike.service.FriendService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.PingYinUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,21 +36,31 @@ public class FriendController extends BaseController{
     private FriendService friendService;
 
     /**
-     * @param model
-     * @param token
      * @return
      * 好友申请
      */
     @RequestMapping(value="/apply",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "好友申请", notes = "好友申请")
-    public @ResponseBody String apply(HttpServletRequest request,
-                                      @RequestParam(required=true) Integer friend_uid,
-                                      @RequestParam(required=true) String msg) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String apply(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer friend_uid = jsonO.getInteger("friend_uid");
+        String msg = jsonO.getString("msg");
+        if (null == friend_uid || "".equals(friend_uid)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -83,16 +95,28 @@ public class FriendController extends BaseController{
         }
         return jsonObj.toString();
     }
-    @RequestMapping(value="/myHandleApplies",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/myHandleApplies",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "我的申请处理列表", notes = "我的申请处理列表")
-    public @ResponseBody String myHandleApplies(HttpServletRequest request,
-                                        @RequestParam(required=true) Integer p,
-                                        @RequestParam(required=true) Integer size) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String myHandleApplies(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer p = jsonO.getInteger("p");
+        Integer size = jsonO.getInteger("size");
+        if (null == p || "".equals(p)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -123,19 +147,30 @@ public class FriendController extends BaseController{
     }
 
     /**
-     * @param id
      * @return
      * 通过好友申请
      */
     @RequestMapping(value="/accept",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "通过好友申请", notes = "通过好友申请")
-    public @ResponseBody String accept(HttpServletRequest request,
-                                      @RequestParam(required=true) Integer id) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String accept(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "操作失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer id = jsonO.getInteger("id");
+        if (null == id || "".equals(id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -179,13 +214,25 @@ public class FriendController extends BaseController{
     }
     @RequestMapping(value="/refuse",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "拒绝好友申请", notes = "拒绝好友申请")
-    public @ResponseBody String refuse(HttpServletRequest request,
-                                      @RequestParam(required=true) Integer id) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String refuse(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "操作失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer id = jsonO.getInteger("id");
+        if (null == id || "".equals(id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -209,18 +256,29 @@ public class FriendController extends BaseController{
         }
         return jsonObj.toString();
     }
-    @RequestMapping(value="/myFriends",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/myFriends",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "我的好友接口", notes = "我的好友接口")
-    public @ResponseBody String myFriends(HttpServletRequest request,
-                                                @RequestParam(required=false) String keyword,
-                                                @RequestParam(required=true) Integer p,
-                                                @RequestParam(required=true) Integer size) {
-        System.out.println("线程12:" + Thread.currentThread().getName() +"线程12ID:" + Thread.currentThread().getId());
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String myFriends(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         JSONArray data1 = new JSONArray();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer p = jsonO.getInteger("p");
+        Integer size = jsonO.getInteger("size");
+        String keyword = jsonO.getString("keyword");
+        if (null == p || "".equals(p)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");

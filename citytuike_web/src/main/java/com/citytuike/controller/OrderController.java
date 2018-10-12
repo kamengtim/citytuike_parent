@@ -9,6 +9,8 @@ import com.citytuike.model.TpOrderAction;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpOrderService;
 import com.citytuike.service.TpUsersService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,21 +31,31 @@ public class OrderController extends BaseController{
 	@Autowired
 	private TpUsersService tpUsersService;
 	/**
-	 * @param type
-	 * @param p
 	 * @return
 	 * 订单列表
 	 */
-	@RequestMapping(value="/order_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/order_list",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "订单列表", notes = "订单列表")
-	public @ResponseBody String orderList(HttpServletRequest request,
-										  @RequestParam(required=true) String type,
-										  @RequestParam(required=true, defaultValue="1") Integer p){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String orderList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String type = jsonO.getString("type");
+		Integer p = jsonO.getInteger("p");
+		if (null == type || "".equals(type) || null == p || "".equals(p)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -99,20 +111,30 @@ public class OrderController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param id
-	 * @param orderSn
 	 * @return
 	 * 订单详情
 	 */
-	@RequestMapping(value="/order_detail",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/order_detail",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "订单详情", notes = "订单详情")
-	public @ResponseBody String orderDetail(HttpServletRequest request,
-			@RequestParam(required=true) String id,
-			@RequestParam(required=false) String orderSn){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String orderDetail(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String id = jsonO.getString("id");
+		String orderSn = jsonO.getString("orderSn");
+		if (null == id || "".equals(id) || null == orderSn || "".equals(orderSn)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -135,11 +157,23 @@ public class OrderController extends BaseController{
 	 */
 	@RequestMapping(value="/record_refund_order",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "申请取消订单", notes = "申请取消订单")
-	public @ResponseBody String recordRefundOrder(HttpServletRequest request,
-			@RequestParam(required=true) String order_id){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String recordRefundOrder(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String order_id = jsonO.getString("order_id");
+		if (null == order_id || "".equals(order_id)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -163,17 +197,28 @@ public class OrderController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param id
 	 * @return
 	 * 确认收货
 	 */
 	@RequestMapping(value="/order_confirm",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "确认收货", notes = "确认收货")
-	public @ResponseBody String orderConfirm(HttpServletRequest request,
-			@RequestParam(required=true) String id){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String orderConfirm(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String id = jsonO.getString("id");
+		if (null == id || "".equals(id)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -197,25 +242,34 @@ public class OrderController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param order_id
-	 * @param province
-	 * @param city
-	 * @param district
-	 * @param address
 	 * @return
 	 * 修改订单收货地址
 	 */
 	@RequestMapping(value="/edit_order_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "修改订单收货地址", notes = "修改订单收货地址")
-	public @ResponseBody String editOrderAddress(HttpServletRequest request,
-			@RequestParam(required=true) String order_id,
-			@RequestParam(required=true) String province,
-			@RequestParam(required=true) String city,
-			@RequestParam(required=true) String district,
-			@RequestParam(required=true) String address){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String editOrderAddress(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String order_id = jsonO.getString("order_id");
+		String province = jsonO.getString("province");
+		String city = jsonO.getString("city");
+		String district = jsonO.getString("district");
+		String address = jsonO.getString("address");
+		if (null == order_id || "".equals(order_id) || null == province || "".equals(province)
+				|| null == city || "".equals(city) || null == district || "".equals(district)
+				|| null == address || "".equals(address)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -238,5 +292,17 @@ public class OrderController extends BaseController{
 		}
 		return jsonObj.toString();
 	}
-	
+	//TODO  3. 申请退货
+	//TODO  4. 物流信息
+	//TODO  9. 退换货列表
+	//TODO  10. 退货详情
+	//TODO  11. 修改退货状态，发货
+	//TODO  12. 退款完成
+	//TODO  13. 取消售后服务
+	//TODO  14. 换货商品确认收货
+	//TODO  15. 待收货列表
+	//TODO  16. 补运费下单
+	//TODO  18. 纸巾部分确认收货
+	//TODO  19. 撤销取消订单
+
 }

@@ -108,6 +108,10 @@ public class ChatController extends BaseController{
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
+    //TODO 环信聊天token
+    //TODO 加入\退出群
+    //TODO 用户群列表
+    //TODO 群聊天记录
 
 
 }

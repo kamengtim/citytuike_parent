@@ -27,6 +27,8 @@ import com.yeepay.g3.sdk.yop.encrypt.CertTypeEnum;
 import com.yeepay.g3.sdk.yop.encrypt.DigitalEnvelopeDTO;
 import com.yeepay.g3.sdk.yop.utils.DigitalEnvelopeUtils;
 import com.yeepay.g3.sdk.yop.utils.InternalConfig;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -176,16 +178,28 @@ public class PayController extends BaseController{
         }
     }
 
-    @RequestMapping(value="/getCode",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/getCode",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "支付签名", notes = "支付签名")
-    public @ResponseBody String yopTaketoken(HttpServletResponse resp, HttpServletRequest request,
-                                             @RequestParam(required=true) String order_sn,
-                                             @RequestParam(required=false) String openid,
-                                             @RequestParam(required=true) String pay_code) throws IOException {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String yopTaketoken(HttpServletResponse resp, HttpServletRequest request) throws IOException {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String order_sn = jsonO.getString("order_sn");
+        String pay_code = jsonO.getString("pay_code");
+        String openid = jsonO.getString("openid");
+        if (null == order_sn || "".equals(order_sn) || null == pay_code || "".equals(pay_code)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");

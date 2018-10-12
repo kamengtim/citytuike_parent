@@ -10,6 +10,8 @@ import com.citytuike.util.MD5Utils;
 import com.citytuike.util.Util;
 import com.citytuike.util.mobileCheck;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -48,6 +50,7 @@ public class UserController extends BaseController{
 	private SendMessageService sendMessageService;
 	@Autowired
 	private TpOrderService tpOrderService;
+	@Autowired
     private TpReportListService  tpReportListService;
 	@Autowired
 	private ITpDeviceService tpDeviceService;
@@ -72,20 +75,32 @@ public class UserController extends BaseController{
 	@Autowired
 	private TpFestivalsCateService tpFestivalsCateService;
 	/**
-	 * @param username
-	 * @param password
 	 * @return
 	 * 登陆
 	 */
 	@RequestMapping(value="/do_login",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "登陆", notes = "登陆")
-	public @ResponseBody String doLogin(HttpServletRequest request, @RequestParam(required=true) String username,
-										@RequestParam(required=true) String password){
-		String pwd = MD5Utils.md5("TPSHOP" + password);
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String doLogin(HttpServletRequest request){
+
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String username = jsonO.getString("username");
+        String password = jsonO.getString("password");
+        if (null == username || "".equals(username) || null == password || "".equals(password)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String pwd = MD5Utils.md5("TPSHOP" + password);
 		TpUsers tpUsers = tpUsersService.findOneByLogo(username, pwd);
 		if (null != tpUsers) {
 			String token = MD5Utils.md5(System.currentTimeMillis()+Util.generateString(16));
@@ -111,30 +126,37 @@ public class UserController extends BaseController{
 	}
 
 	/**
-	 * @param nickname
-	 * @param username
-	 * @param password
-	 * @param password2
-	 * @param mobile_code
-	 * @param scene
-	 * @param invite
 	 * @return
 	 * 注册 
 	 */
 	@RequestMapping(value="/reg",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "注册", notes = "注册")
-	public @ResponseBody String reg(@RequestParam(required=false) String nickname,
-			@RequestParam(required=true) String username,
-			@RequestParam(required=true) String password,
-			@RequestParam(required=true) String password2,
-			@RequestParam(required=true) String mobile_code,
-			@RequestParam(required=false) String scene,
-			@RequestParam(required=false) String invite){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String reg(HttpServletRequest request){
 		
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String nickname = jsonO.getString("nickname");
+        String username = jsonO.getString("username");
+        String password = jsonO.getString("password");
+        String password2 = jsonO.getString("password2");
+        String mobile_code = jsonO.getString("mobile_code");
+        String scene = jsonO.getString("scene");
+        String invite = jsonO.getString("invite");
+        if (null == password2 || "".equals(password2) || null == username || "".equals(username)
+                || null == password || "".equals(password) || null == mobile_code || "".equals(mobile_code)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers1 = tpUsersService.findOneByMobile(username);
 		if (null != tpUsers1){
 			jsonObj.put("status", "5");
@@ -208,7 +230,7 @@ public class UserController extends BaseController{
 	 * @return
 	 * 退出登陆 
 	 */
-	@RequestMapping(value="/logout",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/logout",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "退出登陆", notes = "退出登陆")
 	public @ResponseBody String logout(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -228,11 +250,12 @@ public class UserController extends BaseController{
 		
 		return jsonObj.toString();
 	}
+	//TODO . 快速登录
 	/**
 	 * @return
 	 * 用户地址列表
 	 */
-	@RequestMapping(value="/address_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/address_list",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "用户地址列表", notes = "用户地址列表")
 	public @ResponseBody String addressList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -270,29 +293,36 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param province
-	 * @param address
-	 * @param consignee
-	 * @param city
-	 * @param district
-	 * @param mobile
-	 * @param is_default
 	 * @return
 	 * 添加地址
 	 */
 	@RequestMapping(value="/add_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "添加地址", notes = "添加地址")
-	public @ResponseBody String addAddress(HttpServletRequest request,
-			@RequestParam(required=true)Integer province,
-			@RequestParam(required=true)String address,
-			@RequestParam(required=true)String consignee,
-			@RequestParam(required=true)Integer city,
-			@RequestParam(required=true)Integer district,
-			@RequestParam(required=true)String mobile,
-			@RequestParam(required=true)Integer is_default){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String addAddress(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer province = jsonO.getInteger("province");
+        String address = jsonO.getString("address");
+        String consignee = jsonO.getString("consignee");
+        Integer city = jsonO.getInteger("city");
+        Integer district = jsonO.getInteger("district");
+        String mobile = jsonO.getString("mobile");
+        Integer is_default = jsonO.getInteger("is_default");
+        if (null == province || "".equals(province) || null == address || "".equals(address)
+                || null == consignee || "".equals(consignee) || null == city || "".equals(city)
+                || null == district || "".equals(district) || null == mobile || "".equals(mobile)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -327,6 +357,7 @@ public class UserController extends BaseController{
 	 * @return
 	 * 修改地址
 	 */
+	//TODO 地址编辑
 	@RequestMapping(value="/edit_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "修改地址", notes = "修改地址")
 	public @ResponseBody String editAddress(HttpServletRequest request,
@@ -368,19 +399,30 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param id
 	 * @return
 	 * 获取城县区
 	 */
-	@RequestMapping(value="/get_region",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/get_region",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "获取城县区", notes = "获取城县区")
-	public @ResponseBody String getRegion(HttpServletRequest request,
-			@RequestParam(required=true)Integer id){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String getRegion(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArry = new JSONArray();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer id = jsonO.getInteger("id");
+        if (null == id || "".equals(id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -408,17 +450,28 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param id
 	 * @return
 	 * 设置默认值
 	 */
 	@RequestMapping(value="/set_default",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "设置默认值", notes = "设置默认值")
-	public @ResponseBody String setDefault(HttpServletRequest request,
-			@RequestParam(required=true)Integer id){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String setDefault(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer id = jsonO.getInteger("id");
+        if (null == id || "".equals(id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -471,16 +524,28 @@ public class UserController extends BaseController{
 	 * @return
 	 * 收益明细列表
 	 */
-	@RequestMapping(value="/account_list",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/account_list",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "收益明细列表", notes = "收益明细列表")
-	public @ResponseBody String AccountList(HttpServletRequest request,
-											@RequestParam(required = true)String type,
-											@RequestParam(required = false,defaultValue = "1")String page){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String AccountList(HttpServletRequest request){
 		JSONObject data = new JSONObject();
 		JSONObject jsonObj = new JSONObject();
 		JSONArray  jsonArray = new JSONArray();
-		TpUsers tpUsers = initUser(request);
-		if (null == tpUsers) {
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String type = jsonO.getString("type");
+        String page = jsonO.getString("page");
+        if (null == type || "".equals(type) || null == page || "".equals(page)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
 			return jsonObj.toString();
@@ -505,11 +570,26 @@ public class UserController extends BaseController{
 
 		return jsonObj.toString();
 	}
+	//TODO 会员信息
+    @RequestMapping(value="/account_info",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "会员信息", notes = "会员信息")
+    public  @ResponseBody String accountInfo(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", "0");
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "请先登陆!");
+            return jsonObj.toString();
+        }
+        return jsonObj.toString();
+    }
 	/**
 	 * @return
 	 * 银行卡列表
 	 */
-	@RequestMapping(value = "bank_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "bank_list",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "银行卡列表", notes = "银行卡列表")
 	public @ResponseBody String BankList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -531,18 +611,30 @@ public class UserController extends BaseController{
 		jsonObj.put("status", "1");
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
-	}
+}
 	/**
 	 * @return
 	 * 提现申请列表
 	 */
-	@RequestMapping(value = "withdrawals_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "withdrawals_list",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "提现申请列表", notes = "提现申请列表")
-	public @ResponseBody String WithdrawalsList(HttpServletRequest request,
-												@RequestParam(required = false,defaultValue = "1")String page){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String WithdrawalsList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String page = jsonO.getString("page");
+        if (null == page || "".equals(page)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -569,13 +661,26 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "send_validate_code",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "短信发送", notes = "短信发送")
-	public @ResponseBody String SendValidateCode(@RequestParam(required = false)String type,
-												 @RequestParam(required = false,defaultValue = "6")String scene,
-												 @RequestParam(required = true)String mobile,
-												 @RequestParam(required = false) String send,
-												 @RequestParam(required = false)String verify_code,
-												 @RequestParam(required = false)String unique_id){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String SendValidateCode(HttpServletRequest request){
 		JSONObject jsonObject = new JSONObject();
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObject.put("status", "0");
+            jsonObject.put("msg", "参数有误");
+            return jsonObject.toString();
+        }
+        String type = jsonO.getString("type");
+        String scene = jsonO.getString("scene");
+        String mobile = jsonO.getString("mobile");
+        String send = jsonO.getString("send");
+        String verify_code = jsonO.getString("verify_code");
+        String unique_id = jsonO.getString("unique_id");
+        if (null == mobile || "".equals(mobile)){
+            jsonObject.put("status", "0");
+            jsonObject.put("msg", "参数有误");
+            return jsonObject.toString();
+        }
 		String mobile_code = (String) redisTemplate.opsForValue().get(mobile);
 		if(mobile_code != null){
 			jsonObject.put("status","0");
@@ -651,24 +756,32 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "userinfo",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "更新用户信息", notes = "更新用户信息")
-	public @ResponseBody String UserInfo(HttpServletRequest request,
-										 @RequestParam(required = false)String head_pic,
-										 @RequestParam(required = false)String nickname,
-										 @RequestParam(required = false)String qq,
-										 @RequestParam(required = false)String sex,
-										 @RequestParam(required = false)String birthday,
-										 @RequestParam(required = false)String province,
-										 @RequestParam(required = false)String city,
-										 @RequestParam(required = false)String district,
-										 @RequestParam(required = false)String email,
-										 @RequestParam(required = false)String mobile,
-										 @RequestParam(required = false)String scene,
-										 @RequestParam(required = false)String wechat_qrcode,
-										 @RequestParam(required = false)String wechat,
-										 @RequestParam(required = false)String mobile_code){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String UserInfo(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers = initUser(request);
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String head_pic = jsonO.getString("head_pic");
+        String nickname = jsonO.getString("nickname");
+        String qq = jsonO.getString("qq");
+        String sex = jsonO.getString("sex");
+        String birthday = jsonO.getString("birthday");
+        String province = jsonO.getString("province");
+        String city = jsonO.getString("city");
+        String district = jsonO.getString("district");
+        String email = jsonO.getString("email");
+        String mobile = jsonO.getString("mobile");
+        String scene = jsonO.getString("scene");
+        String wechat_qrcode = jsonO.getString("wechat_qrcode");
+        String wechat = jsonO.getString("wechat");
+        String mobile_code = jsonO.getString("mobile_code");
+        String voice_notice = jsonO.getString("voice_notice");
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -694,7 +807,7 @@ public class UserController extends BaseController{
 	 * @return
 	 * 发卡行列表
 	 */
-	@RequestMapping(value = "bank",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "bank",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "发卡行列表", notes = "发卡行列表")
 	public @ResponseBody String Bank(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -721,12 +834,25 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "send_report",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "投诉", notes = "投诉")
-	public @ResponseBody String sendReport(HttpServletRequest request,
-										   @RequestParam(required = true)String address,
-										   @RequestParam(required = true)String report_mess,
-										   @RequestParam(required = true)String image,
-										   @RequestParam(required = true)String area){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String sendReport(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String address = jsonO.getString("address");
+		String report_mess = jsonO.getString("report_mess");
+		String area = jsonO.getString("area");
+		String image = jsonO.getString("image");
+		if (null == address || "".equals(address) || null == report_mess || "".equals(report_mess)
+		 || null == area || "".equals(area) || null == image || "".equals(image)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -757,7 +883,7 @@ public class UserController extends BaseController{
      * @return
      * 投诉记录
      */
-    @RequestMapping(value = "report_list",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "report_list",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "投诉记录", notes = "投诉记录")
     public @ResponseBody String ReportList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
@@ -912,7 +1038,7 @@ public class UserController extends BaseController{
      * @return
      * 热门城市
      */
-	@RequestMapping(value = "get_hot_city",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "get_hot_city",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "热门城市", notes = "热门城市")
 	public @ResponseBody String getHotCity(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -965,15 +1091,26 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	/**
-	 * @param id
 	 * @return
 	 * 删除银行卡
 	 */
 	@RequestMapping(value = "del_bank",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "删除银行卡", notes = "删除银行卡")
-	public @ResponseBody String delBank(HttpServletRequest request,
-										@RequestParam(required = true)String id){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String delBank(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String id = jsonO.getString("id");
+        if (null == id || "".equals(id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -997,16 +1134,32 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "add_bank",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "添加银行卡", notes = "添加银行卡")
-	public @ResponseBody String addBank(HttpServletRequest request,
-										@RequestParam(required = true)String real_name,
-										@RequestParam(required = true)String mobile,
-										@RequestParam(required = true)String bank_card,
-										@RequestParam(required = true)String bank_id,
-										@RequestParam(required = true)String bank_name,
-										@RequestParam(required = true)String branch,
-										@RequestParam(required = true)String mobile_code){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String addBank(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String real_name = jsonO.getString("real_name");
+        String mobile = jsonO.getString("mobile");
+        String bank_card = jsonO.getString("bank_card");
+        String bank_id = jsonO.getString("bank_id");
+        String bank_name = jsonO.getString("bank_name");
+        String branch = jsonO.getString("branch");
+        String mobile_code = jsonO.getString("mobile_code");
+        if (null == real_name || "".equals(real_name) || null == mobile || "".equals(mobile)
+                || null == bank_card || "".equals(bank_card) || null == bank_id || "".equals(bank_id)
+                || null == bank_name || "".equals(bank_name) || null == branch || "".equals(branch)
+                || null == mobile_code || "".equals(mobile_code)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
 			jsonObj.put("msg", "请先登陆!");
@@ -1039,15 +1192,26 @@ public class UserController extends BaseController{
 		}
 	}
 	/**
-	 * @param id
 	 * @return
 	 * 删除地址
 	 */
 	@RequestMapping(value = "del_address",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "删除地址", notes = "删除地址")
-	public @ResponseBody String delAddress(HttpServletRequest request,
-										   @RequestParam(required = true)String id){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String delAddress(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String id = jsonO.getString("id");
+        if (null == id || "".equals(id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -1091,16 +1255,27 @@ public class UserController extends BaseController{
         return jsonObj.toString();
 	}
     /**
-     * @param id
      * @return
      * 用户提现
      */
     @RequestMapping(value = "get_money",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "用户提现", notes = "用户提现")
-    public @ResponseBody String getMoney(HttpServletRequest request,
-                                         @RequestParam(required = true)int id,
-                                         @RequestParam(required = true)float money){
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String getMoney(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer id = jsonO.getInteger("id");
+        float money = jsonO.getFloat("money");
+        if (null == id || "".equals(id) || money > 0.00 || "".equals(money)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -1151,15 +1326,28 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "addApplyPeople",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "新添申请人信息", notes = "新添申请人信息")
-    public @ResponseBody String addApplyPeople(HttpServletRequest request,
-                                               @RequestParam(required = true)String cardid,
-                                               @RequestParam(required = true)String name,
-                                               @RequestParam(required = true)String idcard,
-                                               @RequestParam(required = true)String mobile,
-                                               @RequestParam(required = true)String mobile_code,
-                                               @RequestParam(required = true)String area){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String addApplyPeople(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
-        JSONObject object = new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String cardid = jsonO.getString("cardid");
+		String name = jsonO.getString("name");
+		String idcard = jsonO.getString("idcard");
+		String mobile = jsonO.getString("mobile");
+		String mobile_code = jsonO.getString("mobile_code");
+		String area = jsonO.getString("area");
+		if (null == cardid || "".equals(cardid) || null == name || "".equals(name)
+		 || null == idcard || "".equals(idcard) || null == mobile || "".equals(mobile)
+		 || null == mobile_code || "".equals(mobile_code)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -1209,41 +1397,57 @@ public class UserController extends BaseController{
      */
 	@RequestMapping(value = "application_for_business_cooperation",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "申请商务合作", notes = "申请商务合作")
-	public @ResponseBody String applicationForBusinessCooperation(@RequestParam(required = true)String code,
-                                                                  HttpServletRequest request,
-                                                                  @RequestParam(required = true)String name,
-                                                                  @RequestParam(required = true)String email,
-                                                                  @RequestParam(required = true)String province,
-                                                                  @RequestParam(required = true)String city,
-                                                                  @RequestParam(required = true)String district,
-                                                                  @RequestParam(required = true)String type,
-                                                                  @RequestParam(required = true)String bank_name,
-                                                                  @RequestParam(required = true)String ways_of_cooperation,
-                                                                  @RequestParam(required = true)String company,
-                                                                  @RequestParam(required = true)String day_number,
-                                                                  @RequestParam(required = true)String details,
-                                                                  @RequestParam(required = true)String files,
-                                                                  @RequestParam(required = true)String reason){
-            JSONObject jsonObj = new JSONObject();
-            JSONObject data = new JSONObject();
-			TpUsers tpUsers = initUser(request);
-            if (null == tpUsers) {
-                jsonObj.put("status", "0");
-                jsonObj.put("msg", "请先登陆!");
-                return jsonObj.toString();
-            }
-         /*   TpSmsLog tpSmsLog = tpSmsLogService.findOneByMobileAndCode(tpUsers1.getMobile(), code);
-            if (null == tpSmsLog) {
-                jsonObj.put("status", "3");
-                jsonObj.put("msg", "验证码错误!");
-                return jsonObj.toString();
-            }else {
-                if (tpSmsLog.getStatus() == 1) {
-                    jsonObj.put("status", "4");
-                    jsonObj.put("msg", "验证码已使用!");
-                    return jsonObj.toString();
-                }
-            }*/
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String applicationForBusinessCooperation(HttpServletRequest request){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String code = jsonO.getString("code");
+		String name = jsonO.getString("name");
+		String email = jsonO.getString("email");
+		String province = jsonO.getString("province");
+		String city = jsonO.getString("city");
+		String district = jsonO.getString("district");
+		String type = jsonO.getString("type");
+		String bank_name = jsonO.getString("bank_name");
+		String ways_of_cooperation = jsonO.getString("ways_of_cooperation");
+		String company = jsonO.getString("company");
+		String day_number = jsonO.getString("day_number");
+		String details = jsonO.getString("details");
+		String files = jsonO.getString("files");
+		String reason = jsonO.getString("reason");
+		if (null == code || "".equals(code) || null == name || "".equals(name)
+				|| null == email || "".equals(email) || null == province || "".equals(province)
+				|| null == city || "".equals(city) || null == district || "".equals(district)
+				|| null == type || "".equals(type) || null == company || "".equals(company)
+				|| null == files || "".equals(files)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		TpUsers tpUsers = initUser(request);
+		if (null == tpUsers) {
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "请先登陆!");
+			return jsonObj.toString();
+		}
+	 /*   TpSmsLog tpSmsLog = tpSmsLogService.findOneByMobileAndCode(tpUsers1.getMobile(), code);
+		if (null == tpSmsLog) {
+			jsonObj.put("status", "3");
+			jsonObj.put("msg", "验证码错误!");
+			return jsonObj.toString();
+		}else {
+			if (tpSmsLog.getStatus() == 1) {
+				jsonObj.put("status", "4");
+				jsonObj.put("msg", "验证码已使用!");
+				return jsonObj.toString();
+			}
+		}*/
         TpApplicationForBusinessCooperation tpApplication = new TpApplicationForBusinessCooperation();
         tpApplication.setUser_id(tpUsers.getUser_id());
         tpApplication.setName(name);
@@ -1273,18 +1477,29 @@ public class UserController extends BaseController{
         return jsonObj.toString();
     }
 	/**
-	 * @param id
 	 * @return
 	 * 提交信用卡申请
 	 */
 	@RequestMapping(value = "applyCard",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "提交信用卡申请", notes = "提交信用卡申请")
-	public @ResponseBody String applyCard(HttpServletRequest request,
-										  @RequestParam(required = true)String mobile_code	,
-										  @RequestParam(required = true)String cardid,
-										  @RequestParam(required = true)String id){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String applyCard(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		JSONObject object = new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String mobile_code = jsonO.getString("mobile_code");
+		String cardid = jsonO.getString("cardid");
+		String id = jsonO.getString("id");
+		if (null == mobile_code || "".equals(mobile_code) || null == cardid || "".equals(cardid)
+		 || null == id || "".equals(id)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -1309,11 +1524,24 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "password",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "修改密码", notes = "修改密码")
-	public @ResponseBody String Password(@RequestParam(required = true)String new_password,
-										 @RequestParam(required = true)String confirm_password,
-										 @RequestParam(required = true)String code,
-										 HttpServletRequest request){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String Password(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String new_password = jsonO.getString("new_password");
+		String confirm_password = jsonO.getString("confirm_password");
+		String code = jsonO.getString("code");
+		if (null == new_password || "".equals(new_password) || null == confirm_password || "".equals(confirm_password)
+		 || null == code || "".equals(code)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -1415,11 +1643,25 @@ public class UserController extends BaseController{
      */
     @RequestMapping(value = "add_ali_account",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "添加支付宝账号", notes = "添加支付宝账号")
-    public @ResponseBody String addAliAccount(@RequestParam(required = true)String real_name,
-                                              @RequestParam(required = true)String mobile,
-                                              @RequestParam(required = true)String account,
-                                              @RequestParam(required = true)String mobile_code){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String addAliAccount(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String real_name = jsonO.getString("real_name");
+		String mobile = jsonO.getString("mobile");
+		String account = jsonO.getString("account");
+		String mobile_code = jsonO.getString("mobile_code");
+		if (null == real_name || "".equals(real_name) || null == mobile || "".equals(mobile)
+		 || null == account || "".equals(account) || null == mobile_code || "".equals(mobile_code)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
         int count = tpSmsLogService.selectCode(mobile_code);
         if(count > 0 ){
             tpUserAliAccountService.addAliAccount(real_name,mobile,account);
@@ -1812,12 +2054,25 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "getMoneyPassword",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "提现支付密码设置", notes = "提现支付密码设置")
-	public @ResponseBody String getMoneyPassword(HttpServletRequest request,
-												@RequestParam(required = true)String mobile,
-												@RequestParam(required = true)String code,
-												@RequestParam(required = true)String paypwd,
-												@RequestParam(required = true)String repaypwd){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String getMoneyPassword(HttpServletRequest request){
 		JSONObject jsonObj =new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String mobile = jsonO.getString("mobile");
+		String code = jsonO.getString("code");
+		String paypwd = jsonO.getString("paypwd");
+		String repaypwd = jsonO.getString("repaypwd");
+		if (null == mobile || "".equals(mobile) || null == code || "".equals(code)
+		 || null == paypwd || "".equals(paypwd) || null == repaypwd || "".equals(repaypwd)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -1908,11 +2163,24 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "messMidAutumn",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "评论海报", notes = "评论海报")
-	public @ResponseBody String messMidAutumn(HttpServletRequest request,
-										  @RequestParam(required = true)String content,
-										  @RequestParam(required = true)String ha_id,
-										  @RequestParam(required = true)String user_id){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String messMidAutumn(HttpServletRequest request){
 		JSONObject jsonObj =new JSONObject();
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String content = jsonO.getString("content");
+		String ha_id = jsonO.getString("ha_id");
+		String user_id = jsonO.getString("user_id");
+		if (null == content || "".equals(content) || null == ha_id || "".equals(ha_id)
+		 || null == user_id || "".equals(user_id)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -2036,20 +2304,30 @@ public class UserController extends BaseController{
 	}
 
 	/**
-	 * @param image
-	 * @param content
 	 * @return
 	 * 发布动态
 	 */
 	@RequestMapping(value = "setDynamic",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "发布动态", notes = "发布动态")
-	public @ResponseBody String setDynamic(HttpServletRequest request,
-										   @RequestParam(required = true) String image,
-										   @RequestParam(required = true) String content){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String setDynamic(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String image = jsonO.getString("image");
+		String content = jsonO.getString("content");
+		if (null == image || "".equals(image) || null == content || "".equals(content)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -2075,20 +2353,30 @@ public class UserController extends BaseController{
 	}
 
 	/**
-	 * @param did
-	 * @param replay_content
 	 * @return
 	 * 回复动态
 	 */
 	@RequestMapping(value = "setReplayMess",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "回复动态", notes = "回复动态")
-	public @ResponseBody String setReplayMess(HttpServletRequest request,
-										   @RequestParam(required = true) Integer did,
-										   @RequestParam(required = true) String replay_content){
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String setReplayMess(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		jsonObj.put("status", "0");
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		Integer did = jsonO.getInteger("did");
+		String replay_content = jsonO.getString("replay_content");
+		if (null == did || "".equals(did) || null == replay_content || "".equals(replay_content)){
+			jsonObj.put("status", "0");
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", "0");
@@ -2255,6 +2543,13 @@ public class UserController extends BaseController{
 		jsonObj.put("msg", "请求成功");
 		return jsonObj.toString();
 	}
-
+//TODO 我要加盟
+//TODO 首字母排序获取地址列表接口
+//TODO H5--信息收集
+//TODO 用户基础信息
+//TODO 添加意向用户
+//TODO 办卡人资料列表
+//TODO 帮助朋友
+//TODO 领取奖励
 
 }

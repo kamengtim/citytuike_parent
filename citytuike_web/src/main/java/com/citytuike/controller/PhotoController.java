@@ -7,6 +7,8 @@ import com.citytuike.model.*;
 import com.citytuike.service.PhotoService;
 import com.citytuike.service.TpUsersService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -130,7 +132,7 @@ public class PhotoController extends BaseController{
         return jsonObj.toString();
     }
 
-    @RequestMapping(value="/create_ad",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/create_ad",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "添加广告", notes = "添加广告")
     public @ResponseBody String createAd(HttpServletRequest request,
                                         @RequestParam(required=true) String desc,
@@ -226,29 +228,36 @@ public class PhotoController extends BaseController{
     }
 
     /**
-     * @param ad_id
-     * @param music_url
-     * @param tmp_id
-     * @param image_list
-     * @param extend_str
-     * @param p_id
      * @return
      * 保存相册
      */
     @RequestMapping(value="/save_photo",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "保存相册", notes = "保存相册")
-    public @ResponseBody String savePhoto(HttpServletRequest request,
-                                          @RequestParam(required=false) String desc,
-                                          @RequestParam(required=false) String ad_id,
-                                          @RequestParam(required=true) String music_url,
-                                          @RequestParam(required=true) String tmp_id,
-                                          @RequestParam(required=false) String image_list,
-                                          @RequestParam(required=true) String extend_str,
-                                          @RequestParam(required=false) String p_id) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String savePhoto(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String desc = jsonO.getString("desc");
+        String ad_id = jsonO.getString("ad_id");
+        String music_url = jsonO.getString("music_url");
+        String tmp_id = jsonO.getString("tmp_id");
+        String image_list = jsonO.getString("image_list");
+        String extend_str = jsonO.getString("extend_str");
+        String p_id = jsonO.getString("p_id");
+        if (null == music_url || "".equals(music_url) || null == tmp_id || "".equals(tmp_id)
+         || null == extend_str || "".equals(extend_str) || null == p_id || "".equals(p_id)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -453,7 +462,7 @@ public class PhotoController extends BaseController{
      * @return
      * 删除相册
      */
-    @RequestMapping(value="/photo_delete",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/photo_delete",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "删除相册", notes = "删除相册")
     public @ResponseBody String photoDelete(@RequestParam(required=true) String p_id, HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
@@ -489,7 +498,7 @@ public class PhotoController extends BaseController{
      * @return
      * 添加浏览\分享数
      */
-    @RequestMapping(value="/add_pv_share",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/add_pv_share",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "添加浏览\\分享数", notes = "添加浏览\\分享数")
     public @ResponseBody String addPvOrShare(@RequestParam(required=true) String p_id,
             @RequestParam(required=true) String action,
@@ -527,20 +536,30 @@ public class PhotoController extends BaseController{
     }
 
     /**
-     * @param p_id
-     * @param content
      * @param request
      * @return
      * 相册评论
      */
     @RequestMapping(value="/photo_comment",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "相册评论", notes = "相册评论")
-    public @ResponseBody String photoComment(@RequestParam(required=true) String p_id,
-            @RequestParam(required=true) String content,
-            HttpServletRequest request) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String photoComment(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String p_id = jsonO.getString("p_id");
+        String content = jsonO.getString("content");
+        if (null == p_id || "".equals(p_id) || null == content || "".equals(content)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");

@@ -12,6 +12,8 @@ import com.citytuike.util.HttpUtils;
 import com.citytuike.util.WeixinAPI;
 import com.yeepay.shade.org.apache.http.HttpResponse;
 import com.yeepay.shade.org.apache.http.util.EntityUtils;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -69,18 +71,29 @@ public class PubliclController extends BaseController{
 
     /**
      * @param request
-     * @param content
      * @return
      * 内容生成二维码
      */
-    @RequestMapping(value="/Index/make_qrcode",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/Index/make_qrcode",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "内容生成二维码", notes = "内容生成二维码")
-    public @ResponseBody  String make_qrcode(HttpServletRequest request,
-                                             @RequestParam(required=true) String content) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody  String make_qrcode(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String content = jsonO.getString("content");
+        if (null == content || "".equals(content)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -128,14 +141,26 @@ public class PubliclController extends BaseController{
      * @return
      * 识别营业执照
      */
-    @RequestMapping(value="/index/business_license_recognition",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/index/business_license_recognition",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "识别营业执照", notes = "识别营业执照")
-    public @ResponseBody  String business_license_recognition(HttpServletRequest request,
-                                             @RequestParam(required=true) String pic) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody  String business_license_recognition(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String pic = jsonO.getString("pic");
+        if (null == pic || "".equals(pic)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
@@ -235,14 +260,26 @@ public class PubliclController extends BaseController{
 
         return jsonObj.toString();
     }
-    @RequestMapping(value="/index/im_status",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/index/im_status",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "检查用户是否环信在线", notes = "检查用户是否环信在线")
-    public @ResponseBody  String imStatus(HttpServletRequest request,
-                                               @RequestParam(required=false) String ids) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody  String imStatus(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", "0");
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String ids = jsonO.getString("ids");
+        if (null == ids || "".equals(ids)){
+            jsonObj.put("status", "0");
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", "0");
