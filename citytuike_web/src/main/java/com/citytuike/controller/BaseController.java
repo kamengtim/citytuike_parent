@@ -1,7 +1,7 @@
 package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.citytuike.interceptor.RedisConstant;
+import com.citytuike.constant.Constant;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,4 @@ public class BaseController {
         }
         return  jsonObject;
     }
-
-
-
 }
