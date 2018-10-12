@@ -56,12 +56,12 @@ public class CartController extends  BaseController{
 											  @RequestParam(required=false) String type){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		TpOrder tpOrder = new TpOrder();
@@ -78,7 +78,7 @@ public class CartController extends  BaseController{
 			tpOrder.setOrder_status(0);
 			TpUserAddress tpUserAddress = tpUsersService.findUserAddresById(Integer.parseInt(address_id));
 			if (null == tpUserAddress) {
-				jsonObj.put("status", "1");
+				jsonObj.put("status", 1);
 				jsonObj.put("msg", "请先填写地址!");
 				return jsonObj.toString();
 			}
@@ -145,7 +145,7 @@ public class CartController extends  BaseController{
 					tpOrderAction.setStatus_desc("提交订单");
 					int goodsResult1 =tpOrderService.insertOrderAction(tpOrderAction);
 					if (goodsResult1 <= 0) {
-						jsonObj.put("status", "0");
+						jsonObj.put("status", 0);
 						jsonObj.put("msg", "添加失败!");
 						return jsonObj.toString();
 					}
@@ -161,7 +161,7 @@ public class CartController extends  BaseController{
 					invoice.setCtime(Integer.parseInt(Util.CreateDate()));
 					int goodsResult2 = tpOrderService.insertInvoic(invoice);
 					if (goodsResult2 <= 0) {
-						jsonObj.put("status", "0");
+						jsonObj.put("status", 0);
 						jsonObj.put("msg", "添加失败!");
 						return jsonObj.toString();
 					}
@@ -169,7 +169,7 @@ public class CartController extends  BaseController{
 			}
 		}
 		jsonObj.put("return", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}

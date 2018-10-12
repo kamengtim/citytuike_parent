@@ -42,18 +42,18 @@ public class GoodsController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if (null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		Integer id = jsonO.getInteger("id");
 		Integer page = jsonO.getInteger("page");
 		if (null == id || "".equals(id) || null == page || "".equals(page)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -67,7 +67,7 @@ public class GoodsController extends BaseController{
 		data.put("list", jsonArray);
 		data.put("count", limitPageList.getPage().getTotalCount());
 		jsonObj.put("return", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		System.out.println("结果:" + jsonObj.toString());
 		return jsonObj.toString();
@@ -82,12 +82,12 @@ public class GoodsController extends BaseController{
 	public @ResponseBody String goodsInfo(@RequestParam(required=true) Integer id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpGoods tpGoods = tpGoodsService.findById(id);
 		data = tpGoodsService.getGoodsJson(tpGoods);
 		jsonObj.put("return", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
@@ -100,24 +100,24 @@ public class GoodsController extends BaseController{
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String collectGoods(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		Integer goods_id = jsonO.getInteger("goods_id");
 		if (null == goods_id || "".equals(goods_id)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		TpGoods tpGoods = tpGoodsService.findById(goods_id);
@@ -128,7 +128,7 @@ public class GoodsController extends BaseController{
 			tpGoodsCollect.setAdd_time(Integer.parseInt(Util.CreateDate()));
 			int status = tpGoodsService.insertGoodsCollect(tpGoodsCollect);
 			if (status > 0) {
-				jsonObj.put("status", "1");
+				jsonObj.put("status", 1);
 				jsonObj.put("msg", "收藏成功!请到个人中心查看");
 			}
 		}
@@ -145,12 +145,12 @@ public class GoodsController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObj2 = new JSONObject();
 		JSONArray data = new JSONArray();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		String[] goodsId = {"144","144","144"};
@@ -176,7 +176,7 @@ public class GoodsController extends BaseController{
 		}
 		jsonObj2.put("list", data);
 		jsonObj.put("return", jsonObj2);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}

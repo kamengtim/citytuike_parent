@@ -41,25 +41,25 @@ public class OrderController extends BaseController{
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		String type = jsonO.getString("type");
 		Integer p = jsonO.getInteger("p");
 		if (null == type || "".equals(type) || null == p || "".equals(p)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		JSONObject jsonObject = new JSONObject();
@@ -105,7 +105,7 @@ public class OrderController extends BaseController{
 		}
 		data.put("lists", jsonArray1);
 		jsonObj.put("result", data);
-		jsonObj.put("status", "1");
+		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功");
 		System.out.println("结果:" + jsonObj.toString());
 		return jsonObj.toString();
@@ -120,32 +120,32 @@ public class OrderController extends BaseController{
 	public @ResponseBody String orderDetail(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		String id = jsonO.getString("id");
 		String orderSn = jsonO.getString("orderSn");
 		if (null == id || "".equals(id) || null == orderSn || "".equals(orderSn)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		TpOrder tpOrder = tpOrderService.findOrderById(Integer.parseInt(id));
 		if (null != tpOrder) {
 			data = tpOrderService.getOrderJson(tpOrder);
 			jsonObj.put("result", data);
-			jsonObj.put("status", "1");
+			jsonObj.put("status", 1);
 			jsonObj.put("msg", "请求成功!");
 			System.out.println("结果:" + jsonObj.toString());
 		}
@@ -160,24 +160,24 @@ public class OrderController extends BaseController{
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String recordRefundOrder(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		String order_id = jsonO.getString("order_id");
 		if (null == order_id || "".equals(order_id)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		TpOrder tpOrder = tpOrderService.findOrderById(Integer.parseInt(order_id));
@@ -187,7 +187,7 @@ public class OrderController extends BaseController{
 				TpOrderAction tpOrderAction = tpOrderService.getOrderAction(tpOrder, 0);
 				int goodsResult1 =tpOrderService.insertOrderAction(tpOrderAction);
 				if (goodsResult1 > 0) {
-					jsonObj.put("status", "1");
+					jsonObj.put("status", 1);
 					jsonObj.put("msg", "请求成功!");
 					System.out.println("结果:" + jsonObj.toString());
 				}
@@ -205,24 +205,24 @@ public class OrderController extends BaseController{
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String orderConfirm(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		String id = jsonO.getString("id");
 		if (null == id || "".equals(id)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		TpOrder tpOrder = tpOrderService.findOrderById(Integer.parseInt(id));
@@ -232,7 +232,7 @@ public class OrderController extends BaseController{
 				TpOrderAction tpOrderAction = tpOrderService.getOrderAction(tpOrder, 2);
 				int goodsResult1 =tpOrderService.insertOrderAction(tpOrderAction);
 				if (goodsResult1 > 0) {
-					jsonObj.put("status", "1");
+					jsonObj.put("status", 1);
 					jsonObj.put("msg", "请求成功!");
 					System.out.println("结果:" + jsonObj.toString());
 				}
@@ -250,11 +250,11 @@ public class OrderController extends BaseController{
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String editOrderAddress(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
-		jsonObj.put("status", "0");
+		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		JSONObject jsonO = getRequestJson(request);
 		if(null == jsonO){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
@@ -266,14 +266,14 @@ public class OrderController extends BaseController{
 		if (null == order_id || "".equals(order_id) || null == province || "".equals(province)
 				|| null == city || "".equals(city) || null == district || "".equals(district)
 				|| null == address || "".equals(address)){
-			jsonObj.put("status", "0");
+			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();
 		}
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
-			jsonObj.put("status", "0");
-			jsonObj.put("msg", "请先登陆!");
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
 		TpOrder tpOrder = tpOrderService.findOrderById(Integer.parseInt(order_id));
@@ -284,7 +284,7 @@ public class OrderController extends BaseController{
 			tpOrder.setAddress(address);
 			int result = tpOrderService.updateOrderAddress(tpOrder);
 			if (result > 0) {
-				jsonObj.put("status", "1");
+				jsonObj.put("status", 1);
 				jsonObj.put("msg", "请求成功!");
 				System.out.println("结果:" + jsonObj.toString());
 			}

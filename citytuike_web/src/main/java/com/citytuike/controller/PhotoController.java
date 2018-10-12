@@ -43,12 +43,12 @@ public class PhotoController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         LimitPageList limitPageList = photoService.getLimitListByCid(c_id, page);
@@ -64,7 +64,7 @@ public class PhotoController extends BaseController{
            data.add(object);
         }
         jsonObj.put("result",data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -82,12 +82,12 @@ public class PhotoController extends BaseController{
         JSONObject jsonObj1 = new JSONObject();
         JSONArray data = new JSONArray();
         JSONArray data1 = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         Integer fristClassify = null;
@@ -127,7 +127,7 @@ public class PhotoController extends BaseController{
             jsonObj1.put("first_list", jsonObject);
         }
         jsonObj.put("result",jsonObj1);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -145,12 +145,12 @@ public class PhotoController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumAd tpPhotoAlbumAd = new TpPhotoAlbumAd();
@@ -167,7 +167,7 @@ public class PhotoController extends BaseController{
                 tpPhotoAlbumAd.setAdId(tpPhotoAlbumAd1.getAdId());
                 int upResult = photoService.updataPhotoAlbumAd(tpPhotoAlbumAd);
                 if (upResult < 0){
-                    jsonObj.put("status", "0");
+                    jsonObj.put("status", 0);
                     jsonObj.put("msg", "更新失败!");
                     return jsonObj.toString();
                 }
@@ -175,7 +175,7 @@ public class PhotoController extends BaseController{
         }else{
             int adResult = photoService.insertPhotoAlbumAd(tpPhotoAlbumAd);
             if (adResult < 0){
-                jsonObj.put("status", "0");
+                jsonObj.put("status", 0);
                 jsonObj.put("msg", "添加失败!");
                 return jsonObj.toString();
             }
@@ -183,7 +183,7 @@ public class PhotoController extends BaseController{
 
         jsonObj1.put("ad_id", tpPhotoAlbumAd.getAdId());
         jsonObj.put("result",jsonObj1);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -199,12 +199,12 @@ public class PhotoController extends BaseController{
                                         @RequestParam(required=true) String ad_id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumAd tpPhotoAlbumAd = photoService.findOneAlbumAdById(ad_id);
@@ -222,7 +222,7 @@ public class PhotoController extends BaseController{
         }
 
         jsonObj.put("result",jsonObj1);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -237,11 +237,11 @@ public class PhotoController extends BaseController{
     public @ResponseBody String savePhoto(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -254,14 +254,14 @@ public class PhotoController extends BaseController{
         String p_id = jsonO.getString("p_id");
         if (null == music_url || "".equals(music_url) || null == tmp_id || "".equals(tmp_id)
          || null == extend_str || "".equals(extend_str) || null == p_id || "".equals(p_id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumUser tpPhotoAlbumUser = new TpPhotoAlbumUser();
@@ -282,21 +282,21 @@ public class PhotoController extends BaseController{
                 tpPhotoAlbumUser.setpId(Integer.parseInt(p_id));
                 int updataResult = photoService.updataPhotoAlbumUser(tpPhotoAlbumUser);
                 if (updataResult <= 0){
-                    jsonObj.put("status", "0");
+                    jsonObj.put("status", 0);
                     jsonObj.put("msg", "更新失败!");
                     return jsonObj.toString();
                 }
             }
             int deleteResult = photoService.deleteUserImageByPid(p_id);
             if (deleteResult <= 0){
-                jsonObj.put("status", "0");
+                jsonObj.put("status", 0);
                 jsonObj.put("msg", "更新失败!");
                 return jsonObj.toString();
             }
         }else{
             int insertResult = photoService.insertPhotoAlbumUser(tpPhotoAlbumUser);
             if (insertResult <= 0){
-                jsonObj.put("status", "0");
+                jsonObj.put("status", 0);
                 jsonObj.put("msg", "添加失败!");
                 return jsonObj.toString();
             }
@@ -309,13 +309,13 @@ public class PhotoController extends BaseController{
             tpPhotoAlbumUserImage.setSort(1);
             int insertUserImage = photoService.insertPHotoAlbumUserImage(tpPhotoAlbumUserImage);
             if (insertUserImage <= 0){
-                jsonObj.put("status", "0");
+                jsonObj.put("status", 0);
                 jsonObj.put("msg", "添加失败!");
                 return jsonObj.toString();
             }
         }
         jsonObj.put("result",jsonObj1);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -332,12 +332,12 @@ public class PhotoController extends BaseController{
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj1 = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         LimitPageList limitPageList = photoService.getlimitListPhotoAlbumUser(Integer.parseInt(page), tpUsers.getUser_id());
@@ -369,7 +369,7 @@ public class PhotoController extends BaseController{
         jsonObj1.put("current_page",limitPageList.getPage().getPageNow());
         jsonObj1.put("last_page",limitPageList.getPage().getTotalPageCount());
         jsonObj.put("result",jsonObj1);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -385,12 +385,12 @@ public class PhotoController extends BaseController{
     public @ResponseBody String photoDetail(@RequestParam(required=true) String p_id, HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonObj1 = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
@@ -451,7 +451,7 @@ public class PhotoController extends BaseController{
             jsonObj1.put("image_list", jsonArray);
         }
         jsonObj.put("result",jsonObj1);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -466,12 +466,12 @@ public class PhotoController extends BaseController{
     @ApiOperation(value = "删除相册", notes = "删除相册")
     public @ResponseBody String photoDelete(@RequestParam(required=true) String p_id, HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
@@ -480,13 +480,13 @@ public class PhotoController extends BaseController{
             if (deleteResult > 0){
                 int deleteResultImage = photoService.deleteUserImageByPid(p_id);
                 if (deleteResultImage <= 0){
-                    jsonObj.put("status", "0");
+                    jsonObj.put("status", 0);
                     jsonObj.put("msg", "删除失败，请稍后再试");
                     return jsonObj.toString();
                 }
             }
         }
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -504,12 +504,12 @@ public class PhotoController extends BaseController{
             @RequestParam(required=true) String action,
             HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
@@ -517,20 +517,20 @@ public class PhotoController extends BaseController{
             if (action.equals("pv")){
                 int updataPVResult = photoService.updataPhotoAlbumUserPv(p_id);
                 if (updataPVResult <= 0){
-                    jsonObj.put("status", "0");
+                    jsonObj.put("status", 0);
                     jsonObj.put("msg", "请求失败，请稍后再试");
                     return jsonObj.toString();
                 }
             }else if (action.equals("share")){
                 int updataShareResult = photoService.updataPhotoAlbumUserShare(p_id);
                 if (updataShareResult <= 0){
-                    jsonObj.put("status", "0");
+                    jsonObj.put("status", 0);
                     jsonObj.put("msg", "请求失败，请稍后再试");
                     return jsonObj.toString();
                 }
             }
         }
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -545,25 +545,25 @@ public class PhotoController extends BaseController{
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
     public @ResponseBody String photoComment(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String p_id = jsonO.getString("p_id");
         String content = jsonO.getString("content");
         if (null == p_id || "".equals(p_id) || null == content || "".equals(content)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
@@ -576,12 +576,12 @@ public class PhotoController extends BaseController{
             tpPhotoAlbumComment.setUserId(tpUsers.getUser_id());
             int insertComment = photoService.insertPhotoAlbumComment(tpPhotoAlbumComment);
             if(insertComment <= 0){
-                jsonObj.put("status", "0");
+                jsonObj.put("status", 0);
                 jsonObj.put("msg", "请求失败，请稍后再试");
                 return jsonObj.toString();
             }
         }
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -598,12 +598,12 @@ public class PhotoController extends BaseController{
             HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpPhotoAlbumUser tpPhotoAlbumUser = photoService.findOneAlbumUserById(p_id);
@@ -628,7 +628,7 @@ public class PhotoController extends BaseController{
             }
         }
         jsonObj.put("result", jsonArray);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }

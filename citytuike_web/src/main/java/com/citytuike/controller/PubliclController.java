@@ -45,12 +45,12 @@ public class PubliclController extends BaseController{
     public @ResponseBody  String share(HttpServletRequest request) throws WeixinApiException {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         WeixinAPI api = new WeixinAPI(Constant.WEIXIN_APPID, Constant.WEIXIN_APPSECRET);
@@ -63,7 +63,7 @@ public class PubliclController extends BaseController{
         data.put("rawString", map.get("jsapi_ticket"));
 
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
@@ -80,29 +80,29 @@ public class PubliclController extends BaseController{
     public @ResponseBody  String make_qrcode(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String content = jsonO.getString("content");
         if (null == content || "".equals(content)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         String base64url = UtilConfig.generalQRCode(content);
         jsonObj.put("result", "data:image/png;base64,"+base64url);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
@@ -120,24 +120,23 @@ public class PubliclController extends BaseController{
                                              @RequestParam(required=true) String url) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         String base64url = Base64Img.GetImageStrFromUrl(url);
         jsonObj.put("result", "data:image/png;base64,"+base64url);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
     }
 
     /**
-     * @param pic
      * @return
      * 识别营业执照
      */
@@ -147,24 +146,24 @@ public class PubliclController extends BaseController{
     public @ResponseBody  String business_license_recognition(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String pic = jsonO.getString("pic");
         if (null == pic || "".equals(pic)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         Map<String, String> headers = new HashMap<String, String>();
@@ -196,7 +195,7 @@ public class PubliclController extends BaseController{
         }
 
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
@@ -217,12 +216,12 @@ public class PubliclController extends BaseController{
                                                @RequestParam(required=false) String ip) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         Map<String, String> headers = new HashMap<String, String>();
@@ -255,7 +254,7 @@ public class PubliclController extends BaseController{
         }
 
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
@@ -266,28 +265,28 @@ public class PubliclController extends BaseController{
     public @ResponseBody  String imStatus(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if(null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String ids = jsonO.getString("ids");
         if (null == ids || "".equals(ids)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
@@ -304,12 +303,12 @@ public class PubliclController extends BaseController{
                                                @RequestParam(required=true) String domain) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         Auth auth = Auth.create(Constant.QINIU_ACCESSKEY,Constant.QINIU_SECRETKEY);
@@ -318,7 +317,7 @@ public class PubliclController extends BaseController{
         data.put("expires", 36000);
         data.put("token", tokenqiniu);
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();

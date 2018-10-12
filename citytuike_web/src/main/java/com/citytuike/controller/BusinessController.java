@@ -39,11 +39,11 @@ public class BusinessController extends BaseController{
     public @ResponseBody String businessUp(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -65,14 +65,14 @@ public class BusinessController extends BaseController{
                 || null == mobile || "".equals(mobile) || null == location_area || "".equals(location_area)
                 || null == address || "".equals(address) || null == xpoint || "".equals(xpoint)
                 || null == ypoint || "".equals(ypoint) || null == images || "".equals(images)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessShare tpBusinessShare = new TpBusinessShare();
@@ -106,14 +106,14 @@ public class BusinessController extends BaseController{
                 tpBusinessImages.setImgSort(i);
                 int resultImg = businessService.insertBusinessImages(tpBusinessImages);
                 if (resultImg <= 0){
-                    jsonObj.put("status", "0");
+                    jsonObj.put("status", 0);
                     jsonObj.put("msg", "请求失败，请稍后再试");
                     return jsonObj.toString();
                 }
             }
             data.put("business_id", tpBusinessShare.getId());
             jsonObj.put("result", data);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
@@ -128,12 +128,12 @@ public class BusinessController extends BaseController{
     public @ResponseBody String getBusinessType(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         List<TpBusinessType> tpBusinessTypeList = businessService.findAllBusinessType();
@@ -145,7 +145,7 @@ public class BusinessController extends BaseController{
             data.add(jsonObject1);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -160,11 +160,11 @@ public class BusinessController extends BaseController{
     public @ResponseBody String businessEva(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -174,14 +174,14 @@ public class BusinessController extends BaseController{
         String tag = jsonO.getString("tag");
         if (null == business_id || "".equals(business_id) || null == stars || "".equals(stars)
             || null == message || "".equals(message) || null == tag || "".equals(tag)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessComment tpBusinessComment = new TpBusinessComment();
@@ -195,7 +195,7 @@ public class BusinessController extends BaseController{
         if (result > 0){
             data.put("business_comment_id", tpBusinessComment.getId());
             jsonObj.put("result", data);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
@@ -220,12 +220,12 @@ public class BusinessController extends BaseController{
                                             @RequestParam(required=false) int tuijian) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         String geohashStr = GeoHashUtil.encode(Double.parseDouble(xpoint+""), Double.parseDouble(ypoint+""));
@@ -236,7 +236,7 @@ public class BusinessController extends BaseController{
             data.add(jsonObject1);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -256,12 +256,12 @@ public class BusinessController extends BaseController{
                                             @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessShare tpbusinessShare = businessService.findBusinessShareById(id);
@@ -296,7 +296,7 @@ public class BusinessController extends BaseController{
             data.put("comment", commentObject);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -312,12 +312,12 @@ public class BusinessController extends BaseController{
                                             @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessComment tpBusinessComment = businessService.findOneCommentById(id);
@@ -337,7 +337,7 @@ public class BusinessController extends BaseController{
         }
 
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -353,12 +353,12 @@ public class BusinessController extends BaseController{
                                             @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessCashFace tpBusinessCashFace = businessService.findBusinessCashFaceById(id);
@@ -382,7 +382,7 @@ public class BusinessController extends BaseController{
                 if (resultOrder > 0){
                     data.put("order_sn", ordersn);
                     jsonObj.put("result", data);
-                    jsonObj.put("status", "1");
+                    jsonObj.put("status", 1);
                     jsonObj.put("msg", "请求成功!");
                 }
             }
@@ -419,12 +419,12 @@ public class BusinessController extends BaseController{
                                                 @RequestParam(required=true) String launch_date_end) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
@@ -449,7 +449,7 @@ public class BusinessController extends BaseController{
             int resultCash = businessService.insertBusinessCash(tpBusinessCash);
             if (resultCash > 0){
                 jsonObj.put("result", data);
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
             }
         }
@@ -465,17 +465,17 @@ public class BusinessController extends BaseController{
     public @ResponseBody String grantCash(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "未缴纳");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         List<TpBusinessOrder> tpBusinessOrderList = businessService.findAllBusinessOrderByPay(tpUsers.getUser_id(),1);
         if (tpBusinessOrderList.size() > 0){
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "已缴纳");
         }
         return jsonObj.toString();
@@ -490,19 +490,19 @@ public class BusinessController extends BaseController{
     public @ResponseBody String getBusinessName(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
         if (null != tpBusinessShare){
             data.put("name", tpBusinessShare.getName());
             jsonObj.put("result", data);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
 
@@ -518,12 +518,12 @@ public class BusinessController extends BaseController{
     public @ResponseBody String cashFaceLish(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         List<TpBusinessCashFace> tpBusinessCashFaceList = businessService.findAllBusinessCashFace();
@@ -537,7 +537,7 @@ public class BusinessController extends BaseController{
             data.add(object1);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -551,12 +551,12 @@ public class BusinessController extends BaseController{
     public @ResponseBody String businessTips(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         List<TpBusinessOrder> tpBusinessOrderList = businessService.findAllBusinessOrderByPay(tpUsers.getUser_id(),1);
@@ -571,7 +571,7 @@ public class BusinessController extends BaseController{
                 data.put("face_cash_end", tpBusinessCashFace.getFaceCashEnd());
                 data.put("add_time", tpBusinessCashFace.getAddTime());
                 jsonObj.put("result", data);
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
             }
         }
@@ -593,13 +593,13 @@ public class BusinessController extends BaseController{
                                                @RequestParam(required=true) int p,
                                                @RequestParam(required=true) String number) {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
 
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
 
@@ -634,7 +634,7 @@ public class BusinessController extends BaseController{
             data.put("cash", jsonArray2);
             object.put("cash", data);
             jsonObj.put("result", object);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
 
@@ -653,12 +653,12 @@ public class BusinessController extends BaseController{
                                                @RequestParam(required=true) int cash_id,
                                                @RequestParam(required=true) String thaw_mess) {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessCash tpBusinessCash = businessService.findBusinessCashById(cash_id);
@@ -670,7 +670,7 @@ public class BusinessController extends BaseController{
             tpBusinessCash1.setThawMess(thaw_mess);
             int resultCash = businessService.updataCashByThaw(tpBusinessCash1);
             if (resultCash > 0){
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "解冻成功！申请解冻后我们会在1-7个工作日之内退还所冻结金额!");
             }
         }
@@ -682,19 +682,19 @@ public class BusinessController extends BaseController{
                                                @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessCash tpBusinessCash = businessService.findBusinessCashById(id);
         if (null != tpBusinessCash){
             data = businessService.getBUsinessCashJson(tpBusinessCash);
             jsonObj.put("result", data);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
 
@@ -712,12 +712,12 @@ public class BusinessController extends BaseController{
                                                @RequestParam(required=true) String number) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessUseCash tpBusinessUseCash = businessService.findBusinessUseCashByNumber(number);
@@ -727,7 +727,7 @@ public class BusinessController extends BaseController{
                 data = businessService.getBUsinessCashJson(tpBusinessCash);
                 data.put("codes", tpBusinessUseCash.getCodes());
                 jsonObj.put("result", data);
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
             }
 
@@ -746,12 +746,12 @@ public class BusinessController extends BaseController{
                                                @RequestParam(required=true) String status) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         List<TpBusinessUseCash> tpBusinessUseCashList = businessService.findBusinessUseCashByStatus(tpUsers.getUser_id(), status);
@@ -775,7 +775,7 @@ public class BusinessController extends BaseController{
             data.add(jsonObject);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -789,17 +789,17 @@ public class BusinessController extends BaseController{
     public @ResponseBody String upStoreFlag(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "未上传过!");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
         if (null != tpBusinessShare){
-            jsonObj.put("status", "-1");
+            jsonObj.put("status", -1);
             jsonObj.put("msg", "您已经上传过了!");
         }
         return jsonObj.toString();

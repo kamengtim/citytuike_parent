@@ -2612,6 +2612,17 @@ public class UserController extends BaseController{
 //TODO 添加意向用户
 //TODO 办卡人资料列表
 //TODO 帮助朋友
-//TODO 领取奖励
+//TODO  69. 抽奖接口
+//TODO 70. 领取奖励
+//TODO 71. 已经获得的奖励列表
+//TODO 72. 抽奖钱包可用余额
+//TODO 73. 用户抽奖钱包支付宝提现
+//TODO 74. 抽奖财务列表
+//TODO 75. 领取保险接口
+//TODO 76. 领取贷款接口
+//TODO 77. 贷款渠道列表
+//TODO 78. 检测实习会员能否修改上级
+//TODO 79. 实习会员修改上级
+//TODO 80. 用户更多详情（聊天点击查看）
 
 }

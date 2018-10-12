@@ -49,19 +49,19 @@ public class AdController extends BaseController{
         TpUsers tpUsers = initUser(request);
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String regions_id = jsonO.getString("regions_id");
         if (null == regions_id || "".equals(regions_id)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         if (null == tpUsers) {
-            jsonObj.put("status", -2   );
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         String[] ids = regions_id.split(",");
@@ -92,7 +92,7 @@ public class AdController extends BaseController{
         }
 
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -106,12 +106,12 @@ public class AdController extends BaseController{
     public @ResponseBody String getHotCities(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         String[] ids = {"1", "338", "10543", "28241", "28558", "31929"};
@@ -140,7 +140,7 @@ public class AdController extends BaseController{
             }
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -155,11 +155,11 @@ public class AdController extends BaseController{
     public @ResponseBody String apply(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
@@ -175,14 +175,14 @@ public class AdController extends BaseController{
         String launch_date = jsonO.getString("launch_date");
         if (null == type || "".equals(type) || null == days || "".equals(days)
                 || null == regions || "".equals(regions)|| null == materials || "".equals(materials)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpAdApply tpAdApply = new TpAdApply();
@@ -228,12 +228,12 @@ public class AdController extends BaseController{
                         tpAdApplyRegion.setNum(Integer.parseInt(num));
                         int resultRegion = tpAdService.insertAdApplyRegion(tpAdApplyRegion);
                         if (resultRegion <= 0){
-                            jsonObj.put("status", "0");
+                            jsonObj.put("status", 0);
                             jsonObj.put("msg", "请求失败，请稍后再试");
                             return jsonObj.toString();
                         }
                     }else{
-                        jsonObj.put("status", "0");
+                        jsonObj.put("status", 0);
                         jsonObj.put("msg", "请求失败，请稍后再试");
                         return jsonObj.toString();
                     }
@@ -246,13 +246,13 @@ public class AdController extends BaseController{
                     tpAdApplyMaterial.setUrl(material);
                     int resultMaterial = tpAdService.insertAdApplyMaterial(tpAdApplyMaterial);
                     if (resultMaterial <= 0){
-                        jsonObj.put("status", "0");
+                        jsonObj.put("status", 0);
                         jsonObj.put("msg", "请求失败，请稍后再试");
                         return jsonObj.toString();
                     }
                 }
             }
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
@@ -267,12 +267,12 @@ public class AdController extends BaseController{
     public @ResponseBody String trade(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         List<TpAdTrade> tpAdTradeList =  tpAdService.findAllAdTrade();
@@ -302,7 +302,7 @@ public class AdController extends BaseController{
             data.add(jsonObject);
         }
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
         return jsonObj.toString();
     }
@@ -317,24 +317,24 @@ public class AdController extends BaseController{
     public @ResponseBody String topUp(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         float amount = jsonO.getFloat("amount");
         if (amount > 0.0 || "".equals(amount)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpAdTopUp tpAdTopUp = new TpAdTopUp();
@@ -348,7 +348,7 @@ public class AdController extends BaseController{
         if (resultTopUp > 0){
             data.put("order_sn", tpAdTopUp.getOrder_sn());
             jsonObj.put("result", data);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
 
@@ -360,25 +360,25 @@ public class AdController extends BaseController{
     public @ResponseBody String topUpList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer page = jsonO.getInteger("page");
         Integer size = jsonO.getInteger("size");
         if (null == page|| "".equals(page) || null == size|| "".equals(size)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         LimitPageList limitPageList = tpAdService.getTopUpLimitPageList(page, size);
@@ -394,7 +394,7 @@ public class AdController extends BaseController{
         data.put("list", jsonArray);
         data.put("cur", page);
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
@@ -410,25 +410,25 @@ public class AdController extends BaseController{
     public @ResponseBody String applyList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         Integer page = jsonO.getInteger("page");
         Integer size = jsonO.getInteger("size");
         if (null == page|| "".equals(page) || null == size|| "".equals(size)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         LimitPageList limitPageList = tpAdService.getApplyLimitPageList(page, size);
@@ -459,7 +459,7 @@ public class AdController extends BaseController{
         data.put("list", jsonArray);
         data.put("cur", page);
         jsonObj.put("result", data);
-        jsonObj.put("status", "1");
+        jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();
@@ -474,19 +474,19 @@ public class AdController extends BaseController{
     public @ResponseBody String userBalance(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpUserWallet tpUserWallet = tpUsersService.findWalletByUserId(tpUsers.getUser_id());
         if (null != tpUserWallet){
             data.put("balance", tpUserWallet.getBalance());
             jsonObj.put("result", data);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
@@ -501,24 +501,24 @@ public class AdController extends BaseController{
     public @ResponseBody String applyDetail(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String order_sn = jsonO.getString("order_sn");
         if (null == order_sn || "".equals(order_sn)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpAdApply tpAdApply = tpAdService.findAdApplyByOrderSn(order_sn);
@@ -575,7 +575,7 @@ public class AdController extends BaseController{
             }
             data.put("regions",jsonArray);
             jsonObj.put("result", data);
-            jsonObj.put("status", "1");
+            jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
         }
         return jsonObj.toString();
@@ -591,25 +591,25 @@ public class AdController extends BaseController{
     public @ResponseBody String applySettle(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
-        jsonObj.put("status", "0");
+        jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
         if (null == jsonO){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         String order_sn = jsonO.getString("order_sn");
         String verify_code = jsonO.getString("verify_code");
         if (null == order_sn || "".equals(order_sn) || null == verify_code || "".equals(verify_code)){
-            jsonObj.put("status", "0");
+            jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
         }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
-            jsonObj.put("status", "0");
-            jsonObj.put("msg", "请先登陆!");
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
         TpSmsLog tpSmsLog = tpSmsLogService.findOneByMobileAndCode(tpUsers.getMobile(), verify_code);
@@ -646,7 +646,7 @@ public class AdController extends BaseController{
                     tpUserFinance.setCreated_at(new Date());
                     int resultFinance = tpUsersService.insertUserFinance(tpUserFinance);
                     if (resultFinance <= 0){
-                        jsonObj.put("status", "0");
+                        jsonObj.put("status", 0);
                         jsonObj.put("msg", "请求失败，请稍后再试");
                         return jsonObj.toString();
                     }
@@ -660,7 +660,7 @@ public class AdController extends BaseController{
             tpAdApply1.setUpdated_at(new Date());
             int updateAdApply = tpAdService.updateAdApply(tpAdApply1);
             if (updateAdApply > 0){
-                jsonObj.put("status", "1");
+                jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
                 return jsonObj.toString();
             }
