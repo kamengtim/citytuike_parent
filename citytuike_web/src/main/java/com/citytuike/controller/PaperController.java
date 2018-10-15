@@ -321,12 +321,19 @@ public class PaperController extends BaseController{
      */
     @RequestMapping(value = "paper_transfer", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "纸巾转赠", notes = "纸巾转赠")
-    public @ResponseBody String paperTransfer(HttpServletRequest request,
-                                              @RequestParam(required = true) String money,
-                                              @RequestParam(required = true) String number,
-                                              @RequestParam(required = true) String invite_code,
-                                              @RequestParam(required = true) String code){
+    public @ResponseBody String paperTransfer(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String money = jsonRequest.getString("money");
+        String number = jsonRequest.getString("number");
+        String invite_code = jsonRequest.getString("invite_code");
+        String code = jsonRequest.getString("code");
+        if(money == null || money.equals("") || number == null || number.equals("") || invite_code == null || invite_code.equals(""
+        ) || code ==null || code.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
         JSONObject msg = new JSONObject();
         JSONObject table = new JSONObject();
         jsonObj.put("status", 0);
@@ -404,6 +411,11 @@ public class PaperController extends BaseController{
                                                     @RequestParam(required = true)String page,
                                                     @RequestParam(required = true)String status){
         JSONObject jsonObj = new JSONObject();
+        if(page == null || page.equals("") || status == null || status.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
         JSONArray jsonArray = new JSONArray();
         JSONObject object = new JSONObject();
         jsonObj.put("status", 0);
@@ -531,11 +543,17 @@ public class PaperController extends BaseController{
     @RequestMapping(value = "paper_transfer_confirm", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
     @ApiOperation(value = "纸巾转赠确认", notes = "纸巾转赠确认")
-    public @ResponseBody String paper_transfer_confirm(HttpServletRequest request,
-                                                    @RequestParam(required = true)String status,
-                                                    @RequestParam(required = true)String log_id,
-                                                    @RequestParam(required = false)String reason){
+    public @ResponseBody String paper_transfer_confirm(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+        JSONObject jsonRequest = getRequestJson(request);
+        String status = jsonRequest.getString("status");
+        String log_id = jsonRequest.getString("log_id");
+        String reason = jsonRequest.getString("reason");
+        if(status == null || status.equals("") || log_id ==null || log_id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
         JSONObject msg = new JSONObject();
         JSONObject table = new JSONObject();
         jsonObj.put("status", 0);

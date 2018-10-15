@@ -53,6 +53,11 @@ public class TenSecondsActivityController extends BaseController{
                                               @RequestParam(required = true)String activity_id,
                                               @RequestParam(required = false)String invite_code){
         JSONObject jsonObj = new JSONObject();
+        if(activity_id == null || activity_id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
         jsonObj.put("status", 0);
         jsonObj.put("msg", "失败!");
         TpUsers tpUsers = initUser(request);
@@ -145,6 +150,11 @@ public class TenSecondsActivityController extends BaseController{
                                                 @RequestParam(required = true)String activity_id,
                                                 @RequestParam(required = false)String invite_code){
         JSONObject jsonObj = new JSONObject();
+        if(activity_id == null || activity_id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
         jsonObj.put("status", 0);
         jsonObj.put("msg", "失败!");
         TpUsers tpUsers = initUser(request);
@@ -291,6 +301,13 @@ public class TenSecondsActivityController extends BaseController{
                                             @RequestParam(required = true)String activity_id,
                                             @RequestParam(required = false)String invite_code){
         JSONObject jsonObj = new JSONObject();
+
+        if(activity_id == null || activity_id.equals("") || second == null || second.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
+
         jsonObj.put("status", 0);
         jsonObj.put("msg", "失败!");
         TpUsers tpUsers = initUser(request);
@@ -377,6 +394,11 @@ public class TenSecondsActivityController extends BaseController{
                        @RequestParam(required = true)String reward_id,
                        @RequestParam(required = true)String address_id){
         JSONObject jsonObj = new JSONObject();
+        if(reward_id == null || reward_id.equals("") || address_id == null || address_id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
         jsonObj.put("status", 0);
         jsonObj.put("msg", "失败!");
         TpUsers tpUsers = initUser(request);
@@ -430,6 +452,11 @@ public class TenSecondsActivityController extends BaseController{
                                               @RequestParam(required = true)String log_id){
         String image = "https://citycdn.citytuike.cn/assets/images/logo.ce2a6d9c.png";
         JSONObject jsonObj = new JSONObject();
+        if(log_id == null || log_id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数错误!");
+            return jsonObj.toString();
+        }
         jsonObj.put("status", 0);
         jsonObj.put("msg", "失败!");
         TpUsers tpUsers = initUser(request);
