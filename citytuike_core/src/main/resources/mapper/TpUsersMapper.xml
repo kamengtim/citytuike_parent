@@ -154,7 +154,7 @@
 		from tp_users as t where t.invite_code=#{invite}
 	</select>
 	<select id="findAllByUserParentId" resultMap="TpUsers">
-		select * from tp_user as t where t.parent_id=#{parent_id} and t.level > 0
+		select * from tp_users as t where t.parent_id=#{parent_id} and t.level > 0
 	</select>
 	<select id="findAddressByUserId" resultMap="TpUserAddress">
 		select * from tp_user_address as t where t.user_id=#{user_id}
