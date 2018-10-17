@@ -293,18 +293,29 @@ public class PubliclController extends BaseController{
     }
 
     /**
-     * @param domain
      * 七牛上传token
      * @return
      */
-    @RequestMapping(value="/Upload/qiniu_token",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/Upload/qiniu_token",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "七牛上传token", notes = "七牛上传token")
-    public @ResponseBody  String qiniuToken(HttpServletRequest request,
-                                               @RequestParam(required=true) String domain) {
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody  String qiniuToken(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
         jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if(null == jsonO){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String domain = jsonO.getString("domain");
+        if (null == domain || "".equals(domain)){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", -2);
@@ -318,6 +329,39 @@ public class PubliclController extends BaseController{
         data.put("token", tokenqiniu);
         jsonObj.put("result", data);
         jsonObj.put("status", 1);
+        jsonObj.put("msg", "请求成功!");
+
+        return jsonObj.toString();
+    }
+    @RequestMapping(value="/Index/getMyAddress",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "获取本机地址", notes = "获取本机地址")
+    public @ResponseBody  String getMyAddress(HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        jsonObj.put("code", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("code", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        data.put("ip","58.249.21.186");
+        data.put("country","中国");
+        data.put("area","");
+        data.put("region","广东");
+        data.put("city","广州");
+        data.put("county","XX");
+        data.put("isp","联通");
+        data.put("country_id","CN");
+        data.put("area_id","");
+        data.put("region_id","440000");
+        data.put("city_id","440100");
+        data.put("county_id","xx");
+        data.put("isp_id","100026");
+
+        jsonObj.put("data", data);
+        jsonObj.put("code", 1);
         jsonObj.put("msg", "请求成功!");
 
         return jsonObj.toString();

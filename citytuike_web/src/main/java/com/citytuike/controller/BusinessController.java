@@ -485,7 +485,7 @@ public class BusinessController extends BaseController{
      * @return
      * 商家名
      */
-    @RequestMapping(value="/getBusinessName",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @RequestMapping(value="/getBusinessName",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "商家名", notes = "商家名")
     public @ResponseBody String getBusinessName(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
@@ -741,7 +741,7 @@ public class BusinessController extends BaseController{
      *
      */
     @RequestMapping(value="/useUserCashList",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = " 使用优惠券", notes = " 使用优惠券")
+    @ApiOperation(value = " 用户优惠券列表", notes = " 用户优惠券列表")
     public @ResponseBody String useUserCashList(HttpServletRequest request,
                                                @RequestParam(required=true) String status) {
         JSONObject jsonObj = new JSONObject();
@@ -804,8 +804,24 @@ public class BusinessController extends BaseController{
         }
         return jsonObj.toString();
     }
+    @RequestMapping(value="/getStoreDetailed",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = " 商家资金冻结详细", notes = " 商家资金冻结详细")
+    public @ResponseBody String getStoreDetailed(HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
+        JSONArray data = new JSONArray();
+        jsonObj.put("status",0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        return jsonObj.toString();
+    }
     //TODO 商家资金冻结详细
     //TODO 制作折扣图
     //TODO 折扣图列表
+    //TODO 使用优惠券
 }
 

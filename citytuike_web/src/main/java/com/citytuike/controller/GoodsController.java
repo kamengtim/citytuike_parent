@@ -58,7 +58,7 @@ public class GoodsController extends BaseController{
 			return jsonObj.toString();
 		}
 		LimitPageList limitPageList = tpGoodsService.getLimitPageList(id, page);
-		data.put("return", limitPageList.getList());
+//		data.put("return", limitPageList.getList());
 		List<TpGoods> tpGoods = (List<TpGoods>) limitPageList.getList();
 		for (TpGoods tpGoods2 : tpGoods) {
 			JSONObject goods = tpGoodsService.getGoodsJson(tpGoods2);
@@ -66,7 +66,7 @@ public class GoodsController extends BaseController{
 		}
 		data.put("list", jsonArray);
 		data.put("count", limitPageList.getPage().getTotalCount());
-		jsonObj.put("return", data);
+		jsonObj.put("result", data);
 		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		System.out.println("结果:" + jsonObj.toString());
@@ -82,11 +82,14 @@ public class GoodsController extends BaseController{
 	public @ResponseBody String goodsInfo(@RequestParam(required=true) Integer id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
+		JSONObject data1 = new JSONObject();
+		JSONObject good = new JSONObject();
 		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpGoods tpGoods = tpGoodsService.findById(id);
-		data = tpGoodsService.getGoodsJson(tpGoods);
-		jsonObj.put("return", data);
+		good = tpGoodsService.getGoodsJson(tpGoods);
+		data1.put("goods", good);
+		jsonObj.put("result", data1);
 		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();

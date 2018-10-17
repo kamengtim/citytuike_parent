@@ -17,9 +17,9 @@ public interface TpOrderMapper {
 
 	int insertInvoic(TpInvoice invoice);
 
-	int getCount();
+	int getCount(@Param(value = "user_id") int user_id, @Param(value = "type") String type);
 
-	List<TpGoods> selectByPage(@Param(value = "type") String type, @Param(value = "startPos") int startPos, @Param(value = "pageSize") int pageSize);
+	List<TpGoods> selectByPage(@Param(value = "user_id") int user_id, @Param(value = "type") String type, @Param(value = "startPos") int startPos, @Param(value = "pageSize") int pageSize);
 
 	List<TpOrderGoods> findAllGoodsByOrderId(@Param(value = "order_id") Integer order_id);
 

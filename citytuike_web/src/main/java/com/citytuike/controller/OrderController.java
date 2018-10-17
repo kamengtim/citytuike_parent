@@ -88,7 +88,7 @@ public class OrderController extends BaseController{
 		jsonArray.add(jsonObject);
 		data.put("pay_status", jsonArray);
 		
-		LimitPageList limitPageList = tpOrderService.getLimitPageList(type, p);
+		LimitPageList limitPageList = tpOrderService.getLimitPageList(tpUsers.getUser_id(), type, p);
 		data.put("url", "https://api.citytuike.cn");
 		data.put("page", limitPageList.getPage().getPageNow());
 		data.put("count", limitPageList.getPage().getTotalCount());
@@ -130,7 +130,7 @@ public class OrderController extends BaseController{
 		}
 		String id = jsonO.getString("id");
 		String orderSn = jsonO.getString("orderSn");
-		if (null == id || "".equals(id) || null == orderSn || "".equals(orderSn)){
+		if (null == id || "".equals(id)){
 			jsonObj.put("status", 0);
 			jsonObj.put("msg", "参数有误");
 			return jsonObj.toString();

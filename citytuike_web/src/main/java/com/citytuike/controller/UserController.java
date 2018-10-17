@@ -13,6 +13,7 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -106,14 +107,14 @@ public class UserController extends BaseController{
 			String token = MD5Utils.md5(System.currentTimeMillis()+Util.generateString(16));
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
-			TpUsers tpUsers1 = tpUsersService.getToken(tpUsers.getToken());
-			redisTemplate.opsForValue().set(Constant.CURRENT_USER+tpUsers1.getToken(),tpUsers1.getToken());
-			redisTemplate.expire(Constant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
+//			TpUsers tpUsers1 = tpUsersService.getToken(tpUsers.getToken());
+//			redisTemplate.opsForValue().set(Constant.CURRENT_USER+tpUsers1.getToken(),tpUsers1.getToken());
+//			redisTemplate.expire(Constant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
 			if (result > 0) {
 				jsonObj.put("status", 1);
 				jsonObj.put("msg", "登陆成功!");
 				data = tpUsersService.getUserlJson(tpUsers);
-				jsonObj.put("return", data);
+				jsonObj.put("result", data);
 			}else {
 				System.out.println("系统错误!");
 			}
@@ -219,7 +220,7 @@ public class UserController extends BaseController{
 			jsonObj.put("status", 1);
 			jsonObj.put("msg", "注册成功!");
 			data = tpUsersService.getUserlJson(tpUsers);
-			jsonObj.put("return", data);
+			jsonObj.put("result", data);
 		}else {
 			System.out.println("系统错误!");
 		}
@@ -248,6 +249,25 @@ public class UserController extends BaseController{
 			}
 		}
 		
+		return jsonObj.toString();
+	}
+	@RequestMapping(value="/get_user_info",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "用户基础信息", notes = "用户基础信息")
+	public @ResponseBody String getUserInfo(HttpServletRequest request){
+		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
+		JSONObject user = new JSONObject();
+		jsonObj.put("status", 0);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
+		if (null != tpUsers) {
+			user = tpUsersService.getUserlJson(tpUsers);
+			data.put("user", user);
+			jsonObj.put("result", data);
+			jsonObj.put("status", 1);
+			jsonObj.put("msg", "请求成功");
+		}
+
 		return jsonObj.toString();
 	}
 	//TODO . 快速登录
@@ -289,7 +309,7 @@ public class UserController extends BaseController{
 		}
 		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
-		jsonObj.put("return", jsonArray);
+		jsonObj.put("result", jsonArray);
 		return jsonObj.toString();
 	}
 	/**
@@ -403,27 +423,14 @@ public class UserController extends BaseController{
 	 * @return
 	 * 获取城县区
 	 */
-	@RequestMapping(value="/get_region",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@RequestMapping(value="/get_region",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "获取城县区", notes = "获取城县区")
-    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-	public @ResponseBody String getRegion(HttpServletRequest request){
+	public @ResponseBody String getRegion(HttpServletRequest request, @RequestParam(required=true)Integer id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
 		JSONArray jsonArry = new JSONArray();
 		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
-        JSONObject jsonO = getRequestJson(request);
-        if(null == jsonO){
-            jsonObj.put("status", 0);
-            jsonObj.put("msg", "参数有误");
-            return jsonObj.toString();
-        }
-        Integer id = jsonO.getInteger("id");
-        if (null == id || "".equals(id)){
-            jsonObj.put("status", 0);
-            jsonObj.put("msg", "参数有误");
-            return jsonObj.toString();
-        }
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
 			jsonObj.put("status", -2);
@@ -445,7 +452,7 @@ public class UserController extends BaseController{
 			jsonArry.add(jsonObject);
 		}
 		data.put("region_list", jsonArry);
-		jsonObj.put("return", data);
+		jsonObj.put("result", data);
 		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
@@ -1043,6 +1050,7 @@ public class UserController extends BaseController{
 	@ApiOperation(value = "热门城市", notes = "热门城市")
 	public @ResponseBody String getHotCity(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
+		JSONObject data = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		TpUsers tpUsers = initUser(request);
 		if (null == tpUsers) {
@@ -1086,7 +1094,9 @@ public class UserController extends BaseController{
 		jsonObject5.put("level","1");
 		jsonObject5.put("parent_id","0");
 		jsonArray.add(jsonObject5);
-		jsonObj.put("region_list",jsonArray);
+
+		data.put("region_list",jsonArray);
+		jsonObj.put("result",data);
 		jsonObj.put("status", 1);
 		jsonObj.put("msg", "ok!");
 		return jsonObj.toString();
@@ -1233,7 +1243,7 @@ public class UserController extends BaseController{
      * @return
      * 个人中心 总收益、广告收益、已提现
      */
-	@RequestMapping(value = "user_account_statistics",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "user_account_statistics",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "个人中心 总收益、广告收益、已提现", notes = "个人中心 总收益、广告收益、已提现")
 	public @ResponseBody String userAccountStatistics(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -1581,7 +1591,7 @@ public class UserController extends BaseController{
 	 * @return
 	 * 收益明细中的收益统计
 	 */
-	@RequestMapping(value = "income_count",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "income_count",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "收益明细中的收益统计", notes = "收益明细中的收益统计")
 	public @ResponseBody String incomeCount(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -1827,7 +1837,7 @@ public class UserController extends BaseController{
 	 * @return
 	 * 系统通知判断
 	 */
-	@RequestMapping(value = "getSysList",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "getSysList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "系统通知判断", notes = "系统通知判断")
 	public @ResponseBody String getSysList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();

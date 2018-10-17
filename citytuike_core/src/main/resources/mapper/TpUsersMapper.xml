@@ -477,7 +477,7 @@
 		select user_money from tp_users where user_id=#{user_id}
 	</select>
 	<select id="findOneBySysIdAndUserId" resultType="com.citytuike.model.TpSysMessageUser">
-		select * from tp_sys_message where user_id=#{user_id}and id=#{id};
+		select * from tp_sys_message_user where user_id=#{user_id} and sys_msg_id=#{id}
 	</select>
 	<select id="findPlatMsgByFlagd" resultType="com.citytuike.model.TpPlateMsg">
 		select * from tp_plate_msg where flag=#{flag}

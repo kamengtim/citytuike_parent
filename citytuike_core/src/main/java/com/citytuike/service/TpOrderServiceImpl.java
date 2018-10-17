@@ -38,19 +38,19 @@ public class TpOrderServiceImpl implements TpOrderService{
 		return tpOrderMapper.insertInvoic(invoice);
 	}
 
-	public LimitPageList getLimitPageList(String type, Integer p) {
+	public LimitPageList getLimitPageList(Integer user_id, String type, Integer p) {
 		LimitPageList LimitPageStuList = new LimitPageList();
-	    int totalCount=tpOrderMapper.getCount();//获取总的记录数
+	    int totalCount=tpOrderMapper.getCount(user_id, type);//获取总的记录数
 	    List<TpGoods> stuList=new ArrayList<TpGoods>();
 	    Page page=null;
 	    if(p!=null){
 	        page=new Page(totalCount, p);
 	        page.setPageSize(10);
-	        stuList=tpOrderMapper.selectByPage(type, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+	        stuList=tpOrderMapper.selectByPage(user_id, type, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
 	    }else{
 	        page=new Page(totalCount, 1);//初始化pageNow为1
 	        page.setPageSize(10);
-	        stuList=tpOrderMapper.selectByPage(type, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+	        stuList=tpOrderMapper.selectByPage(user_id, type, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
 	    }
 	    LimitPageStuList.setPage(page);
 	    LimitPageStuList.setList(stuList);

@@ -17,7 +17,7 @@ public interface TpOrderService {
 
 	int insertInvoic(TpInvoice invoice);
 
-	LimitPageList getLimitPageList(String type, Integer p);
+	LimitPageList getLimitPageList(Integer user_id, String type, Integer p);
 
 	JSONObject getOrderJson(TpOrder tpOrder);
 

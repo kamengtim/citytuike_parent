@@ -168,7 +168,7 @@ public class CartController extends  BaseController{
 				}
 			}
 		}
-		jsonObj.put("return", data);
+		jsonObj.put("result", data);
 		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();

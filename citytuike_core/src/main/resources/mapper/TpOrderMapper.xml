@@ -52,40 +52,67 @@
     </select>
     <select id="selectByPage" resultMap="TpOrder">
     	select *  from tp_order
-    	
+		where
+		user_id=#{user_id}
     	<if test="type != null">
-    		where
-    		<if test='type == "ALL"'>
-			    1=1
+    		<if test='type == "all"'>
+
 			</if>
     		<if test='type == "WAITSEND"'>
-			    shipping_status=1 and order_status in(0, 1)
+			    and shipping_status=1 and order_status in(0, 1)
 			</if>
 		    <if test='type != null and type == "WAITPAY"'>
-			    pay_status=1 and order_status in(0, 1)
+				 and pay_status=1 and order_status in(0, 1)
 			</if>
 		    <if test='type != null and type == "WAITRECEIVE"'>
-			    shipping_status=1 and order_status=0
+				 and shipping_status=1 and order_status=0
 			</if>
 		    <if test='type != null and type == "WAITCCOMMENT"'>
-			    order_status=2
+				 and order_status=2
 			</if>
 		    <if test='type != null and type == "CANCEL"'>
-			    order_status=3
+				 and order_status=3
 			</if>
 		    <if test='type != null and type == "FINISH"'>
-			    order_status=4
+				 and order_status=4
 			</if>
 		    <if test='type != null and type == "CANCELLED"'>
-			    order_status=5
+				 and order_status=5
 			</if>
     	</if>
-	    
         limit #{startPos},#{pageSize}
     </select>  
     <!-- 取得记录的总数 -->  
     <select id="getCount" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM tp_order  
+        SELECT COUNT(*) FROM tp_order
+		where
+		user_id=#{user_id}
+		<if test="type != null">
+			<if test='type == "all"'>
+
+			</if>
+			<if test='type == "WAITSEND"'>
+				and shipping_status=1 and order_status in(0, 1)
+			</if>
+			<if test='type != null and type == "WAITPAY"'>
+				and pay_status=1 and order_status in(0, 1)
+			</if>
+			<if test='type != null and type == "WAITRECEIVE"'>
+				and shipping_status=1 and order_status=0
+			</if>
+			<if test='type != null and type == "WAITCCOMMENT"'>
+				and order_status=2
+			</if>
+			<if test='type != null and type == "CANCEL"'>
+				and order_status=3
+			</if>
+			<if test='type != null and type == "FINISH"'>
+				and order_status=4
+			</if>
+			<if test='type != null and type == "CANCELLED"'>
+				and order_status=5
+			</if>
+		</if>
     </select> 
 	<insert id="intsertOrder" parameterType="com.citytuike.model.TpOrder" useGeneratedKeys="true" keyProperty="order_id">
 		INSERT INTO tp_goods_collect (
