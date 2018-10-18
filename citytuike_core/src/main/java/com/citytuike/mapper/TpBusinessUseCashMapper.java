@@ -56,7 +56,7 @@ public interface TpBusinessUseCashMapper {
 
     TpBusinessUseCash findBusinessUseCashByNumber(String number);
 
-    List<TpBusinessUseCash> findBusinessUseCashByStatus(@Param("user_id") Integer user_id, @Param("status") String status);
+    List<TpBusinessUseCash> findBusinessUseCashByStatus(@Param("user_id") Integer user_id, @Param("tpye") String tpye, @Param("status") Integer status);
 
     int getCount();
 
@@ -64,4 +64,8 @@ public interface TpBusinessUseCashMapper {
 
     List<TpBusinessUseCash> selectByPage1(@Param("user_id") Integer user_id, @Param("business_id") Integer business_id, @Param("flag") Integer flag, @Param("startPos") int startPos, @Param("pageSize") int pageSize);
 
+    int getUserCashCountByCash(@Param("cash_id") Integer cash_id);
+
+
+    int updataUserCashFlagByCashId(@Param("flag")int flag, @Param("cashId")Integer cashId);
 }

@@ -1,6 +1,7 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpBusinessType;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -54,4 +55,5 @@ public interface TpBusinessTypeMapper {
     int updateByPrimaryKey(TpBusinessType record);
 
     List<TpBusinessType> findAllBusinessType();
+
 }

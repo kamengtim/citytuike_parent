@@ -30,6 +30,8 @@ public class BusinessServiceImpl implements BusinessService {
     private TpBusinessCashMapper tpBusinessCashMapper;
     @Autowired
     private TpBusinessUseCashMapper tpBusinessUseCashMapper;
+    @Autowired
+    private TpBusinessSaveMapper tpBusinessSaveMapper;
     @Override
     public int insertBusinessShare(TpBusinessShare tpBusinessShare) {
         return tpBusinessShareMapper.insert(tpBusinessShare);
@@ -108,7 +110,7 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public TpBusinessShare findBusinessShareByUserId(Integer user_id) {
+    public List<TpBusinessShare> findBusinessShareByUserId(Integer user_id) {
         return tpBusinessShareMapper.findBusinessShareByUserId(user_id);
     }
 
@@ -169,8 +171,8 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public List<TpBusinessUseCash> findBusinessUseCashByStatus(Integer user_id, String status) {
-        return tpBusinessUseCashMapper.findBusinessUseCashByStatus(user_id, status);
+    public List<TpBusinessUseCash> findBusinessUseCashByStatus(Integer user_id, String type, int status) {
+        return tpBusinessUseCashMapper.findBusinessUseCashByStatus(user_id, type, status);
     }
 
     @Override
@@ -203,4 +205,71 @@ public class BusinessServiceImpl implements BusinessService {
         LimitPageStuList.setList(stuList);
         return LimitPageStuList;
     }
+
+    @Override
+    public List<TpBusinessType> findAllBusinessCommentByUserId(Integer user_id, Integer business_id) {
+        return tpBusinessCommentMapper.findAllBusinessCommentByUserId(user_id, business_id);
+    }
+
+    @Override
+    public TpBusinessShare findBusinessShareByTag(Integer business_id, String tag) {
+        return tpBusinessShareMapper.findBusinessShareByTag(business_id, tag);
+    }
+
+    @Override
+    public int updataShareByTag(Integer business_id, String tags) {
+        return tpBusinessShareMapper.updataShareByTag(business_id, tags);
+    }
+
+    @Override
+    public List<TpBusinessSave> findAllSaveByOrder(String orderSn) {
+        return tpBusinessSaveMapper.findAllSaveByOrder(orderSn);
+    }
+
+    @Override
+    public List<TpBusinessImages> findAllImagesByShare(Integer businessId) {
+        return tpBusinessImagesMapper.findAllImagesByShare(businessId);
+    }
+
+    @Override
+    public List<TpBusinessCash> findAllCashByShare(Integer businessId) {
+        return tpBusinessCashMapper.findAllCashByShare(businessId);
+    }
+
+    @Override
+    public int getUserCashCountByCash(Integer cash_id) {
+        return tpBusinessUseCashMapper.getUserCashCountByCash(cash_id);
+    }
+
+    @Override
+    public TpBusinessSave findSavaByCashId(Integer cash_id) {
+        return tpBusinessSaveMapper.findSavaByCashId(cash_id);
+    }
+
+    @Override
+    public JSONObject getBusinessUserCashJson(TpBusinessUseCash tpbusinessUseCash) {
+        JSONObject useCashObj = new JSONObject();
+        useCashObj.put("id", tpbusinessUseCash.getId());
+        useCashObj.put("user_id", tpbusinessUseCash.getUserId());
+        useCashObj.put("cash_id", tpbusinessUseCash.getCashId());
+        useCashObj.put("number", tpbusinessUseCash.getNumber());
+        useCashObj.put("business_id", tpbusinessUseCash.getBusinessId());
+        useCashObj.put("flag", tpbusinessUseCash.getFlag());
+        useCashObj.put("add_time", tpbusinessUseCash.getAddTime());
+        useCashObj.put("codes", tpbusinessUseCash.getCodes());
+        useCashObj.put("userUseId", tpbusinessUseCash.getUserUseId());
+        useCashObj.put("use_status", tpbusinessUseCash.getUseStatus());
+        return useCashObj;
+    }
+
+    @Override
+    public int updataUserCashFlagByCashId(int flag, Integer cashId) {
+        return tpBusinessUseCashMapper.updataUserCashFlagByCashId(flag, cashId);
+    }
+
+    @Override
+    public TpBusinessUseCash findUseCashById(int id) {
+        return tpBusinessUseCashMapper.selectByPrimaryKey(id);
+    }
+
 }

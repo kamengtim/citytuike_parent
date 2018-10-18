@@ -55,4 +55,5 @@ public interface TpBusinessCashMapper {
      */
     int updateByPrimaryKey(TpBusinessCash record);
 
+    List<TpBusinessCash> findAllCashByShare(@Param("businessId") Integer businessId);
 }

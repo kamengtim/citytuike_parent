@@ -1,6 +1,9 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpBusinessImages;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TpBusinessImagesMapper {
     /**
@@ -50,4 +53,6 @@ public interface TpBusinessImagesMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(TpBusinessImages record);
+
+    List<TpBusinessImages> findAllImagesByShare(@Param("businessId") Integer businessId);
 }

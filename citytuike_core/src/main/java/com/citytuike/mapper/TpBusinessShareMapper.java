@@ -56,5 +56,9 @@ public interface TpBusinessShareMapper {
 
     List<TpBusinessShare> findNearByBusiness(@Param("business_type") int business_type, @Param("geohash")String geohash, @Param("tuijian")int tuijian);
 
-    TpBusinessShare findBusinessShareByUserId(@Param("user_id")Integer user_id);
+    List<TpBusinessShare> findBusinessShareByUserId(@Param("user_id")Integer user_id);
+
+    TpBusinessShare findBusinessShareByTag(@Param("business_id")Integer business_id, @Param("tag") String tag);
+
+    int updataShareByTag(@Param("business_id") Integer business_id, @Param("tags") String tags);
 }

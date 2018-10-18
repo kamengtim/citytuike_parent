@@ -1,6 +1,7 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpBusinessComment;
+import com.citytuike.model.TpBusinessType;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -56,4 +57,6 @@ public interface TpBusinessCommentMapper {
     int updateByPrimaryKey(TpBusinessComment record);
 
     List<TpBusinessComment> findAllBusinessCommentByBusinessId(@Param("id") int id);
+
+    List<TpBusinessType> findAllBusinessCommentByUserId(@Param("user_id") Integer user_id, @Param("business_id")Integer business_id);
 }
