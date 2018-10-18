@@ -4,33 +4,16 @@ import java.io.Serializable;
 
 public class TpRegion implements Serializable{
 
-	/**
-	 * 地区表
-	 */
-	private static final long serialVersionUID = 8047922416881294619L;
-	/**
-	 * id
-	 */
 	private Integer id;
-	/**
-	 * 地区名称
-	 */
+
 	private String name;
-	/**
-	 * 地区等级 分省市县区
-	 */
+
 	private Byte level;
-	/**
-	 * 父id
-	 */
+
 	private Integer parent_id;
-	/**
-	 *
-	 */
+
 	private String initials;
-	/**
-	 * 地区机器数量
-	 */
+
 	private Integer num;
 
 	public Integer getId() {

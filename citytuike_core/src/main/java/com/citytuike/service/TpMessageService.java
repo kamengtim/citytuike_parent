@@ -10,4 +10,9 @@ public interface TpMessageService {
     JSONObject getJson(TpMessage tpMessage,Integer user_id);
 
     void save(JSONObject jsonObj);
+
+    void insert(TpMessage tpMessage);
+
+
+    TpMessage getNewMessage(int i);
 }

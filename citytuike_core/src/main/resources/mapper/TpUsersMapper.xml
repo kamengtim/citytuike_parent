@@ -711,4 +711,10 @@
 	<update id="addNumberToUser">
 		update tp_users set paper_number_allowance = paper_number_allowance + #{number} ,paper_number = paper_number + #{number} where user_id = #{user_id}
 	</update>
+	<select id="getLikeUser" resultType="TpUsers">
+		SELECT * from tp_users where user_id = #{user_id}
+	</select>
+	<select id="selectInviteUser" resultType="TpUsers">
+		select * from tp_users where invite_code = #{invite_code}
+	</select>
 </mapper>

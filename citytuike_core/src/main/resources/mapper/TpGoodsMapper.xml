@@ -50,4 +50,7 @@
 	<select id="selectPrice" resultType="TpGoods">
 		select * from tp_goods where goods_id = 146
 	</select>
+	<select id="getGoodName" resultType="TpGoods">
+		select * from tp_goods where good_id = #{goods_id}
+	</select>
 </mapper>

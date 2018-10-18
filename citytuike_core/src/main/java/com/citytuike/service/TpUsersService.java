@@ -153,4 +153,8 @@ public interface TpUsersService {
 	TpUsers selectToUsers(Integer user_id);
 
 	void addNumberToUser(Integer user_id, Integer number);
+
+    TpUsers getLikeUser(Integer user_id);
+
+    TpUsers selectInviteUser(String invite_code);
 }

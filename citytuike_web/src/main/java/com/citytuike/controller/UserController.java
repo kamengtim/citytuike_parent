@@ -1,6 +1,7 @@
 package com.citytuike.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.constant.Constant;
@@ -10,6 +11,7 @@ import com.citytuike.util.MD5Utils;
 import com.citytuike.util.Util;
 import com.citytuike.util.mobileCheck;
 import com.github.pagehelper.PageInfo;
+import de.ailis.pherialize.Pherialize;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -26,10 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -75,6 +74,20 @@ public class UserController extends BaseController{
 	private TpFestivalsService tpFestivalsService;
 	@Autowired
 	private TpFestivalsCateService tpFestivalsCateService;
+	@Autowired
+    private TpJoinUsService tpJoinUsService;
+	@Autowired
+	private TpRegionService tpRegionService;
+	@Autowired
+    private TpApplyService tpApplyService;
+	@Autowired
+    private TpGoodsService tpGoodsService;
+	@Autowired
+    private TpUserMessageService tpUserMessageService;
+	@Autowired
+    private TpMessageService tpMessageService;
+	@Autowired
+	private TpScanHelpService tpScanHelpService;
 	/**
 	 * @return
 	 * 登陆
@@ -2455,7 +2468,8 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "clickFabulous",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = "点赞", notes = "点赞")
-	public @ResponseBody String clickFabulous(HttpServletRequest request,
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String clickFabulous(HttpServletRequest request,
 										   @RequestParam(required = true) Integer did){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -2495,7 +2509,8 @@ public class UserController extends BaseController{
 	 * 更改个人动态背景图
 	 */
 	@RequestMapping(value = "changeBackImg",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "更改个人动态背景图", notes = "更改个人动态背景图")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "更改个人动态背景图", notes = "更改个人动态背景图")
 	public @ResponseBody String changeBackImg(HttpServletRequest request,
 										   @RequestParam(required = true) String image){
 		JSONObject jsonObj = new JSONObject();
@@ -2615,13 +2630,365 @@ public class UserController extends BaseController{
         }
         return null;
     }
-//TODO 我要加盟
-//TODO 首字母排序获取地址列表接口
-//TODO H5--信息收集
-//TODO 用户基础信息
-//TODO 添加意向用户
-//TODO 办卡人资料列表
-//TODO 帮助朋友
+	/**
+	 * @return
+	 * 我要加盟
+	 */
+	@RequestMapping(value = "joinUs",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "我要加盟", notes = "我要加盟")
+	public @ResponseBody String joinUs(HttpServletRequest request){
+		JSONObject jsonObj = new JSONObject();
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+		jsonObj.put("status", 0);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonRequest = getRequestJson(request);
+		if(null == jsonRequest){
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+        String name = jsonRequest.getString("name");
+        String mobile = jsonRequest.getString("mobile");
+        String area = jsonRequest.getString("area");
+        String reason = jsonRequest.getString("reason");
+        if(name == null || name.equals("") || mobile == null || mobile.equals("") ||
+           area == null || area.equals("") || reason == null || reason.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        TpJoinUs tpJoinUs = new TpJoinUs();
+        tpJoinUs.setName(name);
+        tpJoinUs.setMobile(mobile);
+        tpJoinUs.setReason(reason);
+        tpJoinUs.setArea(area);
+        tpJoinUs.setStatus(false);
+        int i  = tpJoinUsService.insert(tpJoinUs);
+        if(i<0){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "请求失败");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 1);
+        jsonObj.put("msg", "请求成功");
+        return jsonObj.toString();
+    }
+    /**
+     * @return
+     * 首字母排序获取地址列表接口
+     */
+    @RequestMapping(value = "get_regions",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "首字母排序获取地址列表接口", notes = "首字母排序获取地址列表接口")
+    public @ResponseBody String get_regions(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject object = new JSONObject();
+        JSONObject json = new JSONObject();
+        List<String> list = new ArrayList<String>();
+        JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonRequest = getRequestJson(request);
+        if(null == jsonRequest){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String id = jsonRequest.getString("id");
+        if(id == null || id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        //获取第一级地址
+		List<TpRegion> tpRegions = tpRegionService.selectOne();
+		for (TpRegion tpRegion : tpRegions) {
+			List<TpRegion> regiones = tpRegionService.selectByParentId(tpRegion.getId());
+			for (TpRegion regione : regiones) {
+                List<TpRegion> region = tpRegionService.getDis(regione.getId());
+                JSONObject jsonObject = new JSONObject();
+                JSONArray array = new JSONArray();
+                for (TpRegion tpReg : region) {
+                        JSONObject jsonObject3 = new JSONObject();
+                        jsonObject3.put("id", tpReg.getId());
+                        jsonObject3.put("name", tpReg.getName());
+                        jsonObject3.put("initials", tpReg.getInitials());
+                        jsonObject3.put("level", tpReg.getLevel());
+                        jsonObject3.put("num", tpReg.getNum());
+                        jsonObject3.put("parent_id", tpReg.getParent_id());
+                        array.add(jsonObject3);
+                        jsonObject.put("area_value",array);
+                }
+				jsonObject.put("area_id", regione.getId());
+				jsonObject.put("area_name", regione.getName());
+				jsonObject.put("initials", regione.getInitials());
+				jsonArray.add(jsonObject);
+                list.add((String)jsonObject.get("initials"));
+                for  ( int  i  =   0 ; i  <  list.size()  -   1 ; i ++ )  {
+                    for  ( int  j  =  list.size()  -   1 ; j  >  i; j -- )  {
+                        if  (list.get(j).equals(list.get(i)))  {
+                            list.remove(j);
+                        }
+                    }
+                }
+		    }
+        }
+            Collections.sort(list);
+            String[] output = list.toArray(new String[0]);
+            for (int i = 0; i <output.length ; i++) {
+                Iterator<Object> it = jsonArray.iterator();
+                JSONArray jsonArray2 = new JSONArray();
+                while (it.hasNext()) {
+                    JSONObject ob = (JSONObject) it.next();
+                    if(ob.get("initials").equals(output[i])){
+                        jsonArray2.add(ob);
+                        object.put((String)ob.get("initials"),jsonArray2);
+                    }
+                }
+            }
+            json.put("region_list",object);
+            jsonObj.put("result",json);
+			jsonObj.put("status", 1);
+			jsonObj.put("msg", "ok");
+			return jsonObj.toString();
+    }
+	/**
+	 * @return
+	 * H5--信息收集
+	 */
+	@RequestMapping(value = "apply",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	@ApiOperation(value = "信息收集", notes = "信息收集")
+	public @ResponseBody String apply(HttpServletRequest request){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = initUser(request);
+		if (null == tpUsers) {
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效!");
+			return jsonObj.toString();
+		}
+		jsonObj.put("status", 0);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonRequest = getRequestJson(request);
+		if(null == jsonRequest){
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+        String name = jsonRequest.getString("name");
+        String mobile = jsonRequest.getString("mobile");
+        String type = jsonRequest.getString("type");
+        String reason = jsonRequest.getString("reason");
+        String area = jsonRequest.getString("area");
+        if(name == null || name.equals("") || mobile == null || mobile.equals("") || type ==null || type.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        TpApply tpApply = new TpApply();
+        tpApply.setMobile(mobile);
+        tpApply.setName(name);
+        tpApply.setType(Integer.valueOf(type));
+        tpApply.setReason(reason == null ? "" : reason);
+        tpApply.setStatus(0);
+        int i = tpApplyService.insert(tpApply);
+        if(i>0){
+            jsonObj.put("status", 1);
+            jsonObj.put("msg", "操作成功");
+        }
+        return jsonObj.toString();
+	}
+    /**
+     * @return
+     * 添加意向用户
+     */
+    @RequestMapping(value = "wantBuy",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "添加意向用户", notes = "添加意向用户")
+    public @ResponseBody String wantBuy(HttpServletRequest request,
+                                        @RequestParam(required = true)String goods_id){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject msg = new JSONObject();
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        if(goods_id == null || goods_id.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        TpUsers likeUser = tpUsersService.getLikeUser(tpUsers.getUser_id());
+        if(likeUser.getParent_id() == null){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "无上级");
+            return jsonObj.toString();
+        }
+        String good_name = tpGoodsService.getGoodName(goods_id);
+        TpMessage tpMessage = new TpMessage();
+        tpMessage.setMessage("");
+        tpMessage.setType(false);
+        tpMessage.setCategory(14);
+        tpMessage.setSend_time((int)(new Date().getTime()/1000));
+        msg.put("user_id",tpUsers.getUser_id());
+        msg.put("head_pic",tpUsers.getHead_pic());
+        msg.put("nickname",tpUsers.getNickname());
+        msg.put("good_id",goods_id);
+        msg.put("good_name",good_name);
+        msg.put("mobile",tpUsers.getMobile());
+        msg.put("wechat_qrcode",tpUsers.getWechat_qrcode());
+        msg.put("hx_id",0);
+        String data = Pherialize.serialize(msg);
+        tpMessage.setData(data);
+        tpMessage.setError_msg("0");
+        tpMessage.setError_num(0);
+        tpMessage.setCreate_time((int)(new Date().getTime()/1000));
+        tpMessageService.insert(tpMessage);
+        TpMessage newMessage = tpMessageService.getNewMessage((int)(new Date().getTime()/1000));
+        TpUserMessage tpUserMessage = new TpUserMessage();
+        tpUserMessage.setMessage_id(newMessage.getMessage_id());
+        tpUserMessage.setUser_id(likeUser.getParent_id());
+        int i = tpUserMessageService.insert(tpUserMessage);
+        if(i<0){
+            jsonObj.put("status", 1);
+            jsonObj.put("msg", "操作成功");
+        }
+        return jsonObj.toString();
+    }
+    /**
+     * @return
+     * 办卡人资料列表
+     */
+    @RequestMapping(value = "applyPeople",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "办卡人资料列表", notes = "办卡人资料列表")
+    public @ResponseBody String applyPeople(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject object = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+		List<TpApplyCard>tpApplyCards = tpApplyCardService.selectList(tpUsers.getUser_id());
+		for (TpApplyCard tpApplyCard : tpApplyCards) {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("id",tpApplyCard.getId());
+			jsonObject.put("name",tpApplyCard.getName());
+			jsonObject.put("mobile",tpApplyCard.getMobile());
+			jsonObject.put("idcard",tpApplyCard.getIdcard());
+			jsonObject.put("area",tpApplyCard.getArea());
+			jsonObject.put("add_time",tpApplyCard.getAdd_time());
+			jsonObject.put("user_id",tpApplyCard.getAdd_time());
+			jsonArray.add(jsonObject);
+			for (int i = 0; i <jsonArray.size() ; i++) {
+				object.put(String.valueOf((jsonArray.size()-1)),jsonObject);
+			}
+		}
+		jsonObj.put("status", 1);
+		jsonObj.put("msg", "ok");
+		jsonObj.put("result",object);
+        return jsonObj.toString();
+    }
+	/**
+	 * @return
+	 * 帮助朋友
+	 */
+	@RequestMapping(value = "addChance",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	@ApiOperation(value = "办卡人资料列表", notes = "办卡人资料列表")
+	public @ResponseBody String addChance(HttpServletRequest request){
+		JSONObject jsonObj = new JSONObject();
+		TpUsers tpUsers = initUser(request);
+		if (null == tpUsers) {
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效!");
+			return jsonObj.toString();
+		}
+		jsonObj.put("status", 0);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonRequest = getRequestJson(request);
+		if(null == jsonRequest){
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+        String invite_code = jsonRequest.getString("invite_code");
+		if(invite_code == null || invite_code.equals("")){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "没有邀请码");
+            return jsonObj.toString();
+        }
+        TpUsers inviteUser = tpUsersService.selectInviteUser(invite_code);
+		if(inviteUser == null){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "帮助的用户不存在");
+            return jsonObj.toString();
+        }
+        if(inviteUser.getUser_id() == tpUsers.getUser_id()){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "帮助的用户不应该是自已");
+            return jsonObj.toString();
+        }
+        String s = this.fansHelp(tpUsers.getUser_id(),inviteUser.getUser_id());
+		org.json.JSONObject object = new org.json.JSONObject(s);
+        Integer status = (Integer) object.get("status");
+        if(status == 1){
+            jsonObj.put("status", 1);
+            jsonObj.put("msg", "ok");
+        }else{
+            String msg = (String) object.get("msg");
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", msg);
+        }
+        return jsonObj.toString();
+	}
+
+	private String fansHelp(Integer user_id, Integer invite_id) {
+		JSONObject jsonObj = new JSONObject();
+		//检查用户有没有帮助他人
+		int count = tpScanHelpService.fansHelp(user_id);
+		if(count > 0){
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "您已经帮助过了其他人了");
+			return jsonObj.toString();
+		}
+		//检查求助对象今天是否被帮助过
+		int num = tpScanHelpService.toDayHelp(invite_id);
+		if(num > 0){
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "您的好友今天已经有人帮助他了");
+			return jsonObj.toString();
+		}
+		int i = tpScanHelpService.insert(user_id,invite_id);
+		if(i<0){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "操作失败");
+        }
+		jsonObj.put("status", 1);
+		jsonObj.put("msg", "ok");
+		return jsonObj.toString();
+	}
 //TODO  69. 抽奖接口
 //TODO 70. 领取奖励
 //TODO 71. 已经获得的奖励列表
@@ -2633,6 +3000,6 @@ public class UserController extends BaseController{
 //TODO 77. 贷款渠道列表
 //TODO 78. 检测实习会员能否修改上级
 //TODO 79. 实习会员修改上级
-//TODO 80. 用户更多详情（聊天点击查看）
+//TODO 80. 用户更多详情（聊天点击查看)
 
 }

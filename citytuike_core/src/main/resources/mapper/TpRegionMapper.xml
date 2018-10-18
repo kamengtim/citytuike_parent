@@ -64,4 +64,13 @@
   <select id="getTwon" resultType="string">
     SELECT name from tp_region where id = #{twonName}
   </select>
+  <select id="selectOne" resultMap="BaseResultMap">
+    select * from tp_region where parent_id = 0 ORDER BY initials
+  </select>
+  <select id="selectByParentId" resultMap="BaseResultMap">
+    select * from tp_region where parent_id = #{id} ORDER BY initials
+  </select>
+  <select id="getDis" resultMap="BaseResultMap">
+    select * from tp_region where parent_id = #{id} ORDER BY initials
+  </select>
 </mapper>

@@ -93,4 +93,9 @@ public class TpUserMessageServiceImpl implements TpUserMessageService {
     public void setMessageReadByCat(Integer user_id, String cate,Integer message_id) {
         tpUserMessageMapper.setMessageReadByCat(user_id,cate,message_id);
     }
+
+    @Override
+    public int insert(TpUserMessage tpUserMessage) {
+        return tpUserMessageMapper.insert(tpUserMessage);
+    }
 }

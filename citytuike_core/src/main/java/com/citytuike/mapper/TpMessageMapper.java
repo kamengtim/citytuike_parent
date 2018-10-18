@@ -28,4 +28,6 @@ public interface TpMessageMapper {
     List<TpMessage> selectMessage(@Param("category") int category, @Param("user_id") Integer user_id);
 
     void save(TpMessage tpMessage);
+
+    TpMessage getNewMessage(int i);
 }

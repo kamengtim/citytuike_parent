@@ -42,6 +42,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
+                .apis(RequestHandlerSelectors.basePackage("com.citytuike.controller"))
                 .apis(RequestHandlerSelectors.any())
                 .build()
                 .globalOperationParameters(pars);

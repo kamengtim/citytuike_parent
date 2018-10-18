@@ -32,4 +32,10 @@ public interface TpRegionMapper {
     TpRegion getNameByFanId(Integer address);
 
     String getTwon(Integer twonName);
+
+    List<TpRegion> selectOne();
+
+    List<TpRegion> selectByParentId(Integer id);
+
+    List<TpRegion> getDis(Integer id);
 }

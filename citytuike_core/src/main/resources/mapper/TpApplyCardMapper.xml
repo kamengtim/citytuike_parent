@@ -48,4 +48,7 @@
   <select id="selectListId" resultMap="BaseResultMap">
     select id, name, mobile, idcard, area, add_time, user_id from tp_apply_card where id = #{id}
   </select>
+  <select id="selectList" resultMap="BaseResultMap">
+        select id, name, mobile, idcard, area, add_time, user_id from tp_apply_card where user_id = #{user_id}
+  </select>
 </mapper>

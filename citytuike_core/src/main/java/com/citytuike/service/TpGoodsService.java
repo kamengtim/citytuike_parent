@@ -25,4 +25,6 @@ public interface TpGoodsService {
     TpGoods getGoodsById(Integer id);
 
     TpGoods selectPrice();
+
+    String getGoodName(String goods_id);
 }

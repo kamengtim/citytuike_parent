@@ -86,4 +86,7 @@ SELECT m.category,m.message_id,um.status,m.send_time,m.type,m.data,m.message FRO
       #{error_msg,jdbcType=VARCHAR}, #{error_num,jdbcType=INTEGER}, #{create_time,jdbcType=INTEGER},
       #{message,jdbcType=LONGVARCHAR}, #{data,jdbcType=LONGVARCHAR})
   </insert>
+  <select id="getNewMessage" resultMap="BaseResultMap">
+    SELECT * from tp_message where send_time = #{i}
+  </select>
 </mapper>

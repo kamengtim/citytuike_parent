@@ -598,4 +598,14 @@ public class TpUsersServiceImpl implements TpUsersService{
 	public void addNumberToUser(Integer user_id, Integer number) {
 		tpUsersMapper.addNumberToUser(user_id,number);
 	}
+
+	@Override
+	public TpUsers getLikeUser(Integer user_id) {
+		return tpUsersMapper.getLikeUser(user_id);
+	}
+
+	@Override
+	public TpUsers selectInviteUser(String invite_code) {
+		return tpUsersMapper.selectInviteUser(invite_code);
+	}
 }

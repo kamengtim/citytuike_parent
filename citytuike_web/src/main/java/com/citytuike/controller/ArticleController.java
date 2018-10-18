@@ -27,6 +27,7 @@ public class ArticleController extends BaseController{
     /**
      * @return 统一文章列表
      */
+    //TODO 改成没有参数
     @RequestMapping(value = "getArticleList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "统一文章列表", notes = "统一文章列表")
     public @ResponseBody String getArticleList(HttpServletRequest request,

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.citytuike.mapper.TpJoinUsMapper" >
+  <resultMap id="BaseResultMap" type="com.citytuike.model.TpJoinUs" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="reason" property="reason" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIT" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tp_join_us
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.citytuike.model.TpJoinUs" useGeneratedKeys="true" keyProperty="id" >
+    insert into tp_join_us (name, mobile, reason, 
+      area, status)
+    values (#{name,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{status,jdbcType=BIT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpJoinUs" >
+    update tp_join_us
+    set name = #{name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, name, mobile, reason, area, status
+    from tp_join_us
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, mobile, reason, area, status
+    from tp_join_us
+  </select>
+</mapper>

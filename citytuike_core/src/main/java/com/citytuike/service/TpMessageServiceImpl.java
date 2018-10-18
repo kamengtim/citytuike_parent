@@ -84,4 +84,15 @@ public class TpMessageServiceImpl implements TpMessageService {
         tpMessage.setCreate_time((int)(new Date().getTime()/1000));
         tpMessageMapper.save(tpMessage);
     }
+
+    @Override
+    public void insert(TpMessage tpMessage) {
+        tpMessageMapper.save(tpMessage);
+    }
+
+    @Override
+    public TpMessage getNewMessage(int i) {
+        TpMessage tpMessage = tpMessageMapper.getNewMessage(i);
+        return tpMessage;
+    }
 }

@@ -38,4 +38,5 @@ public interface TpGoodsMapper {
 
     TpGoods selectPrice();
 
+    String getGoodName(String goods_id);
 }

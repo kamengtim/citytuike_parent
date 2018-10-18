@@ -161,4 +161,10 @@ public interface TpUsersMapper {
 	TpUsers selectToUsers(Integer user_id);
 
 	void addNumberToUser(@Param("user_id") Integer user_id, @Param("number") Integer number);
+
+    TpUsers getLikeUser(Integer user_id);
+
+	String getGoodName(String goods_id);
+
+    TpUsers selectInviteUser(String invite_code);
 }

@@ -25,7 +25,7 @@
     insert into tp_user_message (rec_id, user_id, message_id, 
       category, status)
     values (#{rec_id,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER}, #{message_id,jdbcType=INTEGER}, 
-      #{category,jdbcType=INTEGER}, #{status,jdbcType=BIT})
+      14, #{status,jdbcType=BIT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpUserMessage" >
     update tp_user_message

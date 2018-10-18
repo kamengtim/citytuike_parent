@@ -19,4 +19,6 @@ public interface TpApplyCardMapper {
     void deleteApplyPeople(@Param("user_id") Integer user_id, @Param("id") int id);
 
     TpApplyCard selectListId(String id);
+
+    List<TpApplyCard> selectList(Integer user_id);
 }

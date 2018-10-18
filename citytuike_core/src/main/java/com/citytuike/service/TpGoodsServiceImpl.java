@@ -118,5 +118,11 @@ public class TpGoodsServiceImpl implements TpGoodsService{
 		return tpGoods;
 	}
 
+	@Override
+	public String getGoodName(String goods_id) {
+		String goodName = tpGoodsMapper.getGoodName(goods_id);
+		return goodName;
+	}
+
 
 }

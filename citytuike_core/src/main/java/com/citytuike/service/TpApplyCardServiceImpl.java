@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TpApplyCardServiceImpl implements TpApplyCardService {
@@ -26,5 +27,10 @@ public class TpApplyCardServiceImpl implements TpApplyCardService {
     @Override
     public void deleteApplyPeople(Integer user_id, int id) {
         tpApplyCardMapper.deleteApplyPeople(user_id,id);
+    }
+
+    @Override
+    public List<TpApplyCard> selectList(Integer user_id) {
+        return tpApplyCardMapper.selectList(user_id);
     }
 }
