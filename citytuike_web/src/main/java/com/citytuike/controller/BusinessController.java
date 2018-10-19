@@ -7,6 +7,7 @@ import com.citytuike.service.BusinessService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.GeoHashUtil;
 import com.citytuike.util.Util;
+import com.qiniu.util.Json;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -75,8 +79,8 @@ public class BusinessController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
-        List<TpBusinessShare> tpBusinessShareList = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
-        if (tpBusinessShareList.size() >= 1){
+        TpBusinessShare tpBusinessShare1 = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare1){
             jsonObj.put("status", -1);
             jsonObj.put("msg", "您已经上传过了");
             return jsonObj.toString();
@@ -385,15 +389,15 @@ public class BusinessController extends BaseController{
         }
         TpBusinessCashFace tpBusinessCashFace = businessService.findBusinessCashFaceById(id);
         if (null != tpBusinessCashFace){
-            List<TpBusinessShare> tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
-            if (tpBusinessShare.size() == 1){
+            TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+            if (null != tpBusinessShare){
                 TpBusinessOrder tpBusinessOrder = new TpBusinessOrder();
                 String ordersn = "business" + Util.CreateDate() + Util.numberString(4);
                 tpBusinessOrder.setOrderSn(ordersn);
                 tpBusinessOrder.setUserId(tpUsers.getUser_id());
                 tpBusinessOrder.setPayStatus(0);
                 tpBusinessOrder.setFlag(2);
-                tpBusinessOrder.setBusinessId(tpBusinessShare.get(0).getId());
+                tpBusinessOrder.setBusinessId(tpBusinessShare.getId());
                 tpBusinessOrder.setAddTime((int)Calendar.getInstance().getTimeInMillis());
                 tpBusinessOrder.setTotalAmount(tpBusinessCashFace.getBond());
                 tpBusinessOrder.setGoodsPrice(tpBusinessCashFace.getBond());
@@ -449,11 +453,11 @@ public class BusinessController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
-        List<TpBusinessShare> tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
-        if (tpBusinessShare.size() == 1){
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare){
             TpBusinessCash tpBusinessCash = new TpBusinessCash();
             tpBusinessCash.setSkin(skin);
-            tpBusinessCash.setBusinessId(tpBusinessShare.get(0).getId());
+            tpBusinessCash.setBusinessId(tpBusinessShare.getId());
             tpBusinessCash.setBusinessName(name);
             tpBusinessCash.setPrice(price);
             tpBusinessCash.setFullsubPrice(fullsub_price);
@@ -470,6 +474,28 @@ public class BusinessController extends BaseController{
             tpBusinessCash.setJieTime((int)Calendar.getInstance().getTimeInMillis());
             int resultCash = businessService.insertBusinessCash(tpBusinessCash);
             if (resultCash > 0){
+                for (int i=0; i<nums; i++){
+                    TpBusinessUseCash tpBusinessUseCash = new TpBusinessUseCash();
+                    String time = Calendar.getInstance().getTimeInMillis() + "";
+                    String number = "YH" + tpBusinessShare.getId() + time.substring(0,time.length()-3) + Util.numberString(3);
+                    String code = Util.generateString(10);
+                    tpBusinessUseCash.setUserId(tpUsers.getUser_id());
+                    tpBusinessUseCash.setCashId(tpBusinessCash.getId());
+                    tpBusinessUseCash.setNumber(number);
+                    tpBusinessUseCash.setBusinessId(tpBusinessShare.getId());
+                    tpBusinessUseCash.setFlag(0);
+                    tpBusinessUseCash.setAddTime((int)Calendar.getInstance().getTimeInMillis());
+                    tpBusinessUseCash.setCodes(code);
+                    tpBusinessUseCash.setFlag(0);
+                    tpBusinessUseCash.setType(2);
+                    int userCashResult = businessService.insertBUsinessUseCash(tpBusinessUseCash);
+                    if (userCashResult <= 0){
+                        jsonObj.put("result", data);
+                        jsonObj.put("status", -1);
+                        jsonObj.put("msg", "优惠券生成失败");
+                        return jsonObj.toString();
+                    }
+                }
                 jsonObj.put("result", data);
                 jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
@@ -531,9 +557,9 @@ public class BusinessController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
-        List<TpBusinessShare> tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
-        if (tpBusinessShare.size() == 1){
-            data.put("name", tpBusinessShare.get(0).getName());
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare){
+            data.put("name", tpBusinessShare.getName());
             jsonObj.put("result", data);
             jsonObj.put("status", 1);
             jsonObj.put("msg", "请求成功!");
@@ -638,16 +664,16 @@ public class BusinessController extends BaseController{
             return jsonObj.toString();
         }
 
-        List<TpBusinessShare> tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
-        if (tpBusinessShare.size() == 1 && null != tpBusinessShare.get(0)){
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare){
             JSONObject object = new JSONObject();
 //            JSONObject data = new JSONObject();
-            object.put("id", tpBusinessShare.get(0).getId());
-            object.put("name", tpBusinessShare.get(0).getName());
-            object.put("business_name", tpBusinessShare.get(0).getBusinessName());
-            object.put("location_area", tpBusinessShare.get(0).getLocationArea());
-            object.put("address", tpBusinessShare.get(0).getAddress());
-            List<TpBusinessImages> tpBusinessImagesList = businessService.findAllImagesByShare(tpBusinessShare.get(0).getId());
+            object.put("id", tpBusinessShare.getId());
+            object.put("name", tpBusinessShare.getName());
+            object.put("business_name", tpBusinessShare.getBusinessName());
+            object.put("location_area", tpBusinessShare.getLocationArea());
+            object.put("address", tpBusinessShare.getAddress());
+            List<TpBusinessImages> tpBusinessImagesList = businessService.findAllImagesByShare(tpBusinessShare.getId());
             JSONArray images = new JSONArray();
             JSONObject img = null;
             JSONObject imgAll = null;
@@ -666,7 +692,7 @@ public class BusinessController extends BaseController{
             double baozhengjin = 0.00;
             if (!"".equals(number)){
                 //搜索
-                LimitPageList limitPageList = businessService.getLimitPageUseCashList(null, number, page, tpBusinessShare.get(0).getId(), tpUsers.getUser_id());
+                LimitPageList limitPageList = businessService.getLimitPageUseCashList(null, number, page, tpBusinessShare.getId(), tpUsers.getUser_id());
                 object.put("count", limitPageList.getPage().getTotalPageCount());
                 object.put("page", page);
                 object.put("totalPages", limitPageList.getPage().getTotalPageCount()/10);
@@ -690,7 +716,7 @@ public class BusinessController extends BaseController{
             }else{
                 if (flag == 1){
                     //全部
-                    List<TpBusinessCash> tpBusinessCashList = businessService.findAllCashByShare(tpBusinessShare.get(0).getId());
+                    List<TpBusinessCash> tpBusinessCashList = businessService.findAllCashByShare(tpBusinessShare.getId());
                     TpBusinessSave tpBusinessSave = null;
                     int userCount = 0;
                     int price_date = 0;
@@ -723,7 +749,7 @@ public class BusinessController extends BaseController{
                     }
 
                 }else{
-                    LimitPageList limitPageList = businessService.getLimitPageUseCashList(1, "", page, tpBusinessShare.get(0).getId(), tpUsers.getUser_id());
+                    LimitPageList limitPageList = businessService.getLimitPageUseCashList(1, "", page, tpBusinessShare.getId(), tpUsers.getUser_id());
                     object.put("count", limitPageList.getPage().getTotalPageCount());
                     object.put("page", page);
                     object.put("totalPages", limitPageList.getPage().getTotalPageCount()/10);
@@ -941,8 +967,8 @@ public class BusinessController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
-        List<TpBusinessShare> tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
-        if (tpBusinessShare.size() == 1){
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare){
             jsonObj.put("status", -1);
             jsonObj.put("msg", "您已经上传过了!");
         }
@@ -952,7 +978,7 @@ public class BusinessController extends BaseController{
     @ApiOperation(value = " 商家资金冻结详细", notes = " 商家资金冻结详细")
     public @ResponseBody String getStoreDetailed(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
-        JSONArray data = new JSONArray();
+        JSONObject data = new JSONObject();
         jsonObj.put("status",0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
@@ -961,14 +987,274 @@ public class BusinessController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
-        List<TpBusinessShare> tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
-        if (tpBusinessShare.size() == 1){
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare){
+            double yibaozhengjin = 0.00;
+            //已解冻金额
+            List<TpBusinessCash> tpBusinessCashList = businessService.findAllCashByShareAndThawflag(tpBusinessShare.getId(), 1);
+            for (TpBusinessCash tpCash : tpBusinessCashList) {
+                TpBusinessSave tpBusinessSave = businessService.findSaveByBUsinessIdAndCashId(tpBusinessShare.getId(), tpCash.getId());
+                if (null != tpBusinessSave && "".equals(tpBusinessSave.getFaceId())){
+                    yibaozhengjin += tpBusinessSave.getBaozhengjin();
+                }
+            }
+            data.put("yi", yibaozhengjin);
+            double kebaozhengjin = 0.00;
+            //已解冻金额
+            List<TpBusinessCash> tpBusinessCashList2 = businessService.findAllCashByShareAndThawflag(tpBusinessShare.getId(), 0);
+            for (TpBusinessCash tpCash : tpBusinessCashList2) {
+                TpBusinessSave tpBusinessSave = businessService.findSaveByBUsinessIdAndCashId(tpBusinessShare.getId(), tpCash.getId());
+                if (null != tpBusinessSave && "".equals(tpBusinessSave.getFaceId())){
+                    kebaozhengjin += tpBusinessSave.getBaozhengjin();
+                }
+            }
+            data.put("ke", kebaozhengjin);
+            double dongbaozhengjin = 0.00;
+            JSONArray cashArray = new JSONArray();
+            List<TpBusinessCash> tpBusinessCashList1 = businessService.findAllCashByShare(tpBusinessShare.getId());
+            List<String> datesTime = new ArrayList<>();
+            for (TpBusinessCash tpCash : tpBusinessCashList1) {
+                JSONObject cashObj = new JSONObject();
+                TpBusinessSave tpBusinessSave = businessService.findSaveByBUsinessIdAndCashId(tpBusinessShare.getId(), tpCash.getId());
+                if (null != tpBusinessSave && !"".equals(tpBusinessSave.getFaceId())){
+                    dongbaozhengjin += tpBusinessSave.getBaozhengjin();
+                }
+                if (tpCash.getThawFlag() == 1){
+                    //已解冻
+                    if (!datesTime.contains(Util.stampToDate2(tpBusinessSave.getCreateTime() + ""))){
+                        datesTime.add(Util.stampToDate2(tpBusinessSave.getCreateTime() + ""));
+                    }
+
+                }else{
+                    if (!datesTime.contains(Util.stampToDate2(tpBusinessSave.getCreateTime() + ""))){
+                        datesTime.add(Util.stampToDate2(tpBusinessSave.getCreateTime() + ""));
+                    }
+                }
+            }
+            data.put("dong", dongbaozhengjin);
+            JSONObject timeObj = new JSONObject();
+            for (int i=0; i < datesTime.size(); i++){
+                for (TpBusinessCash tpCash : tpBusinessCashList1) {
+                    int num = 0;
+                    JSONObject cashObj = new JSONObject();
+                    TpBusinessSave tpBusinessSave = businessService.findSaveByBUsinessIdAndCashId(tpBusinessShare.getId(), tpCash.getId());
+                    if (tpCash.getThawFlag() == 1){
+                        //已解冻
+                        if (datesTime.get(i).equals(Util.stampToDate2(tpBusinessSave.getCreateTime() + ""))){
+                            num = 1;
+                        }
+                        cashObj.put("time", Util.stampToDate2(tpBusinessSave.getCreateTime() + ""));
+                        cashObj.put("wtime", Util.stampToDate3(tpBusinessSave.getCreateTime() + ""));
+                    if (null != tpBusinessSave && !"".equals(tpBusinessSave.getFaceId())){
+                        cashObj.put("money", "-" + tpBusinessSave.getBaozhengjin());
+                    }
+                    cashObj.put("msg", "申请解冻");
+                    }else{
+                        if (datesTime.get(i).equals(Util.stampToDate2(tpBusinessSave.getCreateTime() + ""))){
+                            num = 1;
+                        }
+                        cashObj.put("time", Util.stampToDate2(tpBusinessSave.getCreateTime() + ""));
+                        cashObj.put("wtime", Util.stampToDate3(tpBusinessSave.getCreateTime() + ""));
+                    }
+                    if (null != tpBusinessSave && !"".equals(tpBusinessSave.getFaceId())){
+                        cashObj.put("money", "+" + tpBusinessSave.getBaozhengjin());
+                    }
+                    cashObj.put("msg", "充值");
+                    if (num == 1){
+                        cashArray.add(cashObj);
+                    }
+                }
+                timeObj.put("\"" + datesTime.get(i) + "\"", cashArray);
+            }
+            data.put("list", timeObj);
+            jsonObj.put("status",1);
+            jsonObj.put("msg", "请求成功");
         }
         return jsonObj.toString();
     }
-    //TODO 商家资金冻结详细
-    //TODO 制作折扣图
-    //TODO 折扣图列表
-    //TODO 使用优惠券
+    @RequestMapping(value="/discount_add",method=RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiOperation(value = "制作折扣图", notes = "制作折扣图")
+    public @ResponseBody String discountAdd(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if (null == jsonO){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String business_address = jsonO.getString("business_address");
+        String price = jsonO.getString("price");
+        String discount_price = jsonO.getString("discount_price");
+        String valid_date = jsonO.getString("valid_date");
+        String launch_address = jsonO.getString("launch_address");
+        String launch_id_str = jsonO.getString("launch_id_str");
+        String launch_date_start = jsonO.getString("launch_date_start");
+        String launch_date_end = jsonO.getString("launch_date_end");
+        String nums = jsonO.getString("nums");
+        String image = jsonO.getString("image");
+        if (null == business_address || "".equals(business_address) || null == price || "".equals(price)
+                || null == discount_price || "".equals(discount_price) || null == valid_date || "".equals(valid_date)
+                || null == launch_address || "".equals(launch_address) || null == launch_id_str || "".equals(launch_id_str)
+                || null == launch_date_start || "".equals(launch_date_start) || null == launch_date_end || "".equals(launch_date_end)
+                || null == nums || "".equals(nums) || null == image || "".equals(image)){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null == tpBusinessShare){
+            jsonObj.put("status", -1);
+            jsonObj.put("msg", "您还不是商家哦");
+            return jsonObj.toString();
+        }
+        TpBusinessDiscount tpBusinessDiscount = new TpBusinessDiscount();
+        tpBusinessDiscount.setBusinessId(tpBusinessShare.getId());
+        tpBusinessDiscount.setBusinessName(tpBusinessShare.getBusinessName());
+        tpBusinessDiscount.setBusinessAddress(tpBusinessShare.getAddress());
+        tpBusinessDiscount.setPrice(Double.parseDouble(price));
+        tpBusinessDiscount.setDiscountPrice(Double.parseDouble(discount_price));
+        tpBusinessDiscount.setValidDate(Integer.parseInt(valid_date));
+        tpBusinessDiscount.setLaunchAddress(launch_address);
+        tpBusinessDiscount.setLaunchId(launch_id_str);
+        tpBusinessDiscount.setLaunchDateStart(Integer.parseInt(launch_date_start));
+        tpBusinessDiscount.setLaunchDateEnd(Integer.parseInt(launch_date_end));
+        tpBusinessDiscount.setNums(Integer.parseInt(nums));
+        tpBusinessDiscount.setAddTime(new Timestamp(new Date().getTime()));
+        tpBusinessDiscount.setImage(image);
+        tpBusinessDiscount.setStatus(1);
+        int discountResult = businessService.insertBusinessDiscount(tpBusinessDiscount);
+        if (discountResult > 0){
+            int num = Integer.parseInt(nums);
+            for (int i=0; i<num; i++){
+                String time = Calendar.getInstance().getTimeInMillis() + "";
+                TpBusinessUseCash tpBusinessUseCash = new TpBusinessUseCash();
+                String number = "ZK" + tpBusinessShare.getId() + time.substring(0,time.length()-3) + Util.numberString(3);
+                String code = Util.generateString(10);
+                tpBusinessUseCash.setUserId(tpUsers.getUser_id());
+                tpBusinessUseCash.setCashId(tpBusinessDiscount.getId());
+                tpBusinessUseCash.setNumber(number);
+                tpBusinessUseCash.setBusinessId(tpBusinessShare.getId());
+                tpBusinessUseCash.setFlag(0);
+                tpBusinessUseCash.setAddTime((int)Calendar.getInstance().getTimeInMillis());
+                tpBusinessUseCash.setCodes(code);
+                tpBusinessUseCash.setFlag(0);
+                tpBusinessUseCash.setType(2);
+                int userCashResult = businessService.insertBUsinessUseCash(tpBusinessUseCash);
+                if (userCashResult <= 0){
+                    jsonObj.put("result", data);
+                    jsonObj.put("status", -1);
+                    jsonObj.put("msg", "优惠券生成失败");
+                    return jsonObj.toString();
+                }
+            }
+            jsonObj.put("result", data);
+            jsonObj.put("status", 1);
+            jsonObj.put("msg", "请求成功");
+        }
+        return jsonObj.toString();
+    }
+    @RequestMapping(value="/discount_list",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "折扣图列表", notes = "折扣图列表")
+    public @ResponseBody String discountList(HttpServletRequest request,
+                                                @RequestParam(required=true) String page) {
+        JSONObject jsonObj = new JSONObject();
+        JSONObject dataObj = new JSONObject();
+        JSONArray data = new JSONArray();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare){
+            LimitPageList limitPageList = businessService.getLimitPageDiscountListByBusinessId(tpBusinessShare.getId(), Integer.parseInt(page));
+            JSONObject discountJson = null;
+            for (TpBusinessDiscount tpDisCount : (List<TpBusinessDiscount>)limitPageList.getList()) {
+                discountJson = businessService.getBusinessDiscountJson(tpDisCount);
+                data.add(discountJson);
+            }
+            dataObj.put("total", limitPageList.getPage().getTotalCount());
+            dataObj.put("per_page", limitPageList.getPage().getPageSize());
+            dataObj.put("current_page", limitPageList.getPage().getPageNow());
+            dataObj.put("last_page", limitPageList.getPage().getTotalPageCount());
+            dataObj.put("data", data);
+        }
+
+        jsonObj.put("result", dataObj);
+        jsonObj.put("status", 1);
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
+    @RequestMapping(value="/useCashShop",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "使用优惠券", notes = "使用优惠券")
+    public @ResponseBody String useCashShop(HttpServletRequest request,
+                                            @RequestParam(required=true) String number,
+                                            @RequestParam(required=true) String code) {
+        JSONObject jsonObj = new JSONObject();
+        JSONObject dataObj = new JSONObject();
+        JSONArray data = new JSONArray();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        TpBusinessShare tpBusinessShare = businessService.findBusinessShareByUserId(tpUsers.getUser_id());
+        if (null != tpBusinessShare){
+            TpBusinessUseCash tpBusinessUseCash = businessService.findUseByUserAndNumberAndUseStatus(number, tpUsers.getUser_id(), 1);
+            if (null != tpBusinessUseCash){
+//                TpBusinessSave tpBusinessSave = businessService.findSavaByCashId(tpBusinessUseCash.getCashId());
+                TpBusinessCash tpBusinessCash = businessService.findBusinessCashById(tpBusinessUseCash.getCashId());
+                if (null != tpBusinessCash){
+                    int miao = 0;
+                    if (null != tpBusinessCash && null != tpBusinessCash.getPriceDate()){
+                        miao = tpBusinessUseCash.getAddTime() + tpBusinessCash.getPriceDate()*24*60*60;
+                    }
+                    int nowTime = (int)Calendar.getInstance().getTimeInMillis();
+                    if (miao < nowTime){
+                        int useStatus = businessService.updataUseCashForUseStatus(number, tpBusinessCash.getId(), code, 2);
+                        if (useStatus > 0){
+                            jsonObj.put("status", -1001);
+                            jsonObj.put("msg", "优惠券已过期");
+                        }
+                        return jsonObj.toString();
+                    }else{
+                        if (code.equals(tpBusinessUseCash.getCodes())){
+                            int updataFalg = businessService.updataUseCashForFlag(number, tpUsers.getUser_id(), 1);
+                            if (updataFalg > 0){
+                                jsonObj.put("status", 1);
+                                jsonObj.put("msg", "使用成功");
+                                return jsonObj.toString();
+                            }
+                        }else{
+                            jsonObj.put("status", -1000);
+                            jsonObj.put("msg", "激活码错误");
+                            return jsonObj.toString();
+                        }
+                    }
+                }
+            }
+        }
+
+        jsonObj.put("status", -1001);
+        jsonObj.put("msg", "优惠券已过期");
+        return jsonObj.toString();
+    }
 }
 

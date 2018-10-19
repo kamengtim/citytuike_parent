@@ -57,4 +57,6 @@ public interface TpBusinessSaveMapper {
     List<TpBusinessSave> findAllSaveByOrder(@Param("orderSn") String orderSn);
 
     TpBusinessSave findSavaByCashId(@Param("cash_id") Integer cash_id);
+
+    TpBusinessSave findSaveByBUsinessIdAndCashId(@Param("business_id") Integer business_id, @Param("cash_id") Integer cash_id);
 }

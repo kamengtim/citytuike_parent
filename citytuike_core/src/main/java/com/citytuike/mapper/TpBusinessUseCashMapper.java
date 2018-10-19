@@ -66,6 +66,11 @@ public interface TpBusinessUseCashMapper {
 
     int getUserCashCountByCash(@Param("cash_id") Integer cash_id);
 
-
     int updataUserCashFlagByCashId(@Param("flag")int flag, @Param("cashId")Integer cashId);
+
+    TpBusinessUseCash findUseByUserAndNumberAndUseStatus(@Param("number") String number, @Param("user_id") Integer user_id, @Param("use_status") int use_status);
+
+    int updataUseCashForUseStatus(@Param("number") String number, @Param("cash_id") Integer cash_id, @Param("code") String code, @Param("use_status") int use_status);
+
+    int updataUseCashForFlag(@Param("number")String number, @Param("user_id")Integer user_id, @Param("use_status")int use_status);
 }

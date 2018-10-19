@@ -28,7 +28,7 @@ public interface BusinessService {
 
     TpBusinessCashFace findBusinessCashFaceById(int id);
 
-    List<TpBusinessShare> findBusinessShareByUserId(Integer user_id);
+    TpBusinessShare findBusinessShareByUserId(Integer user_id);
 
     int insertBusinessOrder(TpBusinessOrder tpBusinessOrder);
 
@@ -71,4 +71,22 @@ public interface BusinessService {
     int updataUserCashFlagByCashId(int flag, Integer cashId);
 
     TpBusinessUseCash findUseCashById(int id);
+
+    List<TpBusinessCash> findAllCashByShareAndThawflag(Integer business_id, int thaw_flag);
+
+    TpBusinessSave findSaveByBUsinessIdAndCashId(Integer business_id, Integer cash_id);
+
+    int insertBusinessDiscount(TpBusinessDiscount tpBusinessDiscount);
+
+    int insertBUsinessUseCash(TpBusinessUseCash tpBusinessUseCash);
+
+    LimitPageList getLimitPageDiscountListByBusinessId(Integer business_id, Integer page);
+
+    JSONObject getBusinessDiscountJson(TpBusinessDiscount tpDisCount);
+
+    TpBusinessUseCash findUseByUserAndNumberAndUseStatus(String number, Integer user_id, int use_status);
+
+    int updataUseCashForUseStatus(String number, Integer cash_id, String code, int use_status);
+
+    int updataUseCashForFlag(String number, Integer user_id, int use_status);
 }

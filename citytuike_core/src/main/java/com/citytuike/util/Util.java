@@ -150,6 +150,44 @@ public class Util<main> {
         todayEnd.set(Calendar.MILLISECOND, 999);
         return todayEnd.getTime();
     }
+    /*
+     * 将时间戳转换为时间
+     */
+    public static String stampToDate0(String s){
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+    /*
+     * 将时间戳转换为时间
+     */
+    public static String stampToDate1(String s){
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+    public static String stampToDate2(String s){
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
+    public static String stampToDate3(String s){
+        String res;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        long lt = new Long(s);
+        Date date = new Date(lt);
+        res = simpleDateFormat.format(date);
+        return res;
+    }
     public static String getNowToString(){
         //使用Calendar
 //        Calendar now = Calendar.getInstance();
@@ -207,26 +245,29 @@ public class Util<main> {
     }
     public static void  main(String[] args) {
         //使用Calendar
-        Calendar now = Calendar.getInstance();
-        System.out.println("年：" + now.get(Calendar.YEAR));
-        System.out.println("月：" + (now.get(Calendar.MONTH) + 1));
-        System.out.println("日：" + now.get(Calendar.DAY_OF_MONTH));
-        System.out.println("时：" + now.get(Calendar.HOUR_OF_DAY));
-        System.out.println("分：" + now.get(Calendar.MINUTE));
-        System.out.println("秒：" + now.get(Calendar.SECOND));
-        //方法 一
-
-//方法 二
-        Calendar.getInstance().getTimeInMillis();
-//方法 三
-        new Date().getTime();
-//使用Date
-        Date d = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("当前时间：" + System.currentTimeMillis());
-        System.out.println("当前时间：" + Calendar.getInstance().getTimeInMillis());
-        System.out.println("当前时间：" + new Date());
-        System.out.println("当前时间：" + getDateAndNumber(16));
+//        Calendar now = Calendar.getInstance();
+//        System.out.println("年：" + now.get(Calendar.YEAR));
+//        System.out.println("月：" + (now.get(Calendar.MONTH) + 1));
+//        System.out.println("日：" + now.get(Calendar.DAY_OF_MONTH));
+//        System.out.println("时：" + now.get(Calendar.HOUR_OF_DAY));
+//        System.out.println("分：" + now.get(Calendar.MINUTE));
+//        System.out.println("秒：" + now.get(Calendar.SECOND));
+//        //方法 一
+//
+////方法 二
+//        Calendar.getInstance().getTimeInMillis();
+////方法 三
+//        new Date().getTime();
+////使用Date
+//        Date d = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        System.out.println("当前时间：" + System.currentTimeMillis());
+//        System.out.println("当前时间：" + Calendar.getInstance().getTimeInMillis());
+//        System.out.println("当前时间：" + new Date());
+//        System.out.println("当前时间：" + getDateAndNumber(16));
+        String date = Calendar.getInstance().getTimeInMillis() + "";
+        String sss = stampToDate1(date);
+        System.out.println(sss);
     }
     public static String transferLongToDate(String dateFormat, Long millSec){
         String result = null;

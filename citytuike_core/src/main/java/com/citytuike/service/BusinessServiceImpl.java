@@ -32,6 +32,8 @@ public class BusinessServiceImpl implements BusinessService {
     private TpBusinessUseCashMapper tpBusinessUseCashMapper;
     @Autowired
     private TpBusinessSaveMapper tpBusinessSaveMapper;
+    @Autowired
+    private TpBusinessDiscountMapper tpBusinessDiscountMapper;
     @Override
     public int insertBusinessShare(TpBusinessShare tpBusinessShare) {
         return tpBusinessShareMapper.insert(tpBusinessShare);
@@ -110,7 +112,7 @@ public class BusinessServiceImpl implements BusinessService {
     }
 
     @Override
-    public List<TpBusinessShare> findBusinessShareByUserId(Integer user_id) {
+    public TpBusinessShare findBusinessShareByUserId(Integer user_id) {
         return tpBusinessShareMapper.findBusinessShareByUserId(user_id);
     }
 
@@ -271,5 +273,84 @@ public class BusinessServiceImpl implements BusinessService {
     public TpBusinessUseCash findUseCashById(int id) {
         return tpBusinessUseCashMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    public List<TpBusinessCash> findAllCashByShareAndThawflag(Integer business_id, int thaw_flag) {
+        return tpBusinessCashMapper.findAllCashByShareAndThawflag(business_id, thaw_flag);
+    }
+
+    @Override
+    public TpBusinessSave findSaveByBUsinessIdAndCashId(Integer business_id, Integer cash_id) {
+        return tpBusinessSaveMapper.findSaveByBUsinessIdAndCashId(business_id, cash_id);
+    }
+
+    @Override
+    public int insertBusinessDiscount(TpBusinessDiscount tpBusinessDiscount) {
+        return tpBusinessDiscountMapper.insert(tpBusinessDiscount);
+    }
+
+    @Override
+    public int insertBUsinessUseCash(TpBusinessUseCash tpBusinessUseCash) {
+        return tpBusinessUseCashMapper.insert(tpBusinessUseCash);
+    }
+
+    @Override
+    public LimitPageList getLimitPageDiscountListByBusinessId(Integer business_id, Integer p) {
+        LimitPageList LimitPageStuList = new LimitPageList();
+        int totalCount=tpBusinessDiscountMapper.getCountByBusinessId(business_id);//获取总的记录数
+        List<TpBusinessUseCash> stuList=new ArrayList<TpBusinessUseCash>();
+        Page page=null;
+        if(p!=null){
+            page=new Page(totalCount, p);
+            page.setPageSize(10);
+            stuList=tpBusinessDiscountMapper.selectByPageByBusinessId(business_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+        }else{
+            page=new Page(totalCount, 1);//初始化pageNow为1
+            page.setPageSize(10);
+            stuList=tpBusinessDiscountMapper.selectByPageByBusinessId(business_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+        }
+        LimitPageStuList.setPage(page);
+        LimitPageStuList.setList(stuList);
+        return LimitPageStuList;
+    }
+
+    @Override
+    public JSONObject getBusinessDiscountJson(TpBusinessDiscount tpDisCount) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", tpDisCount.getId());
+        jsonObject.put("business_id", tpDisCount.getBusinessId());
+        jsonObject.put("business_name", tpDisCount.getBusinessName());
+        jsonObject.put("business_address", tpDisCount.getBusinessAddress());
+        jsonObject.put("price", tpDisCount.getPrice());
+        jsonObject.put("discount_price", tpDisCount.getDiscountPrice());
+        jsonObject.put("valid_date", tpDisCount.getValidDate());
+        jsonObject.put("launch_address", tpDisCount.getLaunchAddress());
+        jsonObject.put("launch_id", tpDisCount.getLaunchId());
+        jsonObject.put("launch_date_start", Util.stampToDate1(tpDisCount.getLaunchDateStart() + ""));
+        jsonObject.put("launch_date_end", Util.stampToDate1(tpDisCount.getLaunchDateEnd() + ""));
+        jsonObject.put("nums", tpDisCount.getNums());
+        jsonObject.put("add_time", tpDisCount.getAddTime());
+        jsonObject.put("image", tpDisCount.getImage());
+        jsonObject.put("status", tpDisCount.getStatus());
+        int useCount = tpBusinessUseCashMapper.getUserCashCountByCash(tpDisCount.getId());
+        jsonObject.put("use_count", useCount);
+        return jsonObject;
+    }
+
+    @Override
+    public TpBusinessUseCash findUseByUserAndNumberAndUseStatus(String number, Integer user_id, int use_status) {
+        return tpBusinessUseCashMapper.findUseByUserAndNumberAndUseStatus(number, user_id, use_status);
+    }
+
+    @Override
+    public int updataUseCashForUseStatus(String number, Integer cash_id, String code, int use_status) {
+        return tpBusinessUseCashMapper.updataUseCashForUseStatus(number, cash_id, code, use_status);
+    }
+
+    @Override
+    public int updataUseCashForFlag(String number, Integer user_id, int use_status) {
+        return tpBusinessUseCashMapper.updataUseCashForFlag(number, user_id, use_status);
+    }
+
 
 }
