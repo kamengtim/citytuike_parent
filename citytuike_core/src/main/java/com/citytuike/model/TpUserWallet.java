@@ -17,6 +17,10 @@ public class TpUserWallet implements Serializable {
      */
     private double balance;
     /**
+     * 可用余额
+     */
+    private double paid_amount;
+    /**
      * 创建时间
      */
     private Date created_at;
@@ -24,6 +28,14 @@ public class TpUserWallet implements Serializable {
      * 更新时间
      */
     private Date updated_at;
+
+    public double getPaid_amount() {
+        return paid_amount;
+    }
+
+    public void setPaid_amount(double paid_amount) {
+        this.paid_amount = paid_amount;
+    }
 
     public Integer getId() {
         return id;

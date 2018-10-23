@@ -157,4 +157,6 @@ public interface TpUsersService {
     TpUsers getLikeUser(Integer user_id);
 
     TpUsers selectInviteUser(String invite_code);
+
+	int updateUserWalletBalanceAndOrderAmount(double balance, double paid_amount, Integer user_id);
 }

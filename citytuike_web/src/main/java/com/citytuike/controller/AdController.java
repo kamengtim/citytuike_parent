@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,10 @@ public class AdController extends BaseController{
     @Autowired
     private TpSmsLogService tpSmsLogService;
 
-
+//TODO  1. 材料上传
+//TODO 2. 获取纸巾广告弹出
+//TODO 3. 获取广告列表
+//TODO 4. 物料下载百度云
     /**
      * @return
      * 获取广告的地区和设备数
@@ -41,7 +45,7 @@ public class AdController extends BaseController{
     @RequestMapping(value="/regionData",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "获取广告的地区和设备数", notes = "获取广告的地区和设备数")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-    public @ResponseBody String uploadMaterial(HttpServletRequest request){
+    public @ResponseBody String regionData(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONArray data = new JSONArray();
         jsonObj.put("status", 0);
@@ -102,7 +106,7 @@ public class AdController extends BaseController{
      * 热门城市
      */
     @RequestMapping(value="/getHotCities",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "热门城市", notes = "热门城市")
+    @ApiOperation(value = "获取广告热门城市", notes = "获取广告热门城市")
     public @ResponseBody String getHotCities(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject data = new JSONObject();
@@ -207,7 +211,7 @@ public class AdController extends BaseController{
         }else{
             amount = 0.01;
         }
-        tpAdApply.setAmount(amount);
+        tpAdApply.setOrder_amount(amount);
         tpAdApply.setState("apply");
         tpAdApply.setPay_status(0);
         tpAdApply.setCreated_at(new Date());
@@ -257,11 +261,69 @@ public class AdController extends BaseController{
         }
         return jsonObj.toString();
     }
-    //TODO 取消广告申请
     /**
      * @return
-     * 广告行业数据接口
+     * 取消广告申请
      */
+    @RequestMapping(value="/cancelApply",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "取消广告申请", notes = "取消广告申请")
+    public @ResponseBody String cancelApply(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        JSONArray data = new JSONArray();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if (null == jsonO){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String apply_sn = jsonO.getString("apply_sn");
+        if (null == apply_sn || "".equals(apply_sn)){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        TpAdApply tpAdApply = tpAdService.findAdApplyByOrderSnAndStatus(apply_sn, tpUsers.getUser_id(), "apply");
+        if (null != tpAdApply){
+            if (tpAdApply.getPay_status() == 1){
+                TpUserWallet tpUserWallet = tpUsersService.findWalletByUserId(tpUsers.getUser_id());
+                if (null != tpUserWallet){
+                    double balance = tpUserWallet.getBalance();
+                    double paidAmount = tpUserWallet.getPaid_amount();
+                    TpUserFinance tpUserFinance = new TpUserFinance();
+                    tpUserFinance.setUser_id(tpUsers.getUser_id());
+                    tpUserFinance.setChange_type(1);
+                    tpUserFinance.setAmount(tpAdApply.getOrder_amount());
+                    tpUserFinance.setUser_balance(balance+tpAdApply.getOrder_amount());
+                    tpUserFinance.setBiz_sign("ad_apply_cancel");
+                    tpUserFinance.setBiz_sn(tpAdApply.getOrder_sn());
+                    tpUserFinance.setRemark("用户取消广告申请，退还至余额");
+                    tpUserFinance.setCreated_at(new Timestamp(new Date().getTime()));
+                    int updataApplyBystate = tpAdService.updataApplyBystate(tpAdApply.getId(), "cancel");
+                    if (updataApplyBystate > 0){
+                        int insertUserFinance = tpUsersService.insertUserFinance(tpUserFinance);
+                        if (insertUserFinance > 0){
+                            int updataUserWallet = tpUsersService.updateUserWalletBalanceAndOrderAmount(balance+tpAdApply.getOrder_amount(),
+                                    paidAmount-tpAdApply.getOrder_amount(), tpUsers.getUser_id());
+                            if (updataUserWallet > 0){
+                                jsonObj.put("result", data);
+                                jsonObj.put("status", 1);
+                                jsonObj.put("msg", "取消成功");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return jsonObj.toString();
+    }
     @RequestMapping(value="/trade",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "广告行业数据接口", notes = "广告行业数据接口")
     public @ResponseBody String trade(HttpServletRequest request){
@@ -381,7 +443,7 @@ public class AdController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
-        LimitPageList limitPageList = tpAdService.getTopUpLimitPageList(page, size);
+        LimitPageList limitPageList = tpAdService.getTopUpLimitPageList(tpUsers.getUser_id(), page, size);
         JSONArray jsonArray = new JSONArray();
         for (TpAdTopUp tpAdTopUp : (List<TpAdTopUp>)limitPageList.getList()) {
             JSONObject jsonObject = new JSONObject();
@@ -428,15 +490,14 @@ public class AdController extends BaseController{
         TpUsers tpUsers = initUser(request);
         if (null == tpUsers) {
             jsonObj.put("status", -2);
-            jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
-        LimitPageList limitPageList = tpAdService.getApplyLimitPageList(page, size);
+        LimitPageList limitPageList = tpAdService.getApplyLimitPageList(tpUsers.getUser_id(), page, size);
         JSONArray jsonArray = new JSONArray();
         for (TpAdApply tpAdApply : (List<TpAdApply>)limitPageList.getList()) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("apply_sn", tpAdApply.getOrder_sn());
-            jsonObject.put("amount", tpAdApply.getAmount());
+            jsonObject.put("amount", tpAdApply.getOrder_amount());
             jsonObject.put("created_at", tpAdApply.getCreated_at());
             jsonObject.put("cate", tpAdApply.getCate());
             //1屏幕广告|2二维码|3纸巾|4APP广告
@@ -551,7 +612,7 @@ public class AdController extends BaseController{
             data.put("describe",tpAdApply.getDescribe());
             data.put("side",tpAdApply.getSide());
             data.put("launch_num",tpAdApply.getLaunch_num());
-            data.put("amount",tpAdApply.getAmount());
+            data.put("amount",tpAdApply.getOrder_amount());
             List<TpAdApplyMaterial> tpAdApplyMaterialList = tpAdService.findAdApplyMaterialByApplyId(tpAdApply.getId());
             List<String> materials = new ArrayList<>();
             for (TpAdApplyMaterial tp : tpAdApplyMaterialList) {
@@ -586,7 +647,7 @@ public class AdController extends BaseController{
      * 广告申请订单结算
      */
     @RequestMapping(value="/applySettle",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "广告申请订单结算", notes = "广告申请订单结算")
+    @ApiOperation(value = "广告申请订单余额结算", notes = "广告申请订单余额结算")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
     public @ResponseBody String applySettle(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
@@ -631,15 +692,15 @@ public class AdController extends BaseController{
             if (null != tpUserWallet){
                 TpUserWallet tpUserWallet1 = new TpUserWallet();
                 tpUserWallet1.setId(tpUserWallet.getId());
-                tpUserWallet1.setBalance(tpUserWallet.getBalance()-tpAdApply.getAmount());
+                tpUserWallet1.setBalance(tpUserWallet.getBalance()-tpAdApply.getOrder_amount());
                 tpUserWallet1.setUpdated_at(new Date());
                 int updateWalletResult = tpUsersService.updateUserWalletBalance(tpUserWallet1);
                 if (updateWalletResult > 0){
                     TpUserFinance tpUserFinance = new TpUserFinance();
                     tpUserFinance.setUser_id(tpUsers.getUser_id());
                     tpUserFinance.setChange_type(2);
-                    tpUserFinance.setAmount(tpAdApply.getAmount());
-                    tpUserFinance.setUser_balance(tpUserWallet.getBalance()-tpAdApply.getAmount());
+                    tpUserFinance.setAmount(tpAdApply.getOrder_amount());
+                    tpUserFinance.setUser_balance(tpUserWallet.getBalance()-tpAdApply.getOrder_amount());
                     tpUserFinance.setBiz_sign("ad_apply");
                     tpUserFinance.setBiz_sn(tpAdApply.getOrder_sn());
                     tpUserFinance.setRemark("广告申请");
@@ -667,7 +728,40 @@ public class AdController extends BaseController{
         }
         return jsonObj.toString();
     }
-    //TODO 设备广告列表（新）
-    //TODO 广告钱包提现
+    @RequestMapping(value="/deviceAdList",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "设备广告列表（新）", notes = "设备广告列表（新）")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String deviceAdList(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if (null == jsonO){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        String imei = jsonO.getString("imei");
+        String end_date = jsonO.getString("end_date");
+        if (null == imei || "".equals(imei) || null == end_date || "".equals(end_date)){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+
+        return jsonObj.toString();
+    }
+
+    //TODO 16. 设备广告列表（新）
+    //TODO 17. 广告钱包提现
+    //TODO 18. 订单改价
+    //TODO 19. 广告订单列表
 
 }

@@ -16,4 +16,5 @@ public interface TpWithdrawalsService {
     BigDecimal selectWithdrawalsMoney(Integer user_id);
 
     void ApplyForWithdrawals(Integer user_id, int id, float money);
+
 }

@@ -1,7 +1,5 @@
 package com.citytuike.service;
 
-import com.citytuike.mapper.TpApplyMapper;
-import com.citytuike.model.TpApply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

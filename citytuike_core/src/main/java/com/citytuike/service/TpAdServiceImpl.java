@@ -1,7 +1,6 @@
 package com.citytuike.service;
 
 import com.citytuike.mapper.TpAdMapper;
-import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,19 +66,19 @@ public class TpAdServiceImpl implements TpAdService {
     }
 
     @Override
-    public LimitPageList getTopUpLimitPageList(Integer page1, int size) {
+    public LimitPageList getTopUpLimitPageList(Integer user_id, Integer page1, int size) {
         LimitPageList LimitPageStuList = new LimitPageList();
-        int totalCount=tpAdMapper.getTopUpCount();//获取总的记录数
+        int totalCount=tpAdMapper.getTopUpCount(user_id);//获取总的记录数
         List<TpGoods> stuList=new ArrayList<TpGoods>();
         Page page=null;
         if(page1!=null){
             page=new Page(totalCount, page1);
             page.setPageSize(size);
-            stuList=tpAdMapper.selectTopUpByPage(page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpAdMapper.selectTopUpByPage(user_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
         }else{
             page=new Page(totalCount, 1);//初始化pageNow为1
             page.setPageSize(size);
-            stuList=tpAdMapper.selectTopUpByPage(page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpAdMapper.selectTopUpByPage(user_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
         }
         LimitPageStuList.setPage(page);
         LimitPageStuList.setList(stuList);
@@ -87,19 +86,19 @@ public class TpAdServiceImpl implements TpAdService {
     }
 
     @Override
-    public LimitPageList getApplyLimitPageList(Integer page1, int size) {
+    public LimitPageList getApplyLimitPageList(Integer user_id, Integer page1, int size) {
         LimitPageList LimitPageStuList = new LimitPageList();
-        int totalCount=tpAdMapper.getApplyCount();//获取总的记录数
+        int totalCount=tpAdMapper.getApplyCount(user_id);//获取总的记录数
         List<TpGoods> stuList=new ArrayList<TpGoods>();
         Page page=null;
         if(page1!=null){
             page=new Page(totalCount, page1);
             page.setPageSize(size);
-            stuList=tpAdMapper.selectApplyByPage(page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpAdMapper.selectApplyByPage(user_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
         }else{
             page=new Page(totalCount, 1);//初始化pageNow为1
             page.setPageSize(size);
-            stuList=tpAdMapper.selectApplyByPage(page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpAdMapper.selectApplyByPage(user_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
         }
         LimitPageStuList.setPage(page);
         LimitPageStuList.setList(stuList);
@@ -134,5 +133,15 @@ public class TpAdServiceImpl implements TpAdService {
     @Override
     public int updateAdApply(TpAdApply tpAdApply1) {
         return tpAdMapper.updateAdApply(tpAdApply1);
+    }
+
+    @Override
+    public TpAdApply findAdApplyByOrderSnAndStatus(String apply_sn, Integer user_id, String status) {
+        return tpAdMapper.findAdApplyByOrderSnAndStatus(apply_sn, user_id, status);
+    }
+
+    @Override
+    public int updataApplyBystate(Integer adApplyId, String state) {
+        return tpAdMapper.updataApplyBystate(adApplyId, state);
     }
 }

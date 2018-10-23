@@ -47,7 +47,7 @@ public class TpAdApply implements Serializable {
     /**
      * 订单总价格
      */
-    private double amount;
+    private double order_amount;
     /**
      * 状态（apply申请|pass通过审核|reject驳回|cancel取消|fail失效）
      */
@@ -56,6 +56,14 @@ public class TpAdApply implements Serializable {
      * 支付状态（0提交|1已支付|2失效）
      */
     private Integer pay_status;
+    /**
+     * 支付类型
+     */
+    private String pay_code;
+    /**
+     * 支付类型名称
+     */
+    private String pay_name;
     /**
      * 广告投放开始日期
      */
@@ -76,6 +84,26 @@ public class TpAdApply implements Serializable {
      * 更新时间
      */
     private Date updated_at;
+    /**
+     * 是否一元活动
+     */
+    private Integer activity;
+    /**
+     * 订单原价
+     */
+    private double ori_order_amount;
+    /**
+     * 0
+     */
+    private Integer before_days;
+    /**
+     * 二维码 时必须
+     */
+    private Integer fans_need_id;
+    /**
+     * APP投放位置：1启动页广告|2领纸广告|3关注公众号广告|4领纸成功广告|5领红包广告|6抽奖广告
+     */
+    private String launch_position;
 
     public Integer getId() {
         return id;
@@ -157,12 +185,68 @@ public class TpAdApply implements Serializable {
         this.launch_num = launch_num;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getOrder_amount() {
+        return order_amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setOrder_amount(double order_amount) {
+        this.order_amount = order_amount;
+    }
+
+    public String getPay_code() {
+        return pay_code;
+    }
+
+    public void setPay_code(String pay_code) {
+        this.pay_code = pay_code;
+    }
+
+    public String getPay_name() {
+        return pay_name;
+    }
+
+    public void setPay_name(String pay_name) {
+        this.pay_name = pay_name;
+    }
+
+    public Integer getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Integer activity) {
+        this.activity = activity;
+    }
+
+    public double getOri_order_amount() {
+        return ori_order_amount;
+    }
+
+    public void setOri_order_amount(double ori_order_amount) {
+        this.ori_order_amount = ori_order_amount;
+    }
+
+    public Integer getBefore_days() {
+        return before_days;
+    }
+
+    public void setBefore_days(Integer before_days) {
+        this.before_days = before_days;
+    }
+
+    public Integer getFans_need_id() {
+        return fans_need_id;
+    }
+
+    public void setFans_need_id(Integer fans_need_id) {
+        this.fans_need_id = fans_need_id;
+    }
+
+    public String getLaunch_position() {
+        return launch_position;
+    }
+
+    public void setLaunch_position(String launch_position) {
+        this.launch_position = launch_position;
     }
 
     public String getState() {

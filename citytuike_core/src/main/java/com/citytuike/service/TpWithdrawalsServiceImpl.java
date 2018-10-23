@@ -99,4 +99,5 @@ public class TpWithdrawalsServiceImpl implements TpWithdrawalsService {
             throw new SendMessageException("最低提现金额:15");
         }
     }
+
 }

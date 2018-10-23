@@ -383,8 +383,13 @@
 			created_at
 		) VALUES (
 			#{user_id},
-			#{level},
-			#{add_time}
+			#{change_type},
+			#{amount},
+			#{user_balance},
+			#{biz_sign},
+			#{biz_sn},
+			#{remark},
+			#{created_at}
 		);
 	</insert>
 	<update id="updateBytokenIn" parameterType="com.citytuike.model.TpUsers" >
@@ -431,9 +436,17 @@
 	<update id="updateUserWalletBalance" parameterType="com.citytuike.model.TpUserWallet" >
 		UPDATE tp_user_wallet
 		SET
-				balance=#{balance}.
+				balance=#{balance},
 				updated_at=#{updated_at}
 		WHERE id=#{id}
+	</update>
+	<update id="updateUserWalletBalanceAndOrderAmount" parameterType="com.citytuike.model.TpUserWallet" >
+		UPDATE tp_user_wallet
+		SET
+				balance=#{balance},
+				paid_amount=#{paid_amount},
+				updated_at=#{updated_at}
+		WHERE user_id=#{user_id}
 	</update>
 	<update id="updateUserAddress" parameterType="com.citytuike.model.TpUserAddress" >
 		UPDATE tp_user_address

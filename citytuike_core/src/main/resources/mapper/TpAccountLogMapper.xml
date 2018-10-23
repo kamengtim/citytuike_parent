@@ -74,6 +74,6 @@
     select count(log_id)  from tp_account_log where user_id = #{user_id} and change_type = #{type}
   </select>
   <select id="SumMoney" resultType="double" >
-    select sum(user_money)+sum(frozen_money) as count_money  from tp_account_log where user_id = #{user_id}
+    select sum(user_money) from tp_account_log where user_id = #{user_id} and user_money>0
   </select>
 </mapper>

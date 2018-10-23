@@ -294,6 +294,8 @@ public class OrderController extends BaseController{
 	}
 	//TODO  3. 申请退货
 	//TODO  4. 物流信息
+	//TODO  5. 取消订单
+	//TODO  7. 订单支付后取消订单
 	//TODO  9. 退换货列表
 	//TODO  10. 退货详情
 	//TODO  11. 修改退货状态，发货

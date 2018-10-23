@@ -93,7 +93,7 @@ public class UserController extends BaseController{
 	 * 登陆
 	 */
 	@RequestMapping(value="/do_login",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "登陆", notes = "登陆")
+	@ApiOperation(value = "用户登录", notes = "用户登录")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String doLogin(HttpServletRequest request){
 
@@ -136,6 +136,7 @@ public class UserController extends BaseController{
 			jsonObj.put("status", -1);
 			jsonObj.put("msg", "账号不存在!");
 		}
+		//TODO //登录后将超时未支付订单给取消掉
 		return jsonObj.toString();
 	}
 
@@ -144,7 +145,7 @@ public class UserController extends BaseController{
 	 * 注册 
 	 */
 	@RequestMapping(value="/reg",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "注册", notes = "注册")
+	@ApiOperation(value = "用户注册", notes = "用户注册")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
     public @ResponseBody String reg(HttpServletRequest request){
 		
@@ -265,25 +266,24 @@ public class UserController extends BaseController{
 		return jsonObj.toString();
 	}
 	@RequestMapping(value="/get_user_info",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "用户基础信息", notes = "用户基础信息")
-	public @ResponseBody String getUserInfo(HttpServletRequest request){
-		JSONObject jsonObj = new JSONObject();
-		JSONObject data = new JSONObject();
-		JSONObject user = new JSONObject();
-		jsonObj.put("status", 0);
-		jsonObj.put("msg", "请求失败，请稍后再试");
-		TpUsers tpUsers = initUser(request);
-		if (null != tpUsers) {
-			user = tpUsersService.getUserlJson(tpUsers);
-			data.put("user", user);
-			jsonObj.put("result", data);
-			jsonObj.put("status", 1);
-			jsonObj.put("msg", "请求成功");
-		}
+		@ApiOperation(value = "用户基础信息", notes = "用户基础信息")
+		public @ResponseBody String getUserInfo(HttpServletRequest request){
+			JSONObject jsonObj = new JSONObject();
+			JSONObject data = new JSONObject();
+			JSONObject user = new JSONObject();
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "请求失败，请稍后再试");
+			TpUsers tpUsers = initUser(request);
+			if (null != tpUsers) {
+				user = tpUsersService.getUserlJson(tpUsers);
+				data.put("user", user);
+				jsonObj.put("result", data);
+				jsonObj.put("status", 1);
+				jsonObj.put("msg", "请求成功");
+			}
 
-		return jsonObj.toString();
+			return jsonObj.toString();
 	}
-	//TODO . 快速登录
 	/**
 	 * @return
 	 * 用户地址列表
@@ -319,6 +319,39 @@ public class UserController extends BaseController{
 			jsonObj1.put("is_default", tpUserAddress.getIs_default());
 			jsonObj1.put("is_pickup", tpUserAddress.getIs_pickup());
 			jsonArray.add(jsonObj1);
+		}
+		jsonObj.put("status", 1);
+		jsonObj.put("msg", "请求成功!");
+		jsonObj.put("result", jsonArray);
+		return jsonObj.toString();
+	}
+	@RequestMapping(value="/quick_login",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
+	@ApiOperation(value = "快速登录", notes = "快速登录")
+	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+	public @ResponseBody String quickLogin(HttpServletRequest request){
+		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		jsonObj.put("status", 0);
+		jsonObj.put("msg", "请求失败，请稍后再试");
+		JSONObject jsonO = getRequestJson(request);
+		if(null == jsonO){
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		String code = jsonO.getString("code");
+		String flag	 = jsonO.getString("flag");
+		if (null == code || "".equals(code) || null == flag || "".equals(flag)){
+			jsonObj.put("status", 0);
+			jsonObj.put("msg", "参数有误");
+			return jsonObj.toString();
+		}
+		//TODO 微信登录
+		TpUsers tpUsers = initUser(request);
+		if (null == tpUsers) {
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效!");
+			return jsonObj.toString();
 		}
 		jsonObj.put("status", 1);
 		jsonObj.put("msg", "请求成功!");
@@ -390,10 +423,10 @@ public class UserController extends BaseController{
 	 * @return
 	 * 修改地址
 	 */
-	//TODO 地址编辑
+	//TODO
 	@RequestMapping(value="/edit_address",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-    @ApiOperation(value = "修改地址", notes = "修改地址")
+    @ApiOperation(value = "地址编辑", notes = "地址编辑")
 	public @ResponseBody String editAddress(HttpServletRequest request,
 			@RequestParam(required=true)Integer id,
 			@RequestParam(required=true)Integer province,
@@ -437,7 +470,7 @@ public class UserController extends BaseController{
 	 * 获取城县区
 	 */
 	@RequestMapping(value="/get_region",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "获取城县区", notes = "获取城县区")
+	@ApiOperation(value = "获取地区列表", notes = "获取地区列表")
 	public @ResponseBody String getRegion(HttpServletRequest request, @RequestParam(required=true)Integer id){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -475,7 +508,7 @@ public class UserController extends BaseController{
 	 * 设置默认值
 	 */
 	@RequestMapping(value="/set_default",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "设置默认值", notes = "设置默认值")
+	@ApiOperation(value = "设置默认收货地址", notes = "设置默认收货地址")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String setDefault(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -591,11 +624,11 @@ public class UserController extends BaseController{
 
 		return jsonObj.toString();
 	}
-	//TODO 会员信息
     @RequestMapping(value="/account_info",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "会员信息", notes = "会员信息")
     public  @ResponseBody String accountInfo(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
         jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         TpUsers tpUsers = initUser(request);
@@ -604,6 +637,14 @@ public class UserController extends BaseController{
             jsonObj.put("msg", "token失效!");
             return jsonObj.toString();
         }
+		data.put("user_id",tpUsers.getUser_id());
+		data.put("nickname",tpUsers.getNickname());
+		data.put("invite_code",tpUsers.getInvite_code());
+		data.put("head_pic",tpUsers.getHead_pic());
+		data.put("total_income",tpAccountLogService.SumMoney(tpUsers.getUser_id()));
+		data.put("ad_income",0);
+		data.put("withdraw",tpWithdrawalsService.selectWithdrawalsMoney(tpUsers.getUser_id()));
+		jsonObj.put("result", data);
         return jsonObj.toString();
     }
 	/**
@@ -1057,10 +1098,10 @@ public class UserController extends BaseController{
     }
     /**
      * @return
-     * 热门城市
+     * 获取热门城市列表接口
      */
 	@RequestMapping(value = "get_hot_city",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "热门城市", notes = "热门城市")
+	@ApiOperation(value = "获取热门城市列表接口", notes = "获取热门城市列表接口")
 	public @ResponseBody String getHotCity(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject data = new JSONObject();
@@ -1217,10 +1258,10 @@ public class UserController extends BaseController{
 	}
 	/**
 	 * @return
-	 * 删除地址
+	 * 地址删除
 	 */
 	@RequestMapping(value = "del_address",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "删除地址", notes = "删除地址")
+	@ApiOperation(value = "地址删除", notes = "地址删除")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
 	public @ResponseBody String delAddress(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
@@ -1777,7 +1818,7 @@ public class UserController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "plateMsg",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "1为首页2为个人中心3为订单4为消息", notes = "1为首页2为个人中心3为订单4为消息")
+	@ApiOperation(value = "板块通知接口", notes = "板块通知接口")
 	public @ResponseBody String plateMsg(HttpServletRequest request,
 											   @RequestParam(required = true)int flag){
 		JSONObject jsonObj = new JSONObject();
@@ -1848,10 +1889,10 @@ public class UserController extends BaseController{
 
 	/**
 	 * @return
-	 * 系统通知判断
+	 * 判断系统通知
 	 */
 	@RequestMapping(value = "getSysList",method = RequestMethod.GET,produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "系统通知判断", notes = "系统通知判断")
+	@ApiOperation(value = "判断系统通知", notes = "判断系统通知")
 	public @ResponseBody String getSysList(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
@@ -2770,7 +2811,7 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "apply",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-	@ApiOperation(value = "信息收集", notes = "信息收集")
+	@ApiOperation(value = "H5--信息收集", notes = "H5--信息收集")
 	public @ResponseBody String apply(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
@@ -2916,7 +2957,7 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping(value = "addChance",method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-	@ApiOperation(value = "办卡人资料列表", notes = "办卡人资料列表")
+	@ApiOperation(value = "帮助朋友", notes = "帮助朋友")
 	public @ResponseBody String addChance(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		TpUsers tpUsers = initUser(request);
@@ -2989,7 +3030,7 @@ public class UserController extends BaseController{
 		jsonObj.put("msg", "ok");
 		return jsonObj.toString();
 	}
-//TODO  69. 抽奖接口
+//TODO  31. 意向用户列表
 //TODO 70. 领取奖励
 //TODO 71. 已经获得的奖励列表
 //TODO 72. 抽奖钱包可用余额

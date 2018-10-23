@@ -87,7 +87,7 @@
     select *  from tp_withdrawals where user_id = #{user_id} limit #{startPos},#{pageSize}
   </select>
   <select id="selectWithdrawalsMoney" resultType="bigdecimal">
-    select sum(money) from tp_withdrawals where user_id = #{user_id}
+    select sum(money) from tp_withdrawals where user_id = #{user_id} and status=2
   </select>
   <insert id="saveWithdrawals" parameterType="com.citytuike.model.TpWithdrawals" useGeneratedKeys="true" keyProperty="id">
     insert into tp_withdrawals (user_id, money, create_time,

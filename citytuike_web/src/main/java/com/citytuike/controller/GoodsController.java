@@ -32,11 +32,11 @@ public class GoodsController extends BaseController{
 	private TpUsersService tpUsersService;
 	/**
 	 * @return
-	 * 商品列表
+	 * 商品列表页
 	 */
 	@RequestMapping(value="/ajaxGoodsList",method=RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-	@ApiOperation(value = "商品列表", notes = "商品列表")
+	@ApiOperation(value = "商品列表页", notes = "商品列表页")
 	public @ResponseBody String ajaxGoodsList(HttpServletRequest request){
 
 		JSONObject jsonObj = new JSONObject();
@@ -140,10 +140,10 @@ public class GoodsController extends BaseController{
 	
 	/**
 	 * @return
-	 * 商品轮播
+	 *  轮播商品
 	 */
 	@RequestMapping(value="/carousel",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "商品轮播", notes = "商品轮播")
+	@ApiOperation(value = " 轮播商品", notes = " 轮播商品")
 	public @ResponseBody String carousel(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		JSONObject jsonObj2 = new JSONObject();
@@ -183,5 +183,5 @@ public class GoodsController extends BaseController{
 		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
-	
+	//TODO  商品规格
 }

@@ -38,19 +38,22 @@
 		SELECT * FROM tp_ad_trade where parent_id=#{trade_id}
 	</select>
 	<select id="getTopUpCount" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM tp_ad_top_up where pay_status=1
+        SELECT COUNT(*) FROM tp_ad_top_up where pay_status=1 and user_id=#{user_id}
     </select>
 	<select id="getApplyCount" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM tp_ad_apply where state='pass'
+        SELECT COUNT(*) FROM tp_ad_apply where state='pass' and user_id=#{user_id}
     </select>
 	<select id="selectTopUpByPage" resultMap="TpAdTopUpMap">
-        select *  from tp_ad_top_up where pay_status=1 limit #{startPos},#{pageSize}
+        select *  from tp_ad_top_up where pay_status=1 and user_id=#{user_id} order by created_at desc limit #{startPos},#{pageSize}
     </select>
 	<select id="selectApplyByPage" resultMap="TpAdApplyMap">
-        select *  from tp_ad_apply where state='pass' limit #{startPos},#{pageSize}
+        select *  from tp_ad_apply where state='pass' and user_id=#{user_id} order by create_at limit #{startPos},#{pageSize}
     </select>
 	<select id="findAdApplyByOrderSn" resultMap="TpAdApplyMap">
         select *  from tp_ad_apply where order_sn=#{apply_sn}
+    </select>
+	<select id="findAdApplyByOrderSnAndStatus" resultMap="TpAdApplyMap">
+        select *  from tp_ad_apply where order_sn=#{apply_sn} and user_id=#{user_id} and state=#{state};
     </select>
 	<select id="findTradeById" resultMap="TpAdTradeMap">
         select *  from tp_ad_trade where id=#{apply_sn}
@@ -59,13 +62,18 @@
     insert into tp_ad_apply (order_sn, user_id, cate,
       trade_id, days, url,
       describe, side, launch_num,
-      amount, state, pay_status,launch_at,paid_at,
-      audited_at,created_at, updated_at)
+      order_amount, state, pay_status,pay_code, pay_name,
+      launch_at,paid_at,
+      audited_at,created_at, updated_at,
+      activity,ori_order_amount,before_days,fans_need_id,
+      launch_position)
     values (#{order_sn}, #{user_id}, #{cate},
       #{trade_id}, #{days}, #{url},
       #{describe}, #{side}, #{launch_num},
-      #{amount}, #{state}, #{pay_status},#{launch_at},paid_at},
-      #{audited_at},#{created_at}, #{updated_at})
+      #{order_amount}, #{state}, #{pay_status},
+      #{pay_code},#{pay_name},#{launch_at},paid_at},
+      #{audited_at},#{created_at}, #{updated_at},
+      #{activity}, #{ori_order_amount}, #{before_days}, #{fans_need_id}, #{launch_position})
   </insert>
 	<insert id="insertAdApplyRegion" parameterType="com.citytuike.model.TpAdApplyRegion" useGeneratedKeys="true" keyProperty="id" >
     insert into tp_ad_apply_region (apply_id, region_id, num
@@ -88,10 +96,17 @@
 	<update id="updateAdApply" parameterType="com.citytuike.model.TpAdApply" >
 		UPDATE tp_ad_apply
 		SET
-				pay_status=#{pay_status}.
+				pay_status=#{pay_status},
 				paid_at=#{paid_at},
 				launch_at=#{launch_at},
 				updated_at=#{updated_at}
 		WHERE order_sn=#{order_sn}
+	</update>
+	<update id="updataApplyBystate" parameterType="com.citytuike.model.TpAdApply" >
+		UPDATE tp_ad_apply
+		SET
+				state=#{state},
+				updated_at=now()
+		WHERE id=#{adApplyId}
 	</update>
 </mapper>

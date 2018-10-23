@@ -167,4 +167,6 @@ public interface TpUsersMapper {
 	String getGoodName(String goods_id);
 
     TpUsers selectInviteUser(String invite_code);
+
+	int updateUserWalletBalanceAndOrderAmount(@Param("balance") double balance, @Param("paid_amount") double paid_amount, @Param("user_id") Integer user_id);
 }

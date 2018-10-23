@@ -18,9 +18,9 @@ public interface TpAdService {
 
     int insertAdTopUp(TpAdTopUp tpAdTopUp);
 
-    LimitPageList getTopUpLimitPageList(Integer page, int size);
+    LimitPageList getTopUpLimitPageList(Integer user_id, Integer page, int size);
 
-    LimitPageList getApplyLimitPageList(Integer page, int size);
+    LimitPageList getApplyLimitPageList(Integer user_id, Integer page, int size);
 
     TpAdTrade findTradeById(Integer trade_id);
 
@@ -33,4 +33,8 @@ public interface TpAdService {
     List<TpAdApplyRegion> findAdApplyRegionByApplyId(Integer id);
 
     int updateAdApply(TpAdApply tpAdApply1);
+
+    TpAdApply findAdApplyByOrderSnAndStatus(String apply_sn, Integer user_id, String status);
+
+    int updataApplyBystate(Integer adApplyId, String state);
 }

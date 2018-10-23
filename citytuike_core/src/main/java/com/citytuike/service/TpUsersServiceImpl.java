@@ -608,4 +608,9 @@ public class TpUsersServiceImpl implements TpUsersService{
 	public TpUsers selectInviteUser(String invite_code) {
 		return tpUsersMapper.selectInviteUser(invite_code);
 	}
+
+	@Override
+	public int updateUserWalletBalanceAndOrderAmount(double balance, double paid_amount, Integer user_id) {
+		return tpUsersMapper.updateUserWalletBalanceAndOrderAmount(balance, paid_amount, user_id);
+	}
 }
