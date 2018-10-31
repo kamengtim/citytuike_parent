@@ -1,6 +1,7 @@
 package com.citytuike.mapper;
 
 import com.citytuike.model.TpBusinessShare;
+import com.citytuike.model.TpBusinessUseCash;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -61,4 +62,12 @@ public interface TpBusinessShareMapper {
     TpBusinessShare findBusinessShareByTag(@Param("business_id")Integer business_id, @Param("tag") String tag);
 
     int updataShareByTag(@Param("business_id") Integer business_id, @Param("tags") String tags);
+
+    TpBusinessShare findBusinessShareByIdAndUserId(@Param("shop_id") int shop_id, @Param("user_id")Integer user_id);
+
+    int getCount(@Param("type") String type, @Param("geohash") String geohash);
+
+    List<TpBusinessShare> selectByPage(@Param("type")String type, @Param("geohash")String geohash, @Param("startPos")int startPos, @Param("pageSize")int pageSize);
+
+    int updataShareByGivequan(@Param("businessId")Integer businessId);
 }

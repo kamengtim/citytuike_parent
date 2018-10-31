@@ -62,4 +62,6 @@ public interface TpDeviceMapper {
     int updateDevice(@Param("id") Integer id, @Param("province") String province, @Param("city") String city, @Param("district") String district, @Param("date") int date, @Param("landmark_picture") String landmark_picture);
 
     TpDevice selectPaper(@Param("device_sn") String device_sn, @Param("user_id") Integer user_id);
+
+    TpDevice findByDevicesnAndIsactive(@Param("device_sn") String imei, @Param("is_active") int is_active);
 }

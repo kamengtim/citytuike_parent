@@ -9,6 +9,9 @@
 	<resultMap id="TpAdTradeMap" type="com.citytuike.model.TpAdTrade" >
 		<result column="trade_id" property="trade_id" />
 	</resultMap>
+	<resultMap id="TpAdCategoryMap" type="com.citytuike.model.TpAdCategory" >
+		<result column="id;" property="id;" />
+	</resultMap>
 	<resultMap id="TpAdTopUpMap" type="com.citytuike.model.TpAdTopUp" >
 		<result column="id" property="id" />
 	</resultMap>
@@ -29,7 +32,7 @@
 		SELECT * FROM tp_ad_trade where ISNULL(parent_id)
 	</select>
 	<select id="findAdApplyMaterialByApplyId" parameterType="java.util.HashMap" resultMap="TpAdApplyMaterialMap">
-		SELECT * FROM tp_ad_apply_material where id=#{id}
+		SELECT * FROM tp_ad_apply_material where id=#{id} and display=1 order by sort DESC
 	</select>
 	<select id="findAdApplyRegionByApplyId" parameterType="java.util.HashMap" resultMap="TpAdApplyRegionMap">
 		SELECT * FROM tp_ad_apply_region where id=#{id}
@@ -37,20 +40,33 @@
 	<select id="findAllAdTradeByParentId" parameterType="java.util.HashMap" resultMap="TpAdTradeMap">
 		SELECT * FROM tp_ad_trade where parent_id=#{trade_id}
 	</select>
+	<select id="findAdCategoryById" parameterType="java.util.HashMap" resultMap="TpAdCategoryMap">
+		SELECT * FROM tp_ad_category where id=#{cate}
+	</select>
 	<select id="getTopUpCount" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM tp_ad_top_up where pay_status=1 and user_id=#{user_id}
     </select>
 	<select id="getApplyCount" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM tp_ad_apply where state='pass' and user_id=#{user_id}
+        SELECT COUNT(*) FROM tp_ad_apply where  user_id=#{user_id}
+		<if test="status != null" >
+			and state=#{status}
+		</if>
     </select>
 	<select id="selectTopUpByPage" resultMap="TpAdTopUpMap">
         select *  from tp_ad_top_up where pay_status=1 and user_id=#{user_id} order by created_at desc limit #{startPos},#{pageSize}
     </select>
 	<select id="selectApplyByPage" resultMap="TpAdApplyMap">
-        select *  from tp_ad_apply where state='pass' and user_id=#{user_id} order by create_at limit #{startPos},#{pageSize}
+        select *  from tp_ad_apply where user_id=#{user_id}
+		<if test="status != null" >
+			and state=#{status}
+		</if>
+		order by create_at limit #{startPos},#{pageSize}
     </select>
 	<select id="findAdApplyByOrderSn" resultMap="TpAdApplyMap">
         select *  from tp_ad_apply where order_sn=#{apply_sn}
+    </select>
+	<select id="findAdApplyByOrderSn" resultMap="TpAdApplyMap">
+        select *  from tp_ad_apply where id=#{id}
     </select>
 	<select id="findAdApplyByOrderSnAndStatus" resultMap="TpAdApplyMap">
         select *  from tp_ad_apply where order_sn=#{apply_sn} and user_id=#{user_id} and state=#{state};
@@ -100,6 +116,17 @@
 				paid_at=#{paid_at},
 				launch_at=#{launch_at},
 				updated_at=#{updated_at}
+		WHERE order_sn=#{order_sn}
+	</update>
+	<update id="updateAdApplyByActivity" parameterType="com.citytuike.model.TpAdApply" >
+		UPDATE tp_ad_apply
+		SET
+				order_amount=#{order_amount},
+				days=#{days},
+				activity=#{activity},
+				before_days=#{before_days},
+				order_sn=#{order_sn},
+				ori_order_amount=#{ori_order_amount}
 		WHERE order_sn=#{order_sn}
 	</update>
 	<update id="updataApplyBystate" parameterType="com.citytuike.model.TpAdApply" >

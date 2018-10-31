@@ -37,4 +37,6 @@ public class Constant {
 
 	//推送类型
 	public static final Integer SYSTEMTYYE = 0;
+
+	public static final Integer ACCOUNT_CHANGE_TYPE_STATUS_WAIT_ACT = 4;
 }

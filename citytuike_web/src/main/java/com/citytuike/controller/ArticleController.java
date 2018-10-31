@@ -3,9 +3,11 @@ package com.citytuike.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.TpArticle;
+import com.citytuike.model.TpArticleCat;
 import com.citytuike.model.TpUsers;
 import com.citytuike.service.TpArticleService;
 import com.citytuike.service.TpUsersService;
+import com.google.gson.JsonObject;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,6 @@ public class ArticleController extends BaseController{
     /**
      * @return 统一文章列表
      */
-    //TODO 改成没有参数
     @RequestMapping(value = "getArticleList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "统一文章列表", notes = "统一文章列表")
     public @ResponseBody String getArticleList(HttpServletRequest request,
@@ -93,6 +94,38 @@ public class ArticleController extends BaseController{
         }
         jsonObj.put("status", 0);
         jsonObj.put("msg", "失败");
+        return jsonObj.toString();
+    }
+    @RequestMapping(value = "getArticleCate", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "获取文章分类", notes = "获取文章分类")
+    public @ResponseBody String getArticleCate(HttpServletRequest request,
+                                              @RequestParam(required = true) Integer pid){
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效!");
+            return jsonObj.toString();
+        }
+        JSONArray jsonArray = new JSONArray();
+        List<TpArticleCat> tpArticleCatList = tpArticleService.findArticleCatByPid(pid);
+        for (TpArticleCat tpArticleCat : tpArticleCatList) {
+            JSONObject jsonObject = new JSONObject();
+            int click_count = tpArticleService.getClick_Count(tpArticleCat.getCatId());
+            jsonObject.put("cat_id", tpArticleCat.getCatId());
+            jsonObject.put("cat_name", tpArticleCat.getCatName());
+            jsonObject.put("parent_id", tpArticleCat.getParentId());
+            jsonObject.put("sort_order", tpArticleCat.getSortOrder());
+            jsonObject.put("cat_icon", tpArticleCat.getCatIcon());
+            jsonObject.put("click_count", click_count);
+            jsonArray.add(jsonObject);
+        }
+
+        jsonObj.put("result", jsonArray);
+        jsonObj.put("status", 1);
+        jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
 

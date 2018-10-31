@@ -1,8 +1,10 @@
 package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.citytuike.mapper.TpArticleCatMapper;
 import com.citytuike.mapper.TpArticleMapper;
 import com.citytuike.model.TpArticle;
+import com.citytuike.model.TpArticleCat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.List;
 public class TpArticleServiceImpl implements TpArticleService {
     @Autowired
     private TpArticleMapper tpArticleMapper;
+    @Autowired
+    private TpArticleCatMapper tpArticleCatMapper;
     @Override
     public List<TpArticle> getArticleList(String cat_id) {
         List<TpArticle>tpArticles = tpArticleMapper.getArticleList(cat_id);
@@ -62,5 +66,15 @@ public class TpArticleServiceImpl implements TpArticleService {
         jsonObject.put("publish_time",tpArticle.getPublish_time());
         jsonObject.put("thumb",tpArticle.getThumb());
         return jsonObject;
+    }
+
+    @Override
+    public List<TpArticleCat> findArticleCatByPid(Integer pid) {
+        return tpArticleCatMapper.findArticleCatByPid(pid);
+    }
+
+    @Override
+    public int getClick_Count(Integer catId) {
+        return tpArticleCatMapper.getClick_Count(catId);
     }
 }

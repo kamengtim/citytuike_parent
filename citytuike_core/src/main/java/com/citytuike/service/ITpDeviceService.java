@@ -56,4 +56,6 @@ public interface ITpDeviceService {
     int update(Integer id, String province, String city, String district, String landmark_picture);
 
     TpDevice selectPaper(String device_sn, Integer user_id);
+
+    TpDevice findByDevicesnAndIsactive(String imei, int is_active);
 }

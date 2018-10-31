@@ -352,5 +352,65 @@ public class BusinessServiceImpl implements BusinessService {
         return tpBusinessUseCashMapper.updataUseCashForFlag(number, user_id, use_status);
     }
 
+    @Override
+    public TpBusinessShare findBusinessShareByIdAndUserId(int shop_id, Integer user_id) {
+        return tpBusinessShareMapper.findBusinessShareByIdAndUserId(shop_id, user_id);
+    }
+
+    @Override
+    public int updataShareByDesc(TpBusinessShare tpBusinessShare1) {
+        return tpBusinessShareMapper.updateByPrimaryKeySelective(tpBusinessShare1);
+    }
+
+    @Override
+    public LimitPageList getLimitPageShareByType(String type, String geohash, Integer p) {
+        LimitPageList LimitPageStuList = new LimitPageList();
+        int totalCount=tpBusinessShareMapper.getCount(type, geohash);//获取总的记录数
+        List<TpBusinessShare> stuList=new ArrayList<TpBusinessShare>();
+        Page page=null;
+        if(p!=null){
+            page=new Page(totalCount, p);
+            page.setPageSize(10);
+            stuList=tpBusinessShareMapper.selectByPage(type, geohash, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+        }else{
+            page=new Page(totalCount, 1);//初始化pageNow为1
+            page.setPageSize(10);
+            stuList=tpBusinessShareMapper.selectByPage(type, geohash, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+        }
+        LimitPageStuList.setPage(page);
+        LimitPageStuList.setList(stuList);
+        return LimitPageStuList;
+    }
+
+    @Override
+    public int getCashCountByBusinessShareId(Integer business_id) {
+        return tpBusinessCashMapper.getCashCountByBusinessShareId(business_id);
+    }
+
+    @Override
+    public int getUserGoodsCountByUserId(Integer user_id) {
+        return 0;
+    }
+
+    @Override
+    public TpBusinessDiscount findBusinessDiscountById(int cash_id) {
+        return tpBusinessDiscountMapper.selectByPrimaryKey(cash_id);
+    }
+
+    @Override
+    public TpBusinessUseCash findUseCashByCashIdAndUseIdAndFalg(int cash_id, Integer user_id, Integer flag) {
+        return tpBusinessUseCashMapper.findUseCashByCashIdAndUseIdAndFalg(cash_id, user_id, flag);
+    }
+
+    @Override
+    public int updataUseCashByUser(Integer id, Integer user_id, int flag) {
+        return tpBusinessUseCashMapper.updataUseCashByUser(id, user_id, flag);
+    }
+
+    @Override
+    public int updataShareByGivequan(Integer businessId) {
+        return tpBusinessShareMapper.updataShareByGivequan(businessId);
+    }
+
 
 }

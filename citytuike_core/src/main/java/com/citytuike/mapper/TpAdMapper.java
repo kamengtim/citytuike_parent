@@ -23,9 +23,9 @@ public interface TpAdMapper {
 
     List<TpGoods> selectTopUpByPage(@Param("user_id") Integer user_id, @Param("startPos") int startPos, @Param("pageSize") int pageSize);
 
-    int getApplyCount(@Param("user_id")Integer user_id);
+    int getApplyCount(@Param("user_id")Integer user_id, @Param("status") String status);
 
-    List<TpGoods> selectApplyByPage(@Param("user_id")Integer user_id, @Param("startPos") int startPos, @Param("pageSize") int pageSize);
+    List<TpGoods> selectApplyByPage(@Param("user_id")Integer user_id, @Param("status") String status, @Param("startPos") int startPos, @Param("pageSize") int pageSize);
 
     TpAdTrade findTradeById(@Param("trade_id")Integer trade_id);
 
@@ -42,4 +42,10 @@ public interface TpAdMapper {
     TpAdApply findAdApplyByOrderSnAndStatus(@Param("apply_sn") String apply_sn, @Param("user_id") Integer user_id, @Param("state") String state);
 
     int updataApplyBystate(@Param("adApplyId")Integer adApplyId, @Param("state") String state);
+
+    int updateAdApplyByActivity(TpAdApply tpAdApply1);
+
+    TpAdApply findAdApplyById(@Param("id")Integer id);
+
+    TpAdCategory findAdCategoryById(@Param("cate")Integer cate);
 }

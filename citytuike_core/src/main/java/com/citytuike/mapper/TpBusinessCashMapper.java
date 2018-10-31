@@ -58,4 +58,6 @@ public interface TpBusinessCashMapper {
     List<TpBusinessCash> findAllCashByShare(@Param("businessId") Integer businessId);
 
     List<TpBusinessCash> findAllCashByShareAndThawflag(@Param("business_id") Integer business_id, @Param("thaw_flag") int thaw_flag);
+
+    int getCashCountByBusinessShareId(@Param("business_id") Integer business_id);
 }

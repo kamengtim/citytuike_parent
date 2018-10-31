@@ -80,7 +80,7 @@ public class TpWithdrawalsServiceImpl implements TpWithdrawalsService {
         TpWithdrawals tpWithdrawals = new TpWithdrawals();
         if(money >= 15 && userMoney.intValue() >= 15){
         tpWithdrawals.setUser_id(user_id);
-        tpWithdrawals.setMoney(BigDecimal.valueOf(money));
+        tpWithdrawals.setMoney(money);
         tpWithdrawals.setCreate_time((int)(new Date().getTime()/1000));
         String bankName = tpBankMapper.selectBank(id);
         tpWithdrawals.setBank_name(bankName);
@@ -88,9 +88,9 @@ public class TpWithdrawalsServiceImpl implements TpWithdrawalsService {
         tpWithdrawals.setRealname(tpUserBank.getReal_name());
         tpWithdrawals.setBank_card(tpUserBank.getBank_card());
         tpWithdrawals.setStatus(0);
-        tpWithdrawals.setSend_type(false);
-        tpWithdrawals.setTaxfee(new BigDecimal(5));
-        tpWithdrawals.setIs_paid(Byte.valueOf("0"));
+        tpWithdrawals.setSend_type(0);
+        tpWithdrawals.setTaxfee(5);
+        tpWithdrawals.setIs_paid(0);
         tpWithdrawals.setQuery_time(0);
         tpWithdrawalsMapper.saveWithdrawals(tpWithdrawals);
         BigDecimal newUserMoney = userMoney.subtract((BigDecimal.valueOf(money)).multiply(new BigDecimal(1).subtract(new BigDecimal(0.05))));
@@ -98,6 +98,11 @@ public class TpWithdrawalsServiceImpl implements TpWithdrawalsService {
         }else{
             throw new SendMessageException("最低提现金额:15");
         }
+    }
+
+    @Override
+    public int insertWithdrawals(TpWithdrawals tpWithdrawals) {
+        return tpWithdrawalsMapper.insert(tpWithdrawals);
     }
 
 }

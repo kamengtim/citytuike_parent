@@ -129,6 +129,10 @@
 		select <include refid="Base_Column_List" /> 
 		from tp_users as t where t.mobile=#{username} and t.password=#{password}
 	</select>
+	<select id="findOneByPayPwd" resultType="TpUsers">
+		select <include refid="Base_Column_List" />
+		from tp_users as t where t.user_id=#{user_id} and t.paypwd=#{paypwd}
+	</select>
 	<select id="findOneByOpenId" resultType="TpUsers">
 		select *
 		from tp_users as t where t.openid=#{openid}
@@ -405,6 +409,15 @@
 		SET
 				parent_id=#{parent_id},
 				relation=#{relation}
+		WHERE user_id = #{user_id}
+	</update>
+	<update id="updataUserByAllAccountLog" parameterType="com.citytuike.model.TpUsers" >
+		UPDATE tp_users
+		SET
+				user_money=#{user_money},
+				distribut_money=#{distribut_money},
+				frozen_money=#{frozen_money},
+				pay_points=#{pay_points}
 		WHERE user_id = #{user_id}
 	</update>
 	<update id="updateBytokenOut" parameterType="com.citytuike.model.TpUsers" >

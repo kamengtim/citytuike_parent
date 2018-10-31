@@ -89,4 +89,22 @@ public interface BusinessService {
     int updataUseCashForUseStatus(String number, Integer cash_id, String code, int use_status);
 
     int updataUseCashForFlag(String number, Integer user_id, int use_status);
+
+    TpBusinessShare findBusinessShareByIdAndUserId(int shop_id, Integer user_id);
+
+    int updataShareByDesc(TpBusinessShare tpBusinessShare1);
+
+    LimitPageList getLimitPageShareByType(String type, String geohash, Integer page);
+
+    int getCashCountByBusinessShareId(Integer business_id);
+
+    int getUserGoodsCountByUserId(Integer user_id);
+
+    TpBusinessDiscount findBusinessDiscountById(int cash_id);
+
+    TpBusinessUseCash findUseCashByCashIdAndUseIdAndFalg(int cash_id, Integer user_id, Integer flag);
+
+    int updataUseCashByUser(Integer id, Integer user_id, int flag);
+
+    int updataShareByGivequan(Integer businessId);
 }

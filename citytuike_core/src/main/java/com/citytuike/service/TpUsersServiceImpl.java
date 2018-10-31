@@ -3,9 +3,11 @@ package com.citytuike.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONArray;
+import com.citytuike.constant.Constant;
 import com.citytuike.mapper.*;
 import com.citytuike.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import com.citytuike.mapper.TpUsersMapper;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service@Transactional
-public class TpUsersServiceImpl implements TpUsersService{
+public class TpUsersServiceImpl implements TpUsersService {
 
 	@Autowired
 	private TpUsersMapper tpUsersMapper;
@@ -30,6 +32,8 @@ public class TpUsersServiceImpl implements TpUsersService{
 	private TpReplayMapper tpReplayMapper;
 	@Autowired
 	private TpFabulousMapper tpFabulousMapper;
+	@Autowired
+	private ITpAccountLogService tpAccountLogService;
 
 
 	public TpUsers findOneByLogo(String username, String password) {
@@ -496,8 +500,8 @@ public class TpUsersServiceImpl implements TpUsersService{
 	}
 
 	@Override
-	public int updatePayPwd(String password,Integer user_id) {
-		int i = tpUsersMapper.updatePayPwd(password,user_id);
+	public int updatePayPwd(String password, Integer user_id) {
+		int i = tpUsersMapper.updatePayPwd(password, user_id);
 		return i;
 	}
 
@@ -509,7 +513,7 @@ public class TpUsersServiceImpl implements TpUsersService{
 	@Override
 	public int updatePassword(Integer user_id, String confirm_password) {
 
-		return tpUsersMapper.updatePassword(user_id,confirm_password);
+		return tpUsersMapper.updatePassword(user_id, confirm_password);
 	}
 
 	@Override
@@ -548,8 +552,8 @@ public class TpUsersServiceImpl implements TpUsersService{
 	}
 
 	@Override
-	public TpUsers selectLevel(int level,String type) {
-		TpUsers tpUsers = tpUsersMapper.selectLevel(level,type);
+	public TpUsers selectLevel(int level, String type) {
+		TpUsers tpUsers = tpUsersMapper.selectLevel(level, type);
 		return tpUsers;
 	}
 
@@ -567,7 +571,7 @@ public class TpUsersServiceImpl implements TpUsersService{
 
 	@Override
 	public int updateNumber(Integer user_id, String number) {
-		int i= tpUsersMapper.updateNumber(user_id,number);
+		int i = tpUsersMapper.updateNumber(user_id, number);
 		return i;
 	}
 
@@ -584,19 +588,19 @@ public class TpUsersServiceImpl implements TpUsersService{
 	}
 
 	@Override
-	public void addNumber(Integer from_user_id,Integer number) {
-		tpUsersMapper.addNumber(from_user_id,number);
+	public void addNumber(Integer from_user_id, Integer number) {
+		tpUsersMapper.addNumber(from_user_id, number);
 	}
 
 	@Override
 	public TpUsers selectToUsers(Integer user_id) {
-		TpUsers toUsers =tpUsersMapper.selectToUsers(user_id);
+		TpUsers toUsers = tpUsersMapper.selectToUsers(user_id);
 		return toUsers;
 	}
 
 	@Override
 	public void addNumberToUser(Integer user_id, Integer number) {
-		tpUsersMapper.addNumberToUser(user_id,number);
+		tpUsersMapper.addNumberToUser(user_id, number);
 	}
 
 	@Override
@@ -612,5 +616,46 @@ public class TpUsersServiceImpl implements TpUsersService{
 	@Override
 	public int updateUserWalletBalanceAndOrderAmount(double balance, double paid_amount, Integer user_id) {
 		return tpUsersMapper.updateUserWalletBalanceAndOrderAmount(balance, paid_amount, user_id);
+	}
+
+	@Override
+	public TpUsers findOneByPayPwd(Integer user_id, String paypwd) {
+		return tpUsersMapper.findOneByPayPwd(user_id, paypwd);
+	}
+
+	@Override
+	public void accountLog(Integer user_id, double user_money, Integer pay_points, String desc, double distribut_money,
+						   Integer order_id, String order_sn, double frozen_money, Integer change_type, Integer second_type,
+						   Integer third_type, Integer status, Integer device_id) {
+		TpAccountLog tpAccountLog = new TpAccountLog();
+		tpAccountLog.setUser_id(user_id);
+		tpAccountLog.setUser_money(user_money);
+		tpAccountLog.setPay_points(pay_points);
+		tpAccountLog.setFrozen_money(frozen_money);
+		tpAccountLog.setChange_time((int)Calendar.getInstance().getTimeInMillis());
+		tpAccountLog.setDesc(desc);
+		tpAccountLog.setOrder_id(order_id);
+		tpAccountLog.setOrder_sn(order_sn);
+		tpAccountLog.setChange_type(change_type);
+		tpAccountLog.setSecond_type(second_type);
+		tpAccountLog.setThird_type(third_type);
+		tpAccountLog.setStatus(status);
+		tpAccountLog.setDevice_id(device_id);
+
+
+		if (status != Constant.ACCOUNT_CHANGE_TYPE_STATUS_WAIT_ACT) {
+			TpUsers tpUsers = new TpUsers();
+			tpUsers.setUser_id(user_id);
+			tpUsers.setUser_money(user_money);
+			tpUsers.setPay_points(pay_points);
+			tpUsers.setDistribut_money(distribut_money);
+			tpUsers.setFrozen_money(frozen_money);
+			int updataUser = tpUsersMapper.updataUserByAllAccountLog(tpUsers);
+			if (updataUser > 0){
+				int insertAccountLog = tpAccountLogService.insertAccountLog(tpAccountLog);
+			}
+		}else{
+			int insertAccountLog = tpAccountLogService.insertAccountLog(tpAccountLog);
+		}
 	}
 }

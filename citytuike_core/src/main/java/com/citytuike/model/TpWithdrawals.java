@@ -8,7 +8,7 @@ public class TpWithdrawals implements Serializable {
 
     private Integer user_id;
 
-    private BigDecimal money;
+    private double money;
 
     private Integer create_time;
 
@@ -26,7 +26,7 @@ public class TpWithdrawals implements Serializable {
 
     private String remark;
 
-    private BigDecimal taxfee;
+    private double taxfee;
 
     private int status;
 
@@ -34,7 +34,7 @@ public class TpWithdrawals implements Serializable {
 
     private String error_code;
 
-    private Byte is_paid;
+    private Integer is_paid;
 
     private Integer query_time;
 
@@ -42,7 +42,7 @@ public class TpWithdrawals implements Serializable {
 
     private String serial_number;
 
-    private Boolean send_type;
+    private Integer send_type;
 
     public Integer getId() {
         return id;
@@ -60,11 +60,11 @@ public class TpWithdrawals implements Serializable {
         this.user_id = user_id;
     }
 
-    public BigDecimal getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(BigDecimal money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 
@@ -132,11 +132,11 @@ public class TpWithdrawals implements Serializable {
         this.remark = remark;
     }
 
-    public BigDecimal getTaxfee() {
+    public double getTaxfee() {
         return taxfee;
     }
 
-    public void setTaxfee(BigDecimal taxfee) {
+    public void setTaxfee(double taxfee) {
         this.taxfee = taxfee;
     }
 
@@ -164,11 +164,11 @@ public class TpWithdrawals implements Serializable {
         this.error_code = error_code;
     }
 
-    public Byte getIs_paid() {
+    public Integer getIs_paid() {
         return is_paid;
     }
 
-    public void setIs_paid(Byte is_paid) {
+    public void setIs_paid(Integer is_paid) {
         this.is_paid = is_paid;
     }
 
@@ -196,11 +196,11 @@ public class TpWithdrawals implements Serializable {
         this.serial_number = serial_number;
     }
 
-    public Boolean getSend_type() {
+    public Integer getSend_type() {
         return send_type;
     }
 
-    public void setSend_type(Boolean send_type) {
+    public void setSend_type(Integer send_type) {
         this.send_type = send_type;
     }
 }

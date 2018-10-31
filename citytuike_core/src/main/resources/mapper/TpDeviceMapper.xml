@@ -165,6 +165,9 @@
   <select id="getDeviceId" resultMap="BaseResultMap">
     SELECT longitude,latitude from tp_device where longitude =#{lng} and latitude = #{lat}
   </select>
+  <select id="findByDevicesnAndIsactive" resultMap="BaseResultMap">
+    SELECT * from tp_device where device_sn =#{device_sn} and is_active = #{is_active}
+  </select>
     <select id="getDevice" resultMap="BaseResultMap">
         select * from tp_device where id = #{device_id}
     </select>

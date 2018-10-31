@@ -169,4 +169,8 @@ public interface TpUsersMapper {
     TpUsers selectInviteUser(String invite_code);
 
 	int updateUserWalletBalanceAndOrderAmount(@Param("balance") double balance, @Param("paid_amount") double paid_amount, @Param("user_id") Integer user_id);
+
+    TpUsers findOneByPayPwd(@Param("user_id") Integer user_id, @Param("paypwd")String paypwd);
+
+	int updataUserByAllAccountLog(TpUsers tpUsers);
 }

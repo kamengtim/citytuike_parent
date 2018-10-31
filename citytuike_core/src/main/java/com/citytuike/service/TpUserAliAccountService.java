@@ -14,4 +14,6 @@ public interface TpUserAliAccountService {
     JSONObject getJsonUserAliAccount(TpUserAliAccount tpUserAliAccount);
 
     void getMoneyAli(String id, String money);
+
+    TpUserAliAccount findByIdAndUserId(Integer id, Integer user_id);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.*;
+import org.omg.PortableInterceptor.INACTIVE;
 
 public interface TpUsersService {
 
@@ -159,4 +160,10 @@ public interface TpUsersService {
     TpUsers selectInviteUser(String invite_code);
 
 	int updateUserWalletBalanceAndOrderAmount(double balance, double paid_amount, Integer user_id);
+
+    TpUsers findOneByPayPwd(Integer user_id, String paypwd);
+
+    void accountLog(Integer user_id, double user_money, Integer pay_points, String desc, double distribut_money, Integer order_id,
+					String order_sn, double frozen_money, Integer change_type, Integer second_type, Integer third_type, Integer status,
+					Integer device_id);
 }

@@ -20,7 +20,7 @@ public interface TpAdService {
 
     LimitPageList getTopUpLimitPageList(Integer user_id, Integer page, int size);
 
-    LimitPageList getApplyLimitPageList(Integer user_id, Integer page, int size);
+    LimitPageList getApplyLimitPageList(Integer user_id, String status, Integer page, int size);
 
     TpAdTrade findTradeById(Integer trade_id);
 
@@ -37,4 +37,12 @@ public interface TpAdService {
     TpAdApply findAdApplyByOrderSnAndStatus(String apply_sn, Integer user_id, String status);
 
     int updataApplyBystate(Integer adApplyId, String state);
+
+    List<TpAdLaunch> findAllAdLaunchByDeviceId(Integer deviceId, String end_date);
+
+    boolean changeActivityPrice(String order_sn, Integer user_id, boolean is_activity_price);
+
+    TpAdApply findAdApplyById(Integer id);
+
+    TpAdCategory findAdCategoryById(Integer cate);
 }

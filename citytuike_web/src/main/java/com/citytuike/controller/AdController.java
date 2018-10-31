@@ -2,14 +2,14 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.citytuike.constant.Constant;
 import com.citytuike.model.*;
-import com.citytuike.service.TpAdService;
-import com.citytuike.service.TpSmsLogService;
-import com.citytuike.service.TpUsersService;
+import com.citytuike.service.*;
 import com.citytuike.util.Util;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.omg.Dynamic.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,12 @@ public class AdController extends BaseController{
     private TpAdService tpAdService;
     @Autowired
     private TpSmsLogService tpSmsLogService;
+    @Autowired
+    private ITpDeviceService iTpDeviceService;
+    @Autowired
+    private TpUserAliAccountService tpUserAliAccountService;
+    @Autowired
+    private TpWithdrawalsService tpWithdrawalsService;
 
 //TODO  1. 材料上传
 //TODO 2. 获取纸巾广告弹出
@@ -492,7 +499,7 @@ public class AdController extends BaseController{
             jsonObj.put("status", -2);
             return jsonObj.toString();
         }
-        LimitPageList limitPageList = tpAdService.getApplyLimitPageList(tpUsers.getUser_id(), page, size);
+        LimitPageList limitPageList = tpAdService.getApplyLimitPageList(tpUsers.getUser_id(), "pass", page, size);
         JSONArray jsonArray = new JSONArray();
         for (TpAdApply tpAdApply : (List<TpAdApply>)limitPageList.getList()) {
             JSONObject jsonObject = new JSONObject();
@@ -733,7 +740,6 @@ public class AdController extends BaseController{
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
     public @ResponseBody String deviceAdList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
-        JSONObject data = new JSONObject();
         jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
         JSONObject jsonO = getRequestJson(request);
@@ -744,7 +750,7 @@ public class AdController extends BaseController{
         }
         String imei = jsonO.getString("imei");
         String end_date = jsonO.getString("end_date");
-        if (null == imei || "".equals(imei) || null == end_date || "".equals(end_date)){
+        if (null == imei || "".equals(imei)){
             jsonObj.put("status", 0);
             jsonObj.put("msg", "参数有误");
             return jsonObj.toString();
@@ -755,13 +761,274 @@ public class AdController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
+        int nowTime = (int)Calendar.getInstance().getTimeInMillis();
+        int endTime = 0;
+        if (end_date != null && !"".equals(end_date)){
+            endTime = (int)Util.strToDateLong(end_date).getTime();
+            if (endTime < nowTime){
+                jsonObj.put("status", -1);
+                jsonObj.put("msg", "日期必须大于今天");
+                return jsonObj.toString();
+            }
+        }
+        JSONArray jsonArray = new JSONArray();
+        TpDevice tpDevice = iTpDeviceService.findByDevicesnAndIsactive(imei, 1);
+        if (null != tpDevice){
+            List<TpAdLaunch> tpAdLaunchList = tpAdService.findAllAdLaunchByDeviceId(tpDevice.getId(), end_date);
+            for (TpAdLaunch tpAdLaunch : tpAdLaunchList) {
+                    List<TpAdApplyMaterial> tpAdApplyMaterialList = tpAdService.findAdApplyMaterialByApplyId(tpAdLaunch.getApplyId());
+                for (TpAdApplyMaterial tpAdApplyMaterial : tpAdApplyMaterialList) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("start_time", tpAdLaunch.getLaunchStartDate());
+                    jsonObject.put("end_time", tpAdLaunch.getLaunchEndDate());
+                    jsonObject.put("interval", "5000");
+                    jsonObject.put("media_type", 1);
+                    jsonObject.put("url", tpAdApplyMaterial.getUrl());
+                    jsonArray.add(jsonObject);
+                }
+            }
+        }else{
+            jsonObj.put("status", -1);
+            jsonObj.put("msg", "找不到该设备注册信息");
+            return jsonObj.toString();
 
+        }
+        if (jsonArray.size() == 0){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("start_time", Util.getNowDate());
+            jsonObject.put("end_time", end_date);
+            jsonObject.put("interval", "5000");
+            jsonObject.put("media_type", 2);
+            jsonObject.put("url", "https://m.citytuike.cn");
+            jsonArray.add(jsonObject);
+            JSONObject jsonObject1 = new JSONObject();
+            jsonObject1.put("start_time", Util.getNowDate());
+            jsonObject1.put("end_time", end_date);
+            jsonObject1.put("interval", "5000");
+            jsonObject1.put("media_type", 0);
+            jsonObject1.put("url", "http://res.citytuike.cn/6463106600253b90.jpeg");
+            jsonArray.add(jsonObject1);
+            JSONObject jsonObject2 = new JSONObject();
+            jsonObject2.put("start_time", Util.getNowDate());
+            jsonObject2.put("end_time", end_date);
+            jsonObject2.put("interval", "5000");
+            jsonObject2.put("media_type", 0);
+            jsonObject2.put("url", "http://res.citytuike.cn/736851706002b435.jpeg");
+            jsonArray.add(jsonObject2);
+            JSONObject jsonObject3 = new JSONObject();
+            jsonObject3.put("start_time", Util.getNowDate());
+            jsonObject3.put("end_time", end_date);
+            jsonObject3.put("interval", "5000");
+            jsonObject3.put("media_type", 1);
+            jsonObject3.put("url", "http://res.citytuike.cn/city.mp4");
+            jsonArray.add(jsonObject3);
+        }
+        jsonObj.put("result", jsonArray);
+        jsonObj.put("status", 1);
+        jsonObj.put("msg", "请求成功");
         return jsonObj.toString();
     }
+    @RequestMapping(value="/withdraw",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告钱包提现", notes = "广告钱包提现")
+    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    public @ResponseBody String withdraw(HttpServletRequest request){
+        JSONObject jsonObj = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        JSONObject jsonO = getRequestJson(request);
+        if (null == jsonO){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        Integer id = jsonO.getInteger("id");
+        float money = jsonO.getFloat("money");
+        String paypwd = jsonO.getString("paypwd");
+        if (null == id || "".equals(id)){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "参数有误");
+            return jsonObj.toString();
+        }
+        if ("".equals(money) && money < 1){
+            jsonObj.put("status", -1);
+            jsonObj.put("msg", "提现最少需要1元");
+            return jsonObj.toString();
+        }
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        TpUserAliAccount tpUserAliAccount = tpUserAliAccountService.findByIdAndUserId(id, tpUsers.getUser_id());
+        if (null != tpUserAliAccount){
+            if (null != paypwd && !"".equals(paypwd)){
+                TpUsers tpUser = tpUsersService.findOneByPayPwd(tpUsers.getUser_id(), paypwd);
+                if (null == tpUser){
+                    jsonObj.put("status", -1);
+                    jsonObj.put("msg", "提现密码错误");
+                    return jsonObj.toString();
+                }
+                TpWithdrawals tpWithdrawals = new TpWithdrawals();
+                tpWithdrawals.setRealname(tpUserAliAccount.getReal_name());
+                tpWithdrawals.setUser_id(tpUser.getUser_id());
+                tpWithdrawals.setBank_card(tpUserAliAccount.getAccount());
+                tpWithdrawals.setBank_name("支付宝");
+                tpWithdrawals.setMoney(money);
+                tpWithdrawals.setOrder_sn(Util.CreateDate() + Util.generateString(3));
+                tpWithdrawals.setTaxfee(0);
+                tpWithdrawals.setStatus(0);
+                tpWithdrawals.setSend_type(3);
 
-    //TODO 16. 设备广告列表（新）
-    //TODO 17. 广告钱包提现
-    //TODO 18. 订单改价
-    //TODO 19. 广告订单列表
+                TpUserWallet tpUserWallet = tpUsersService.findWalletByUserId(tpUser.getUser_id());
+                if (null != tpUserWallet){
+                    double balanceChanged = tpUserWallet.getBalance() - tpWithdrawals.getMoney() + tpWithdrawals.getTaxfee();
+                    if (balanceChanged < 0){
+                        jsonObj.put("status", -1);
+                        jsonObj.put("msg", "提现密码错误");
+                        return jsonObj.toString();
+                    }
+                    TpUserWallet tpUserWallet1 = new TpUserWallet();
+                    tpUserWallet1.setId(tpUserWallet.getId());
+                    tpUserWallet1.setBalance(balanceChanged);
+                    tpUserWallet1.setUpdated_at(new Timestamp(new Date().getTime()));
+                    int updataUserWallet = tpUsersService.updateUserWalletBalance(tpUserWallet1);
+                    if (updataUserWallet > 0){
+                        int insertWithdrawals = tpWithdrawalsService.insertWithdrawals(tpWithdrawals);
+                        if (insertWithdrawals > 0){
+                            double count_money = tpWithdrawals.getMoney() + tpWithdrawals.getTaxfee();
+                            tpUsersService.accountLog(tpUser.getUser_id(), count_money, 0 , "广告钱包提现申请扣除 " + (count_money * -1) + " 元",
+                                    0,0, tpWithdrawals.getOrder_sn(), 0, 0, 0, 0,
+                                    Constant.ACCOUNT_CHANGE_TYPE_STATUS_WAIT_ACT, 0);
+                            TpUserFinance tpUserFinance = new TpUserFinance();
+                            tpUserFinance.setUser_id(tpUser.getUser_id());
+                            tpUserFinance.setChange_type(2);
+                            tpUserFinance.setAmount(count_money);
+                            tpUserFinance.setUser_balance(balanceChanged);
+                            tpUserFinance.setBiz_sign("ad_withdraw");
+                            tpUserFinance.setBiz_sn(tpWithdrawals.getOrder_sn());
+                            tpUserFinance.setRemark("提现");
+                            tpUserFinance.setCreated_at(new Timestamp(new Date().getTime()));
+                            int insertUserFinance = tpUsersService.insertUserFinance(tpUserFinance);
+                            if (insertUserFinance > 0){
+                                jsonObj.put("status", 1);
+                                jsonObj.put("msg", "提现成功");
+                                return jsonObj.toString();
+                            }
+                        }
+                    }
+                }
+
+            }else {
+                jsonObj.put("status", -1);
+                jsonObj.put("msg", "提现密码不能为空");
+                return jsonObj.toString();
+            }
+
+        }else{
+            jsonObj.put("status", -1);
+            jsonObj.put("msg", "找不到有效账号信息记录");
+            return jsonObj.toString();
+        }
+
+        jsonObj.put("status", 1);
+        jsonObj.put("msg", "请求成功");
+        return jsonObj.toString();
+    }
+    /**
+     * @return
+     * 广告用户可用余额
+     */
+    @RequestMapping(value="/change_price",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "订单改价", notes = "订单改价")
+    public @ResponseBody String changePrice(HttpServletRequest request, @RequestParam(required=true) String order_sn){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        TpAdApply tpAdApply = tpAdService.findAdApplyByOrderSn(order_sn);
+        if (null != tpAdApply){
+            if (tpAdApply.getActivity() == 1){
+                data.put("order_sn", tpAdApply.getOrder_sn());
+                jsonObj.put("status", 1);
+                jsonObj.put("msg", "请求成功");
+                return jsonObj.toString();
+            }
+            tpAdService.changeActivityPrice(order_sn, tpUsers.getUser_id(), true);
+            TpAdApply tpAdApply1 = tpAdService.findAdApplyById(tpAdApply.getId());
+            if (null != tpAdApply1){
+                data.put("order_sn", tpAdApply1.getOrder_sn());
+            }
+        }
+        jsonObj.put("result", data);
+        jsonObj.put("status", 1);
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
+    @RequestMapping(value="/order_list",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
+    @ApiOperation(value = "广告订单列表", notes = "广告订单列表")
+    public @ResponseBody String orderList(HttpServletRequest request, @RequestParam(required=true) String status,
+                                          @RequestParam(required=true) Integer page){
+        JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
+        jsonObj.put("status", 0);
+        jsonObj.put("msg", "请求失败，请稍后再试");
+        TpUsers tpUsers = initUser(request);
+        if (null == tpUsers) {
+            jsonObj.put("status", -2);
+            jsonObj.put("msg", "token失效");
+            return jsonObj.toString();
+        }
+        LimitPageList limitPageList  = tpAdService.getApplyLimitPageList(tpUsers.getUser_id(), status, page, 10);
+        JSONArray jsonArray = new JSONArray();
+        for (TpAdApply tpAdApply : (List<TpAdApply>)limitPageList.getPage()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", tpAdApply.getId());
+            jsonObject.put("order_sn", tpAdApply.getOrder_sn());
+            jsonObject.put("days", tpAdApply.getDays());
+            jsonObject.put("side", tpAdApply.getSide());
+            jsonObject.put("launch_num", tpAdApply.getLaunch_num());
+            jsonObject.put("order_amount", tpAdApply.getOrder_amount());
+            jsonObject.put("state", tpAdApply.getState());
+            jsonObject.put("pay_status", tpAdApply.getPay_status());
+            jsonObject.put("created_at", tpAdApply.getCreated_at());
+            jsonObject.put("fans_need_id", tpAdApply.getFans_need_id());
+            TpAdCategory tpAdCategory = tpAdService.findAdCategoryById(tpAdApply.getCate());
+            if (null != tpAdCategory){
+                jsonObject.put("title_name", tpAdCategory.getName());
+            }
+            List<TpAdApplyRegion> tpAdApplyRegionList = tpAdService.findAdApplyRegionByApplyId(tpAdApply.getId());
+            int i = 0;
+            String city_info_str = "";
+            for (TpAdApplyRegion tpAdApplyRegion : tpAdApplyRegionList) {
+                TpRegion tpRegion = tpUsersService.findRegionById(tpAdApplyRegion.getRegion_id());
+                if (null != tpRegion){
+                    if (i == 0){
+                        city_info_str = tpRegion.getName() + "(" + tpAdApplyRegion.getNum() + ")台";
+                    }else{
+                        city_info_str = city_info_str + "," + tpRegion.getName() + "(" + tpAdApplyRegion.getNum() + ")台";
+                    }
+                }
+                i++;
+            }
+            jsonObject.put("city_info_str", city_info_str);
+            jsonArray.add(jsonObject);
+        }
+        data.put("total", limitPageList.getPage().getTotalCount());
+        data.put("per_page", limitPageList.getPage().getPageSize());
+        data.put("current_page", limitPageList.getPage().getPageNow());
+        data.put("last_page", limitPageList.getPage().getTotalPageCount());
+        data.put("data", jsonArray);
+        jsonObj.put("result", data);
+        jsonObj.put("status", 1);
+        jsonObj.put("msg", "请求成功!");
+        return jsonObj.toString();
+    }
 
 }

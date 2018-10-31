@@ -17,4 +17,5 @@ public interface TpWithdrawalsService {
 
     void ApplyForWithdrawals(Integer user_id, int id, float money);
 
+    int insertWithdrawals(TpWithdrawals tpWithdrawals);
 }

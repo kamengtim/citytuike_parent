@@ -24,4 +24,6 @@ public interface TpUserAliAccountMapper {
     List<TpAccountLog> selectAliAccountList(@Param("startPos") int startPos, @Param("pageSize") int pageSize);
 
     TpUserAliAccount selectAliById(String id);
+
+    TpUserAliAccount findByIdAndUserId(@Param("id") Integer id, @Param("user_id") Integer user_id);
 }

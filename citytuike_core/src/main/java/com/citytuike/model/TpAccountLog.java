@@ -73,6 +73,22 @@ public class TpAccountLog implements Serializable{
 	 * 是否删除
 	 */
 	private Integer is_delete;
+	/**
+	 * 设备ID
+	 */
+	private Integer device_id;
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public Integer getDevice_id() {
+		return device_id;
+	}
+
+	public void setDevice_id(Integer device_id) {
+		this.device_id = device_id;
+	}
 
 	public Integer getLog_id() {
 		return log_id;

@@ -63,7 +63,10 @@
     where article_id = #{article_id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select article_id, cat_id, title, author, author_email, keywords, article_type, is_open, 
+    SELECT SUM(t.click) FROM tp_article as t
+  </select>
+  <select id="getClick_Count" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select article_id, cat_id, title, author, author_email, keywords, article_type, is_open,
     add_time, file_url, open_type, link, click, publish_time, thumb, top, content, description
     from tp_article
     where article_id = #{article_id,jdbcType=INTEGER}
@@ -74,7 +77,7 @@
     from tp_article
   </select>
   <select id="getArticleList" resultMap="BaseResultMap">
-    SELECT * from tp_article where cat_id =#{cat_id} and is_open = 1 order by add_time desc
+    SELECT * from tp_article where cat_id =#{cat_id} and is_open = 1 order by top desc,add_time desc
   </select>
   <select id="getArticleCon" resultMap="BaseResultMap">
     SELECT * from tp_article where article_id = #{article_id}

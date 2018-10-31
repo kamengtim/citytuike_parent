@@ -97,4 +97,9 @@ public class TpUserAliAccountServiceImpl implements TpUserAliAccountService {
             throw new SendMessageException("最低提现金额:15");
         }
     }
+
+    @Override
+    public TpUserAliAccount findByIdAndUserId(Integer id, Integer user_id) {
+        return tpUserAliAccountMapper.findByIdAndUserId(id, user_id);
+    }
 }

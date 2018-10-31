@@ -322,4 +322,9 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
         return tpDevice;
     }
 
+    @Override
+    public TpDevice findByDevicesnAndIsactive(String imei, int is_active) {
+        return tpDeviceMapper.findByDevicesnAndIsactive(imei, is_active);
+    }
+
 }
