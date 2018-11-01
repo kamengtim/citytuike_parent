@@ -20,12 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
 @RequestMapping("api/Goods")
 public class GoodsController extends BaseController{
-	
+
 	@Autowired
 	private TpGoodsService tpGoodsService;
 	@Autowired
@@ -78,20 +79,50 @@ public class GoodsController extends BaseController{
 	 * 商品详情
 	 */
 	@RequestMapping(value="/goodsInfo",method=RequestMethod.GET, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "商品详情", notes = "商品详情")
-	public @ResponseBody String goodsInfo(@RequestParam(required=true) Integer id){
+	@ApiOperation(value = "商品详情" , notes = "商品详情")
+	public @ResponseBody String goodsInfo(HttpServletRequest request, @RequestParam(required=true) Integer id){
 		JSONObject jsonObj = new JSONObject();
-		JSONObject data = new JSONObject();
 		JSONObject data1 = new JSONObject();
 		JSONObject good = new JSONObject();
 		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
+		TpUsers tpUsers = initUser(request);
+		if (null == tpUsers) {
+			jsonObj.put("status", -2);
+			jsonObj.put("msg", "token失效");
+			return jsonObj.toString();
+		}
 		TpGoods tpGoods = tpGoodsService.findById(id);
-		good = tpGoodsService.getGoodsJson(tpGoods);
-		data1.put("goods", good);
-		jsonObj.put("result", data1);
-		jsonObj.put("status", 1);
-		jsonObj.put("msg", "请求成功!");
+		if(null != tpGoods){
+			if (tpGoods.getIs_on_sale() == 0 || (tpGoods.getIs_virtual() == 1 && tpGoods.getVirtual_indate() <= Calendar.getInstance().getTimeInMillis())){
+				jsonObj.put("status", 0);
+				jsonObj.put("msg", "此商品不存在或者已下架");
+				return jsonObj.toString();
+			}
+			good = tpGoodsService.getGoodsJson(tpGoods);
+			List<TpGoodsImages> tpGoodsImagesList = tpGoodsService.findByGoodsId(tpGoods.getGoods_id());
+			int i = 0;
+			JSONArray jsonArray = new JSONArray();
+			for (TpGoodsImages tpGoodsImages : tpGoodsImagesList) {
+				JSONObject jsonObject = new JSONObject();
+				JSONObject jsonObject1 = new JSONObject();
+				jsonObject.put("goods_id", tpGoodsImages.getGoods_id());
+				jsonObject.put("image_url", tpGoodsImages.getImage_url());
+				jsonObject.put("img_id", tpGoodsImages.getImg_id());
+				jsonObject1.put("\""+ i +"\"", jsonObject);
+				jsonArray.add(jsonObject1);
+				i++;
+			}
+			data1.put("goods_images_list", jsonArray);
+			int collect = tpGoodsService.getCountByGoodsOrUser(tpGoods.getGoods_id(), tpUsers.getUser_id());
+			data1.put("collect", collect);
+			int goods_collect_count = tpGoodsService.getCountByGoodsOrUser(tpGoods.getGoods_id(), null);
+			data1.put("goods_collect_count", goods_collect_count);
+			data1.put("goods", good);
+			jsonObj.put("result", data1);
+			jsonObj.put("status", 1);
+			jsonObj.put("msg", "请求成功!");
+		}
 		return jsonObj.toString();
 	}
 	/**
@@ -125,6 +156,12 @@ public class GoodsController extends BaseController{
 		}
 		TpGoods tpGoods = tpGoodsService.findById(goods_id);
 		if (null != tpGoods) {
+			int num = tpGoodsService.getCountByGoodsOrUser(tpGoods.getGoods_id(), tpUsers.getUser_id());
+			if (num >= 1){
+				jsonObj.put("status", 3);
+				jsonObj.put("msg", "商品已收藏");
+				return jsonObj.toString();
+			}
 			TpGoodsCollect tpGoodsCollect = new TpGoodsCollect();
 			tpGoodsCollect.setGoods_id(tpGoods.getGoods_id());
 			tpGoodsCollect.setUser_id(tpUsers.getUser_id());
@@ -137,17 +174,17 @@ public class GoodsController extends BaseController{
 		}
 		return jsonObj.toString();
 	}
-	
+
 	/**
 	 * @return
 	 *  轮播商品
 	 */
 	@RequestMapping(value="/carousel",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
 	@ApiOperation(value = " 轮播商品", notes = " 轮播商品")
-	public @ResponseBody String carousel(HttpServletRequest request){
+	public @ResponseBody String carousel(HttpServletRequest request) {
 		JSONObject jsonObj = new JSONObject();
-		JSONObject jsonObj2 = new JSONObject();
-		JSONArray data = new JSONArray();
+		JSONObject data1 = new JSONObject();
+		JSONObject good = new JSONObject();
 		jsonObj.put("status", 0);
 		jsonObj.put("msg", "请求失败，请稍后再试");
 		TpUsers tpUsers = initUser(request);
@@ -156,31 +193,40 @@ public class GoodsController extends BaseController{
 			jsonObj.put("msg", "token失效");
 			return jsonObj.toString();
 		}
-		String[] goodsId = {"144","144","144"};
+		String[] goodsId = {"144", "144", "144"};
 		for (int i = 0; i < goodsId.length; i++) {
-			JSONObject data1 = new JSONObject();
-			JSONArray jsonArray1 = new JSONArray();
-			JSONArray jsonArray = new JSONArray();
 			TpGoods tpGoods = tpGoodsService.findById(Integer.parseInt(goodsId[i]));
 			if (null != tpGoods) {
-				List<TpGoodsImages> tpGoodsImages = tpGoodsService.findByGoodsId(tpGoods.getGoods_id());
-				for (TpGoodsImages tpGoodsImages2 : tpGoodsImages) {
-					JSONObject jsonObject1 = new JSONObject();
-					jsonObject1 = tpGoodsService.getGoodsImagesJson(tpGoodsImages2);
-					jsonArray1.add(jsonObject1);
+				if (tpGoods.getIs_on_sale() == 0 || (tpGoods.getIs_virtual() == 1 && tpGoods.getVirtual_indate() <= Calendar.getInstance().getTimeInMillis())) {
+					jsonObj.put("status", 0);
+					jsonObj.put("msg", "此商品不存在或者已下架");
+					return jsonObj.toString();
 				}
-				JSONObject jsonObject = new JSONObject();
-				jsonObject = tpGoodsService.getGoodsJson(tpGoods);
-				jsonArray.add(jsonObject);
-				data1.put("goods_images_list", jsonArray1);
-				data1.put("goods", jsonArray);
+				good = tpGoodsService.getGoodsJson(tpGoods);
+				List<TpGoodsImages> tpGoodsImagesList = tpGoodsService.findByGoodsId(tpGoods.getGoods_id());
+				int j = 0;
+				JSONArray jsonArray = new JSONArray();
+				for (TpGoodsImages tpGoodsImages : tpGoodsImagesList) {
+					JSONObject jsonObject = new JSONObject();
+					JSONObject jsonObject1 = new JSONObject();
+					jsonObject.put("goods_id", tpGoodsImages.getGoods_id());
+					jsonObject.put("image_url", tpGoodsImages.getImage_url());
+					jsonObject.put("img_id", tpGoodsImages.getImg_id());
+					jsonObject1.put("\"" + j + "\"", jsonObject);
+					jsonArray.add(jsonObject1);
+					j++;
+				}
+				data1.put("goods_images_list", jsonArray);
+				int collect = tpGoodsService.getCountByGoodsOrUser(tpGoods.getGoods_id(), tpUsers.getUser_id());
+				data1.put("collect", collect);
+				int goods_collect_count = tpGoodsService.getCountByGoodsOrUser(tpGoods.getGoods_id(), null);
+				data1.put("goods_collect_count", goods_collect_count);
+				data1.put("goods", good);
+				jsonObj.put("result", data1);
+				jsonObj.put("status", 1);
+				jsonObj.put("msg", "请求成功!");
 			}
-			data.add(data1);
 		}
-		jsonObj2.put("list", data);
-		jsonObj.put("return", jsonObj2);
-		jsonObj.put("status", 1);
-		jsonObj.put("msg", "请求成功!");
 		return jsonObj.toString();
 	}
 	//TODO  商品规格

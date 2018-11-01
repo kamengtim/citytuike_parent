@@ -79,16 +79,16 @@ public class TpUserAliAccountServiceImpl implements TpUserAliAccountService {
         TpWithdrawals tpWithdrawals = new TpWithdrawals();
         if(Integer.parseInt(money) >= 15 && userMoney.intValue() >= 15){
             tpWithdrawals.setUser_id(tpUserAliAccount.getUser_id());
-            tpWithdrawals.setMoney(BigDecimal.valueOf(Integer.parseInt(money)));
+            tpWithdrawals.setMoney(Double.valueOf(Integer.parseInt(money)));
             tpWithdrawals.setCreate_time((int)(new Date().getTime()/1000));
             String bankName = "";
             tpWithdrawals.setBank_name(bankName);
             tpWithdrawals.setRealname(tpUserAliAccount.getReal_name());
             tpWithdrawals.setBank_card("");
             tpWithdrawals.setStatus(0);
-            tpWithdrawals.setSend_type(true);
-            tpWithdrawals.setTaxfee(new BigDecimal(5));
-            tpWithdrawals.setIs_paid(Byte.valueOf("0"));
+            tpWithdrawals.setSend_type(1);
+            tpWithdrawals.setTaxfee(5.00);
+            tpWithdrawals.setIs_paid(0);
             tpWithdrawals.setQuery_time(0);
             tpWithdrawalsMapper.saveWithdrawals(tpWithdrawals);
             BigDecimal newUserMoney = userMoney.subtract((BigDecimal.valueOf(Integer.parseInt(money))).multiply(new BigDecimal(1).subtract(new BigDecimal(0.05))));

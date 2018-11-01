@@ -87,6 +87,12 @@ public class Util<main> {
         dataStr = sdf.format(new Date());
         return dataStr;
     }
+    public static String getCreateDate(){
+        String dataStr=null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMd-d hh:mm:ss");
+        dataStr = sdf.format(new Date());
+        return dataStr;
+    }
     public static String getNowDate(){
         String dataStr=null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -265,9 +271,22 @@ public class Util<main> {
 //        System.out.println("当前时间：" + Calendar.getInstance().getTimeInMillis());
 //        System.out.println("当前时间：" + new Date());
 //        System.out.println("当前时间：" + getDateAndNumber(16));
-        String date = Calendar.getInstance().getTimeInMillis() + "";
-        String sss = stampToDate1(date);
-        System.out.println(sss);
+//        String date = Calendar.getInstance().getTimeInMillis() + "";
+//        String sss = stampToDate1(date);
+//        System.out.println(sss);
+        String im_id = "P0000075214";
+        String friend_im_id = "P0000075215";
+        String room = "";
+        int im = Integer.parseInt(im_id.substring(1));
+        int friend_im = Integer.parseInt(friend_im_id.substring(1));
+        if (im > friend_im){
+            room = im_id + friend_im_id;
+        }else{
+            room = friend_im_id + im_id;
+        }
+        System.out.println(">>>>>>>>>>>>" + room);
+        System.out.println(">>>>>md5>>>>>>>" + MD5Utils.md5(room));
+
     }
     public static String transferLongToDate(String dateFormat, Long millSec){
         String result = null;

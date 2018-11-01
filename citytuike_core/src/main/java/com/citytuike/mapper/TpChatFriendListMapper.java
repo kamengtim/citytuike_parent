@@ -1,6 +1,5 @@
 package com.citytuike.mapper;
 
-import com.citytuike.model.TpBusinessUseCash;
 import com.citytuike.model.TpChatFriendList;
 import org.apache.ibatis.annotations.Param;
 
@@ -55,7 +54,9 @@ public interface TpChatFriendListMapper {
      */
     int updateByPrimaryKey(TpChatFriendList record);
 
-    int getCount(@Param("im_id") String im_id);
+    int getCount(@Param("im_id") String im_id, @Param("type") Integer type);
 
-    List<TpChatFriendList> selectByPage(@Param("im_id") String im_id, @Param("startPos")int startPos, @Param("pageSize")int pageSize);
+    List<TpChatFriendList> selectByPage(@Param("im_id") String im_id, @Param("type")Integer type, @Param("startPos") int startPos, @Param("pageSize") int pageSize);
+
+    int updataChatFriendListIsRead(@Param("room") String room, @Param("im_ids")String im_ids);
 }

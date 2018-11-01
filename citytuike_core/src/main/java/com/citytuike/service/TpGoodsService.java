@@ -27,4 +27,6 @@ public interface TpGoodsService {
     TpGoods selectPrice();
 
     String getGoodName(String goods_id);
+
+	int getCountByGoodsOrUser(Integer goods_id, Integer user_id);
 }

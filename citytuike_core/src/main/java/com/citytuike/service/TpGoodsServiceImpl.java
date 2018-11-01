@@ -124,5 +124,10 @@ public class TpGoodsServiceImpl implements TpGoodsService{
 		return goodName;
 	}
 
+	@Override
+	public int getCountByGoodsOrUser(Integer goods_id, Integer user_id) {
+		return tpGoodsMapper.getCountByGoodsOrUser(goods_id, user_id);
+	}
+
 
 }

@@ -13,12 +13,17 @@
 	
 	<!-- 分页SQL语句 -->  
     <select id="selectByPage" resultMap="TpGoods">  
-        select *  from tp_goods limit #{startPos},#{pageSize}
-    </select>  
-    
-    <!-- 取得记录的总数 -->  
+        select *  from tp_goods where is_on_sale = 1 and goods_type != 37 order by sort asc, goods_id desc limit #{startPos},#{pageSize}
+    </select>
+	<select id="getCountByGoodsOrUser" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tp_goods_collect  where goods_id=#{goods_id}
+        <if test="user_id !=null">
+			and user_id=#{user_id}
+		</if>
+    </select>
+	<!-- 取得记录的总数 -->
     <select id="getCount" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM tp_goods  
+        SELECT COUNT(*) FROM tp_goods  where is_on_sale = 1 and goods_type != 37
     </select> 
 	<!--token查询 -->
 	<select id="findById" resultType="TpGoods">

@@ -2,6 +2,7 @@ package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.mapper.TpChatFriendListMapper;
+import com.citytuike.mapper.TpChatGroupUserMapper;
 import com.citytuike.mapper.TpChatLogMapper;
 import com.citytuike.mapper.TpUsersMapper;
 import com.citytuike.model.*;
@@ -19,21 +20,23 @@ public class ChatServiceImpl implements ChatService {
     private TpChatLogMapper tpChatLogMapper;
     @Autowired
     private TpUsersMapper tpUsersMapper;
+    @Autowired
+    private TpChatGroupUserMapper tpChatGroupUserMapper;
     @Override
-    public LimitPageList getLimitPageListByChatList(String im_id, Integer p) {
+    public LimitPageList getLimitPageListByChatList(String im_id, Integer type, Integer p) {
         LimitPageList LimitPageStuList = new LimitPageList();
-        int totalCount=tpChatFriendListMapper.getCount(im_id);//获取总的记录数
+        int totalCount=tpChatFriendListMapper.getCount(im_id, type);//获取总的记录数
         List<TpChatFriendList> stuList=new ArrayList<TpChatFriendList>();
         Page page=null;
         if(p!=null){
             page=new Page(totalCount, p);
             page.setPageSize(10);
-            stuList=tpChatFriendListMapper.selectByPage(im_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpChatFriendListMapper.selectByPage(im_id,type, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
 
         }else{
             page=new Page(totalCount, 1);//初始化pageNow为1
             page.setPageSize(10);
-            stuList=tpChatFriendListMapper.selectByPage(im_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpChatFriendListMapper.selectByPage(im_id, type, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
 
         }
         LimitPageStuList.setPage(page);
@@ -77,24 +80,39 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public LimitPageList getLImitPageLIstByChatLogList(String im_id, Integer p) {
+    public LimitPageList getLImitPageLIstByChatLogList(String room, Integer p) {
         LimitPageList LimitPageStuList = new LimitPageList();
-        int totalCount=tpChatLogMapper.getCount(im_id);//获取总的记录数
+        int totalCount=tpChatLogMapper.getCount(room);//获取总的记录数
         List<TpChatLog> stuList=new ArrayList<TpChatLog>();
         Page page=null;
         if(p!=null){
             page=new Page(totalCount, p);
             page.setPageSize(10);
-            stuList=tpChatLogMapper.selectByPage(im_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpChatLogMapper.selectByPage(room, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
 
         }else{
             page=new Page(totalCount, 1);//初始化pageNow为1
             page.setPageSize(10);
-            stuList=tpChatLogMapper.selectByPage(im_id, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
+            stuList=tpChatLogMapper.selectByPage(room, page.getStartPos(), page.getPageSize());//从startPos开始，获取pageSize条数据
 
         }
         LimitPageStuList.setPage(page);
         LimitPageStuList.setList(stuList);
         return LimitPageStuList;
+    }
+
+    @Override
+    public int updataChatFriendListIsRead(String room, String im_ids) {
+        return tpChatFriendListMapper.updataChatFriendListIsRead(room, im_ids);
+    }
+
+    @Override
+    public int insertChatGroupUser(TpChatGroupUser tpChatGroupUser) {
+        return tpChatGroupUserMapper.insert(tpChatGroupUser);
+    }
+
+    @Override
+    public int updateChatGroupUserByStatus(String group_id, String user_id) {
+        return tpChatGroupUserMapper.updateChatGroupUserByStatus(group_id, user_id);
     }
 }

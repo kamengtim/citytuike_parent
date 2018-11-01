@@ -36,13 +36,13 @@
     content
   </sql>
   <select id="getCount" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM tp_chat_log t where t.from=#{im_id} or t.to=#{im_id}
+        SELECT COUNT(*) FROM tp_chat_log t where room=#{room}
   </select>
   <select id="selectByPage" resultMap="BaseResultMap" parameterType="java.util.HashMap">
     select *
     from tp_chat_log t
     where
-    t.from=#{im_id} or t.to=#{im_id}
+    room=#{room}
     limit #{startPos},#{pageSize}
   </select>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >

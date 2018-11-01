@@ -39,4 +39,6 @@ public interface TpGoodsMapper {
     TpGoods selectPrice();
 
     String getGoodName(String goods_id);
+
+    int getCountByGoodsOrUser(@Param("goods_id") Integer goods_id, @Param("user_id") Integer user_id);
 }

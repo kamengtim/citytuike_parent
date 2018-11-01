@@ -62,7 +62,7 @@ public interface TpChatLogMapper {
      */
     int updateByPrimaryKey(TpChatLog record);
 
-    int getCount(@Param("im_id") String im_id);
+    int getCount(@Param("room") String room);
 
-    List<TpChatLog> selectByPage(@Param("im_id")String im_id, @Param("startPos")int startPos, @Param("pageSize")int pageSize);
+    List<TpChatLog> selectByPage(@Param("room")String room, @Param("startPos")int startPos, @Param("pageSize")int pageSize);
 }
