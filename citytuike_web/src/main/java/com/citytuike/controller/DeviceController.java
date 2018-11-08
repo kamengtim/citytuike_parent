@@ -319,7 +319,7 @@ public class DeviceController extends BaseController{
      * @return 获取机器二维码-v2
      */
     @RequestMapping(value = "getQrCodeV2", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "获取机器二维码", notes = "获取机器二维码")
+    @ApiOperation(value = "获取机器二维码-v2", notes = "获取机器二维码-v2")
     public @ResponseBody
     String getUserMpQr(HttpServletRequest  request,
                        @RequestParam(required = true,defaultValue = "a1njSyrGdTz") String ProductKey,
@@ -717,7 +717,7 @@ public class DeviceController extends BaseController{
          * @return 更换配件列表-v2
          */
     @RequestMapping(value = "replacement_parts_list_v2", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "更换配件列表", notes = "更换配件列表")
+    @ApiOperation(value = "更换配件列表-v2", notes = "更换配件列表-v2")
     public @ResponseBody String replacement_parts_list_v2(HttpServletRequest request,
                                                           @RequestParam(required = true)Integer type,
                                                           @RequestParam(required = true)String pageNo,
@@ -876,7 +876,7 @@ public class DeviceController extends BaseController{
             jsonObj.put("msg", "没有版本");
             return jsonObj.toString();
         }
-        //Todo
+        //TODO
         String[]imeis = new String[]{};
         String imei = request.getParameter("imei");
         String get_version = request.getParameter("version");
@@ -945,4 +945,12 @@ public class DeviceController extends BaseController{
         }
         return jsonObj.toString();
     }
+
+    //TODO 13. 获取可关注公众号列表
+    //TODO 14. 关注公众号后回到前端页面--检查paper_token是否有效
+    //TODO 17. 机器出纸回调
+    //TODO 24. 修改机器别名
+    //TODO 25. 区域机器数量--省份
+    //TODO 26. 区域机器数量-市
+    //TODO 27. 机器当前纸巾库存
 }

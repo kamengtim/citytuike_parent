@@ -38,7 +38,7 @@ public class BusinessController extends BaseController{
      * 添加商家
      */
     @RequestMapping(value="/businessUp",method= RequestMethod.POST, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "添加商家", notes = "添加商家")
+    @ApiOperation(value = "商家上传", notes = "商家上传")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
     public @ResponseBody String businessUp(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
@@ -330,10 +330,10 @@ public class BusinessController extends BaseController{
     /**
      * @param id 评论ID
      * @return
-     * 评论标签列表接口
+     * 标签列表接口
      */
     @RequestMapping(value="/commentTag",method= RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "评论标签列表接口", notes = "评论标签列表接口")
+    @ApiOperation(value = "标签列表接口", notes = "标签列表接口")
     public @ResponseBody String commentTag(HttpServletRequest request,
                                             @RequestParam(required=true) int id) {
         JSONObject jsonObj = new JSONObject();

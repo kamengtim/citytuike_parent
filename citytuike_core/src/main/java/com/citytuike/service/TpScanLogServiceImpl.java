@@ -7,6 +7,7 @@ import com.citytuike.mapper.TpDeviceLogMapper;
 import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.mapper.TpScanLogMapper;
 import com.citytuike.mapper.TpUsersMapper;
+import com.citytuike.model.TpDevice;
 import com.citytuike.model.TpDeviceLog;
 import com.citytuike.model.TpScanLog;
 import com.citytuike.model.TpUsers;
@@ -49,14 +50,14 @@ public class TpScanLogServiceImpl implements TpScanLogService {
     @Override
     public JSONObject sendPaperWx(Integer id, Integer device_id, String paper_token, boolean is_test) {
         TpDevice tpDevice = tpDeviceMapper.getDevice(device_id);
-        JSONObject jsonObject = check_paper_number_allowance(tpDevice.getUser_id());
+        JSONObject jsonObject = check_paper_number_allowance(tpDevice.getUserId());
         if(jsonObject.get("status").equals("0")){
             return jsonObject;
         }
 
         AliyunIotApi aliyunIotApi = new AliyunIotApi();
-        PubResponse response = aliyunIotApi.put(tpDevice.getProduct_key(), tpDevice.getDevice_name(), paper_token);
-        if(tpDevice.getUser_id() == 2951 || tpDevice.getRun_status() == 1 || is_test){
+        PubResponse response = aliyunIotApi.put(tpDevice.getProductKey(), tpDevice.getDeviceName(), paper_token);
+        if(tpDevice.getUserId() == 2951 || tpDevice.getRunStatus() == 1 || is_test){
              jsonObject.put("status","1");
              jsonObject.put("msg","ok");
         }
@@ -74,7 +75,7 @@ public class TpScanLogServiceImpl implements TpScanLogService {
             jsonObject.put("msg","发纸失败");
             return jsonObject;
         }
-        TpUsers tpUsers = tpUsersMapper.getInviteCode(tpDevice.getUser_id());
+        TpUsers tpUsers = tpUsersMapper.getInviteCode(tpDevice.getUserId());
         tpUsersMapper.update(tpUsers);
         TpDevice device = tpDeviceMapper.getDevice(tpDevice.getId());
         tpDeviceMapper.update(device);
@@ -86,7 +87,7 @@ public class TpScanLogServiceImpl implements TpScanLogService {
         JSONObject jsonObi = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         jsonObi.put("user_id",tpUsers.getUser_id());
-        jsonObi.put("device_user_id",tpDevice.getUser_id());
+        jsonObi.put("device_user_id",tpDevice.getUserId());
         jsonObi.put("device_id",tpDevice.getId());
         jsonObi.put("scene_str",paper_token);
         jsonObi.put("time",(int)(new Date().getTime()/1000));

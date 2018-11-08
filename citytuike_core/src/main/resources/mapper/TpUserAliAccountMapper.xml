@@ -37,7 +37,7 @@
     from tp_user_ali_account
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="findByIdAndUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select id, real_name, mobile, account, user_id, add_time, is_delete
     from tp_user_ali_account
     where id = #{id,jdbcType=INTEGER} and user_id=#{user_id} and is_delete=0

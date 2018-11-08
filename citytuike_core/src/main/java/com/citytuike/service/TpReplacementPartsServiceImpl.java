@@ -29,7 +29,7 @@ public class TpReplacementPartsServiceImpl implements TpReplacementPartsService 
     @Override
     public void insertReplacement(TpDevice tpDevice, String name, String reason, String files, String address) {
         TpReplacementParts tpReplacementParts = new TpReplacementParts();
-        tpReplacementParts.setUser_id(tpDevice.getUser_id());
+        tpReplacementParts.setUser_id(tpDevice.getUserId());
         tpReplacementParts.setName(name);
         tpReplacementParts.setReason(reason);
         tpReplacementParts.setAdd_time((int)(new Date().getTime()/1000));
@@ -86,14 +86,14 @@ public class TpReplacementPartsServiceImpl implements TpReplacementPartsService 
         jsonObject.put("refute_time",tpReplacementPart.getRefute_time());
         jsonObject.put("refute_imgs",tpReplacementPart.getRefute_imgs());
         jsonObject.put("confirm_time",tpReplacementPart.getConfirm_time());
-        TpOrder tpOrder = tpOrderMapper.selectOrder(String.valueOf(tpReplacementPart.getTpDevice().getOrder_id()));
-        TpOrderGoods tpOrderGoods = tpOrderGoodsMapper.selectGoodsAndOrder(String.valueOf(tpReplacementPart.getTpDevice().getOrder_id()));
+        TpOrder tpOrder = tpOrderMapper.selectOrder(String.valueOf(tpReplacementPart.getTpDevice().getOrderId()));
+        TpOrderGoods tpOrderGoods = tpOrderGoodsMapper.selectGoodsAndOrder(String.valueOf(tpReplacementPart.getTpDevice().getOrderId()));
         TpGoodsImages tpGoodsImages = tpGoodsImagesMapper.selectURL(tpOrderGoods.getGoods_id());
         //TpDevice tpDevice = tpDeviceService.getDeviceById((String)tpReplacementPart.get("order_id"));
         //String url = tpOrderGoodsMapper.getGoodsUrl(tpDevice.getOrder_id(),tpDevice.getGoods_id());
         jsonObject.put("shop_img",tpGoodsImages.getImage_url()==null?"":tpGoodsImages.getImage_url());
         jsonObject.put("order_id",tpOrder.getOrder_id());
-        jsonObject.put("device_name",tpReplacementPart.getTpDevice().getDevice_name());
+        jsonObject.put("device_name",tpReplacementPart.getTpDevice().getDeviceName());
         if(type == 1){
             jsonObject.put("status_str",tpReplacementPart.getInspect_status());
         }else if(type == 0){

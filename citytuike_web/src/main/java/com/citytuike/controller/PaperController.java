@@ -82,7 +82,7 @@ public class PaperController extends BaseController{
      */
     @RequestMapping(value = "paper_income_list",method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-    @ApiOperation(value = "纸巾收益列表", notes = "纸巾收益列表")
+    @ApiOperation(value = "纸巾收益列表（分页）", notes = "纸巾收益列表（分页）")
     public @ResponseBody String PaperIncomeList(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonRequest = getRequestJson(request);
@@ -168,7 +168,7 @@ public class PaperController extends BaseController{
      */
     @RequestMapping(value = "lists",method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
     @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-    @ApiOperation(value = "设备列表", notes = "设备列表")
+    @ApiOperation(value = "设备列表（分页）", notes = "设备列表（分页）")
     public @ResponseBody String lists(HttpServletRequest request){
         JSONObject jsonObj = new JSONObject();
         JSONObject jsonRequest = getRequestJson(request);

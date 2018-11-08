@@ -366,4 +366,7 @@ public class PubliclController extends BaseController{
 
         return jsonObj.toString();
     }
+    //TODO 9. 人为每天5次修改坐标
+    //TODO 10. 音乐列表
+    //TODO 11. 虚拟收益
 }

@@ -65,7 +65,7 @@
 	<select id="findAdApplyByOrderSn" resultMap="TpAdApplyMap">
         select *  from tp_ad_apply where order_sn=#{apply_sn}
     </select>
-	<select id="findAdApplyByOrderSn" resultMap="TpAdApplyMap">
+	<select id="findAdApplyById" resultMap="TpAdApplyMap">
         select *  from tp_ad_apply where id=#{id}
     </select>
 	<select id="findAdApplyByOrderSnAndStatus" resultMap="TpAdApplyMap">

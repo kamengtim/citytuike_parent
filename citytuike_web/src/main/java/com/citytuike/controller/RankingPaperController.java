@@ -99,4 +99,6 @@ public class RankingPaperController extends BaseController{
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+    //TODO 4. 纸巾收益-日榜
+    //TODO 5. 纸巾收益-周榜
 }

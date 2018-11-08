@@ -26,7 +26,7 @@ import java.util.Random;
 
 @Controller
 @RequestMapping("api/Fans")
-public class FansController extends BaseController{
+public class FansController extends BaseController {
     @Autowired
     private TpFansService tpFansService;
     @Autowired
@@ -45,14 +45,16 @@ public class FansController extends BaseController{
     private TpOrderService tpOrderService;
     @Autowired
     private TpFansNeedService tpFansNeedService;
+
     /**
      * @return 粉丝公众号列表
      */
     @RequestMapping(value = "fansList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
-    @ApiOperation(value = "粉丝公众号列表", notes = "粉丝公众号列表")
-    public @ResponseBody String getConf(HttpServletRequest request,
-                                        @RequestParam(required = false) String area_id,
-                                        @RequestParam(required = false) String industry){
+    @ApiOperation(value = "粉丝公众号列表--估值（自己可见）", notes = "粉丝公众号列表--估值（自己可见）")
+    public @ResponseBody
+    String getConf(HttpServletRequest request,
+                   @RequestParam(required = false) String area_id,
+                   @RequestParam(required = false) String industry) {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
@@ -64,34 +66,36 @@ public class FansController extends BaseController{
         }
         JSONArray jsonArray = new JSONArray();
         JSONObject data = new JSONObject();
-        PageInfo pageInfo = tpFansService.getLimtPageList(area_id,industry);
-        List<TpFans>tpFans = pageInfo.getList();
+        PageInfo pageInfo = tpFansService.getLimtPageList(area_id, industry);
+        List<TpFans> tpFans = pageInfo.getList();
         for (TpFans tpFan : tpFans) {
-           JSONObject jsonObject = tpFansService.getJson(tpFan);
+            JSONObject jsonObject = tpFansService.getJson(tpFan);
             jsonArray.add(jsonObject);
         }
         data.put("current_page", pageInfo.getPageNum());
         data.put("total", pageInfo.getTotal());
         data.put("per_page", pageInfo.getPageSize());
-        data.put("last_page",pageInfo.getLastPage());
-        data.put("data",jsonArray);
-        jsonObj.put("result",data);
+        data.put("last_page", pageInfo.getLastPage());
+        data.put("data", jsonArray);
+        jsonObj.put("result", data);
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+
     /**
      * @return 粉丝公众号详情
      */
     @RequestMapping(value = "fansDetails", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
-    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
-    @ApiOperation(value = "粉丝公众号详情", notes = "粉丝公众号详情")
-    public @ResponseBody String fansDetails(HttpServletRequest request){
-        JSONObject  jsonObj = new JSONObject();
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true)})
+    @ApiOperation(value = "粉丝公众号详情--估值", notes = "粉丝公众号详情--估值")
+    public @ResponseBody
+    String fansDetails(HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
         JSONObject jsonRequest = getRequestJson(request);
         String id = jsonRequest.getString("id");
         String[] s = new String[]{id};
-        if (notEmply(s)){
+        if (notEmply(s)) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "参数错误");
             return jsonObj.toString();
@@ -105,21 +109,23 @@ public class FansController extends BaseController{
             return jsonObj.toString();
         }
         TpFans tpFans = tpFansService.fansDetails(id);
-        if(tpFans != null){
+        if (tpFans != null) {
             TpRegion tpRegion = tpRegionService.getNameByFanId(tpFans.getAddress());
-            JSONObject  jsonObject = tpFansService.getJson(tpFans,tpRegion);
-            jsonObj.put("result",jsonObject);
+            JSONObject jsonObject = tpFansService.getJson(tpFans, tpRegion);
+            jsonObj.put("result", jsonObject);
         }
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+
     /**
      * @return 粉丝公众号行情示例
      */
     @RequestMapping(value = "fansTypeList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "粉丝公众号行情示例", notes = "粉丝公众号行情示例")
-    public @ResponseBody String fansTypeList(HttpServletRequest request){
+    public @ResponseBody
+    String fansTypeList(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
@@ -131,28 +137,30 @@ public class FansController extends BaseController{
         }
         JSONArray jsonArray = new JSONArray();
         PageInfo pageInfo = tpFansService.fansTypeList();
-        List <TpFans> tpFans = pageInfo.getList();
+        List<TpFans> tpFans = pageInfo.getList();
         for (TpFans tpFan : tpFans) {
             JSONObject jsonObject = tpFansService.getJson(tpFan);
             jsonArray.add(jsonObject);
         }
-        jsonObj.put("result",jsonArray);
+        jsonObj.put("result", jsonArray);
         jsonObj.put("current_page", pageInfo.getPageNum());
         jsonObj.put("total", pageInfo.getTotal());
         jsonObj.put("per_page", pageInfo.getPageSize());
-        jsonObj.put("last_page",pageInfo.getLastPage());
+        jsonObj.put("last_page", pageInfo.getLastPage());
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+
     /**
      * @return我要出售
      */
     @RequestMapping(value = "fansSale", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
-    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true)})
     @ApiOperation(value = "我要出售", notes = "我要出售")
-    public @ResponseBody String fansSale(HttpServletRequest request){
-        JSONObject  jsonObj = new JSONObject();
+    public @ResponseBody
+    String fansSale(HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         jsonObj.put("status", 0);
         jsonObj.put("msg", "请求失败，请稍后再试");
@@ -182,50 +190,50 @@ public class FansController extends BaseController{
         String logo = jsonRequest.getString("logo");
         Float price = jsonRequest.getFloat("price");
         Boolean industry = jsonRequest.getBoolean("industry");
-        String[] s = new String[]{String.valueOf(sel_class),String.valueOf(auth_bodys),String.valueOf(auth_body_change),String.valueOf(original),
-                String.valueOf(read_num),String.valueOf(mobile_code),String.valueOf(address),fan_num,scale_man,scale_women,monmoney,admoney,wechat,mobile,title,logo, String.valueOf(industry), String.valueOf(price)};
-        if (notEmply(s)){
+        String[] s = new String[]{String.valueOf(sel_class), String.valueOf(auth_bodys), String.valueOf(auth_body_change), String.valueOf(original),
+                String.valueOf(read_num), String.valueOf(mobile_code), String.valueOf(address), fan_num, scale_man, scale_women, monmoney, admoney, wechat, mobile, title, logo, String.valueOf(industry), String.valueOf(price)};
+        if (notEmply(s)) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "参数错误");
             return jsonObj.toString();
         }
         TpSmsLog tpSmsLog = tpSmsLogService.selectvalidateCode(String.valueOf(mobile_code), mobile);
-        if(tpSmsLog == null || tpSmsLog.getStatus() != 1){
+        if (tpSmsLog == null || tpSmsLog.getStatus() != 1) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "验证码错误");
             return jsonObj.toString();
         }
-        String[] selClassArr = new String[]{"1","2","3"};
-        Integer[] authBodysArr = new Integer[]{1,2};
-        Integer[] authBodyChangeArr = new Integer[]{1,2};
+        String[] selClassArr = new String[]{"1", "2", "3"};
+        Integer[] authBodysArr = new Integer[]{1, 2};
+        Integer[] authBodyChangeArr = new Integer[]{1, 2};
         int a = Arrays.binarySearch(selClassArr, sel_class);
         int b = Arrays.binarySearch(authBodysArr, auth_bodys);
         int c = Arrays.binarySearch(authBodyChangeArr, auth_body_change);
-        if(a<0){
+        if (a < 0) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "类型错误");
             return jsonObj.toString();
-        }else if(b<0){
+        } else if (b < 0) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "主体信息错误");
             return jsonObj.toString();
-        }else if(c<0){
+        } else if (c < 0) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "主体变更设置错误");
             return jsonObj.toString();
         }
         String selClass = "";
         String fan_dev = "";
-        if (Integer.parseInt(scale_man) > Integer.parseInt(scale_women)){
-            fan_dev =  "男粉丝多";
-        }else if(Integer.parseInt(scale_man) < Integer.parseInt(scale_women)){
-            fan_dev =  "女粉丝多";
-        }else{
-            fan_dev =  "一样多";
+        if (Integer.parseInt(scale_man) > Integer.parseInt(scale_women)) {
+            fan_dev = "男粉丝多";
+        } else if (Integer.parseInt(scale_man) < Integer.parseInt(scale_women)) {
+            fan_dev = "女粉丝多";
+        } else {
+            fan_dev = "一样多";
         }
-        if(auth_bodys == 1){
+        if (auth_bodys == 1) {
             selClass = "个人认证";
-        }else{
+        } else {
             selClass = "公司认证";
         }
         TpFansSale tpFansSale = new TpFansSale();
@@ -257,24 +265,26 @@ public class FansController extends BaseController{
         tpFansSale.setCreated_at(new Date());
         tpFansSale.setUpdated_at(new Date());
         int i = tpFansSaleService.fansSale(tpFansSale);
-        if(i < 0 ){
+        if (i < 0) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "操作失败");
             return jsonObj.toString();
         }
-        jsonObj.put("result",jsonArray);
+        jsonObj.put("result", jsonArray);
         jsonObj.put("status", 1);
         jsonObj.put("msg", "ok");
         return jsonObj.toString();
     }
+
     /**
      * @return估值
      */
     @RequestMapping(value = "saveFans", method = RequestMethod.POST, produces = "text/html;charset=UTF-8")
-    @ApiImplicitParams({ @ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true) })
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", dataType = "MessageParam", name = "param", value = "信息参数", required = true)})
     @ApiOperation(value = "估值", notes = "估值")
-    public @ResponseBody String saveFans(HttpServletRequest request){
-        JSONObject  jsonObj = new JSONObject();
+    public @ResponseBody
+    String saveFans(HttpServletRequest request) {
+        JSONObject jsonObj = new JSONObject();
         JSONObject jsonRequest = getRequestJson(request);
         Integer sel_class = jsonRequest.getInteger("sel_class");
         Integer tag = jsonRequest.getInteger("tag");
@@ -295,9 +305,9 @@ public class FansController extends BaseController{
         String title = jsonRequest.getString("title");
         String logo = jsonRequest.getString("logo");
         Boolean industry = jsonRequest.getBoolean("industry");
-        String[] s = new String[]{String.valueOf(sel_class),String.valueOf(auth_bodys),String.valueOf(auth_body_change),String.valueOf(original),
-                String.valueOf(read_num),String.valueOf(mobile_code),String.valueOf(address),fan_num,scale_man,scale_women,monmoney,admoney,wechat,mobile,title,logo, String.valueOf(industry)};
-        if (notEmply(s)){
+        String[] s = new String[]{String.valueOf(sel_class), String.valueOf(auth_bodys), String.valueOf(auth_body_change), String.valueOf(original),
+                String.valueOf(read_num), String.valueOf(mobile_code), String.valueOf(address), fan_num, scale_man, scale_women, monmoney, admoney, wechat, mobile, title, logo, String.valueOf(industry)};
+        if (notEmply(s)) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "参数错误");
             return jsonObj.toString();
@@ -312,17 +322,17 @@ public class FansController extends BaseController{
         }
         String fan_dev = "";
         TpSmsLog tpSmsLog = tpSmsLogService.selectvalidateCode(String.valueOf(mobile_code), mobile);
-        if(tpSmsLog == null){
+        if (tpSmsLog == null) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "验证码错误");
             return jsonObj.toString();
         }
-        if (Integer.parseInt(scale_man) > Integer.parseInt(scale_women)){
-            fan_dev =  "男粉丝多";
-        }else{
-            fan_dev =  "女粉丝多";
+        if (Integer.parseInt(scale_man) > Integer.parseInt(scale_women)) {
+            fan_dev = "男粉丝多";
+        } else {
+            fan_dev = "女粉丝多";
         }
-        
+
         TpFans tpFans = new TpFans();
         tpFans.setSel_class(sel_class);
         tpFans.setTag(tag);
@@ -339,7 +349,7 @@ public class FansController extends BaseController{
         tpFans.setRead_num(String.valueOf(read_num));
         tpFans.setWechat(wechat);
         tpFans.setUser_id(tpUsers.getUser_id());
-        tpFans.setCreatetime((int)(new Date().getTime()/1000));
+        tpFans.setCreatetime((int) (new Date().getTime() / 1000));
         tpFans.setUsed_existx(4);
         tpFans.setType(2);
         tpFans.setCatename("其他");
@@ -356,14 +366,16 @@ public class FansController extends BaseController{
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+
     /**
      * @return 获取行业信息
      */
     @RequestMapping(value = "getIndustry", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "获取行业信息", notes = "获取行业信息")
-    public @ResponseBody String getIndustry(HttpServletRequest request){
-        
-        JSONObject  jsonObj = new JSONObject();
+    public @ResponseBody
+    String getIndustry(HttpServletRequest request) {
+
+        JSONObject jsonObj = new JSONObject();
         JSONObject object = new JSONObject();
         JSONObject arry = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -382,25 +394,27 @@ public class FansController extends BaseController{
             jsonArray1.add(object);
             List<TpIndustry> tpIndustriesSons = tpIndustryService.getIndustrySon(tpIndustry.getFid());
             for (TpIndustry tpIndustriesSon : tpIndustriesSons) {
-                arry =  tpIndustryService.getSonJson(tpIndustriesSon);
+                arry = tpIndustryService.getSonJson(tpIndustriesSon);
                 jsonArray.add(arry);
-                object.put("son",jsonArray);
+                object.put("son", jsonArray);
             }
         }
-        jsonObj.put("result",jsonArray1);
+        jsonObj.put("result", jsonArray1);
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+
     /**
      * @return 粉丝支付接口
      */
     @RequestMapping(value = "getFansOrderSn", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "粉丝支付接口", notes = "粉丝支付接口")
-    public @ResponseBody String getFansOrderSn(HttpServletRequest request,
-                                               @RequestParam(required = true) Integer id){
+    public @ResponseBody
+    String getFansOrderSn(HttpServletRequest request,
+                          @RequestParam(required = true) Integer id) {
         JSONObject jsonObj = new JSONObject();
-        if(id == null){
+        if (id == null) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "参数错误");
             return jsonObj.toString();
@@ -416,8 +430,8 @@ public class FansController extends BaseController{
         JSONObject jsonObject = new JSONObject();
         String order_sn = "";
         TpFans tpFans = tpFansService.getFansOrderSn(id);
-        if(tpFans != null){
-            order_sn =  "fans"+ Util.transferLongToDate("yyyyMMdd HHmm",new Date().getTime()/1000)+""+ new Random().nextInt(1000)+8999;
+        if (tpFans != null) {
+            order_sn = "fans" + Util.transferLongToDate("yyyyMMdd HHmm", new Date().getTime() / 1000) + "" + new Random().nextInt(1000) + 8999;
         }
         TpFansOrder tpFansOrder = new TpFansOrder();
 
@@ -473,45 +487,47 @@ public class FansController extends BaseController{
         tpFansOrder.setOrder_amount(new BigDecimal(str));
         tpFansOrder.setTotal_amount(new BigDecimal(str));
         tpFansOrder.setOrder_status(false);
-        tpFansOrder.setAdd_time((int)(new Date().getTime()/1000));
+        tpFansOrder.setAdd_time((int) (new Date().getTime() / 1000));
         tpFansOrder.setOrder_prom_amount(new BigDecimal(0.00));
         tpOrderService.save(tpFansOrder);
-        jsonObject.put("order_sn",order_sn);
-        jsonObj.put("result",jsonObject);
+        jsonObject.put("order_sn", order_sn);
+        jsonObj.put("result", jsonObject);
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+
     /**
      * @return 我要增粉
      */
     @RequestMapping(value = "addNeedFans", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "我要增粉", notes = "我要增粉")
-    public @ResponseBody String addNeedFans(HttpServletRequest request,
-                                            @RequestParam(required = true) String nickname,
-                                               @RequestParam(required = true) String uid,
-                                               @RequestParam(required = true) String contacts,
-                                               @RequestParam(required = true) String mobile,
-                                               @RequestParam(required = false) String qq,
-                                               @RequestParam(required = false) String wechat,
-                                               @RequestParam(required = true) String email,
-                                               @RequestParam(required = true) String add_time,
-                                               @RequestParam(required = true) String industry,
-                                               @RequestParam(required = true) String product,
-                                               @RequestParam(required = true) String message,
-                                               @RequestParam(required = true) int number,
-                                               @RequestParam(required = true) String fans_time,
-                                               @RequestParam(required = true) int fans_sex,
-                                               @RequestParam(required = true) String area,
-                                               @RequestParam(required = true) String day_add_number,
-                                               @RequestParam(required = true) String company,
-                                               @RequestParam(required = false) int type_sel,
-                                               @RequestParam(required = false) int wechat_type,
-                                               @RequestParam(required = false) String head_img){
-        
-        JSONObject  jsonObj = new JSONObject();
-        String[] s = new String[]{nickname,contacts,mobile,email,add_time,industry,product,message,fans_time,area,day_add_number,company,String.valueOf(number),String.valueOf(fans_sex)};
-        if (notEmply(s)){
+    public @ResponseBody
+    String addNeedFans(HttpServletRequest request,
+                       @RequestParam(required = true) String nickname,
+                       @RequestParam(required = true) String uid,
+                       @RequestParam(required = true) String contacts,
+                       @RequestParam(required = true) String mobile,
+                       @RequestParam(required = false) String qq,
+                       @RequestParam(required = false) String wechat,
+                       @RequestParam(required = true) String email,
+                       @RequestParam(required = true) String add_time,
+                       @RequestParam(required = true) String industry,
+                       @RequestParam(required = true) String product,
+                       @RequestParam(required = true) String message,
+                       @RequestParam(required = true) int number,
+                       @RequestParam(required = true) String fans_time,
+                       @RequestParam(required = true) int fans_sex,
+                       @RequestParam(required = true) String area,
+                       @RequestParam(required = true) String day_add_number,
+                       @RequestParam(required = true) String company,
+                       @RequestParam(required = false) int type_sel,
+                       @RequestParam(required = false) int wechat_type,
+                       @RequestParam(required = false) String head_img) {
+
+        JSONObject jsonObj = new JSONObject();
+        String[] s = new String[]{nickname, contacts, mobile, email, add_time, industry, product, message, fans_time, area, day_add_number, company, String.valueOf(number), String.valueOf(fans_sex)};
+        if (notEmply(s)) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "参数错误");
             return jsonObj.toString();
@@ -552,12 +568,14 @@ public class FansController extends BaseController{
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
+
     /**
      * @return 我要增粉列表
      */
     @RequestMapping(value = "NeedFansList", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "我要增粉列表", notes = "我要增粉列表")
-    public @ResponseBody String NeedFansList(HttpServletRequest request){
+    public @ResponseBody
+    String NeedFansList(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
@@ -569,29 +587,29 @@ public class FansController extends BaseController{
             jsonObj.put("msg", "token失效!");
             return jsonObj.toString();
         }
-        
+
         List<TpFansNeed> tpFansNeeds = tpFansNeedService.NeedFansList(tpUsers.getUser_id());
-        if(tpFansNeeds != null){
+        if (tpFansNeeds != null) {
             for (TpFansNeed tpFansNeed : tpFansNeeds) {
-                if(tpFansNeed.getIs_flag() == true){
-                   int fans_count = tpFansNeedService.getFanNum(tpFansNeed.getId(),1,tpUsers.getUser_id());
-                   int fans_single = tpFansNeedService.getFanNum(tpFansNeed.getId(),2,tpUsers.getUser_id());
-                   jsonObject = tpFansNeedService.getJson(tpFansNeed);
-                   jsonObject.put("fans_count",fans_count);
-                   jsonObject.put("fans_single",fans_single);
-                }else{
+                if (tpFansNeed.getIs_flag() == true) {
+                    int fans_count = tpFansNeedService.getFanNum(tpFansNeed.getId(), 1, tpUsers.getUser_id());
+                    int fans_single = tpFansNeedService.getFanNum(tpFansNeed.getId(), 2, tpUsers.getUser_id());
                     jsonObject = tpFansNeedService.getJson(tpFansNeed);
-                    jsonObject.put("fans_count",0);
-                    jsonObject.put("fans_single",0);
+                    jsonObject.put("fans_count", fans_count);
+                    jsonObject.put("fans_single", fans_single);
+                } else {
+                    jsonObject = tpFansNeedService.getJson(tpFansNeed);
+                    jsonObject.put("fans_count", 0);
+                    jsonObject.put("fans_single", 0);
                 }
-            jsonArray.add(jsonObject);
+                jsonArray.add(jsonObject);
             }
-        }else {
+        } else {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "没有订单");
             return jsonObj.toString();
         }
-        jsonObj.put("result",jsonArray);
+        jsonObj.put("result", jsonArray);
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
@@ -602,12 +620,13 @@ public class FansController extends BaseController{
      */
     @RequestMapping(value = "NeedFansDetails", method = RequestMethod.GET, produces = "text/html;charset=UTF-8")
     @ApiOperation(value = "我要增粉详情", notes = "我要增粉详情")
-    public @ResponseBody String NeedFansDetails(HttpServletRequest request,
-                                                @RequestParam(required = true) int order_id){
+    public @ResponseBody
+    String NeedFansDetails(HttpServletRequest request,
+                           @RequestParam(required = true) int order_id) {
         JSONArray jsonArray = new JSONArray();
-        JSONObject  jsonObj = new JSONObject();
+        JSONObject jsonObj = new JSONObject();
         String[] s = new String[]{String.valueOf(order_id)};
-        if (notEmply(s)){
+        if (notEmply(s)) {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "参数错误");
             return jsonObj.toString();
@@ -621,40 +640,39 @@ public class FansController extends BaseController{
             jsonObj.put("msg", "token失效!");
             return jsonObj.toString();
         }
-        TpFansNeed tpFansNeed = tpFansNeedService.getNeedByOrderId(tpUsers.getUser_id(),order_id);
-        if(tpFansNeed != null){
-            if(tpFansNeed.getFlag() == true){
-                int fans_count = tpFansNeedService.getFanNum(order_id,1,tpUsers.getUser_id());
-                int fans_single = tpFansNeedService.getFanNum(order_id,2,tpUsers.getUser_id());
+        TpFansNeed tpFansNeed = tpFansNeedService.getNeedByOrderId(tpUsers.getUser_id(), order_id);
+        if (tpFansNeed != null) {
+            if (tpFansNeed.getFlag() == true) {
+                int fans_count = tpFansNeedService.getFanNum(order_id, 1, tpUsers.getUser_id());
+                int fans_single = tpFansNeedService.getFanNum(order_id, 2, tpUsers.getUser_id());
                 jsonObject = tpFansNeedService.getJson(tpFansNeed);
-                jsonObject.put("fans_count",fans_count);
-                jsonObject.put("fans_single",fans_single);
+                jsonObject.put("fans_count", fans_count);
+                jsonObject.put("fans_single", fans_single);
             }
             jsonArray.add(jsonObject);
-        }else{
+        } else {
             jsonObj.put("status", 0);
             jsonObj.put("msg", "不存在该订单");
             return jsonObj.toString();
         }
-        jsonObj.put("result",jsonArray);
+        jsonObj.put("result", jsonArray);
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
         return jsonObj.toString();
     }
-    public Boolean notEmply(String[] s){
-        for (int i = 0; i <s.length ; i++) {
-            if(s[i] == null || s[i].equals("")){
+
+    public Boolean notEmply(String[] s) {
+        for (int i = 0; i < s.length; i++) {
+            if (s[i] == null || s[i].equals("")) {
                 return true;
             }
         }
         return false;
     }
-    //TODO
-    /**
-     * @return 公众号出售列表
-     */
-    //TODO
-    /**
-     * @return 出售公众号详情
-     */
+    //TODO 行情示列
+    //TODO 我要估值
+    //TODO 9. 我要增粉订单列表
+    //TODO 10. 我要增粉订单详情
+    //TODO 11. 公众号出售列表
+    //TODO 12. 出售公众号详情
 }

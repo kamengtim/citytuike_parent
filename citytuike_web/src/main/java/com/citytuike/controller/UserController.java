@@ -245,10 +245,10 @@ public class UserController extends BaseController{
 	}
 	/**
 	 * @return
-	 * 退出登陆 
+	 * 退出登录
 	 */
 	@RequestMapping(value="/logout",method=RequestMethod.POST, produces = "text/html;charset=UTF-8")
-	@ApiOperation(value = "退出登陆", notes = "退出登陆")
+	@ApiOperation(value = "退出登录", notes = "退出登录")
 	public @ResponseBody String logout(HttpServletRequest request){
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("status", 0);
