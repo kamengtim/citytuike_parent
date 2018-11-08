@@ -2,10 +2,12 @@ package com.citytuike.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.citytuike.constant.Constant;
 import com.citytuike.model.*;
 import com.citytuike.service.ChatService;
 import com.citytuike.service.TpUsersService;
 import com.citytuike.util.MD5Utils;
+import com.citytuike.util.RedisUtil;
 import com.citytuike.util.Util;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -162,6 +164,10 @@ public class ChatController extends BaseController{
             tpChatGroupUser.setStatus(1);
             int insertGoup = chatService.insertChatGroupUser(tpChatGroupUser);
             if (insertGoup > 0){
+                // 用户->群 集合
+                RedisUtil.valueSet("\"" + Constant.GROUP_KEY + user_id +"\"", group_id);
+                // 群->用户集合
+                RedisUtil.valueSet("\"" + Constant.GROUP_KEY + group_id +"\"", user_id);
                 jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
                 return jsonObj.toString();
@@ -169,6 +175,8 @@ public class ChatController extends BaseController{
         }else if (is_join.equals("0")){
             int deleteGroup = chatService.updateChatGroupUserByStatus(group_id, user_id);
             if (deleteGroup > 0){
+                RedisUtil.delete("\"" + Constant.GROUP_KEY + user_id +"\"");
+                RedisUtil.delete("\"" + Constant.GROUP_KEY + group_id +"\"");
                 jsonObj.put("status", 1);
                 jsonObj.put("msg", "请求成功!");
                 return jsonObj.toString();
@@ -190,6 +198,13 @@ public class ChatController extends BaseController{
             jsonObj.put("msg", "token失效");
             return jsonObj.toString();
         }
+        String redisGroup = RedisUtil.valueGet("\"" + Constant.GROUP_KEY + tpUsers.getUser_id() +"\"") + "";
+        if (null ==  redisGroup || "".equals(redisGroup)){
+            jsonObj.put("status", 0);
+            jsonObj.put("msg", "您还未加入该群~");
+            return jsonObj.toString();
+        }
+
 
         jsonObj.put("status", 1);
         jsonObj.put("msg", "请求成功!");

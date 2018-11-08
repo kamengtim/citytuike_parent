@@ -3,129 +3,459 @@
 <mapper namespace="com.citytuike.mapper.TpDeviceMapper" >
   <resultMap id="BaseResultMap" type="com.citytuike.model.TpDevice" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="device_sn" property="device_sn" jdbcType="VARCHAR" />
-    <result column="ad_position_id" property="ad_position_id" jdbcType="INTEGER" />
+    <result column="device_sn" property="deviceSn" jdbcType="VARCHAR" />
+    <result column="ad_position_id" property="adPositionId" jdbcType="INTEGER" />
     <result column="qrscene" property="qrscene" jdbcType="VARCHAR" />
-    <result column="iot_id" property="iot_id" jdbcType="VARCHAR" />
-    <result column="product_key" property="product_key" jdbcType="VARCHAR" />
-    <result column="device_name" property="device_name" jdbcType="VARCHAR" />
-    <result column="device_secret" property="device_secret" jdbcType="VARCHAR" />
-    <result column="add_time" property="add_time" jdbcType="INTEGER" />
-    <result column="user_id" property="user_id" jdbcType="INTEGER" />
-    <result column="paper_number" property="paper_number" jdbcType="INTEGER" />
-    <result column="paper_send" property="paper_send" jdbcType="INTEGER" />
-    <result column="paper_inventory" property="paper_inventory" jdbcType="INTEGER" />
+    <result column="iot_id" property="iotId" jdbcType="VARCHAR" />
+    <result column="product_key" property="productKey" jdbcType="VARCHAR" />
+    <result column="device_name" property="deviceName" jdbcType="VARCHAR" />
+    <result column="device_secret" property="deviceSecret" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="paper_number" property="paperNumber" jdbcType="INTEGER" />
+    <result column="paper_send" property="paperSend" jdbcType="INTEGER" />
+    <result column="paper_inventory" property="paperInventory" jdbcType="INTEGER" />
     <result column="income" property="income" jdbcType="DECIMAL" />
-    <result column="one_income" property="one_income" jdbcType="DECIMAL" />
+    <result column="one_income" property="oneIncome" jdbcType="DECIMAL" />
     <result column="capacity" property="capacity" jdbcType="INTEGER" />
-    <result column="active_time" property="active_time" jdbcType="INTEGER" />
-    <result column="no_send" property="no_send" jdbcType="BIT" />
-    <result column="open_status" property="open_status" jdbcType="BIT" />
+    <result column="active_time" property="activeTime" jdbcType="INTEGER" />
+    <result column="no_send" property="noSend" jdbcType="BIT" />
+    <result column="open_status" property="openStatus" jdbcType="BIT" />
     <result column="online" property="online" jdbcType="BIT" />
-    <result column="landmark_picture" property="landmark_picture" jdbcType="VARCHAR" />
+    <result column="landmark_picture" property="landmarkPicture" jdbcType="VARCHAR" />
     <result column="province" property="province" jdbcType="INTEGER" />
     <result column="city" property="city" jdbcType="INTEGER" />
     <result column="district" property="district" jdbcType="INTEGER" />
-    <result column="is_active" property="is_active" jdbcType="TINYINT" />
-    <result column="order_id" property="order_id" jdbcType="INTEGER" />
-    <result column="goods_id" property="goods_id" jdbcType="INTEGER" />
-    <result column="distribution_time" property="distribution_time" jdbcType="INTEGER" />
+    <result column="is_active" property="isActive" jdbcType="TINYINT" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="distribution_time" property="distributionTime" jdbcType="INTEGER" />
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="longitude" property="longitude" jdbcType="DOUBLE" />
     <result column="latitude" property="latitude" jdbcType="DOUBLE" />
-    <result column="active_code" property="active_code" jdbcType="VARCHAR" />
-    <result column="shipping_sn" property="shipping_sn" jdbcType="VARCHAR" />
-    <result column="shipping_name" property="shipping_name" jdbcType="VARCHAR" />
-    <result column="today_num" property="today_num" jdbcType="INTEGER" />
-    <result column="today_time" property="today_time" jdbcType="INTEGER" />
-    <result column="app_version" property="app_version"/>
-    <result column="lack_paper" property="lack_paper"/>
-    <result column="run_status" property="run_status"/>
+    <result column="active_code" property="activeCode" jdbcType="VARCHAR" />
+    <result column="shipping_sn" property="shippingSn" jdbcType="VARCHAR" />
+    <result column="shipping_name" property="shippingName" jdbcType="VARCHAR" />
+    <result column="today_num" property="todayNum" jdbcType="INTEGER" />
+    <result column="today_time" property="todayTime" jdbcType="INTEGER" />
+    <result column="app_version" property="appVersion" jdbcType="VARCHAR" />
+    <result column="lack_paper" property="lackPaper" jdbcType="BIT" />
+    <result column="old_order_id" property="oldOrderId" jdbcType="INTEGER" />
+    <result column="is_settled" property="isSettled" jdbcType="BIT" />
+    <result column="settled_money" property="settledMoney" jdbcType="DECIMAL" />
+    <result column="run_status" property="runStatus" jdbcType="BIT" />
+    <result column="position_lock" property="positionLock" jdbcType="BIT" />
+    <result column="distance" property="distance" jdbcType="INTEGER" />
+    <result column="limit_config" property="limitConfig" jdbcType="VARCHAR" />
+    <result column="warning_number" property="warningNumber" jdbcType="INTEGER" />
+    <result column="byname" property="byname" jdbcType="VARCHAR" />
+    <result column="accept_user" property="acceptUser" jdbcType="INTEGER" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from tp_device
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.citytuike.model.TpDevice" useGeneratedKeys="true" keyProperty="id" >
-    insert into tp_device (device_sn, ad_position_id, qrscene, 
-      iot_id, product_key, device_name, 
-      device_secret, add_time, user_id,
-      paper_number, paper_send, paper_inventory,
-      income, one_income, capacity,
-      active_time, no_send, open_status,
-      online, landmark_picture, province,
-      city, district, is_active,
-      order_id, goods_id, distribution_time,
-      address, longitude, latitude,
-      active_code, shipping_sn, shipping_name,
-      today_num, today_time)
-    values (#{device_sn,jdbcType=VARCHAR}, #{ad_position_id,jdbcType=INTEGER}, #{qrscene,jdbcType=VARCHAR}, 
-      #{iot_id,jdbcType=VARCHAR}, #{product_key,jdbcType=VARCHAR}, #{device_name,jdbcType=VARCHAR},
-      #{device_secret,jdbcType=VARCHAR}, #{add_time,jdbcType=INTEGER}, #{user_id,jdbcType=INTEGER},
-      #{paper_number,jdbcType=INTEGER}, #{paper_send,jdbcType=INTEGER}, #{paper_inventory,jdbcType=INTEGER},
-      #{income,jdbcType=DECIMAL}, #{one_income,jdbcType=DECIMAL}, #{capacity,jdbcType=INTEGER},
-      #{active_time,jdbcType=INTEGER}, #{no_send,jdbcType=BIT}, #{open_status,jdbcType=BIT},
-      #{online,jdbcType=BIT}, #{landmark_picture,jdbcType=VARCHAR}, #{province,jdbcType=INTEGER},
-      #{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER}, #{is_active,jdbcType=TINYINT},
-      #{order_id,jdbcType=INTEGER}, #{goods_id,jdbcType=INTEGER}, #{distribution_time,jdbcType=INTEGER},
-      #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE}, #{latitude,jdbcType=DOUBLE},
-      #{active_code,jdbcType=VARCHAR}, #{shipping_sn,jdbcType=VARCHAR}, #{shipping_name,jdbcType=VARCHAR},
-      #{today_num,jdbcType=INTEGER}, #{today_time,jdbcType=INTEGER})
+  <insert id="insert" parameterType="main.java.com.citytuike.model.TpDevice"  useGeneratedKeys="true" keyProperty="id">
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+    -->
+    insert into tp_device (id, device_sn, ad_position_id,
+    qrscene, iot_id, product_key,
+    device_name, device_secret, add_time,
+    user_id, paper_number, paper_send,
+    paper_inventory, income, one_income,
+    capacity, active_time, no_send,
+    open_status, online, landmark_picture,
+    province, city, district,
+    is_active, order_id, goods_id,
+    distribution_time, address, longitude,
+    latitude, active_code, shipping_sn,
+    shipping_name, today_num, today_time,
+    app_version, lack_paper, old_order_id,
+    is_settled, settled_money, run_status,
+    position_lock, distance, limit_config,
+    warning_number, byname, accept_user
+    )
+    values (#{id,jdbcType=INTEGER}, #{deviceSn,jdbcType=VARCHAR}, #{adPositionId,jdbcType=INTEGER},
+    #{qrscene,jdbcType=VARCHAR}, #{iotId,jdbcType=VARCHAR}, #{productKey,jdbcType=VARCHAR},
+    #{deviceName,jdbcType=VARCHAR}, #{deviceSecret,jdbcType=VARCHAR}, #{addTime,jdbcType=INTEGER},
+    #{userId,jdbcType=INTEGER}, #{paperNumber,jdbcType=INTEGER}, #{paperSend,jdbcType=INTEGER},
+    #{paperInventory,jdbcType=INTEGER}, #{income,jdbcType=DECIMAL}, #{oneIncome,jdbcType=DECIMAL},
+    #{capacity,jdbcType=INTEGER}, #{activeTime,jdbcType=INTEGER}, #{noSend,jdbcType=BIT},
+    #{openStatus,jdbcType=BIT}, #{online,jdbcType=BIT}, #{landmarkPicture,jdbcType=VARCHAR},
+    #{province,jdbcType=INTEGER}, #{city,jdbcType=INTEGER}, #{district,jdbcType=INTEGER},
+    #{isActive,jdbcType=TINYINT}, #{orderId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER},
+    #{distributionTime,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{longitude,jdbcType=DOUBLE},
+    #{latitude,jdbcType=DOUBLE}, #{activeCode,jdbcType=VARCHAR}, #{shippingSn,jdbcType=VARCHAR},
+    #{shippingName,jdbcType=VARCHAR}, #{todayNum,jdbcType=INTEGER}, #{todayTime,jdbcType=INTEGER},
+    #{appVersion,jdbcType=VARCHAR}, #{lackPaper,jdbcType=BIT}, #{oldOrderId,jdbcType=INTEGER},
+    #{isSettled,jdbcType=BIT}, #{settledMoney,jdbcType=DECIMAL}, #{runStatus,jdbcType=BIT},
+    #{positionLock,jdbcType=BIT}, #{distance,jdbcType=INTEGER}, #{limitConfig,jdbcType=VARCHAR},
+    #{warningNumber,jdbcType=INTEGER}, #{byname,jdbcType=VARCHAR}, #{acceptUser,jdbcType=INTEGER}
+    )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.citytuike.model.TpDevice" >
+  <insert id="insertSelective" parameterType="main.java.com.citytuike.model.TpDevice" >
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+    -->
+    insert into tp_device
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="deviceSn != null" >
+        device_sn,
+      </if>
+      <if test="adPositionId != null" >
+        ad_position_id,
+      </if>
+      <if test="qrscene != null" >
+        qrscene,
+      </if>
+      <if test="iotId != null" >
+        iot_id,
+      </if>
+      <if test="productKey != null" >
+        product_key,
+      </if>
+      <if test="deviceName != null" >
+        device_name,
+      </if>
+      <if test="deviceSecret != null" >
+        device_secret,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="paperNumber != null" >
+        paper_number,
+      </if>
+      <if test="paperSend != null" >
+        paper_send,
+      </if>
+      <if test="paperInventory != null" >
+        paper_inventory,
+      </if>
+      <if test="income != null" >
+        income,
+      </if>
+      <if test="oneIncome != null" >
+        one_income,
+      </if>
+      <if test="capacity != null" >
+        capacity,
+      </if>
+      <if test="activeTime != null" >
+        active_time,
+      </if>
+      <if test="noSend != null" >
+        no_send,
+      </if>
+      <if test="openStatus != null" >
+        open_status,
+      </if>
+      <if test="online != null" >
+        online,
+      </if>
+      <if test="landmarkPicture != null" >
+        landmark_picture,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="district != null" >
+        district,
+      </if>
+      <if test="isActive != null" >
+        is_active,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="distributionTime != null" >
+        distribution_time,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="activeCode != null" >
+        active_code,
+      </if>
+      <if test="shippingSn != null" >
+        shipping_sn,
+      </if>
+      <if test="shippingName != null" >
+        shipping_name,
+      </if>
+      <if test="todayNum != null" >
+        today_num,
+      </if>
+      <if test="todayTime != null" >
+        today_time,
+      </if>
+      <if test="appVersion != null" >
+        app_version,
+      </if>
+      <if test="lackPaper != null" >
+        lack_paper,
+      </if>
+      <if test="oldOrderId != null" >
+        old_order_id,
+      </if>
+      <if test="isSettled != null" >
+        is_settled,
+      </if>
+      <if test="settledMoney != null" >
+        settled_money,
+      </if>
+      <if test="runStatus != null" >
+        run_status,
+      </if>
+      <if test="positionLock != null" >
+        position_lock,
+      </if>
+      <if test="distance != null" >
+        distance,
+      </if>
+      <if test="limitConfig != null" >
+        limit_config,
+      </if>
+      <if test="warningNumber != null" >
+        warning_number,
+      </if>
+      <if test="byname != null" >
+        byname,
+      </if>
+      <if test="acceptUser != null" >
+        accept_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="deviceSn != null" >
+        #{deviceSn,jdbcType=VARCHAR},
+      </if>
+      <if test="adPositionId != null" >
+        #{adPositionId,jdbcType=INTEGER},
+      </if>
+      <if test="qrscene != null" >
+        #{qrscene,jdbcType=VARCHAR},
+      </if>
+      <if test="iotId != null" >
+        #{iotId,jdbcType=VARCHAR},
+      </if>
+      <if test="productKey != null" >
+        #{productKey,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null" >
+        #{deviceName,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceSecret != null" >
+        #{deviceSecret,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="paperNumber != null" >
+        #{paperNumber,jdbcType=INTEGER},
+      </if>
+      <if test="paperSend != null" >
+        #{paperSend,jdbcType=INTEGER},
+      </if>
+      <if test="paperInventory != null" >
+        #{paperInventory,jdbcType=INTEGER},
+      </if>
+      <if test="income != null" >
+        #{income,jdbcType=DECIMAL},
+      </if>
+      <if test="oneIncome != null" >
+        #{oneIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="capacity != null" >
+        #{capacity,jdbcType=INTEGER},
+      </if>
+      <if test="activeTime != null" >
+        #{activeTime,jdbcType=INTEGER},
+      </if>
+      <if test="noSend != null" >
+        #{noSend,jdbcType=BIT},
+      </if>
+      <if test="openStatus != null" >
+        #{openStatus,jdbcType=BIT},
+      </if>
+      <if test="online != null" >
+        #{online,jdbcType=BIT},
+      </if>
+      <if test="landmarkPicture != null" >
+        #{landmarkPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=INTEGER},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=INTEGER},
+      </if>
+      <if test="district != null" >
+        #{district,jdbcType=INTEGER},
+      </if>
+      <if test="isActive != null" >
+        #{isActive,jdbcType=TINYINT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="distributionTime != null" >
+        #{distributionTime,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=DOUBLE},
+      </if>
+      <if test="activeCode != null" >
+        #{activeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingSn != null" >
+        #{shippingSn,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingName != null" >
+        #{shippingName,jdbcType=VARCHAR},
+      </if>
+      <if test="todayNum != null" >
+        #{todayNum,jdbcType=INTEGER},
+      </if>
+      <if test="todayTime != null" >
+        #{todayTime,jdbcType=INTEGER},
+      </if>
+      <if test="appVersion != null" >
+        #{appVersion,jdbcType=VARCHAR},
+      </if>
+      <if test="lackPaper != null" >
+        #{lackPaper,jdbcType=BIT},
+      </if>
+      <if test="oldOrderId != null" >
+        #{oldOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="isSettled != null" >
+        #{isSettled,jdbcType=BIT},
+      </if>
+      <if test="settledMoney != null" >
+        #{settledMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="runStatus != null" >
+        #{runStatus,jdbcType=BIT},
+      </if>
+      <if test="positionLock != null" >
+        #{positionLock,jdbcType=BIT},
+      </if>
+      <if test="distance != null" >
+        #{distance,jdbcType=INTEGER},
+      </if>
+      <if test="limitConfig != null" >
+        #{limitConfig,jdbcType=VARCHAR},
+      </if>
+      <if test="warningNumber != null" >
+        #{warningNumber,jdbcType=INTEGER},
+      </if>
+      <if test="byname != null" >
+        #{byname,jdbcType=VARCHAR},
+      </if>
+      <if test="acceptUser != null" >
+        #{acceptUser,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="main.java.com.citytuike.model.TpDevice" >
+    <!--
+      WARNING - @mbggenerated
+      This element is automatically generated by MyBatis Generator, do not modify.
+    -->
     update tp_device
-    set device_sn = #{device_sn,jdbcType=VARCHAR},
-      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
-      qrscene = #{qrscene,jdbcType=VARCHAR},
-      iot_id = #{iot_id,jdbcType=VARCHAR},
-      product_key = #{product_key,jdbcType=VARCHAR},
-      device_name = #{device_name,jdbcType=VARCHAR},
-      device_secret = #{device_secret,jdbcType=VARCHAR},
-      add_time = #{add_time,jdbcType=INTEGER},
-      user_id = #{user_id,jdbcType=INTEGER},
-      paper_number = #{paper_number,jdbcType=INTEGER},
-      paper_send = #{paper_send,jdbcType=INTEGER},
-      paper_inventory = #{paper_inventory,jdbcType=INTEGER},
-      income = #{income,jdbcType=DECIMAL},
-      one_income = #{one_income,jdbcType=DECIMAL},
-      capacity = #{capacity,jdbcType=INTEGER},
-      active_time = #{active_time,jdbcType=INTEGER},
-      no_send = #{no_send,jdbcType=BIT},
-      open_status = #{open_status,jdbcType=BIT},
-      online = #{online,jdbcType=BIT},
-      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
-      province = #{province,jdbcType=INTEGER},
-      city = #{city,jdbcType=INTEGER},
-      district = #{district,jdbcType=INTEGER},
-      is_active = #{is_active,jdbcType=TINYINT},
-      order_id = #{order_id,jdbcType=INTEGER},
-      goods_id = #{goods_id,jdbcType=INTEGER},
-      distribution_time = #{distribution_time,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      longitude = #{longitude,jdbcType=DOUBLE},
-      latitude = #{latitude,jdbcType=DOUBLE},
-      active_code = #{active_code,jdbcType=VARCHAR},
-      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
-      shipping_name = #{shipping_name,jdbcType=VARCHAR},
-      today_num = #{today_num,jdbcType=INTEGER},
-      today_time = #{today_time,jdbcType=INTEGER}
+    set device_sn = #{deviceSn,jdbcType=VARCHAR},
+    ad_position_id = #{adPositionId,jdbcType=INTEGER},
+    qrscene = #{qrscene,jdbcType=VARCHAR},
+    iot_id = #{iotId,jdbcType=VARCHAR},
+    product_key = #{productKey,jdbcType=VARCHAR},
+    device_name = #{deviceName,jdbcType=VARCHAR},
+    device_secret = #{deviceSecret,jdbcType=VARCHAR},
+    add_time = #{addTime,jdbcType=INTEGER},
+    user_id = #{userId,jdbcType=INTEGER},
+    paper_number = #{paperNumber,jdbcType=INTEGER},
+    paper_send = #{paperSend,jdbcType=INTEGER},
+    paper_inventory = #{paperInventory,jdbcType=INTEGER},
+    income = #{income,jdbcType=DECIMAL},
+    one_income = #{oneIncome,jdbcType=DECIMAL},
+    capacity = #{capacity,jdbcType=INTEGER},
+    active_time = #{activeTime,jdbcType=INTEGER},
+    no_send = #{noSend,jdbcType=BIT},
+    open_status = #{openStatus,jdbcType=BIT},
+    online = #{online,jdbcType=BIT},
+    landmark_picture = #{landmarkPicture,jdbcType=VARCHAR},
+    province = #{province,jdbcType=INTEGER},
+    city = #{city,jdbcType=INTEGER},
+    district = #{district,jdbcType=INTEGER},
+    is_active = #{isActive,jdbcType=TINYINT},
+    order_id = #{orderId,jdbcType=INTEGER},
+    goods_id = #{goodsId,jdbcType=INTEGER},
+    distribution_time = #{distributionTime,jdbcType=INTEGER},
+    address = #{address,jdbcType=VARCHAR},
+    longitude = #{longitude,jdbcType=DOUBLE},
+    latitude = #{latitude,jdbcType=DOUBLE},
+    active_code = #{activeCode,jdbcType=VARCHAR},
+    shipping_sn = #{shippingSn,jdbcType=VARCHAR},
+    shipping_name = #{shippingName,jdbcType=VARCHAR},
+    today_num = #{todayNum,jdbcType=INTEGER},
+    today_time = #{todayTime,jdbcType=INTEGER},
+    app_version = #{appVersion,jdbcType=VARCHAR},
+    lack_paper = #{lackPaper,jdbcType=BIT},
+    old_order_id = #{oldOrderId,jdbcType=INTEGER},
+    is_settled = #{isSettled,jdbcType=BIT},
+    settled_money = #{settledMoney,jdbcType=DECIMAL},
+    run_status = #{runStatus,jdbcType=BIT},
+    position_lock = #{positionLock,jdbcType=BIT},
+    distance = #{distance,jdbcType=INTEGER},
+    limit_config = #{limitConfig,jdbcType=VARCHAR},
+    warning_number = #{warningNumber,jdbcType=INTEGER},
+    byname = #{byname,jdbcType=VARCHAR},
+    accept_user = #{acceptUser,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, device_sn, ad_position_id, qrscene, iot_id, product_key, device_name,
-    device_secret, add_time, user_id, paper_number, paper_send, paper_inventory, income,
-    one_income, capacity, active_time, no_send, open_status, online, landmark_picture,
-    province, city, district, is_active, order_id, goods_id, distribution_time, address,
-    longitude, latitude, active_code, shipping_sn, shipping_name, today_num, today_time
+    select *
     from tp_device
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, device_sn, ad_position_id, qrscene, iot_id, product_key, device_name, 
-    device_secret, add_time, user_id, paper_number, paper_send, paper_inventory, income, 
-    one_income, capacity, active_time, no_send, open_status, online, landmark_picture, 
-    province, city, district, is_active, order_id, goods_id, distribution_time, address, 
-    longitude, latitude, active_code, shipping_sn, shipping_name, today_num, today_time
+    select *
     from tp_device
   </select>
   <select id="selectCountDevice" resultType="int" >
@@ -173,26 +503,26 @@
     </select>
   <update id="update">
     update tp_device
-    set device_sn = #{device_sn,jdbcType=VARCHAR},
-      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
+    set device_sn = #{deviceSn,jdbcType=VARCHAR},
+      ad_position_id = #{adPositionId,jdbcType=INTEGER},
       qrscene = #{qrscene,jdbcType=VARCHAR},
-      iot_id = #{iot_id,jdbcType=VARCHAR},
-      product_key = #{product_key,jdbcType=VARCHAR},
-      device_name = #{device_name,jdbcType=VARCHAR},
-      device_secret = #{device_secret,jdbcType=VARCHAR},
-      add_time = #{add_time,jdbcType=INTEGER},
-      user_id = #{user_id,jdbcType=INTEGER},
-      paper_number = #{paper_number,jdbcType=INTEGER},
+      iot_id = #{iotId,jdbcType=VARCHAR},
+      product_key = #{productKey,jdbcType=VARCHAR},
+      device_name = #{deviceName,jdbcType=VARCHAR},
+      device_secret = #{deviceSecret,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      paper_number = #{paperNumber,jdbcType=INTEGER},
       paper_send = paper_send + 1,
       paper_inventory = paper_inventory -1,
       income = #{income,jdbcType=DECIMAL},
-      one_income = #{one_income,jdbcType=DECIMAL},
+      one_income = #{oneIncome,jdbcType=DECIMAL},
       capacity = #{capacity,jdbcType=INTEGER},
-      active_time = #{active_time,jdbcType=INTEGER},
-      no_send = #{no_send,jdbcType=BIT},
-      open_status = #{open_status,jdbcType=BIT},
+      active_time = #{activeAime,jdbcType=INTEGER},
+      no_send = #{noSend,jdbcType=BIT},
+      open_status = #{openStatus,jdbcType=BIT},
       online = #{online,jdbcType=BIT},
-      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      landmark_picture = #{landmarkPicture,jdbcType=VARCHAR},
       province = #{province,jdbcType=INTEGER},
       city = #{city,jdbcType=INTEGER},
       district = #{district,jdbcType=INTEGER},
@@ -203,11 +533,11 @@
       address = #{address,jdbcType=VARCHAR},
       longitude = #{longitude,jdbcType=DOUBLE},
       latitude = #{latitude,jdbcType=DOUBLE},
-      active_code = #{active_code,jdbcType=VARCHAR},
-      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
+      active_code = #{activeCode,jdbcType=VARCHAR},
+      shipping_sn = #{shippingSn,jdbcType=VARCHAR},
       shipping_name = #{shipping_name,jdbcType=VARCHAR},
-      today_num = #{today_num,jdbcType=INTEGER},
-      today_time = #{today_time,jdbcType=INTEGER}
+      today_num = #{todayNum,jdbcType=INTEGER},
+      today_time = #{todayTime,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="toDayCountPaper" resultMap="BaseResultMap">
@@ -218,84 +548,53 @@
   </select>
   <update id="updateType">
     update tp_device
-    set device_sn = #{device_sn,jdbcType=VARCHAR},
-      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
+     set device_sn = #{deviceSn,jdbcType=VARCHAR},
+      ad_position_id = #{adPositionId,jdbcType=INTEGER},
       qrscene = #{qrscene,jdbcType=VARCHAR},
-      iot_id = #{iot_id,jdbcType=VARCHAR},
-      product_key = #{product_key,jdbcType=VARCHAR},
-      device_name = #{device_name,jdbcType=VARCHAR},
-      device_secret = #{device_secret,jdbcType=VARCHAR},
-      add_time = #{add_time,jdbcType=INTEGER},
-      user_id = #{user_id,jdbcType=INTEGER},
-      paper_number = #{paper_number,jdbcType=INTEGER},
-      paper_send = #{paper_send,jdbcType=INTEGER},
-      paper_inventory = #{paper_inventory,jdbcType=INTEGER},
+      iot_id = #{iotId,jdbcType=VARCHAR},
+      product_key = #{productKey,jdbcType=VARCHAR},
+      device_name = #{deviceName,jdbcType=VARCHAR},
+      device_secret = #{deviceSecret,jdbcType=VARCHAR},
+      add_time = #{addTime,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      paper_number = #{paperNumber,jdbcType=INTEGER},
+      paper_send = #{paperSend,jdbcType=INTEGER},
+      paper_inventory = #{paperInventory,jdbcType=INTEGER},
       income = #{income,jdbcType=DECIMAL},
-      one_income = #{one_income,jdbcType=DECIMAL},
+      one_income = #{oneIncome,jdbcType=DECIMAL},
       capacity = #{capacity,jdbcType=INTEGER},
-      active_time = #{active_time,jdbcType=INTEGER},
-      no_send = #{no_send,jdbcType=BIT},
-      open_status = #{open_status,jdbcType=BIT},
+      active_time = #{activeTime,jdbcType=INTEGER},
+      no_send = #{noSend,jdbcType=BIT},
+      open_status = #{openStatus,jdbcType=BIT},
       online = #{online,jdbcType=BIT},
-      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      landmark_picture = #{landmarkPicture,jdbcType=VARCHAR},
       province = #{province,jdbcType=INTEGER},
       city = #{city,jdbcType=INTEGER},
       district = #{district,jdbcType=INTEGER},
-      is_active = #{is_active,jdbcType=TINYINT},
-      order_id = #{order_id,jdbcType=INTEGER},
-      goods_id = #{goods_id,jdbcType=INTEGER},
-      distribution_time = #{distribution_time,jdbcType=INTEGER},
+      is_active = #{isActive,jdbcType=TINYINT},
+      order_id = #{orderId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      distribution_time = #{distributionTime,jdbcType=INTEGER},
       address = #{address,jdbcType=VARCHAR},
       longitude = #{longitude,jdbcType=DOUBLE},
       latitude = #{latitude,jdbcType=DOUBLE},
-      active_code = #{active_code,jdbcType=VARCHAR},
-      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
-      shipping_name = #{shipping_name,jdbcType=VARCHAR},
-      today_num = #{today_num,jdbcType=INTEGER},
-      today_time = #{today_time,jdbcType=INTEGER},
-      lack_paper = #{lack_paper}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <select id="getDeviceById" resultMap="BaseResultMap">
-    SELECT * from tp_device where id= #{device_id}
-  </select>
-  <update id="updateRunStatus">
-     update tp_device
-    set device_sn = #{device_sn,jdbcType=VARCHAR},
-      ad_position_id = #{ad_position_id,jdbcType=INTEGER},
-      qrscene = #{qrscene,jdbcType=VARCHAR},
-      iot_id = #{iot_id,jdbcType=VARCHAR},
-      product_key = #{product_key,jdbcType=VARCHAR},
-      device_name = #{device_name,jdbcType=VARCHAR},
-      device_secret = #{device_secret,jdbcType=VARCHAR},
-      add_time = #{add_time,jdbcType=INTEGER},
-      user_id = #{user_id,jdbcType=INTEGER},
-      paper_number = #{paper_number,jdbcType=INTEGER},
-      paper_send = #{paper_send,jdbcType=INTEGER},
-      paper_inventory = #{paper_inventory,jdbcType=INTEGER},
-      income = #{income,jdbcType=DECIMAL},
-      one_income = #{one_income,jdbcType=DECIMAL},
-      capacity = #{capacity,jdbcType=INTEGER},
-      active_time = #{active_time,jdbcType=INTEGER},
-      no_send = #{no_send,jdbcType=BIT},
-      open_status = #{open_status,jdbcType=BIT},
-      online = #{online,jdbcType=BIT},
-      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
-      province = #{province,jdbcType=INTEGER},
-      city = #{city,jdbcType=INTEGER},
-      district = #{district,jdbcType=INTEGER},
-      is_active = #{is_active,jdbcType=TINYINT},
-      order_id = #{order_id,jdbcType=INTEGER},
-      goods_id = #{goods_id,jdbcType=INTEGER},
-      distribution_time = #{distribution_time,jdbcType=INTEGER},
-      address = #{address,jdbcType=VARCHAR},
-      longitude = #{longitude,jdbcType=DOUBLE},
-      latitude = #{latitude,jdbcType=DOUBLE},
-      active_code = #{active_code,jdbcType=VARCHAR},
-      shipping_sn = #{shipping_sn,jdbcType=VARCHAR},
-      shipping_name = #{shipping_name,jdbcType=VARCHAR},
-      today_num = #{today_num,jdbcType=INTEGER},
-      today_time = #{today_time,jdbcType=INTEGER}
+      active_code = #{activeCode,jdbcType=VARCHAR},
+      shipping_sn = #{shippingSn,jdbcType=VARCHAR},
+      shipping_name = #{shippingName,jdbcType=VARCHAR},
+      today_num = #{todayNum,jdbcType=INTEGER},
+      today_time = #{todayTime,jdbcType=INTEGER},
+      app_version = #{appVersion,jdbcType=VARCHAR},
+      lack_paper = #{lackPaper,jdbcType=BIT},
+      old_order_id = #{oldOrderId,jdbcType=INTEGER},
+      is_settled = #{isSettled,jdbcType=BIT},
+      settled_money = #{settledMoney,jdbcType=DECIMAL},
+      run_status = #{runStatus,jdbcType=BIT},
+      position_lock = #{positionLock,jdbcType=BIT},
+      distance = #{distance,jdbcType=INTEGER},
+      limit_config = #{limitConfig,jdbcType=VARCHAR},
+      warning_number = #{warningNumber,jdbcType=INTEGER},
+      byname = #{byname,jdbcType=VARCHAR},
+      accept_user = #{acceptUser,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateVersion">
@@ -304,7 +603,7 @@
   <update id="updateDevice">
     update tp_device
     set
-      landmark_picture = #{landmark_picture,jdbcType=VARCHAR},
+      landmark_picture = #{landmarkPicture,jdbcType=VARCHAR},
       province = #{province,jdbcType=INTEGER},
       city = #{city,jdbcType=INTEGER},
       district = #{district,jdbcType=INTEGER},

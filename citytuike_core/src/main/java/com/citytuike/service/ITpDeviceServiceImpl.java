@@ -2,10 +2,12 @@ package com.citytuike.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.mapper.TpDeviceMapper;
+import com.citytuike.mapper.TpDevicePlayMapper;
 import com.citytuike.mapper.TpRegionMapper;
 import com.citytuike.model.LimitPageList;
 import com.citytuike.model.Page;
 import com.citytuike.model.TpDevice;
+import com.citytuike.model.TpDevicePlay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
     private TpDeviceMapper tpDeviceMapper;
     @Autowired
     private TpRegionMapper tpRegionMapper;
+    @Autowired
+    private TpDevicePlayMapper tpDevicePlayMapper;
 
     public int selectCountDevice(Integer user_id) {
         return tpDeviceMapper.selectCountDevice(user_id);
@@ -53,41 +57,41 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
     public JSONObject getDeviceJson(TpDevice tpDevice) {
         JSONObject data = new JSONObject();
         data.put("id", tpDevice.getId());
-        data.put("device_sn", tpDevice.getDevice_sn());
-        data.put("ad_position_id", tpDevice.getAd_position_id());
+        data.put("device_sn", tpDevice.getDeviceSn());
+        data.put("ad_position_id", tpDevice.getAdPositionId());
         data.put("qrscene", tpDevice.getQrscene());
-        data.put("iot_id", tpDevice.getIot_id());
-        data.put("product_key", tpDevice.getProduct_key());
-        data.put("device_name", tpDevice.getDevice_name());
-        data.put("device_secret", tpDevice.getDevice_secret());
-        data.put("add_time", tpDevice.getAdd_time());
-        data.put("user_id", tpDevice.getUser_id());
-        data.put("paper_number", tpDevice.getPaper_number());
-        data.put("paper_send", tpDevice.getPaper_send());
-        data.put("paper_inventory", tpDevice.getPaper_inventory());
+        data.put("iot_id", tpDevice.getIotId());
+        data.put("product_key", tpDevice.getProductKey());
+        data.put("device_name", tpDevice.getDeviceName());
+        data.put("device_secret", tpDevice.getDeviceSecret());
+        data.put("add_time", tpDevice.getAddTime());
+        data.put("user_id", tpDevice.getUserId());
+        data.put("paper_number", tpDevice.getPaperNumber());
+        data.put("paper_send", tpDevice.getPaperSend());
+        data.put("paper_inventory", tpDevice.getPaperInventory());
         data.put("income", tpDevice.getIncome());
-        data.put("one_income", tpDevice.getOne_income());
+        data.put("one_income", tpDevice.getOneIncome());
         data.put("capacity", tpDevice.getCapacity());
-        data.put("active_time", tpDevice.getActive_time());
-        data.put("no_send", tpDevice.getNo_send());
-        data.put("open_status", tpDevice.getOpen_status());
+        data.put("active_time", tpDevice.getActiveTime());
+        data.put("no_send", tpDevice.getNoSend());
+        data.put("open_status", tpDevice.getOpenStatus());
         data.put("online", tpDevice.getOnline());
-        data.put("landmark_picture", tpDevice.getLandmark_picture());
+        data.put("landmark_picture", tpDevice.getLandmarkPicture());
         data.put("province", tpDevice.getProvince());
         data.put("city", tpDevice.getCity());
         data.put("district", tpDevice.getDistrict());
-        data.put("is_active", tpDevice.getIs_active());
-        data.put("order_id", tpDevice.getOrder_id());
-        data.put("goods_id", tpDevice.getGoods_id());
-        data.put("distribution_time", tpDevice.getDistribution_time());
+        data.put("is_active", tpDevice.getIsActive());
+        data.put("order_id", tpDevice.getOrderId());
+        data.put("goods_id", tpDevice.getGoodsId());
+        data.put("distribution_time", tpDevice.getDistributionTime());
         data.put("address", tpDevice.getAddress());
         data.put("longitude", tpDevice.getLongitude());
         data.put("latitude", tpDevice.getLatitude());
-        data.put("active_code", tpDevice.getActive_code());
-        data.put("shipping_sn", tpDevice.getShipping_sn());
-        data.put("shipping_name", tpDevice.getShipping_name());
-        data.put("today_num", tpDevice.getToday_num());
-        data.put("today_time", tpDevice.getToday_time());
+        data.put("active_code", tpDevice.getActiveCode());
+        data.put("shipping_sn", tpDevice.getShippingSn());
+        data.put("shipping_name", tpDevice.getShippingName());
+        data.put("today_num", tpDevice.getTodayNum());
+        data.put("today_time", tpDevice.getTodayTime());
         return data;
     }
 
@@ -123,11 +127,11 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
         for (TpDevice tpDevice : tpDevices) {
             double income = tpDevice.getIncome().doubleValue();
             SumMoney = SumMoney + income;
-            int paper_number = tpDevice.getPaper_number();
+            int paper_number = tpDevice.getPaperNumber();
             PaperNumber = PaperNumber + paper_number;
-            int paper_send = tpDevice.getPaper_send();
+            int paper_send = tpDevice.getPaperSend();
             PaperSend = PaperSend +paper_send;
-            int paper_inventory = tpDevice.getPaper_inventory();
+            int paper_inventory = tpDevice.getPaperInventory();
             PaperInventory = PaperInventory + paper_inventory;
             jsonObject.put("paper_number",PaperNumber);
             jsonObject.put("paper_send",PaperSend);
@@ -167,41 +171,41 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
         String city_name = tpRegionMapper.getAddressCity(tpDevice.getCity());
         String district_name = tpRegionMapper.getAddressDistrict(tpDevice.getDistrict());
         data.put("id", tpDevice.getId());
-        data.put("device_sn", tpDevice.getDevice_sn());
-        data.put("ad_position_id", tpDevice.getAd_position_id());
+        data.put("device_sn", tpDevice.getDeviceSn());
+        data.put("ad_position_id", tpDevice.getAdPositionId());
         data.put("qrscene", tpDevice.getQrscene());
-        data.put("iot_id", tpDevice.getIot_id());
-        data.put("product_key", tpDevice.getProduct_key());
-        data.put("device_name", tpDevice.getDevice_name());
-        data.put("device_secret", tpDevice.getDevice_secret());
-        data.put("add_time", tpDevice.getAdd_time());
-        data.put("user_id", tpDevice.getUser_id());
-        data.put("paper_number", tpDevice.getPaper_number());
-        data.put("paper_send", tpDevice.getPaper_send());
-        data.put("paper_inventory", tpDevice.getPaper_inventory());
+        data.put("iot_id", tpDevice.getIotId());
+        data.put("product_key", tpDevice.getProductKey());
+        data.put("device_name", tpDevice.getDeviceName());
+        data.put("device_secret", tpDevice.getDeviceSecret());
+        data.put("add_time", tpDevice.getAddTime());
+        data.put("user_id", tpDevice.getUserId());
+        data.put("paper_number", tpDevice.getPaperNumber());
+        data.put("paper_send", tpDevice.getPaperSend());
+        data.put("paper_inventory", tpDevice.getPaperInventory());
         data.put("income", tpDevice.getIncome());
-        data.put("one_income", tpDevice.getOne_income());
+        data.put("one_income", tpDevice.getOneIncome());
         data.put("capacity", tpDevice.getCapacity());
-        data.put("active_time", tpDevice.getActive_time());
-        data.put("no_send", tpDevice.getNo_send());
-        data.put("open_status", tpDevice.getOpen_status());
+        data.put("active_time", tpDevice.getActiveTime());
+        data.put("no_send", tpDevice.getNoSend());
+        data.put("open_status", tpDevice.getOpenStatus());
         data.put("online", tpDevice.getOnline());
-        data.put("landmark_picture", tpDevice.getLandmark_picture());
+        data.put("landmark_picture", tpDevice.getLandmarkPicture());
         data.put("province", tpDevice.getProvince());
         data.put("city", tpDevice.getCity());
         data.put("district", tpDevice.getDistrict());
-        data.put("is_active", tpDevice.getIs_active());
-        data.put("order_id", tpDevice.getOrder_id());
-        data.put("goods_id", tpDevice.getGoods_id());
-        data.put("distribution_time", tpDevice.getDistribution_time());
+        data.put("is_active", tpDevice.getIsActive());
+        data.put("order_id", tpDevice.getOrderId());
+        data.put("goods_id", tpDevice.getGoodsId());
+        data.put("distribution_time", tpDevice.getDistributionTime());
         data.put("address", tpDevice.getAddress());
         data.put("longitude", tpDevice.getLongitude());
         data.put("latitude", tpDevice.getLatitude());
-        data.put("active_code", tpDevice.getActive_code());
-        data.put("shipping_sn", tpDevice.getShipping_sn());
-        data.put("shipping_name", tpDevice.getShipping_name());
-        data.put("today_num", tpDevice.getToday_num());
-        data.put("today_time", tpDevice.getToday_time());
+        data.put("active_code", tpDevice.getActiveCode());
+        data.put("shipping_sn", tpDevice.getShippingSn());
+        data.put("shipping_name", tpDevice.getShippingName());
+        data.put("today_num", tpDevice.getTodayNum());
+        data.put("today_time", tpDevice.getTodayTime());
         data.put("province_name",provinceName);
         data.put("city_name",city_name);
         data.put("district_name",district_name);
@@ -213,41 +217,41 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
         JSONObject data = new JSONObject();
         TpDevice tpDevice = tpDeviceMapper.getOnlyDevice(user_id,device_id,device_sn);
         data.put("id", tpDevice.getId());
-        data.put("device_sn", tpDevice.getDevice_sn());
-        data.put("ad_position_id", tpDevice.getAd_position_id());
+        data.put("device_sn", tpDevice.getDeviceSn());
+        data.put("ad_position_id", tpDevice.getAdPositionId());
         data.put("qrscene", tpDevice.getQrscene());
-        data.put("iot_id", tpDevice.getIot_id());
-        data.put("product_key", tpDevice.getProduct_key());
-        data.put("device_name", tpDevice.getDevice_name());
-        data.put("device_secret", tpDevice.getDevice_secret());
-        data.put("add_time", tpDevice.getAdd_time());
-        data.put("user_id", tpDevice.getUser_id());
-        data.put("paper_number", tpDevice.getPaper_number());
-        data.put("paper_send", tpDevice.getPaper_send());
-        data.put("paper_inventory", tpDevice.getPaper_inventory());
+        data.put("iot_id", tpDevice.getIotId());
+        data.put("product_key", tpDevice.getProductKey());
+        data.put("device_name", tpDevice.getDeviceName());
+        data.put("device_secret", tpDevice.getDeviceSecret());
+        data.put("add_time", tpDevice.getAddTime());
+        data.put("user_id", tpDevice.getUserId());
+        data.put("paper_number", tpDevice.getPaperNumber());
+        data.put("paper_send", tpDevice.getPaperSend());
+        data.put("paper_inventory", tpDevice.getPaperInventory());
         data.put("income", tpDevice.getIncome());
-        data.put("one_income", tpDevice.getOne_income());
+        data.put("one_income", tpDevice.getOneIncome());
         data.put("capacity", tpDevice.getCapacity());
-        data.put("active_time", tpDevice.getActive_time());
-        data.put("no_send", tpDevice.getNo_send());
-        data.put("open_status", tpDevice.getOpen_status());
+        data.put("active_time", tpDevice.getActiveTime());
+        data.put("no_send", tpDevice.getNoSend());
+        data.put("open_status", tpDevice.getOpenStatus());
         data.put("online", tpDevice.getOnline());
-        data.put("landmark_picture", tpDevice.getLandmark_picture());
+        data.put("landmark_picture", tpDevice.getLandmarkPicture());
         data.put("province", tpDevice.getProvince());
         data.put("city", tpDevice.getCity());
         data.put("district", tpDevice.getDistrict());
-        data.put("is_active", tpDevice.getIs_active());
-        data.put("order_id", tpDevice.getOrder_id());
-        data.put("goods_id", tpDevice.getGoods_id());
-        data.put("distribution_time", tpDevice.getDistribution_time());
+        data.put("is_active", tpDevice.getIsActive());
+        data.put("order_id", tpDevice.getOrderId());
+        data.put("goods_id", tpDevice.getGoodsId());
+        data.put("distribution_time", tpDevice.getDistributionTime());
         data.put("address", tpDevice.getAddress());
         data.put("longitude", tpDevice.getLongitude());
         data.put("latitude", tpDevice.getLatitude());
-        data.put("active_code", tpDevice.getActive_code());
-        data.put("shipping_sn", tpDevice.getShipping_sn());
-        data.put("shipping_name", tpDevice.getShipping_name());
-        data.put("today_num", tpDevice.getToday_num());
-        data.put("today_time", tpDevice.getToday_time());
+        data.put("active_code", tpDevice.getActiveCode());
+        data.put("shipping_sn", tpDevice.getShippingSn());
+        data.put("shipping_name", tpDevice.getShippingName());
+        data.put("today_num", tpDevice.getTodayNum());
+        data.put("today_time", tpDevice.getTodayTime());
         return data;
     }
 
@@ -325,6 +329,21 @@ public class ITpDeviceServiceImpl implements ITpDeviceService {
     @Override
     public TpDevice findByDevicesnAndIsactive(String imei, int is_active) {
         return tpDeviceMapper.findByDevicesnAndIsactive(imei, is_active);
+    }
+
+    @Override
+    public TpDevice findDeviceBySn(String deviceSn) {
+        return tpDeviceMapper.selectDeviceBySn(deviceSn);
+    }
+
+    @Override
+    public TpDevicePlay findDevicePlayByDeviceId(Integer device_id) {
+        return tpDevicePlayMapper.findDevicePlayByDeviceId(device_id);
+    }
+
+    @Override
+    public int updataDeviceByRegionId(Integer id, Integer district) {
+        return tpDevicePlayMapper.updataDeviceByRegionId(id, district);
     }
 
 }

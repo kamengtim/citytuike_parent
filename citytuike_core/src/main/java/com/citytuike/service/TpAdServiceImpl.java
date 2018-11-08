@@ -2,6 +2,7 @@ package com.citytuike.service;
 
 import com.citytuike.mapper.TpAdLaunchMapper;
 import com.citytuike.mapper.TpAdMapper;
+import com.citytuike.mapper.TpAdPositionMapper;
 import com.citytuike.model.*;
 import com.citytuike.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class TpAdServiceImpl implements TpAdService {
     private ITpDeviceService iTpDeviceService;
     @Autowired
     private TpAdLaunchMapper tpAdLaunchMapper;
+    @Autowired
+    private TpAdPositionMapper tpAdPositionMapper;
 
     @Override
     public int getPageAvg(TpRegion tpRegion2) {
@@ -208,5 +211,10 @@ public class TpAdServiceImpl implements TpAdService {
     @Override
     public TpAdCategory findAdCategoryById(Integer cate) {
         return tpAdMapper.findAdCategoryById(cate);
+    }
+
+    @Override
+    public List<TpAdPosition> findAdPositionByDeviceId(Integer device_id) {
+        return tpAdPositionMapper.findAdPositionByDeviceId(device_id);
     }
 }

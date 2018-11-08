@@ -7,19 +7,15 @@ import com.citytuike.mapper.TpDeviceLogMapper;
 import com.citytuike.mapper.TpDeviceMapper;
 import com.citytuike.mapper.TpScanLogMapper;
 import com.citytuike.mapper.TpUsersMapper;
-import com.citytuike.model.TpDevice;
 import com.citytuike.model.TpDeviceLog;
 import com.citytuike.model.TpScanLog;
 import com.citytuike.model.TpUsers;
 import com.citytuike.util.AliyunIotApi;
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 

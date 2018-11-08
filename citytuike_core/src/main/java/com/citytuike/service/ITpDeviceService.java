@@ -5,7 +5,7 @@ package com.citytuike.service;
 import com.alibaba.fastjson.JSONObject;
 import com.citytuike.model.LimitPageList;
 import com.citytuike.model.TpDevice;
-import com.citytuike.model.TpRegion;
+import com.citytuike.model.TpDevicePlay;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -58,4 +58,10 @@ public interface ITpDeviceService {
     TpDevice selectPaper(String device_sn, Integer user_id);
 
     TpDevice findByDevicesnAndIsactive(String imei, int is_active);
+
+    TpDevice findDeviceBySn(String deviceSn);
+
+    TpDevicePlay findDevicePlayByDeviceId(Integer device_id);
+
+    int updataDeviceByRegionId(Integer id, Integer district);
 }

@@ -3,14 +3,14 @@ package com.citytuike.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.iot.model.v20180120.QueryDeviceDetailResponse;
+import com.citytuike.constant.Constant;
 import com.citytuike.exception.WeixinApiException;
 import com.citytuike.interceptor.JpushClientUtil;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.AliyunIotApi;
+import com.citytuike.util.RedisUtil;
 import com.citytuike.util.WeixinAPI;
-import com.fasterxml.jackson.databind.ser.Serializers;
-import com.sun.xml.internal.ws.client.SenderException;
 import com.swetake.util.Qrcode;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +61,8 @@ public class DeviceController extends BaseController{
     private TpOrderService tpOrderService;
     @Autowired
     private TpMessageService tpMessageService;
+    @Autowired
+    private TpAdService tpAdService;
 
     /**
      * @return 获取设备配置
@@ -72,6 +72,7 @@ public class DeviceController extends BaseController{
     @ApiOperation(value = "获取设备配置", notes = "获取设备配置")
     public @ResponseBody String getConf(HttpServletRequest request) {
         JSONObject jsonObj = new JSONObject();
+        JSONObject data = new JSONObject();
         JSONObject jsonRequest = getRequestJson(request);
         String deviceSn = jsonRequest.getString("deviceSn");
         if(deviceSn == null || deviceSn.equals("")){
@@ -87,10 +88,63 @@ public class DeviceController extends BaseController{
             jsonObj.put("msg", "token失效!");
             return jsonObj.toString();
         }
-        JSONObject jsonObject = tpDeviceService.selectDeviceBySn(deviceSn);
-        jsonObj.put("status", 1);
-        jsonObj.put("msg", "成功!");
-        jsonObj.put("result", jsonObject);
+        TpDevice tpDevice = tpDeviceService.findDeviceBySn(deviceSn);
+        if (null != tpDevice){
+            //验证机器是否有限制，将限制缓存到redis
+            if (null != tpDevice.getLimitConfig()){
+                JSONObject jsonObject = JSONObject.parseObject(tpDevice.getLimitConfig());
+                //使用多久之后开始限制
+                String use_time = jsonObject.getString("use_time");
+                String[] use_time_arr = use_time.split("-");
+                Random random = new Random();
+                int s = random.nextInt(Integer.parseInt(use_time_arr[1]))%(Integer.parseInt(use_time_arr[1])-Integer.parseInt(use_time_arr[0])+1) + Integer.parseInt(use_time_arr[0]);
+                long time_start = Calendar.getInstance().getTimeInMillis() + s*60  + random.nextInt(59)%60;
+                // 限制的时长
+               String limit_time = jsonObject.getString("limit_time");
+                String[] limit_time_arr = use_time.split("-");
+                int ss = random.nextInt(Integer.parseInt(use_time_arr[1]))%(Integer.parseInt(limit_time_arr[1])-Integer.parseInt(limit_time_arr[0])+1) + Integer.parseInt(limit_time_arr[0]);
+                long time_end = time_start + ss;
+
+                String limit_type = jsonObject.getString("type");
+                long cache_times = time_end - Calendar.getInstance().getTimeInMillis();
+                JSONObject jsonObject1 = new JSONObject();
+                jsonObject1.put("start", time_start);
+                jsonObject1.put("end_time", time_end);
+                jsonObject1.put("limit_type", time_start);
+                RedisUtil.valueSet("\""+ Constant.DEVICE_LIMIT_CONFIG_ + deviceSn + "\"", jsonObject1);
+                List<TpAdPosition> tpAdPositionList = tpAdService.findAdPositionByDeviceId(tpDevice.getId());
+                JSONArray jsonArray = new JSONArray();
+                for (TpAdPosition tpAdPosition : tpAdPositionList) {
+                    JSONObject jsonObject2 = new JSONObject();
+                    jsonObject2.put("position_id", tpAdPosition.getPositionId());
+                    jsonObject2.put("position_name", tpAdPosition.getPositionName());
+                    jsonObject2.put("ad_width", tpAdPosition.getAdWidth());
+                    jsonObject2.put("ad_height", tpAdPosition.getAdHeight());
+                    jsonObject2.put("position_desc", tpAdPosition.getPositionDesc());
+                    jsonObject2.put("is_open", tpAdPosition.getIsOpen());
+                    jsonObject2.put("region_id", tpAdPosition.getRegionId());
+                    jsonObject2.put("address", tpAdPosition.getAddress());
+                    jsonObject2.put("device_id", tpAdPosition.getDeviceId());
+                    jsonObject2.put("position_style", tpAdPosition.getPositionStyle());
+                    jsonArray.add(jsonObject2);
+                }
+                data.put("ProductKey", tpDevice.getProductKey());
+                data.put("DeviceName", tpDevice.getDeviceName());
+                data.put("deviceSecret", tpDevice.getDeviceSecret());
+                data.put("no_send", tpDevice.getNoSend());
+                data.put("positionList", jsonArray);
+            }
+            TpDevicePlay tpDevicePlay = tpDeviceService.findDevicePlayByDeviceId(tpDevice.getId());
+            if (null != tpDevicePlay){
+                int updataDeviceByRegionId = tpDeviceService.updataDeviceByRegionId(tpDevice.getId(), tpDevice.getDistrict());
+                if (updataDeviceByRegionId > 0){
+                    jsonObj.put("status", 1);
+                    jsonObj.put("msg", "成功!");
+                    jsonObj.put("result", data);
+                }
+            }
+        }
+//        JSONObject jsonObject = tpDeviceService.selectDeviceBySn(deviceSn);
         return jsonObj.toString();
     }
 
@@ -127,11 +181,11 @@ public class DeviceController extends BaseController{
             jsonObj.put("status", 0);
             jsonObj.put("msg", "错误的设备号!");
             return jsonObj.toString();
-        }else if(tpDevice.getOrder_id() == null){
+        }else if(tpDevice.getOrderId() == null){
             jsonObj.put("status", 0);
             jsonObj.put("msg", "请求错误-未知订单，请联系客服处理!");
             return jsonObj.toString();
-        }else if(tpDevice.getIs_active().equals(Byte.valueOf("1"))){
+        }else if(tpDevice.getIsActive().equals(Byte.valueOf("1"))){
             jsonObj.put("status", 0);
             jsonObj.put("msg", "设备号已激活，不能重复激活");
             return jsonObj.toString();
@@ -140,7 +194,7 @@ public class DeviceController extends BaseController{
         if(check_active_code){
             int  i = tpDeviceService.update(tpDevice.getId(), String.valueOf(province),city,district,landmark_picture);
             if(i>0){
-                tpOrderService.updateOrder(tpDevice.getOrder_id());
+                tpOrderService.updateOrder(tpDevice.getOrderId());
                 redisTemplate.opsForValue().set("d_active_my_list",tpUsers.getUser_id());
                 jsonObj.put("status", 1);
                 jsonObj.put("msg", "设备激活成功!");
@@ -293,12 +347,12 @@ public class DeviceController extends BaseController{
             jsonObj.put("status", 0);
             jsonObj.put("msg", "没有该设备");
             return jsonObj.toString();
-        } else if (tpDevice.getActive_time() == 0) {
+        } else if (tpDevice.getActiveTime() == 0) {
             jsonObj.put("status", "203");
             jsonObj.put("msg", "该设备没有激活");
             return jsonObj.toString();
         }
-        String conent = tpDeviceQrService.saveQR(tpDevice.getUser_id(), latitude, longitude);
+        String conent = tpDeviceQrService.saveQR(tpDevice.getUserId(), latitude, longitude);
         jsonObject.put("device_id", tpDevice.getId());
         jsonObject.put("ticket", "");
         jsonObject.put("url", conent);
@@ -592,18 +646,18 @@ public class DeviceController extends BaseController{
             jsonObj.put("msg", "机器不存在");
             return jsonObj.toString();
         }
-        tpDevice.setLack_paper(Integer.parseInt(type));
+        tpDevice.setLackPaper(Integer.parseInt(type));
         tpDeviceService.updateType(tpDevice);
         if(type.equals("1")){
             Map<String, String> parm =new HashMap<String, String>();
             jsonObject.put("title","缺纸消息");
             jsonObject.put("discription","当前设备缺纸，请尽快补充");
-            jsonObject.put("device_sn",tpDevice.getDevice_sn());
-            jsonObject.put("paper_inventory",tpDevice.getPaper_inventory());
+            jsonObject.put("device_sn",tpDevice.getDeviceSn());
+            jsonObject.put("paper_inventory",tpDevice.getPaperInventory());
             jsonObject.put("address",tpDevice.getAddress());
             jsonObject.put("longitude",tpDevice.getLatitude());
             jsonObject.put("latitude",tpDevice.getLatitude());
-            parm.put("RegId", String.valueOf(tpDevice.getUser_id()));
+            parm.put("RegId", String.valueOf(tpDevice.getUserId()));
             parm.put("msg",jsonObject.toString());
             object.put("category",12);
             object.put("type",0);
@@ -649,7 +703,7 @@ public class DeviceController extends BaseController{
             return jsonObj.toString();
        }
        TpDevice tpDevice = tpDeviceService.getDeviceById(device_id);
-       if(tpDevice.getUser_id() == 0){
+       if(tpDevice.getUserId() == 0){
            jsonObj.put("status", 0);
            jsonObj.put("msg", "请选择正确的设备");
            return jsonObj.toString();
@@ -730,7 +784,7 @@ public class DeviceController extends BaseController{
             jsonObj.put("msg", "错误的设备");
             return jsonObj.toString();
         }
-        tpDevice.setRun_status(Integer.parseInt(run_status));
+        tpDevice.setRunStatus(Integer.parseInt(run_status));
         tpDeviceService.updateRunStatus(tpDevice);
         jsonObj.put("status", 1);
         jsonObj.put("msg", "成功");
@@ -766,7 +820,7 @@ public class DeviceController extends BaseController{
             return jsonObj.toString();
         }
         AliyunIotApi aliyunIotApi = new AliyunIotApi();
-        QueryDeviceDetailResponse pubResponse = aliyunIotApi.queryDeviceDetailRequest(tpDevice.getProduct_key(), tpDevice.getDevice_name());
+        QueryDeviceDetailResponse pubResponse = aliyunIotApi.queryDeviceDetailRequest(tpDevice.getProductKey(), tpDevice.getDeviceName());
         String status = pubResponse.getData().getStatus();
         if(status.equals("ONLINE")){
             tpDevice.setOnline(true);
@@ -789,8 +843,8 @@ public class DeviceController extends BaseController{
             String district =tpRegionService.getDistrict(tpDevice.getDistrict());
             jsonObject.put("online_time",pubResponse.getData().getGmtOnline());
             jsonObject.put("status",online_status);
-            jsonObject.put("imei",tpDevice.getDevice_sn());
-            TpUsers tpUser = tpUsersService.findOneByUserId(tpDevice.getUser_id());
+            jsonObject.put("imei",tpDevice.getDeviceSn());
+            TpUsers tpUser = tpUsersService.findOneByUserId(tpDevice.getUserId());
             jsonObject.put("name",tpUser.getNickname());
             jsonObject.put("region",province+cityName+district);
             jsonObject.put("paper","正常");

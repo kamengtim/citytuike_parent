@@ -8,6 +8,7 @@ import com.citytuike.constant.Constant;
 import com.citytuike.model.*;
 import com.citytuike.service.*;
 import com.citytuike.util.MD5Utils;
+import com.citytuike.util.RedisUtil;
 import com.citytuike.util.Util;
 import com.citytuike.util.mobileCheck;
 import com.github.pagehelper.PageInfo;
@@ -121,6 +122,7 @@ public class UserController extends BaseController{
 			tpUsers.setToken(token);
 			int result = tpUsersService.updateBytokenIn(tpUsers);
 //			TpUsers tpUsers1 = tpUsersService.getToken(tpUsers.getToken());
+//			RedisUtil.valueSet(Constant.CURRENT_USER+tpUsers.getToken(),tpUsers.getToken(),30, TimeUnit.DAYS);
 //			redisTemplate.opsForValue().set(Constant.CURRENT_USER+tpUsers1.getToken(),tpUsers1.getToken());
 //			redisTemplate.expire(Constant.CURRENT_USER+tpUsers1.getToken(),30, TimeUnit.DAYS);
 			if (result > 0) {

@@ -39,4 +39,6 @@ public class Constant {
 	public static final Integer SYSTEMTYYE = 0;
 
 	public static final Integer ACCOUNT_CHANGE_TYPE_STATUS_WAIT_ACT = 4;
+	public static final String GROUP_KEY = "chat_group_";
+	public static final String DEVICE_LIMIT_CONFIG_ = "device_limit_config_";
 }

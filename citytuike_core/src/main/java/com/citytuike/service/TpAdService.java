@@ -45,4 +45,6 @@ public interface TpAdService {
     TpAdApply findAdApplyById(Integer id);
 
     TpAdCategory findAdCategoryById(Integer cate);
+
+    List<TpAdPosition> findAdPositionByDeviceId(Integer device_id);
 }
